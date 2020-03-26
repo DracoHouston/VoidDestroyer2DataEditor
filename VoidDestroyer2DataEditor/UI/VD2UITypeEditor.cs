@@ -13,9 +13,15 @@ namespace VoidDestroyer2DataEditor
     {
         public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
         {
-           // base.PaintValue(e);
-            VD2Data datainstance = (VD2Data)e.Context.Instance;
+            // base.PaintValue(e);
+            VD2PropertyStore datainstance = null;
+            if (e.Context.Instance.GetType().IsSubclassOf(typeof(VD2PropertyStore)))
+            {
+                datainstance = (VD2PropertyStore)e.Context.Instance;
+            }
+            
             Color indicatorcolor = new Color();
+
             if (datainstance != null)
             {
                 if (datainstance.PropertyExists(e.Context.PropertyDescriptor.Name))
@@ -41,6 +47,7 @@ namespace VoidDestroyer2DataEditor
                     }
                 }
             }
+            
             e.Graphics.FillRectangle(new SolidBrush(indicatorcolor), e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
             //e.Graphics.DrawString(e.Value.ToString(), new Font("Arial", 8), new SolidBrush(Color.White), new RectangleF(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height));
         }

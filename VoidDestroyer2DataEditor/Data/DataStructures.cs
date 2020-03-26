@@ -10,6 +10,106 @@ using System.Globalization;
 
 namespace VoidDestroyer2DataEditor
 {
+    class VD2DataStructure
+    {
+        public Dictionary<string, VD2PropertyInfo> VD2PropertyInfos;
+
+        public VD2DataStructure()
+        {
+            VD2PropertyInfos = new Dictionary<string, VD2PropertyInfo>();
+        }
+
+        public void SetPropertyEdited(string inName, bool inEdited)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.EditedByUser = inEdited;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyEdited(string inName)
+        {
+            bool result = false;
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.EditedByUser;
+                }
+            }
+            return result;
+        }
+
+        public void SetPropertyExists(string inName, bool inExists)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.Exists = inExists;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyExists(string inName)
+        {
+            bool result = false;
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.Exists;
+                }
+            }
+            return result;
+        }
+
+        public void SetPropertyExistsInBaseData(string inName, bool inExistsInBaseData)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.ExistsInBaseData = inExistsInBaseData;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyExistsInBaseData(string inName)
+        {
+            bool result = false;
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.ExistsInBaseData;
+                }
+            }
+            return result;
+        }
+
+        public void UpdatePropertyInfo(string inName, VD2PropertyInfo inInfo)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfos.Remove(inName);
+                VD2PropertyInfos.Add(inName, inInfo);
+            }
+        }
+    }
+
     [TypeConverter(typeof(debrisInfoDataStructureConverter))]
     class debrisInfoDataStructure
     {
@@ -87,14 +187,14 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(debrisDataStructureConverter))]
-    class debrisDataStructure
+    class debrisDataStructure : VD2PropertyStore
     {
         string _debrisID;
 
         int _debrisMomentum;
         int _debrisAngular;
 
-        [Description("debrisID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("debrisID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string debrisID
         {
             get => _debrisID;
@@ -118,7 +218,7 @@ namespace VoidDestroyer2DataEditor
 
 
 
-        public debrisDataStructure()
+        public debrisDataStructure() : base()
         {
             _debrisID = "";
 
@@ -127,7 +227,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public debrisDataStructure(string indebrisID, int indebrisMomentum, int indebrisAngular)
+        public debrisDataStructure(string indebrisID, int indebrisMomentum, int indebrisAngular) : base()
         {
             _debrisID = indebrisID;
 
@@ -136,7 +236,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public debrisDataStructure(debrisDataStructure inCopyFrom)
+        public debrisDataStructure(debrisDataStructure inCopyFrom) : base()
         {
             _debrisID = inCopyFrom.debrisID;
 

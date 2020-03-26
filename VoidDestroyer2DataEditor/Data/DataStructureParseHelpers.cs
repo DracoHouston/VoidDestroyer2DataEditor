@@ -12,12 +12,16 @@ namespace VoidDestroyer2DataEditor
         //Gets the value of child nodes to get a 'debris' data structure as a debrisDataStructure.
         public static debrisDataStructure GetdebrisDataStructureFromXMLNode(XmlNode inXMLNode)
         {
-            string debrisID = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "debrisID");
+            bool hasdebrisID = false;
+            bool debrisIDexists = false;
+            string debrisID = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "debrisID", out debrisIDexists);
 
             int debrisMomentum = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "debrisMomentum");
             int debrisAngular = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "debrisAngular");
 
             debrisDataStructure result = new debrisDataStructure(debrisID, debrisMomentum, debrisAngular);
+            result.VD2PropertyInfos.Add("debrisID", new VD2PropertyInfo());
+            result.SetPropertyExists("debrisID", debrisIDexists);
 
             return result;
         }

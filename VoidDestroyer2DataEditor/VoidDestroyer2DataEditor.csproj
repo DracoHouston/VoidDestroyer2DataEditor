@@ -111,6 +111,7 @@
     <Compile Include="VD2Data.cs" />
     <Compile Include="VD2DB.cs" />
     <Compile Include="VD2LoadCodeGenerator.cs" />
+    <Compile Include="VD2PropertyStore.cs" />
     <Compile Include="Vector3DConverter.cs" />
     <EmbeddedResource Include="UI\EditorAboutBox.resx">
       <DependentUpon>EditorAboutBox.cs</DependentUpon>

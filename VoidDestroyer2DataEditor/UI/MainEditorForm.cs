@@ -119,7 +119,7 @@ namespace VoidDestroyer2DataEditor
             ShipsTree.Nodes[0].Nodes[7].Nodes.Add("Heavy");
             ShipsTree.Nodes[0].Nodes.Add("Drones");
             ShipsTree.Nodes.Add("Non Combat Ships");
-            ShipsTree.Nodes[1].Nodes.Add("Transport");
+            ShipsTree.Nodes[1].Nodes.Add("Transport"); 
             ShipsTree.Nodes[1].Nodes.Add("Mining");
             ShipsTree.Nodes[1].Nodes.Add("Shuttle");
             ShipsTree.Nodes[1].Nodes.Add("Repair");
@@ -717,7 +717,7 @@ namespace VoidDestroyer2DataEditor
                         DataFileProperties.SelectedObject = selectedupgrade;
                     }
                 }
-                else
+                else if ((e.Node.Parent.Text == "Light") || (e.Node.Parent.Text == "Medium") || (e.Node.Parent.Text == "Heavy") || (e.Node.Parent.Text == "Transport") || (e.Node.Parent.Text == "Mining") || (e.Node.Parent.Text == "Shuttle") || (e.Node.Parent.Text == "Repair") || (e.Node.Parent.Text == "Base Capture") || (e.Node.Parent.Text == "Ship Capture") || (e.Node.Parent.Text == "Builder")) 
                 {
                     ShipData selectedship;
                     if (Ships.Data.TryGetValue(e.Node.Text, out selectedship))

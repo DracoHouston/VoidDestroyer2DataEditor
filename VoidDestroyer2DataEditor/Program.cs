@@ -63,6 +63,72 @@ namespace VoidDestroyer2DataEditor
             return x.ToString() + "," + y.ToString() + "," + z.ToString();
         }
     }
+
+    [TypeConverter(typeof(Vector3DConverter))]
+    class ColorF
+    {
+        float _r;
+        public float r
+        {
+            get => _r;
+            set => _r = value;
+        }
+        float _g;
+        public float g
+        {
+            get => _g;
+            set => _g = value;
+        }
+        float _b;
+        public float b
+        {
+            get => _b;
+            set => _b = value;
+        }
+        float _a;
+        public float a
+        {
+            get => _a;
+            set => _a = value;
+        }
+
+        public ColorF()
+        {
+            _r = 0;
+            _g = 0;
+            _b = 0;
+            _a = 0;
+        }
+
+        public ColorF(float magnitude, float alpha = 1)
+        {
+            _r = magnitude;
+            _g = magnitude;
+            _b = magnitude;
+            _a = alpha;
+        }
+
+        public ColorF(float inR, float inG, float inB, float inA)
+        {
+            _r = inR;
+            _g = inG;
+            _b = inB;
+            _a = inA;
+        }
+
+        public ColorF(ColorF inCopyFrom)
+        {
+            _r = inCopyFrom.r;
+            _g = inCopyFrom.g;
+            _b = inCopyFrom.b;
+            _a = inCopyFrom.a;
+        }
+
+        public override string ToString()
+        {
+            return r.ToString() + "," + g.ToString() + "," + b.ToString() + "," + a.ToString();
+        }
+    }
     static class Program
     {
         /// <summary>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Drawing;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -51,373 +52,7 @@ namespace VoidDestroyer2DataEditor
     //Data structures have their own specialized helper functions within this class.
     //'Discovery Helpers' exist to read through all files and discover tags
     static class ParseHelpers
-    {
-        ////////////////////////////////////////////////////////////////////////////////
-        // DISCOVERY HELPERS
-        ////////////////////////////////////////////////////////////////////////////////
-        
-        public static TagNameReportEntry UpdateTagNameReportEntry(TagNameReportEntry inEntry, XmlNode inNode, Dictionary<string, int> inWithinUsage, out Dictionary<string, int> outWithinUsage)
-        {
-            inEntry.UseNum = inEntry.UseNum + 1;
-            float floatparseresult;
-            int intparseresult;
-            if (inNode.Attributes.Count == 1)
-            {
-                if ((inEntry.NodeType != TagNameReportNodeTypes.plaintext) && (float.TryParse(inNode.Attributes[0].InnerText, out floatparseresult)))
-                {
-                    if ((inEntry.NodeType != TagNameReportNodeTypes.realnumber) && (int.TryParse(inNode.Attributes[0].InnerText, out intparseresult)))
-                    {
-                        inEntry.NodeType = TagNameReportNodeTypes.integer;
-                    }
-                    else
-                    {
-                        inEntry.NodeType = TagNameReportNodeTypes.realnumber;
-                    }
-                }
-                else
-                {
-                    inEntry.NodeType = TagNameReportNodeTypes.plaintext;
-                }
-            }
-            else if (inNode.Attributes.Count == 3)
-            {
-                inEntry.NodeType = TagNameReportNodeTypes.vector;
-            }
-            else if (inNode.Attributes.Count == 0)
-            {
-                inEntry.NodeType = TagNameReportNodeTypes.datastructure;
-                if (inNode.ChildNodes.Count > 0)
-                {
-                    inEntry.UsageWithinThisDataStructure.Clear();
-                    for (int i = 0; i < inNode.ChildNodes.Count; i++)
-                    {
-                        if ((inNode.ChildNodes[i].Name != "note_to_self") && !(inNode.ChildNodes[i].Name.StartsWith("_")))
-                        {
-                            TagNameReportEntry currentchildentry = new TagNameReportEntry();
-                            if (inEntry.DataStructureProperties.ContainsKey(inNode.ChildNodes[i].Name))
-                            {
-                                inEntry.DataStructureProperties.TryGetValue(inNode.ChildNodes[i].Name, out currentchildentry);
-                            }
-                            currentchildentry = ParseHelpers.UpdateTagNameReportEntry(currentchildentry, inNode.ChildNodes[i], inEntry.UsageWithinThisDataStructure, out inEntry.UsageWithinThisDataStructure);
-                            inEntry.DataStructureProperties.Remove(inNode.ChildNodes[i].Name);
-                            inEntry.DataStructureProperties.Add(inNode.ChildNodes[i].Name, currentchildentry);
-                        }
-                    }
-                    
-                }
-            }
-            List<string> listtagnameblacklist = new List<string>();
-            listtagnameblacklist.Add("missionRankRequired");//there is a single erroneous double use of this in tug.xml because Paul hates me.
-            listtagnameblacklist.Add("shipClassSize");//one ship file has this twice and it is a mistake to make it a list
-            listtagnameblacklist.Add("cockpitActualPos");//one ship file has this twice and it is a mistake to make it a list
-            listtagnameblacklist.Add("yaw");//one ship file has this twice in a turret def and it is a mistake to make it a list
-            bool OnTagNameBlacklistForLists = false;
-            for (int blacklistidx = 0; blacklistidx < listtagnameblacklist.Count; blacklistidx++)
-            {
-                if (listtagnameblacklist[blacklistidx] == inNode.Name)
-                {
-                    OnTagNameBlacklistForLists = true;
-                }
-            }
-            if ((inWithinUsage.ContainsKey(inNode.Name)) && (!OnTagNameBlacklistForLists)) 
-            {
-                int useageinthisfile;
-                inWithinUsage.TryGetValue(inNode.Name, out useageinthisfile);
-                useageinthisfile = useageinthisfile + 1;
-                if (useageinthisfile > 1)
-                {
-                    inEntry.IsList = true;
-                }
-            }
-            else
-            {
-                if (!OnTagNameBlacklistForLists)
-                {
-                    inWithinUsage.Add(inNode.Name, 1);
-                }
-            }
-            outWithinUsage = inWithinUsage;
-            return inEntry;
-        }
-        
-        public static void GetTagNameListWithUseNumberReportFromXMLFiles(string inPath, string inReportName, out Dictionary<string, TagNameReportEntry> outRootTagResults, out Dictionary<string, Dictionary<string, TagNameReportEntry>> outChildTagResults)
-        {
-            Dictionary<string, TagNameReportEntry> roottagresults = new Dictionary<string, TagNameReportEntry>();
-            Dictionary<string, Dictionary<string, TagNameReportEntry>> childtagresults = new Dictionary<string, Dictionary<string, TagNameReportEntry>>();
-            List<string> reporttextlines = new List<string>();
-            int i = 0;
-            if (Directory.Exists(inPath))
-            {
-                List<string> files = Directory.EnumerateFiles(inPath).ToList();
-                
-                for (i = 0; i < files.Count; i++)
-                {
-                    Dictionary<string, int> UsageWithinThisFile = new Dictionary<string, int>();
-                    List<string> xmltextlines = File.ReadAllLines(files[i]).ToList();
-                    xmltextlines.Insert(1, "<docroot>");
-                    xmltextlines.Add("</docroot>");
-                    File.WriteAllLines("TempLoadStage.xml", xmltextlines);
-                    XmlDocument XMLfile = new XmlDocument();
-                    XMLfile.Load("TempLoadStage.xml");
-                    XmlNodeList nodelist = XMLfile.DocumentElement.ChildNodes;
-                    int nodeindex = 0;
-                    for (nodeindex = 0; nodeindex < nodelist.Count; nodeindex++)
-                    {
-                        if (roottagresults.ContainsKey(nodelist[nodeindex].Name))
-                        {
-                            TagNameReportEntry currententry = new TagNameReportEntry();
-                            roottagresults.TryGetValue(nodelist[nodeindex].Name, out currententry);
-                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-
-                            roottagresults.Remove(nodelist[nodeindex].Name);
-                            roottagresults.Add(nodelist[nodeindex].Name, currententry);
-                        }
-                        else
-                        {
-                            TagNameReportEntry currententry = new TagNameReportEntry();
-
-                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-
-                            roottagresults.Add(nodelist[nodeindex].Name, currententry);
-                        }
-
-                        if (nodelist[nodeindex].ChildNodes.Count > 0)
-                        {
-                            int childindex = 0;
-                            if (nodelist[nodeindex].Name == "debrisInfo")
-                            {
-                                int debrisindex = 0;
-                                for (debrisindex = 0; debrisindex < nodelist[nodeindex].ChildNodes.Count; debrisindex++)
-                                { 
-                                    for (childindex = 0; childindex < nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes.Count; childindex++)
-                                    {
-                                        if (childtagresults.ContainsKey(nodelist[nodeindex].Name))
-                                        {
-                                            Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
-                                            childtagresults.TryGetValue(nodelist[nodeindex].Name, out childdictionary);
-                                            if (childdictionary.ContainsKey(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name))
-                                            {
-                                                TagNameReportEntry currententry = new TagNameReportEntry();
-                                                childdictionary.TryGetValue(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, out currententry);
-                                                currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                                childdictionary.Remove(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name);
-                                                childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
-                                            }
-                                            else
-                                            {
-                                                TagNameReportEntry currententry = new TagNameReportEntry();
-                                                currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                                childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
-                                            }
-                                            childtagresults.Remove(nodelist[nodeindex].Name);
-                                            childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
-                                        }
-                                        else
-                                        {
-                                            TagNameReportEntry currententry = new TagNameReportEntry();
-                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                            Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
-                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
-                                            childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                for (childindex = 0; childindex < nodelist[nodeindex].ChildNodes.Count; childindex++)
-                                {
-                                    if (childtagresults.ContainsKey(nodelist[nodeindex].Name))
-                                    {
-                                        Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
-                                        childtagresults.TryGetValue(nodelist[nodeindex].Name, out childdictionary);
-                                        if (childdictionary.ContainsKey(nodelist[nodeindex].ChildNodes[childindex].Name))
-                                        {
-                                            TagNameReportEntry currententry = new TagNameReportEntry();
-                                            childdictionary.TryGetValue(nodelist[nodeindex].ChildNodes[childindex].Name, out currententry);
-                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                            childdictionary.Remove(nodelist[nodeindex].ChildNodes[childindex].Name);
-                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
-                                        }
-                                        else
-                                        {
-                                            TagNameReportEntry currententry = new TagNameReportEntry();
-                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
-                                        }
-                                        childtagresults.Remove(nodelist[nodeindex].Name);
-                                        childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
-                                    }
-                                    else
-                                    {
-                                        TagNameReportEntry currententry = new TagNameReportEntry();
-                                        currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                                        Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
-                                        childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
-                                        childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            outRootTagResults = roottagresults;
-            outChildTagResults = childtagresults;
-            reporttextlines.Add("Report on tag names and usage for path: " + inPath);
-            
-            for (i = 0; i < roottagresults.Count; i++)
-            {
-                KeyValuePair<string, TagNameReportEntry> currentresult = roottagresults.ElementAt(i);
-                reporttextlines.Add(currentresult.Key + " Usage: " + currentresult.Value.ToString());
-            }
-            
-            reporttextlines.Add("");
-            reporttextlines.Add("Nodes with child nodes follow:");
-            
-            for (i = 0; i < childtagresults.Count; i++)
-            {
-                reporttextlines.Add("");
-                KeyValuePair<string, Dictionary<string, TagNameReportEntry>> currentresult = childtagresults.ElementAt(i);
-                reporttextlines.Add(currentresult.Key + " has child nodes! Count: " + currentresult.Value.Count.ToString());
-                if (currentresult.Key == "debrisInfo")
-                {
-                    reporttextlines.Add("debrisInfo is a special data structure tag, it contains data structures called debris.");
-                    reporttextlines.Add("Below is actually the child tags of debris, debrisInfo tags only contain one or more debris tags");
-                }
-                reporttextlines.Add("Child node names:");
-                int childindex = 0;
-                for (childindex = 0; childindex < currentresult.Value.Count; childindex++)
-                {
-                    KeyValuePair<string, TagNameReportEntry> currentchildresult = currentresult.Value.ElementAt(childindex);
-                    reporttextlines.Add(currentchildresult.Key + " Usage: " + currentchildresult.Value.ToString());
-                }
-            }
-            reporttextlines.Add("Report ends.");
-            File.WriteAllLines(inReportName, reporttextlines);
-        }
-
-
-        
-
-
-        public static void CombinedTagReport(List <Dictionary<string, TagNameReportEntry>> rootreports, List<Dictionary<string, Dictionary<string, TagNameReportEntry>>> childreports, string inReportName)
-        {
-            List<string> reporttextlines = new List<string>();
-            Dictionary<string, TagNameReportEntry> rootreport = new Dictionary<string, TagNameReportEntry>();
-            Dictionary<string, Dictionary<string, TagNameReportEntry>> childreport = new Dictionary<string, Dictionary<string, TagNameReportEntry>>();
-            int reportindex = 0;
-            for (reportindex = 0; reportindex < rootreports.Count; reportindex++)
-            {
-                int tagindex = 0;
-                for (tagindex = 0; tagindex < rootreports[reportindex].Count; tagindex++)
-                {
-                    if (rootreport.ContainsKey(rootreports[reportindex].ElementAt(tagindex).Key))
-                    {
-                        TagNameReportEntry currentreport = new TagNameReportEntry();
-                        rootreport.TryGetValue(rootreports[reportindex].ElementAt(tagindex).Key, out currentreport);
-                        currentreport.UseNum += rootreports[reportindex].ElementAt(tagindex).Value.UseNum;
-                        if ((rootreports[reportindex].ElementAt(tagindex).Value.NodeType < currentreport.NodeType) && ((currentreport.NodeType < TagNameReportNodeTypes.vector) && (rootreports[reportindex].ElementAt(tagindex).Value.NodeType < TagNameReportNodeTypes.vector)))
-                        {
-                            currentreport.NodeType = rootreports[reportindex].ElementAt(tagindex).Value.NodeType;
-                        }
-                        rootreport.Remove(rootreports[reportindex].ElementAt(tagindex).Key);
-                        rootreport.Add(rootreports[reportindex].ElementAt(tagindex).Key, currentreport);
-                    }
-                    else
-                    {
-                        TagNameReportEntry currentreport = new TagNameReportEntry();
-                        currentreport.UseNum = rootreports[reportindex].ElementAt(tagindex).Value.UseNum;
-                        currentreport.NodeType = rootreports[reportindex].ElementAt(tagindex).Value.NodeType;
-                        rootreport.Add(rootreports[reportindex].ElementAt(tagindex).Key, currentreport);
-                    }
-                }
-            }
-
-            for (reportindex = 0; reportindex < childreports.Count; reportindex++)
-            {
-                int tagindex = 0;
-                for (tagindex = 0; tagindex < childreports[reportindex].Count; tagindex++)
-                {
-                    if (childreport.ContainsKey(childreports[reportindex].ElementAt(tagindex).Key))
-                    {
-                        //replace
-                        Dictionary<string, TagNameReportEntry> currentchild = childreports[reportindex].ElementAt(tagindex).Value;
-                        Dictionary<string, TagNameReportEntry> currentchildtotal = new Dictionary<string, TagNameReportEntry>();
-                        childreport.TryGetValue(childreports[reportindex].ElementAt(tagindex).Key, out currentchildtotal);
-                        int childindex = 0;
-                        for (childindex = 0; childindex < currentchild.Count; childindex++)
-                        {
-                            if (currentchildtotal.ContainsKey(currentchild.ElementAt(childindex).Key))
-                            {
-                                //replace in subdictionary
-                                TagNameReportEntry currentreport = new TagNameReportEntry();
-                                currentchildtotal.TryGetValue(currentchild.ElementAt(childindex).Key, out currentreport);
-
-                                currentreport.UseNum += currentchild.ElementAt(childindex).Value.UseNum;
-                                if ((currentchild.ElementAt(childindex).Value.NodeType < currentreport.NodeType) && ((currentreport.NodeType < TagNameReportNodeTypes.vector) && (currentchild.ElementAt(childindex).Value.NodeType < TagNameReportNodeTypes.vector)))
-                                {
-                                    currentreport.NodeType = currentchild.ElementAt(childindex).Value.NodeType;
-                                }
-                                currentchildtotal.Remove(currentchild.ElementAt(childindex).Key);
-                                currentchildtotal.Add(currentchild.ElementAt(childindex).Key, currentreport);
-                                childreport.Remove(childreports[reportindex].ElementAt(tagindex).Key);
-                                childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, currentchildtotal);
-
-                            }
-                            else
-                            {
-                                //add to subdictionary
-                                currentchildtotal.Add(currentchild.ElementAt(childindex).Key, currentchild.ElementAt(childindex).Value);
-                                childreport.Remove(childreports[reportindex].ElementAt(tagindex).Key);
-                                childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, currentchildtotal);
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        //add
-                        childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, childreports[reportindex].ElementAt(tagindex).Value);
-                    }
-                }
-            }
-
-            reporttextlines.Add("Combined total report. Name: " + inReportName);
-            reporttextlines.Add("");
-            reporttextlines.Add("Root tags:");
-            reporttextlines.Add("");
-
-            for (reportindex = 0; reportindex < rootreport.Count; reportindex++)
-            {
-                reporttextlines.Add(rootreport.ElementAt(reportindex).Key + " Usage: " + rootreport.ElementAt(reportindex).Value.ToString());                   
-            }
-
-            reporttextlines.Add("");
-            reporttextlines.Add("Nodes with child nodes follow:");
-
-            for (reportindex = 0; reportindex < childreport.Count; reportindex++)
-            {
-                reporttextlines.Add("");
-                KeyValuePair<string, Dictionary<string, TagNameReportEntry>> currentresult = childreport.ElementAt(reportindex);
-                reporttextlines.Add(currentresult.Key + " has child nodes! Count: " + currentresult.Value.Count.ToString());
-                if (currentresult.Key == "debrisInfo")
-                {
-                    reporttextlines.Add("debrisInfo is a special data structure tag, it contains data structures called debris.");
-                    reporttextlines.Add("Below is actually the child tags of debris, debrisInfo tags only contain one or more debris tags");
-                }
-                reporttextlines.Add("Child node names:");
-                int childindex = 0;
-                for (childindex = 0; childindex < currentresult.Value.Count; childindex++)
-                {
-                    KeyValuePair<string, TagNameReportEntry> currentchildresult = currentresult.Value.ElementAt(childindex);
-                    reporttextlines.Add(currentchildresult.Key + " Usage: " + currentchildresult.Value.ToString());
-                }
-            }
-
-            reporttextlines.Add("Report ends.");
-            File.WriteAllLines(inReportName, reporttextlines);
-        }
+    {       
 
         ////////////////////////////////////////////////////////////////////////////////
         // FILE HELPERS
@@ -605,6 +240,25 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<Vector3D> GetVector3DListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            List<Vector3D> result = new List<Vector3D>();
+            bool exists = false;
+            int childindex = 0;
+            for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
+            {
+                XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
+                if (CurrentChildNode.Name == inChildNodeName)
+                {
+                    exists = true;
+                    result.Add(GetVector3DFromXMLNode(CurrentChildNode));
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value with this name from the child nodes of this xml node, as a 3D vector. 
         //Used for properties that are not in a collection. See GetVector3DListFromXMLNodeNamedChildren for collections of 3D vectors.
         public static Vector3D GetVector3DFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
@@ -619,51 +273,72 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
-      /*  //Gets the value of 3 attributes representing a 3D Vector, named x, y and z from an XML Node as a Vector3D.
-        public static ShipPropulsion GetShipPropulsionFromXMLNode(XmlNode inXMLNode)
+        public static Vector3D GetVector3DFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
         {
+            Vector3D result = new Vector3D();
+            bool exists = false;
+            List<Vector3D> results = GetVector3DListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName);
+            if (results.Count > 0)
+            {
+                exists = true;
+                result = results[0];
+            }
 
-            string propulsionEffectID = GetStringFromXMLNodeNamedChild(inXMLNode, "propulsionEffectID");
-            string direction = GetStringFromXMLNodeNamedChild(inXMLNode, "direction");
-            Vector3D position = GetVector3DFromXMLNodeNamedChild(inXMLNode, "position");
-            float yaw = GetFloatFromXMLNodeNamedChild(inXMLNode, "yaw");
-            float pitch = GetFloatFromXMLNodeNamedChild(inXMLNode, "pitch");
-            float roll = GetFloatFromXMLNodeNamedChild(inXMLNode, "roll");
-            ShipPropulsion result = new ShipPropulsion(propulsionEffectID, direction, position, yaw, pitch, roll);
+            outExists = exists;
+            return result;
+        }
+
+
+
+        //Gets the value of 3 attributes representing a 3D Vector, named x, y and z from an XML Node as a Vector3D.
+        public static ColorF GetColorFromXMLNode(XmlNode inXMLNode)
+        {
+            ColorF result = new ColorF();
+            result.r = GetFloatFromXMLNodeAttributeWithName("r", inXMLNode);
+            result.g = GetFloatFromXMLNodeAttributeWithName("g", inXMLNode);
+            result.b = GetFloatFromXMLNodeAttributeWithName("b", inXMLNode);
+            result.a = GetFloatFromXMLNodeAttributeWithName("a", inXMLNode);
             return result;
         }
 
         //Get values with this name from the child nodes of this xml node, as 3D vectors. 
         //Used for properties that are in a collection. See GetVector3DFromXMLNodeNamedChild for a single value as a 3D vector.
-        public static List<ShipPropulsion> GetShipPropulsionListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName)
+        public static List<ColorF> GetColorListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
         {
-            List<ShipPropulsion> result = new List<ShipPropulsion>();
+            List<ColorF> result = new List<ColorF>();
+            bool exists = false;
             int childindex = 0;
             for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
             {
                 XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
                 if (CurrentChildNode.Name == inChildNodeName)
                 {
-                    result.Add(GetShipPropulsionFromXMLNode(CurrentChildNode));
+                    exists = true;
+                    result.Add(GetColorFromXMLNode(CurrentChildNode));
                 }
             }
 
+            outExists = exists;
             return result;
         }
 
         //Get the first value with this name from the child nodes of this xml node, as a 3D vector. 
         //Used for properties that are not in a collection. See GetVector3DListFromXMLNodeNamedChildren for collections of 3D vectors.
-        public static ShipPropulsion GetShipPropulsionFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
+        public static ColorF GetColorFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
         {
-            ShipPropulsion result = new ShipPropulsion();
-            List<ShipPropulsion> results = GetShipPropulsionListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName);
+            ColorF result = new ColorF();
+            bool exists = false;
+            List<ColorF> results = GetColorListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);
             if (results.Count > 0)
             {
                 result = results[0];
             }
 
+            outExists = exists;
             return result;
-        }*/
+        }
+
+
 
         ////////////////////////////////////////////////////////////////////////////////
         // FIRST ATTRIBUTE HELPERS
@@ -677,16 +352,6 @@ namespace VoidDestroyer2DataEditor
             string result = "";
             result = GetStringFromXMLNodeAttributeAtIndex(0, inXMLNode);
 
-            return result;
-        }
-
-        public static string GetStringFromXMLNode(XmlNode inXMLNode, out bool outExists)
-        {
-            string result = "";
-            bool exists = false;
-            result = GetStringFromXMLNodeAttributeAtIndex(0, inXMLNode, out exists);
-
-            outExists = exists;
             return result;
         }
 
@@ -708,6 +373,25 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<string> GetStringListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            List<string> result = new List<string>();
+            bool exists = false;
+            int childindex = 0;
+            for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
+            {
+                XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
+                if (CurrentChildNode.Name == inChildNodeName)
+                {
+                    exists = true;
+                    result.Add(GetStringFromXMLNode(CurrentChildNode));
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value with this name from the child nodes of this xml node, as a string of plaintext. 
         //Used for properties that are not in a collection. See GetStringListFromXMLNodeNamedChildren for collections of strings of plaintext.
         public static string GetStringFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
@@ -719,6 +403,20 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static string GetStringFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            string result = "";
+            bool exists = false;
+            List<string> results = GetStringListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -751,6 +449,25 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<float> GetFloatListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            List<float> result = new List<float>();
+            bool exists = false;
+            int childindex = 0;
+            for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
+            {
+                XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
+                if (CurrentChildNode.Name == inChildNodeName)
+                {
+                    result.Add(GetFloatFromXMLNode(CurrentChildNode));
+                    exists = true;
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value with this name from the child nodes of this xml node, as a real number. 
         //Used for properties that are not in a collection. See GetFloatListFromXMLNodeNamedChildren for collections of real numbers.
         public static float GetFloatFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
@@ -762,6 +479,20 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static float GetFloatFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            float result = 0;
+            bool exists = false;
+            List<float> results = GetFloatListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -795,6 +526,25 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<bool> GetBoolListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            List<bool> result = new List<bool>();
+            bool exists = false;
+            int childindex = 0;
+            for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
+            {
+                XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
+                if (CurrentChildNode.Name == inChildNodeName)
+                {
+                    exists = true; 
+                    result.Add(GetBoolFromXMLNode(CurrentChildNode));
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value with this name from the child nodes of this xml node, as a boolean. 
         //Used for properties that are not in a collection. See GetBoolListFromXMLNodeNamedChildren for collections of booleans.
         public static bool GetBoolFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
@@ -806,6 +556,20 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static bool GetBoolFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            bool result = false;
+            bool exists = false;
+            List<bool> results = GetBoolListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -838,6 +602,25 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<int> GetInt32ListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            List<int> result = new List<int>();
+            bool exists = false;
+            int childindex = 0;
+            for (childindex = 0; childindex < inXMLNode.ChildNodes.Count; childindex++)
+            {
+                XmlNode CurrentChildNode = inXMLNode.ChildNodes[childindex];
+                if (CurrentChildNode.Name == inChildNodeName)
+                {
+                    exists = true;
+                    result.Add(GetInt32FromXMLNode(CurrentChildNode));
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value with this name from the child nodes of this xml node, as an integer. 
         //Used for properties that are not in a collection. See GetBoolListFromXMLNodeNamedChildren for collections of integers.
         public static int GetInt32FromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName)
@@ -852,10 +635,24 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static int GetInt32FromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
+        {
+            int result = 0;
+            bool exists = false;
+            List<int> results = GetInt32ListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // DATA FILE HELPERS
         ////////////////////////////////////////////////////////////////////////////////
-                          
+
         //Get the values of all nodes in this document with a certain name as strings of plaintext
         //Used for properties that are in a collection. See GetStringFromVD2Data for a single value as a string of plaintext
         public static List<string> GetStringListFromVD2Data(XmlDocument inXML, string inTagName)
@@ -882,6 +679,7 @@ namespace VoidDestroyer2DataEditor
                 exists = true;
                 results.Add(GetStringFromXMLNode(xmlnodes[i]));
             }
+
             outExists = exists;
             return results;
         }
@@ -909,6 +707,7 @@ namespace VoidDestroyer2DataEditor
             {
                 result = results[0];
             }
+
             outExists = exists;
             return result;
         }
@@ -934,6 +733,26 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        public static List<float> GetFloatListFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            List<float> result = new List<float>();
+            bool exists = false;
+            int i = 0;
+            for (i = 0; i < xmlnodes.Count; i++)
+            {
+                XmlNode CurrentNode = xmlnodes[i];
+                if (CurrentNode.Name == inTagName)
+                {
+                    exists = true;
+                    result.Add(GetFloatFromXMLNode(CurrentNode));
+                }
+            }
+
+            outExists = exists;
+            return result;
+        }
+
         //Get the first value of a node in this document with a certain name as a real number
         //Used for properties that are not in a collection. See GetFloatListFromVD2Data for a collection of values as real numbers
         public static float GetFloatFromVD2Data(XmlDocument inXML, string inTagName)
@@ -949,8 +768,23 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
-        
-               
+        public static float GetFloatFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            float result = 0;
+            bool exists = false;
+            List<float> results = GetFloatListFromVD2Data(inXML, inTagName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
+            return result;
+        }
+
+
+
         //Get the values of all nodes in this document with a certain name as integers
         //Used for properties that are in a collection. See GetInt32FromVD2Data for a single value as an integer
         public static List<int> GetInt32ListFromVD2Data(XmlDocument inXML, string inTagName)
@@ -966,6 +800,22 @@ namespace VoidDestroyer2DataEditor
             return results;
         }
 
+        public static List<int> GetInt32ListFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            List<int> results = new List<int>();
+            bool exists = false;
+            int i = 0;
+            for (i = 0; i < xmlnodes.Count; i++)
+            {
+                exists = true;
+                results.Add(GetInt32FromXMLNode(xmlnodes[i]));
+            }
+
+            outExists = exists;
+            return results;
+        }
+
         //Get the first value of a node in this document with a certain name as an integer
         //Used for properties that are not in a collection. See GetInt32ListFromVD2Data for a collection of values as integers
         public static int GetInt32FromVD2Data(XmlDocument inXML, string inTagName)
@@ -977,6 +827,20 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static int GetInt32FromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            int result = 0;
+            bool exists = false;
+            List<int> results = GetInt32ListFromVD2Data(inXML, inTagName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -1043,525 +907,371 @@ namespace VoidDestroyer2DataEditor
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // SHIP DATA STRUCTURE HELPERS
+        // DISCOVERY HELPERS
         ////////////////////////////////////////////////////////////////////////////////
-        /*
-        //Gets a list of 'propulsion' data structures from a ship definition
-        //Used for data structures that are in a collection. See GeShipPropulsionFromVD2Data for a single 'propulsion' data structure
-        public static List<ShipPropulsion> GetShipPropulsionListFromVD2Data(XmlDocument inXML, string inTagName)
+
+        public static TagNameReportEntry UpdateTagNameReportEntry(TagNameReportEntry inEntry, XmlNode inNode, Dictionary<string, int> inWithinUsage, out Dictionary<string, int> outWithinUsage)
         {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipPropulsion> result = new List<ShipPropulsion>();
-            if (xmlnodes.Count > 0)
+            inEntry.UseNum = inEntry.UseNum + 1;
+            float floatparseresult;
+            int intparseresult;
+            if (inNode.Attributes.Count == 1)
             {
-                int nodeindex = 0;
-                for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
+                if ((inEntry.NodeType != TagNameReportNodeTypes.plaintext) && (float.TryParse(inNode.Attributes[0].InnerText, out floatparseresult)))
                 {
-                    XmlNode currentnode = xmlnodes[nodeindex];
-                    ShipPropulsion currentdata = ParseHelpers.GetShipPropulsionFromXMLNode(currentnode);
-                    result.Add(currentdata);
+                    if ((inEntry.NodeType != TagNameReportNodeTypes.realnumber) && (int.TryParse(inNode.Attributes[0].InnerText, out intparseresult)))
+                    {
+                        inEntry.NodeType = TagNameReportNodeTypes.integer;
+                    }
+                    else
+                    {
+                        inEntry.NodeType = TagNameReportNodeTypes.realnumber;
+                    }
+                }
+                else
+                {
+                    inEntry.NodeType = TagNameReportNodeTypes.plaintext;
                 }
             }
-            return result;
-        }
-
-        //Gets the first 'propulsion' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GeShipPropulsionListFromVD2Data for a collection of 'propulsion' data structures
-        public static ShipPropulsion GetShipPropulsionFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipPropulsion> results = GetShipPropulsionListFromVD2Data(inXML, inTagName);
-            ShipPropulsion result = new ShipPropulsion();
-            
-            if (results.Count > 0)
+            else if (inNode.Attributes.Count == 3)
             {
-                result = results[0];
+                inEntry.NodeType = TagNameReportNodeTypes.vector;
             }
-            return result;
-        }
-
-
-
-        //Gets a list of 'weapon' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipWeaponFromVD2Data for a single 'weapon' data structure
-        public static List<ShipWeapon> GetShipWeaponListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipWeapon> result = new List<ShipWeapon>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
+            else if (inNode.Attributes.Count == 0)
             {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipWeapon currentdata = new ShipWeapon();
-
-                currentdata.weaponType = GetStringFromXMLNodeNamedChild(currentnode, "weaponType");
-                currentdata.hardpointID = GetStringFromXMLNodeNamedChild(currentnode, "hardpointID");
-                currentdata.weaponFire = GetStringFromXMLNodeNamedChild(currentnode, "weaponFire"); 
-                currentdata.weaponPosition = GetVector3DListFromXMLNodeNamedChildren(currentnode, "weaponPosition");
-                currentdata.yaw = GetFloatFromXMLNodeNamedChild(currentnode, "yaw");
-                currentdata.pitch = GetFloatFromXMLNodeNamedChild(currentnode, "pitch");
-                currentdata.roll = GetFloatFromXMLNodeNamedChild(currentnode, "roll");
-                currentdata.barrelDelay = GetFloatFromXMLNodeNamedChild(currentnode, "barrelDelay"); 
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'weapon' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipWeaponListFromVD2Data for a collection of 'weapon' data structures
-        public static ShipWeapon GetShipWeaponFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipWeapon> results = GetShipWeaponListFromVD2Data(inXML, inTagName);
-            ShipWeapon result = new ShipWeapon();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'upgrades' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipUpgradesFromVD2Data for a single 'upgrades' data structure
-        public static List<ShipUpgrades> GetShipUpgradesListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipUpgrades> result = new List<ShipUpgrades>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipUpgrades currentdata = new ShipUpgrades();
-
-                currentdata.primaryUpgradeCapacity = (byte)GetInt32FromXMLNodeNamedChild(currentnode, "primaryUpgradeCapacity");
-                currentdata.activeUpgradeCapacity = (byte)GetInt32FromXMLNodeNamedChild(currentnode, "activeUpgradeCapacity");
-                currentdata.upgradeID = GetStringListFromXMLNodeNamedChildren(currentnode, "upgradeID");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'upgrades' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipUpgradesListFromVD2Data for a collection of 'upgrades' data structures
-        public static ShipUpgrades GetShipUpgradesFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipUpgrades> results = GetShipUpgradesListFromVD2Data(inXML, inTagName);
-            ShipUpgrades result = new ShipUpgrades();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'turret' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipTurretFromVD2Data for a single 'turret' data structure
-        public static List<ShipTurret> GetShipTurretListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipTurret> result = new List<ShipTurret>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipTurret currentdata = new ShipTurret();
-
-                currentdata.turretID = GetStringFromXMLNodeNamedChild(currentnode, "turretID");
-                currentdata.turretRole = GetStringFromXMLNodeNamedChild(currentnode, "turretRole");
-                currentdata.turretOrientation = GetStringFromXMLNodeNamedChild(currentnode, "turretOrientation");
-                currentdata.weaponFire = GetStringFromXMLNodeNamedChild(currentnode, "weaponFire");
-                currentdata.weaponPositionID = GetStringFromXMLNodeNamedChild(currentnode, "weaponPositionID");
-                currentdata.position = GetVector3DFromXMLNodeNamedChild(currentnode, "position");
-                currentdata.pitchLower = GetFloatFromXMLNodeNamedChild(currentnode, "pitchLower");
-                currentdata.yaw = GetFloatFromXMLNodeNamedChild(currentnode, "yaw");
-                currentdata.pitch = GetFloatFromXMLNodeNamedChild(currentnode, "pitch");
-                currentdata.roll = GetFloatFromXMLNodeNamedChild(currentnode, "roll");
-                currentdata.yawPermitted = GetFloatFromXMLNodeNamedChild(currentnode, "yawPermitted");
-                currentdata.pitchPermitted = GetFloatFromXMLNodeNamedChild(currentnode, "pitchPermitted");
-                currentdata.rollPermitted = GetFloatFromXMLNodeNamedChild(currentnode, "rollPermitted");
-                currentdata.bShowInCockpit = GetBoolFromXMLNodeNamedChild(currentnode, "bShowInCockpit");
-                currentdata.bHideInHangar = GetBoolFromXMLNodeNamedChild(currentnode, "bHideInHangar");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'turret' data structure from a ship or upgrade definition
-        //Used for data structures that are not in a collection. See GetShipTurretListFromVD2Data for a collection of 'turret' data structures
-        public static ShipTurret GetShipTurretFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipTurret> results = GetShipTurretListFromVD2Data(inXML, inTagName);
-            ShipTurret result = new ShipTurret();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'debris' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipDebrisFromVD2Data for a single 'debris' data structure
-        public static List<ShipDebris> GetShipDebrisListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipDebris> result = new List<ShipDebris>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                int debrisnodeindex = 0;
-                for (debrisnodeindex = 0; debrisnodeindex < xmlnodes[nodeindex].ChildNodes.Count; debrisnodeindex++)
+                inEntry.NodeType = TagNameReportNodeTypes.datastructure;
+                if (inNode.ChildNodes.Count > 0)
                 {
-                    XmlNode currentnode = xmlnodes[nodeindex].ChildNodes[debrisnodeindex];
-                    ShipDebris currentdata = new ShipDebris();
+                    inEntry.UsageWithinThisDataStructure.Clear();
+                    for (int i = 0; i < inNode.ChildNodes.Count; i++)
+                    {
+                        if ((inNode.ChildNodes[i].Name != "note_to_self") && !(inNode.ChildNodes[i].Name.StartsWith("_")))
+                        {
+                            TagNameReportEntry currentchildentry = new TagNameReportEntry();
+                            if (inEntry.DataStructureProperties.ContainsKey(inNode.ChildNodes[i].Name))
+                            {
+                                inEntry.DataStructureProperties.TryGetValue(inNode.ChildNodes[i].Name, out currentchildentry);
+                            }
+                            currentchildentry = ParseHelpers.UpdateTagNameReportEntry(currentchildentry, inNode.ChildNodes[i], inEntry.UsageWithinThisDataStructure, out inEntry.UsageWithinThisDataStructure);
+                            inEntry.DataStructureProperties.Remove(inNode.ChildNodes[i].Name);
+                            inEntry.DataStructureProperties.Add(inNode.ChildNodes[i].Name, currentchildentry);
+                        }
+                    }
 
-                    currentdata.debrisID = GetStringFromXMLNodeNamedChild(currentnode, "debrisID");
-                    currentdata.debrisMomentum = GetInt32FromXMLNodeNamedChild(currentnode, "debrisMomentum");
-                    currentdata.debrisAngular = GetInt32FromXMLNodeNamedChild(currentnode, "debrisAngular");
-
-                    result.Add(currentdata);
                 }
             }
-            return result;
+            List<string> listtagnameblacklist = new List<string>();
+            listtagnameblacklist.Add("missionRankRequired");//there is a single erroneous double use of this in tug.xml because Paul hates me.
+            listtagnameblacklist.Add("shipClassSize");//one ship file has this twice and it is a mistake to make it a list
+            listtagnameblacklist.Add("cockpitActualPos");//one ship file has this twice and it is a mistake to make it a list
+            listtagnameblacklist.Add("yaw");//one ship file has this twice in a turret def and it is a mistake to make it a list
+            bool OnTagNameBlacklistForLists = false;
+            for (int blacklistidx = 0; blacklistidx < listtagnameblacklist.Count; blacklistidx++)
+            {
+                if (listtagnameblacklist[blacklistidx] == inNode.Name)
+                {
+                    OnTagNameBlacklistForLists = true;
+                }
+            }
+            if ((inWithinUsage.ContainsKey(inNode.Name)) && (!OnTagNameBlacklistForLists))
+            {
+                int useageinthisfile;
+                inWithinUsage.TryGetValue(inNode.Name, out useageinthisfile);
+                useageinthisfile = useageinthisfile + 1;
+                if (useageinthisfile > 1)
+                {
+                    inEntry.IsList = true;
+                }
+            }
+            else
+            {
+                if (!OnTagNameBlacklistForLists)
+                {
+                    inWithinUsage.Add(inNode.Name, 1);
+                }
+            }
+            outWithinUsage = inWithinUsage;
+            return inEntry;
         }
 
-        //Gets the first 'debris' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipDebrisListFromVD2Data for a collection of 'debris' data structures
-        public static ShipDebris GetShipDebrisFromVD2Data(XmlDocument inXML, string inTagName)
+        public static void GetTagNameListWithUseNumberReportFromXMLFiles(string inPath, string inReportName, out Dictionary<string, TagNameReportEntry> outRootTagResults, out Dictionary<string, Dictionary<string, TagNameReportEntry>> outChildTagResults)
         {
-            List<ShipDebris> results = GetShipDebrisListFromVD2Data(inXML, inTagName);
-            ShipDebris result = new ShipDebris();
-
-            if (results.Count > 0)
+            Dictionary<string, TagNameReportEntry> roottagresults = new Dictionary<string, TagNameReportEntry>();
+            Dictionary<string, Dictionary<string, TagNameReportEntry>> childtagresults = new Dictionary<string, Dictionary<string, TagNameReportEntry>>();
+            List<string> reporttextlines = new List<string>();
+            int i = 0;
+            if (Directory.Exists(inPath))
             {
-                result = results[0];
+                List<string> files = Directory.EnumerateFiles(inPath).ToList();
+
+                for (i = 0; i < files.Count; i++)
+                {
+                    Dictionary<string, int> UsageWithinThisFile = new Dictionary<string, int>();
+                    List<string> xmltextlines = File.ReadAllLines(files[i]).ToList();
+                    xmltextlines.Insert(1, "<docroot>");
+                    xmltextlines.Add("</docroot>");
+                    File.WriteAllLines("TempLoadStage.xml", xmltextlines);
+                    XmlDocument XMLfile = new XmlDocument();
+                    XMLfile.Load("TempLoadStage.xml");
+                    XmlNodeList nodelist = XMLfile.DocumentElement.ChildNodes;
+                    int nodeindex = 0;
+                    for (nodeindex = 0; nodeindex < nodelist.Count; nodeindex++)
+                    {
+                        if (roottagresults.ContainsKey(nodelist[nodeindex].Name))
+                        {
+                            TagNameReportEntry currententry = new TagNameReportEntry();
+                            roottagresults.TryGetValue(nodelist[nodeindex].Name, out currententry);
+                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+
+                            roottagresults.Remove(nodelist[nodeindex].Name);
+                            roottagresults.Add(nodelist[nodeindex].Name, currententry);
+                        }
+                        else
+                        {
+                            TagNameReportEntry currententry = new TagNameReportEntry();
+
+                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+
+                            roottagresults.Add(nodelist[nodeindex].Name, currententry);
+                        }
+
+                        if (nodelist[nodeindex].ChildNodes.Count > 0)
+                        {
+                            int childindex = 0;
+                            if (nodelist[nodeindex].Name == "debrisInfo")
+                            {
+                                int debrisindex = 0;
+                                for (debrisindex = 0; debrisindex < nodelist[nodeindex].ChildNodes.Count; debrisindex++)
+                                {
+                                    for (childindex = 0; childindex < nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes.Count; childindex++)
+                                    {
+                                        if (childtagresults.ContainsKey(nodelist[nodeindex].Name))
+                                        {
+                                            Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
+                                            childtagresults.TryGetValue(nodelist[nodeindex].Name, out childdictionary);
+                                            if (childdictionary.ContainsKey(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name))
+                                            {
+                                                TagNameReportEntry currententry = new TagNameReportEntry();
+                                                childdictionary.TryGetValue(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, out currententry);
+                                                currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                                childdictionary.Remove(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name);
+                                                childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
+                                            }
+                                            else
+                                            {
+                                                TagNameReportEntry currententry = new TagNameReportEntry();
+                                                currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                                childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
+                                            }
+                                            childtagresults.Remove(nodelist[nodeindex].Name);
+                                            childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
+                                        }
+                                        else
+                                        {
+                                            TagNameReportEntry currententry = new TagNameReportEntry();
+                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                            Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
+                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[debrisindex].ChildNodes[childindex].Name, currententry);
+                                            childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (childindex = 0; childindex < nodelist[nodeindex].ChildNodes.Count; childindex++)
+                                {
+                                    if (childtagresults.ContainsKey(nodelist[nodeindex].Name))
+                                    {
+                                        Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
+                                        childtagresults.TryGetValue(nodelist[nodeindex].Name, out childdictionary);
+                                        if (childdictionary.ContainsKey(nodelist[nodeindex].ChildNodes[childindex].Name))
+                                        {
+                                            TagNameReportEntry currententry = new TagNameReportEntry();
+                                            childdictionary.TryGetValue(nodelist[nodeindex].ChildNodes[childindex].Name, out currententry);
+                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                            childdictionary.Remove(nodelist[nodeindex].ChildNodes[childindex].Name);
+                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
+                                        }
+                                        else
+                                        {
+                                            TagNameReportEntry currententry = new TagNameReportEntry();
+                                            currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                            childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
+                                        }
+                                        childtagresults.Remove(nodelist[nodeindex].Name);
+                                        childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
+                                    }
+                                    else
+                                    {
+                                        TagNameReportEntry currententry = new TagNameReportEntry();
+                                        currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
+                                        Dictionary<string, TagNameReportEntry> childdictionary = new Dictionary<string, TagNameReportEntry>();
+                                        childdictionary.Add(nodelist[nodeindex].ChildNodes[childindex].Name, currententry);
+                                        childtagresults.Add(nodelist[nodeindex].Name, childdictionary);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            return result;
+            outRootTagResults = roottagresults;
+            outChildTagResults = childtagresults;
+            reporttextlines.Add("Report on tag names and usage for path: " + inPath);
+
+            for (i = 0; i < roottagresults.Count; i++)
+            {
+                KeyValuePair<string, TagNameReportEntry> currentresult = roottagresults.ElementAt(i);
+                reporttextlines.Add(currentresult.Key + " Usage: " + currentresult.Value.ToString());
+            }
+
+            reporttextlines.Add("");
+            reporttextlines.Add("Nodes with child nodes follow:");
+
+            for (i = 0; i < childtagresults.Count; i++)
+            {
+                reporttextlines.Add("");
+                KeyValuePair<string, Dictionary<string, TagNameReportEntry>> currentresult = childtagresults.ElementAt(i);
+                reporttextlines.Add(currentresult.Key + " has child nodes! Count: " + currentresult.Value.Count.ToString());
+                if (currentresult.Key == "debrisInfo")
+                {
+                    reporttextlines.Add("debrisInfo is a special data structure tag, it contains data structures called debris.");
+                    reporttextlines.Add("Below is actually the child tags of debris, debrisInfo tags only contain one or more debris tags");
+                }
+                reporttextlines.Add("Child node names:");
+                int childindex = 0;
+                for (childindex = 0; childindex < currentresult.Value.Count; childindex++)
+                {
+                    KeyValuePair<string, TagNameReportEntry> currentchildresult = currentresult.Value.ElementAt(childindex);
+                    reporttextlines.Add(currentchildresult.Key + " Usage: " + currentchildresult.Value.ToString());
+                }
+            }
+            reporttextlines.Add("Report ends.");
+            File.WriteAllLines(inReportName, reporttextlines);
         }
 
 
 
-        //Gets a list of 'shield' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipShieldFromVD2Data for a single 'shield' data structure
-        public static List<ShipShield> GetShipShieldListFromVD2Data(XmlDocument inXML, string inTagName)
+
+
+        public static void CombinedTagReport(List<Dictionary<string, TagNameReportEntry>> rootreports, List<Dictionary<string, Dictionary<string, TagNameReportEntry>>> childreports, string inReportName)
         {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipShield> result = new List<ShipShield>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
+            List<string> reporttextlines = new List<string>();
+            Dictionary<string, TagNameReportEntry> rootreport = new Dictionary<string, TagNameReportEntry>();
+            Dictionary<string, Dictionary<string, TagNameReportEntry>> childreport = new Dictionary<string, Dictionary<string, TagNameReportEntry>>();
+            int reportindex = 0;
+            for (reportindex = 0; reportindex < rootreports.Count; reportindex++)
             {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipShield currentdata = new ShipShield();
-
-                currentdata.shieldID = GetStringFromXMLNodeNamedChild(currentnode, "shieldID");
-                currentdata.shieldOrientation = GetStringFromXMLNodeNamedChild(currentnode, "shieldOrientation");
-                currentdata.shieldPosition = GetVector3DFromXMLNodeNamedChild(currentnode, "shieldPosition");
-                currentdata.yaw = GetFloatFromXMLNodeNamedChild(currentnode, "yaw");
-                currentdata.pitch = GetFloatFromXMLNodeNamedChild(currentnode, "pitch");
-                currentdata.roll = GetFloatFromXMLNodeNamedChild(currentnode, "roll");
-
-                result.Add(currentdata);
+                int tagindex = 0;
+                for (tagindex = 0; tagindex < rootreports[reportindex].Count; tagindex++)
+                {
+                    if (rootreport.ContainsKey(rootreports[reportindex].ElementAt(tagindex).Key))
+                    {
+                        TagNameReportEntry currentreport = new TagNameReportEntry();
+                        rootreport.TryGetValue(rootreports[reportindex].ElementAt(tagindex).Key, out currentreport);
+                        currentreport.UseNum += rootreports[reportindex].ElementAt(tagindex).Value.UseNum;
+                        if ((rootreports[reportindex].ElementAt(tagindex).Value.NodeType < currentreport.NodeType) && ((currentreport.NodeType < TagNameReportNodeTypes.vector) && (rootreports[reportindex].ElementAt(tagindex).Value.NodeType < TagNameReportNodeTypes.vector)))
+                        {
+                            currentreport.NodeType = rootreports[reportindex].ElementAt(tagindex).Value.NodeType;
+                        }
+                        rootreport.Remove(rootreports[reportindex].ElementAt(tagindex).Key);
+                        rootreport.Add(rootreports[reportindex].ElementAt(tagindex).Key, currentreport);
+                    }
+                    else
+                    {
+                        TagNameReportEntry currentreport = new TagNameReportEntry();
+                        currentreport.UseNum = rootreports[reportindex].ElementAt(tagindex).Value.UseNum;
+                        currentreport.NodeType = rootreports[reportindex].ElementAt(tagindex).Value.NodeType;
+                        rootreport.Add(rootreports[reportindex].ElementAt(tagindex).Key, currentreport);
+                    }
+                }
             }
-            return result;
-        }
 
-        //Gets the first 'shield' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipShieldListFromVD2Data for a collection of 'shield' data structures
-        public static ShipShield GetShipShieldFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipShield> results = GetShipShieldListFromVD2Data(inXML, inTagName);
-            ShipShield result = new ShipShield();
-
-            if (results.Count > 0)
+            for (reportindex = 0; reportindex < childreports.Count; reportindex++)
             {
-                result = results[0];
+                int tagindex = 0;
+                for (tagindex = 0; tagindex < childreports[reportindex].Count; tagindex++)
+                {
+                    if (childreport.ContainsKey(childreports[reportindex].ElementAt(tagindex).Key))
+                    {
+                        //replace
+                        Dictionary<string, TagNameReportEntry> currentchild = childreports[reportindex].ElementAt(tagindex).Value;
+                        Dictionary<string, TagNameReportEntry> currentchildtotal = new Dictionary<string, TagNameReportEntry>();
+                        childreport.TryGetValue(childreports[reportindex].ElementAt(tagindex).Key, out currentchildtotal);
+                        int childindex = 0;
+                        for (childindex = 0; childindex < currentchild.Count; childindex++)
+                        {
+                            if (currentchildtotal.ContainsKey(currentchild.ElementAt(childindex).Key))
+                            {
+                                //replace in subdictionary
+                                TagNameReportEntry currentreport = new TagNameReportEntry();
+                                currentchildtotal.TryGetValue(currentchild.ElementAt(childindex).Key, out currentreport);
+
+                                currentreport.UseNum += currentchild.ElementAt(childindex).Value.UseNum;
+                                if ((currentchild.ElementAt(childindex).Value.NodeType < currentreport.NodeType) && ((currentreport.NodeType < TagNameReportNodeTypes.vector) && (currentchild.ElementAt(childindex).Value.NodeType < TagNameReportNodeTypes.vector)))
+                                {
+                                    currentreport.NodeType = currentchild.ElementAt(childindex).Value.NodeType;
+                                }
+                                currentchildtotal.Remove(currentchild.ElementAt(childindex).Key);
+                                currentchildtotal.Add(currentchild.ElementAt(childindex).Key, currentreport);
+                                childreport.Remove(childreports[reportindex].ElementAt(tagindex).Key);
+                                childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, currentchildtotal);
+
+                            }
+                            else
+                            {
+                                //add to subdictionary
+                                currentchildtotal.Add(currentchild.ElementAt(childindex).Key, currentchild.ElementAt(childindex).Value);
+                                childreport.Remove(childreports[reportindex].ElementAt(tagindex).Key);
+                                childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, currentchildtotal);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        //add
+                        childreport.Add(childreports[reportindex].ElementAt(tagindex).Key, childreports[reportindex].ElementAt(tagindex).Value);
+                    }
+                }
             }
-            return result;
-        }
 
+            reporttextlines.Add("Combined total report. Name: " + inReportName);
+            reporttextlines.Add("");
+            reporttextlines.Add("Root tags:");
+            reporttextlines.Add("");
 
-
-        //Gets a list of 'afterburner' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipAfterburnerFromVD2Data for a single 'afterburner' data structure
-        public static List<ShipAfterburner> GetShipAfterburnerListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipAfterburner> result = new List<ShipAfterburner>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
+            for (reportindex = 0; reportindex < rootreport.Count; reportindex++)
             {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipAfterburner currentdata = new ShipAfterburner();
-
-                currentdata.soundID = GetStringFromXMLNodeNamedChild(currentnode, "soundID");
-                currentdata.tailSoundID = GetStringFromXMLNodeNamedChild(currentnode, "tailSoundID");
-                currentdata.multiplier = GetFloatFromXMLNodeNamedChild(currentnode, "multiplier");
-                currentdata.capacity = GetFloatFromXMLNodeNamedChild(currentnode, "capacity");
-                currentdata.recharge = GetFloatFromXMLNodeNamedChild(currentnode, "recharge");
-
-                result.Add(currentdata);
+                reporttextlines.Add(rootreport.ElementAt(reportindex).Key + " Usage: " + rootreport.ElementAt(reportindex).Value.ToString());
             }
-            return result;
-        }
 
-        //Gets the first 'afterburner' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipAfterburnerListFromVD2Data for a collection of 'afterburner' data structures
-        public static ShipAfterburner GetShipAfterburnerFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipAfterburner> results = GetShipAfterburnerListFromVD2Data(inXML, inTagName);
-            ShipAfterburner result = new ShipAfterburner();
+            reporttextlines.Add("");
+            reporttextlines.Add("Nodes with child nodes follow:");
 
-            if (results.Count > 0)
+            for (reportindex = 0; reportindex < childreport.Count; reportindex++)
             {
-                result = results[0];
+                reporttextlines.Add("");
+                KeyValuePair<string, Dictionary<string, TagNameReportEntry>> currentresult = childreport.ElementAt(reportindex);
+                reporttextlines.Add(currentresult.Key + " has child nodes! Count: " + currentresult.Value.Count.ToString());
+                if (currentresult.Key == "debrisInfo")
+                {
+                    reporttextlines.Add("debrisInfo is a special data structure tag, it contains data structures called debris.");
+                    reporttextlines.Add("Below is actually the child tags of debris, debrisInfo tags only contain one or more debris tags");
+                }
+                reporttextlines.Add("Child node names:");
+                int childindex = 0;
+                for (childindex = 0; childindex < currentresult.Value.Count; childindex++)
+                {
+                    KeyValuePair<string, TagNameReportEntry> currentchildresult = currentresult.Value.ElementAt(childindex);
+                    reporttextlines.Add(currentchildresult.Key + " Usage: " + currentchildresult.Value.ToString());
+                }
             }
-            return result;
-        }
 
-
-
-        //Gets a list of 'attachment' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipAttachmentFromVD2Data for a single 'attachment' data structure
-        public static List<ShipAttachment> GetShipAttachmentListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipAttachment> result = new List<ShipAttachment>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipAttachment currentdata = new ShipAttachment();
-
-                currentdata.attachmentID = GetStringFromXMLNodeNamedChild(currentnode, "attachmentID");
-                currentdata.attachmentPosition = GetVector3DFromXMLNodeNamedChild(currentnode, "attachmentPosition");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'attachment' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipAttachmentListFromVD2Data for a collection of 'attachment' data structures
-        public static ShipAttachment GetShipAttachmentFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipAttachment> results = GetShipAttachmentListFromVD2Data(inXML, inTagName);
-            ShipAttachment result = new ShipAttachment();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'movingElement' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipMovingElementFromVD2Data for a single 'movingElement' data structure
-        public static List<ShipMovingElement> GetShipMovingElementListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipMovingElement> result = new List<ShipMovingElement>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipMovingElement currentdata = new ShipMovingElement();
-
-                currentdata.boneName = GetStringFromXMLNodeNamedChild(currentnode, "boneName");
-                currentdata.bCombat = GetBoolFromXMLNodeNamedChild(currentnode, "bCombat");
-                currentdata.bLinkedToWeapon = GetBoolFromXMLNodeNamedChild(currentnode, "bLinkedToWeapon");
-                currentdata.translateAmount = GetVector3DFromXMLNodeNamedChild(currentnode, "translateAmount");
-                currentdata.yaw = GetFloatFromXMLNodeNamedChild(currentnode, "yaw");
-                currentdata.pitch = GetFloatFromXMLNodeNamedChild(currentnode, "pitch");
-                currentdata.roll = GetFloatFromXMLNodeNamedChild(currentnode, "roll");
-                currentdata.speedMultiplier = GetFloatFromXMLNodeNamedChild(currentnode, "speedMultiplier"); 
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'movingElement' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipMovingElementListFromVD2Data for a collection of 'movingElement' data structures
-        public static ShipMovingElement GetShipMovingElementFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipMovingElement> results = GetShipMovingElementListFromVD2Data(inXML, inTagName);
-            ShipMovingElement result = new ShipMovingElement();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'damage' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipDamageFromVD2Data for a single 'damage' data structure
-        public static List<ShipDamage> GetShipDamageListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipDamage> result = new List<ShipDamage>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipDamage currentdata = new ShipDamage();
-
-                currentdata.damageEffectID = GetStringFromXMLNodeNamedChild(currentnode, "damageEffectID");
-                currentdata.position = GetVector3DFromXMLNodeNamedChild(currentnode, "position");
-                currentdata.yaw = GetFloatFromXMLNodeNamedChild(currentnode, "yaw");
-                currentdata.pitch = GetFloatFromXMLNodeNamedChild(currentnode, "pitch");
-                currentdata.roll = GetFloatFromXMLNodeNamedChild(currentnode, "roll");
-                currentdata.healthPoint = GetFloatFromXMLNodeNamedChild(currentnode, "healthPoint");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'damage' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipDamageListFromVD2Data for a collection of 'damage' data structures
-        public static ShipDamage GetShipDamageFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipDamage> results = GetShipDamageListFromVD2Data(inXML, inTagName);
-            ShipDamage result = new ShipDamage();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'dock' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipDockFromVD2Data for a single 'dock' data structure
-        public static List<ShipDock> GetShipDockListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipDock> result = new List<ShipDock>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipDock currentdata = new ShipDock();
-
-                currentdata.dockType = GetStringFromXMLNodeNamedChild(currentnode, "dockType");
-                currentdata.objectID = GetStringFromXMLNodeNamedChild(currentnode, "objectID");
-                currentdata.attachedID = GetStringFromXMLNodeNamedChild(currentnode, "attachedID");
-                currentdata.orientation = GetStringFromXMLNodeNamedChild(currentnode, "orientation");
-                currentdata.ejectOrientation = GetStringFromXMLNodeNamedChild(currentnode, "ejectOrientation");
-                currentdata.resourceOnly = GetStringFromXMLNodeNamedChild(currentnode, "resourceOnly");
-                currentdata.dockType = GetStringFromXMLNodeNamedChild(currentnode, "dockType");
-                currentdata.position = GetVector3DFromXMLNodeNamedChild(currentnode, "position");
-                currentdata.dockYawOffset = GetFloatFromXMLNodeNamedChild(currentnode, "dockYawOffset");
-                currentdata.dockPitchOffset = GetFloatFromXMLNodeNamedChild(currentnode, "dockPitchOffset");
-                currentdata.dockRollOffset = GetFloatFromXMLNodeNamedChild(currentnode, "dockRollOffset");
-                currentdata.bInvisible = GetBoolFromXMLNodeNamedChild(currentnode, "bInvisible");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'dock' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipDockListFromVD2Data for a collection of 'dock' data structures
-        public static ShipDock GetShipDockFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipDock> results = GetShipDockListFromVD2Data(inXML, inTagName);
-            ShipDock result = new ShipDock();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'targetPriorityList' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipTargetPriorityListFromVD2Data for a single 'targetPriorityList' data structure
-        public static List<ShipTargetPriorityList> GetShipTargetPriorityListListFromVD2Data(XmlDocument inXML, string inTagName)
-        {//lmao the function name, damn it Paul. This whole data structure is trolling me, it is just a list of strings!
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipTargetPriorityList> result = new List<ShipTargetPriorityList>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipTargetPriorityList currentdata = new ShipTargetPriorityList();
-
-                currentdata.targetClass = GetStringListFromXMLNodeNamedChildren(currentnode, "targetClass");
-               
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'targetPriorityList' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipTargetPriorityListListFromVD2Data for a collection of 'targetPriorityList' data structures
-        public static ShipTargetPriorityList GetShipTargetPriorityListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipTargetPriorityList> results = GetShipTargetPriorityListListFromVD2Data(inXML, inTagName);
-            ShipTargetPriorityList result = new ShipTargetPriorityList();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }
-
-
-
-        //Gets a list of 'rotatingElement' data structures from a ship definition
-        //Used for data structures that are in a collection. See GetShipRotatingElementFromVD2Data for a single 'rotatingElement' data structure
-        public static List<ShipRotatingElement> GetShipRotatingElementListFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
-            List<ShipRotatingElement> result = new List<ShipRotatingElement>();
-            int nodeindex = 0;
-            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)
-            {
-                XmlNode currentnode = xmlnodes[nodeindex];
-                ShipRotatingElement currentdata = new ShipRotatingElement();
-
-                currentdata.boneName = GetStringFromXMLNodeNamedChild(currentnode, "boneName");
-                currentdata.rollSpeed = GetInt32FromXMLNodeNamedChild(currentnode, "rollSpeed");
-                currentdata.bLinkedToWeapon = GetBoolFromXMLNodeNamedChild(currentnode, "bLinkedToWeapon");
-
-                result.Add(currentdata);
-            }
-            return result;
-        }
-
-        //Gets the first 'rotatingElement' data structure from a ship definition
-        //Used for data structures that are not in a collection. See GetShipRotatingElementListFromVD2Data for a collection of 'rotatingElement' data structures
-        public static ShipRotatingElement GetShipRotatingElementFromVD2Data(XmlDocument inXML, string inTagName)
-        {
-            List<ShipRotatingElement> results = GetShipRotatingElementListFromVD2Data(inXML, inTagName);
-            ShipRotatingElement result = new ShipRotatingElement();
-
-            if (results.Count > 0)
-            {
-                result = results[0];
-            }
-            return result;
-        }*/
+            reporttextlines.Add("Report ends.");
+            File.WriteAllLines(inReportName, reporttextlines);
+        }        
     }
 }
  

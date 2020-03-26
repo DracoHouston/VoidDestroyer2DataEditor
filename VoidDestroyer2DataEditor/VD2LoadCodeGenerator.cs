@@ -51,7 +51,7 @@ namespace VoidDestroyer2DataEditor
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
-                        if (inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b"))
+                        if ((inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b")) && (char.IsUpper(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).ElementAt(1))))
                         {
                             if (currentdatastructureproperty.IsList)
                             {
