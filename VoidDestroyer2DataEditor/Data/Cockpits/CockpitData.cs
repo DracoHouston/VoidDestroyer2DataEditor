@@ -16,38 +16,74 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _offsetPosition;
 
-        [Description("objectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string meshName
         {
-            get => _meshName;
-            set => _meshName = value;
+            get
+            {
+                return _meshName;
+            }
+            set
+            {
+                _meshName = value;
+                SetPropertyEdited("meshName", true);
+            }
         }
 
 
-        [Description("offsetPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("offsetPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D offsetPosition
         {
-            get => _offsetPosition;
-            set => _offsetPosition = value;
+            get
+            {
+                return _offsetPosition;
+            }
+            set
+            {
+                _offsetPosition = value;
+                SetPropertyEdited("offsetPosition", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("objectID");
+            InitProperty("meshName");
+
+            InitProperty("offsetPosition");
+
+        }
 
         public CockpitData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID");
-                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName");
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                SetPropertyExistsInBaseData("objectID", exists);
+                SetPropertyExists("objectID", exists);
+                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
+                SetPropertyExistsInBaseData("meshName", exists);
+                SetPropertyExists("meshName", exists);
 
-                _offsetPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "offsetPosition");
+                _offsetPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "offsetPosition", out exists);
+                SetPropertyExistsInBaseData("offsetPosition", exists);
+                SetPropertyExists("offsetPosition", exists);
 
             }
         }

@@ -106,7 +106,6 @@
     <Compile Include="UI\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\VD2CollectionsUITypeEditor.cs" />
     <Compile Include="UI\VD2UITypeEditor.cs" />
     <Compile Include="VD2Data.cs" />
     <Compile Include="VD2DB.cs" />

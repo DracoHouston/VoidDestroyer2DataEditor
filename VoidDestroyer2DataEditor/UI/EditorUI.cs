@@ -15,7 +15,6 @@ namespace VoidDestroyer2DataEditor
         {
             get
             {
-                EditorUI result = null;
                 if (Instance == null)
                 {
                     Instance = new EditorUI();

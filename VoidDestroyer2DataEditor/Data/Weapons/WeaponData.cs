@@ -43,7 +43,6 @@ namespace VoidDestroyer2DataEditor
 
         int _distance;
         int _roundsPerShot;
-        int _color;
         int _rotateSpeed;
 
         float _damage;
@@ -83,565 +82,1252 @@ namespace VoidDestroyer2DataEditor
         Vector3D _size;
         Vector3D _particlePosition;
 
+        ColorF _color;
+
         recoilDataStructure _recoil;
         rotateBonesDataStructure _rotateBones;
 
-        [Description("weaponType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
         {
-            get => _weaponType;
-            set => _weaponType = value;
+            get
+            {
+                return _weaponType;
+            }
+            set
+            {
+                _weaponType = value;
+                SetPropertyEdited("weaponType", true);
+            }
         }
 
-        [Description("weaponID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("weaponID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponID
         {
-            get => _weaponID;
-            set => _weaponID = value;
+            get
+            {
+                return _weaponID;
+            }
+            set
+            {
+                _weaponID = value;
+                SetPropertyEdited("weaponID", true);
+            }
         }
 
-        [Description("name is a plaintext string"), Category("Plaintext Strings")]
+        [Description("name is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string name
         {
-            get => _name;
-            set => _name = value;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                SetPropertyEdited("name", true);
+            }
         }
 
-        [Description("materialName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("materialName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string materialName
         {
-            get => _materialName;
-            set => _materialName = value;
+            get
+            {
+                return _materialName;
+            }
+            set
+            {
+                _materialName = value;
+                SetPropertyEdited("materialName", true);
+            }
         }
 
-        [Description("hitParticleName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("hitParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string hitParticleName
         {
-            get => _hitParticleName;
-            set => _hitParticleName = value;
+            get
+            {
+                return _hitParticleName;
+            }
+            set
+            {
+                _hitParticleName = value;
+                SetPropertyEdited("hitParticleName", true);
+            }
         }
 
-        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string muzzleFlashEffectID
         {
-            get => _muzzleFlashEffectID;
-            set => _muzzleFlashEffectID = value;
+            get
+            {
+                return _muzzleFlashEffectID;
+            }
+            set
+            {
+                _muzzleFlashEffectID = value;
+                SetPropertyEdited("muzzleFlashEffectID", true);
+            }
         }
 
-        [Description("gravityObjectType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("gravityObjectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string gravityObjectType
         {
-            get => _gravityObjectType;
-            set => _gravityObjectType = value;
+            get
+            {
+                return _gravityObjectType;
+            }
+            set
+            {
+                _gravityObjectType = value;
+                SetPropertyEdited("gravityObjectType", true);
+            }
         }
 
-        [Description("maxShipSize is a plaintext string"), Category("Plaintext Strings")]
+        [Description("maxShipSize is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string maxShipSize
         {
-            get => _maxShipSize;
-            set => _maxShipSize = value;
+            get
+            {
+                return _maxShipSize;
+            }
+            set
+            {
+                _maxShipSize = value;
+                SetPropertyEdited("maxShipSize", true);
+            }
         }
 
-        [Description("shieldID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shieldID
         {
-            get => _shieldID;
-            set => _shieldID = value;
+            get
+            {
+                return _shieldID;
+            }
+            set
+            {
+                _shieldID = value;
+                SetPropertyEdited("shieldID", true);
+            }
         }
 
-        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string ammunitionID
         {
-            get => _ammunitionID;
-            set => _ammunitionID = value;
+            get
+            {
+                return _ammunitionID;
+            }
+            set
+            {
+                _ammunitionID = value;
+                SetPropertyEdited("ammunitionID", true);
+            }
         }
 
-        [Description("projectileWeaponType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("projectileWeaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string projectileWeaponType
         {
-            get => _projectileWeaponType;
-            set => _projectileWeaponType = value;
+            get
+            {
+                return _projectileWeaponType;
+            }
+            set
+            {
+                _projectileWeaponType = value;
+                SetPropertyEdited("projectileWeaponType", true);
+            }
         }
 
-        [Description("instantType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("instantType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string instantType
         {
-            get => _instantType;
-            set => _instantType = value;
+            get
+            {
+                return _instantType;
+            }
+            set
+            {
+                _instantType = value;
+                SetPropertyEdited("instantType", true);
+            }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string explosionID
         {
-            get => _explosionID;
-            set => _explosionID = value;
+            get
+            {
+                return _explosionID;
+            }
+            set
+            {
+                _explosionID = value;
+                SetPropertyEdited("explosionID", true);
+            }
         }
 
-        [Description("chargeSoundID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("chargeSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string chargeSoundID
         {
-            get => _chargeSoundID;
-            set => _chargeSoundID = value;
+            get
+            {
+                return _chargeSoundID;
+            }
+            set
+            {
+                _chargeSoundID = value;
+                SetPropertyEdited("chargeSoundID", true);
+            }
         }
 
-        [Description("chargedSoundID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("chargedSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string chargedSoundID
         {
-            get => _chargedSoundID;
-            set => _chargedSoundID = value;
+            get
+            {
+                return _chargedSoundID;
+            }
+            set
+            {
+                _chargedSoundID = value;
+                SetPropertyEdited("chargedSoundID", true);
+            }
         }
 
-        [Description("chargeParticleName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("chargeParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string chargeParticleName
         {
-            get => _chargeParticleName;
-            set => _chargeParticleName = value;
+            get
+            {
+                return _chargeParticleName;
+            }
+            set
+            {
+                _chargeParticleName = value;
+                SetPropertyEdited("chargeParticleName", true);
+            }
         }
 
-        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string auxAmmunitionID
         {
-            get => _auxAmmunitionID;
-            set => _auxAmmunitionID = value;
+            get
+            {
+                return _auxAmmunitionID;
+            }
+            set
+            {
+                _auxAmmunitionID = value;
+                SetPropertyEdited("auxAmmunitionID", true);
+            }
         }
 
-        [Description("linkedRotatingElement is a plaintext string"), Category("Plaintext Strings")]
+        [Description("linkedRotatingElement is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string linkedRotatingElement
         {
-            get => _linkedRotatingElement;
-            set => _linkedRotatingElement = value;
+            get
+            {
+                return _linkedRotatingElement;
+            }
+            set
+            {
+                _linkedRotatingElement = value;
+                SetPropertyEdited("linkedRotatingElement", true);
+            }
         }
 
-        [Description("beamShieldID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("beamShieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string beamShieldID
         {
-            get => _beamShieldID;
-            set => _beamShieldID = value;
+            get
+            {
+                return _beamShieldID;
+            }
+            set
+            {
+                _beamShieldID = value;
+                SetPropertyEdited("beamShieldID", true);
+            }
         }
 
-        [Description("collisionWeaponType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("collisionWeaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionWeaponType
         {
-            get => _collisionWeaponType;
-            set => _collisionWeaponType = value;
+            get
+            {
+                return _collisionWeaponType;
+            }
+            set
+            {
+                _collisionWeaponType = value;
+                SetPropertyEdited("collisionWeaponType", true);
+            }
         }
 
-        [Description("particleEffectName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("particleEffectName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string particleEffectName
         {
-            get => _particleEffectName;
-            set => _particleEffectName = value;
+            get
+            {
+                return _particleEffectName;
+            }
+            set
+            {
+                _particleEffectName = value;
+                SetPropertyEdited("particleEffectName", true);
+            }
         }
 
-        [Description("beamType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("beamType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string beamType
         {
-            get => _beamType;
-            set => _beamType = value;
+            get
+            {
+                return _beamType;
+            }
+            set
+            {
+                _beamType = value;
+                SetPropertyEdited("beamType", true);
+            }
         }
 
-        [Description("hitSound is a plaintext string"), Category("Plaintext Strings")]
+        [Description("hitSound is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string hitSound
         {
-            get => _hitSound;
-            set => _hitSound = value;
+            get
+            {
+                return _hitSound;
+            }
+            set
+            {
+                _hitSound = value;
+                SetPropertyEdited("hitSound", true);
+            }
         }
 
-        [Description("fireParticleName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("fireParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string fireParticleName
         {
-            get => _fireParticleName;
-            set => _fireParticleName = value;
+            get
+            {
+                return _fireParticleName;
+            }
+            set
+            {
+                _fireParticleName = value;
+                SetPropertyEdited("fireParticleName", true);
+            }
         }
 
-        [Description("linkedMovingElement is a plaintext string"), Category("Plaintext Strings")]
+        [Description("linkedMovingElement is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string linkedMovingElement
         {
-            get => _linkedMovingElement;
-            set => _linkedMovingElement = value;
+            get
+            {
+                return _linkedMovingElement;
+            }
+            set
+            {
+                _linkedMovingElement = value;
+                SetPropertyEdited("linkedMovingElement", true);
+            }
         }
 
-        [Description("minimumShipClass is a plaintext string"), Category("Plaintext Strings")]
+        [Description("minimumShipClass is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string minimumShipClass
         {
-            get => _minimumShipClass;
-            set => _minimumShipClass = value;
+            get
+            {
+                return _minimumShipClass;
+            }
+            set
+            {
+                _minimumShipClass = value;
+                SetPropertyEdited("minimumShipClass", true);
+            }
         }
 
-        [Description("hangarID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("hangarID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string hangarID
         {
-            get => _hangarID;
-            set => _hangarID = value;
+            get
+            {
+                return _hangarID;
+            }
+            set
+            {
+                _hangarID = value;
+                SetPropertyEdited("hangarID", true);
+            }
         }
 
 
-        [Description("fireSoundID is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("fireSoundID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> fireSoundID
         {
-            get => _fireSoundID;
-            set => _fireSoundID = value;
+            get
+            {
+                return _fireSoundID;
+            }
+            set
+            {
+                _fireSoundID = value;
+                SetPropertyEdited("fireSoundID", true);
+            }
         }
 
 
-        [Description("distance is an integer"), Category("Integers")]
+        [Description("distance is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int distance
         {
-            get => _distance;
-            set => _distance = value;
+            get
+            {
+                return _distance;
+            }
+            set
+            {
+                _distance = value;
+                SetPropertyEdited("distance", true);
+            }
         }
 
-        [Description("roundsPerShot is an integer"), Category("Integers")]
+        [Description("roundsPerShot is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int roundsPerShot
         {
-            get => _roundsPerShot;
-            set => _roundsPerShot = value;
+            get
+            {
+                return _roundsPerShot;
+            }
+            set
+            {
+                _roundsPerShot = value;
+                SetPropertyEdited("roundsPerShot", true);
+            }
         }
 
-        [Description("color is an integer"), Category("Integers")]
-        public int color
-        {
-            get => _color;
-            set => _color = value;
-        }
-
-        [Description("rotateSpeed is an integer"), Category("Integers")]
+        [Description("rotateSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rotateSpeed
         {
-            get => _rotateSpeed;
-            set => _rotateSpeed = value;
+            get
+            {
+                return _rotateSpeed;
+            }
+            set
+            {
+                _rotateSpeed = value;
+                SetPropertyEdited("rotateSpeed", true);
+            }
         }
 
 
-        [Description("damage is a real number"), Category("Real Numbers")]
+        [Description("damage is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float damage
         {
-            get => _damage;
-            set => _damage = value;
+            get
+            {
+                return _damage;
+            }
+            set
+            {
+                _damage = value;
+                SetPropertyEdited("damage", true);
+            }
         }
 
-        [Description("range is a real number"), Category("Real Numbers")]
+        [Description("range is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float range
         {
-            get => _range;
-            set => _range = value;
+            get
+            {
+                return _range;
+            }
+            set
+            {
+                _range = value;
+                SetPropertyEdited("range", true);
+            }
         }
 
-        [Description("baseScale is a real number"), Category("Real Numbers")]
+        [Description("baseScale is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float baseScale
         {
-            get => _baseScale;
-            set => _baseScale = value;
+            get
+            {
+                return _baseScale;
+            }
+            set
+            {
+                _baseScale = value;
+                SetPropertyEdited("baseScale", true);
+            }
         }
 
-        [Description("oscilateRange is a real number"), Category("Real Numbers")]
+        [Description("oscilateRange is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float oscilateRange
         {
-            get => _oscilateRange;
-            set => _oscilateRange = value;
+            get
+            {
+                return _oscilateRange;
+            }
+            set
+            {
+                _oscilateRange = value;
+                SetPropertyEdited("oscilateRange", true);
+            }
         }
 
-        [Description("oscilateAmount is a real number"), Category("Real Numbers")]
+        [Description("oscilateAmount is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float oscilateAmount
         {
-            get => _oscilateAmount;
-            set => _oscilateAmount = value;
+            get
+            {
+                return _oscilateAmount;
+            }
+            set
+            {
+                _oscilateAmount = value;
+                SetPropertyEdited("oscilateAmount", true);
+            }
         }
 
-        [Description("capacity is a real number"), Category("Real Numbers")]
+        [Description("capacity is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float capacity
         {
-            get => _capacity;
-            set => _capacity = value;
+            get
+            {
+                return _capacity;
+            }
+            set
+            {
+                _capacity = value;
+                SetPropertyEdited("capacity", true);
+            }
         }
 
-        [Description("reloadTime is a real number"), Category("Real Numbers")]
+        [Description("reloadTime is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float reloadTime
         {
-            get => _reloadTime;
-            set => _reloadTime = value;
+            get
+            {
+                return _reloadTime;
+            }
+            set
+            {
+                _reloadTime = value;
+                SetPropertyEdited("reloadTime", true);
+            }
         }
 
-        [Description("assistDegree is a real number"), Category("Real Numbers")]
+        [Description("assistDegree is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float assistDegree
         {
-            get => _assistDegree;
-            set => _assistDegree = value;
+            get
+            {
+                return _assistDegree;
+            }
+            set
+            {
+                _assistDegree = value;
+                SetPropertyEdited("assistDegree", true);
+            }
         }
 
-        [Description("reFireRate is a real number"), Category("Real Numbers")]
+        [Description("reFireRate is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float reFireRate
         {
-            get => _reFireRate;
-            set => _reFireRate = value;
+            get
+            {
+                return _reFireRate;
+            }
+            set
+            {
+                _reFireRate = value;
+                SetPropertyEdited("reFireRate", true);
+            }
         }
 
-        [Description("parentPush is a real number"), Category("Real Numbers")]
+        [Description("parentPush is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float parentPush
         {
-            get => _parentPush;
-            set => _parentPush = value;
+            get
+            {
+                return _parentPush;
+            }
+            set
+            {
+                _parentPush = value;
+                SetPropertyEdited("parentPush", true);
+            }
         }
 
-        [Description("penetrateZ is a real number"), Category("Real Numbers")]
+        [Description("penetrateZ is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float penetrateZ
         {
-            get => _penetrateZ;
-            set => _penetrateZ = value;
+            get
+            {
+                return _penetrateZ;
+            }
+            set
+            {
+                _penetrateZ = value;
+                SetPropertyEdited("penetrateZ", true);
+            }
         }
 
-        [Description("speedChange is a real number"), Category("Real Numbers")]
+        [Description("speedChange is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float speedChange
         {
-            get => _speedChange;
-            set => _speedChange = value;
+            get
+            {
+                return _speedChange;
+            }
+            set
+            {
+                _speedChange = value;
+                SetPropertyEdited("speedChange", true);
+            }
         }
 
-        [Description("weaponPush is a real number"), Category("Real Numbers")]
+        [Description("weaponPush is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float weaponPush
         {
-            get => _weaponPush;
-            set => _weaponPush = value;
+            get
+            {
+                return _weaponPush;
+            }
+            set
+            {
+                _weaponPush = value;
+                SetPropertyEdited("weaponPush", true);
+            }
         }
 
-        [Description("visualTimer is a real number"), Category("Real Numbers")]
+        [Description("visualTimer is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float visualTimer
         {
-            get => _visualTimer;
-            set => _visualTimer = value;
+            get
+            {
+                return _visualTimer;
+            }
+            set
+            {
+                _visualTimer = value;
+                SetPropertyEdited("visualTimer", true);
+            }
         }
 
-        [Description("pullSpeed is a real number"), Category("Real Numbers")]
+        [Description("pullSpeed is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pullSpeed
         {
-            get => _pullSpeed;
-            set => _pullSpeed = value;
+            get
+            {
+                return _pullSpeed;
+            }
+            set
+            {
+                _pullSpeed = value;
+                SetPropertyEdited("pullSpeed", true);
+            }
         }
 
-        [Description("disableRate is a real number"), Category("Real Numbers")]
+        [Description("disableRate is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float disableRate
         {
-            get => _disableRate;
-            set => _disableRate = value;
+            get
+            {
+                return _disableRate;
+            }
+            set
+            {
+                _disableRate = value;
+                SetPropertyEdited("disableRate", true);
+            }
         }
 
 
         [Description("scatterYaw is a collection of real numbers"), Category("Real Number Collections")]
         public List<float> scatterYaw
         {
-            get => _scatterYaw;
-            set => _scatterYaw = value;
+            get
+            {
+                return _scatterYaw;
+            }
+            set
+            {
+                _scatterYaw = value;
+                SetPropertyEdited("scatterYaw", true);
+            }
         }
 
         [Description("scatterPitch is a collection of real numbers"), Category("Real Number Collections")]
         public List<float> scatterPitch
         {
-            get => _scatterPitch;
-            set => _scatterPitch = value;
+            get
+            {
+                return _scatterPitch;
+            }
+            set
+            {
+                _scatterPitch = value;
+                SetPropertyEdited("scatterPitch", true);
+            }
         }
 
 
-        [Description("bNoAimAssist is a boolean value"), Category("Booleans")]
+        [Description("bNoAimAssist is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoAimAssist
         {
-            get => _bNoAimAssist;
-            set => _bNoAimAssist = value;
+            get
+            {
+                return _bNoAimAssist;
+            }
+            set
+            {
+                _bNoAimAssist = value;
+                SetPropertyEdited("bNoAimAssist", true);
+            }
         }
 
-        [Description("bAlwaysPlayFireSound is a boolean value"), Category("Booleans")]
+        [Description("bAlwaysPlayFireSound is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bAlwaysPlayFireSound
         {
-            get => _bAlwaysPlayFireSound;
-            set => _bAlwaysPlayFireSound = value;
+            get
+            {
+                return _bAlwaysPlayFireSound;
+            }
+            set
+            {
+                _bAlwaysPlayFireSound = value;
+                SetPropertyEdited("bAlwaysPlayFireSound", true);
+            }
         }
 
-        [Description("bFireFullAmmo is a boolean value"), Category("Booleans")]
+        [Description("bFireFullAmmo is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bFireFullAmmo
         {
-            get => _bFireFullAmmo;
-            set => _bFireFullAmmo = value;
+            get
+            {
+                return _bFireFullAmmo;
+            }
+            set
+            {
+                _bFireFullAmmo = value;
+                SetPropertyEdited("bFireFullAmmo", true);
+            }
         }
 
-        [Description("bSticky is a boolean value"), Category("Booleans")]
+        [Description("bSticky is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bSticky
         {
-            get => _bSticky;
-            set => _bSticky = value;
+            get
+            {
+                return _bSticky;
+            }
+            set
+            {
+                _bSticky = value;
+                SetPropertyEdited("bSticky", true);
+            }
         }
 
-        [Description("bCapture is a boolean value"), Category("Booleans")]
+        [Description("bCapture is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCapture
         {
-            get => _bCapture;
-            set => _bCapture = value;
+            get
+            {
+                return _bCapture;
+            }
+            set
+            {
+                _bCapture = value;
+                SetPropertyEdited("bCapture", true);
+            }
         }
 
-        [Description("bReduceMassOnStick is a boolean value"), Category("Booleans")]
+        [Description("bReduceMassOnStick is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bReduceMassOnStick
         {
-            get => _bReduceMassOnStick;
-            set => _bReduceMassOnStick = value;
+            get
+            {
+                return _bReduceMassOnStick;
+            }
+            set
+            {
+                _bReduceMassOnStick = value;
+                SetPropertyEdited("bReduceMassOnStick", true);
+            }
         }
 
-        [Description("bChargeGun is a boolean value"), Category("Booleans")]
+        [Description("bChargeGun is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bChargeGun
         {
-            get => _bChargeGun;
-            set => _bChargeGun = value;
+            get
+            {
+                return _bChargeGun;
+            }
+            set
+            {
+                _bChargeGun = value;
+                SetPropertyEdited("bChargeGun", true);
+            }
         }
 
-        [Description("bAntiCapShip is a boolean value"), Category("Booleans")]
+        [Description("bAntiCapShip is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bAntiCapShip
         {
-            get => _bAntiCapShip;
-            set => _bAntiCapShip = value;
+            get
+            {
+                return _bAntiCapShip;
+            }
+            set
+            {
+                _bAntiCapShip = value;
+                SetPropertyEdited("bAntiCapShip", true);
+            }
         }
 
-        [Description("bIgnoresShields is a boolean value"), Category("Booleans")]
+        [Description("bIgnoresShields is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bIgnoresShields
         {
-            get => _bIgnoresShields;
-            set => _bIgnoresShields = value;
+            get
+            {
+                return _bIgnoresShields;
+            }
+            set
+            {
+                _bIgnoresShields = value;
+                SetPropertyEdited("bIgnoresShields", true);
+            }
         }
 
-        [Description("bAddRandom is a boolean value"), Category("Booleans")]
+        [Description("bAddRandom is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bAddRandom
         {
-            get => _bAddRandom;
-            set => _bAddRandom = value;
+            get
+            {
+                return _bAddRandom;
+            }
+            set
+            {
+                _bAddRandom = value;
+                SetPropertyEdited("bAddRandom", true);
+            }
         }
 
-        [Description("bMining is a boolean value"), Category("Booleans")]
+        [Description("bMining is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bMining
         {
-            get => _bMining;
-            set => _bMining = value;
+            get
+            {
+                return _bMining;
+            }
+            set
+            {
+                _bMining = value;
+                SetPropertyEdited("bMining", true);
+            }
         }
 
-        [Description("bRepair is a boolean value"), Category("Booleans")]
+        [Description("bRepair is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bRepair
         {
-            get => _bRepair;
-            set => _bRepair = value;
+            get
+            {
+                return _bRepair;
+            }
+            set
+            {
+                _bRepair = value;
+                SetPropertyEdited("bRepair", true);
+            }
         }
 
-        [Description("bAntiCapital is a boolean value"), Category("Booleans")]
+        [Description("bAntiCapital is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bAntiCapital
         {
-            get => _bAntiCapital;
-            set => _bAntiCapital = value;
+            get
+            {
+                return _bAntiCapital;
+            }
+            set
+            {
+                _bAntiCapital = value;
+                SetPropertyEdited("bAntiCapital", true);
+            }
         }
 
 
-        [Description("size is a 3D vector"), Category("3D Vectors")]
+        [Description("size is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D size
         {
-            get => _size;
-            set => _size = value;
+            get
+            {
+                return _size;
+            }
+            set
+            {
+                _size = value;
+                SetPropertyEdited("size", true);
+            }
         }
 
-        [Description("particlePosition is a 3D vector"), Category("3D Vectors")]
+        [Description("particlePosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D particlePosition
         {
-            get => _particlePosition;
-            set => _particlePosition = value;
+            get
+            {
+                return _particlePosition;
+            }
+            set
+            {
+                _particlePosition = value;
+                SetPropertyEdited("particlePosition", true);
+            }
         }
 
 
-        [Description("recoil is a datastructure"), Category("Data Structures")]
+        [Description("color is a Color"), Category("Colors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public ColorF color
+        {
+            get
+            {
+                return _color;
+            }
+            set
+            {
+                _color = value;
+                SetPropertyEdited("color", true);
+            }
+        }
+
+
+        [Description("recoil is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public recoilDataStructure recoil
         {
-            get => _recoil;
-            set => _recoil = value;
+            get
+            {
+                return _recoil;
+            }
+            set
+            {
+                _recoil = value;
+                SetPropertyEdited("recoil", true);
+            }
         }
 
-        [Description("rotateBones is a datastructure"), Category("Data Structures")]
+        [Description("rotateBones is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public rotateBonesDataStructure rotateBones
         {
-            get => _rotateBones;
-            set => _rotateBones = value;
+            get
+            {
+                return _rotateBones;
+            }
+            set
+            {
+                _rotateBones = value;
+                SetPropertyEdited("rotateBones", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("weaponType");
+            InitProperty("weaponID");
+            InitProperty("name");
+            InitProperty("materialName");
+            InitProperty("hitParticleName");
+            InitProperty("muzzleFlashEffectID");
+            InitProperty("gravityObjectType");
+            InitProperty("maxShipSize");
+            InitProperty("shieldID");
+            InitProperty("ammunitionID");
+            InitProperty("projectileWeaponType");
+            InitProperty("instantType");
+            InitProperty("explosionID");
+            InitProperty("chargeSoundID");
+            InitProperty("chargedSoundID");
+            InitProperty("chargeParticleName");
+            InitProperty("auxAmmunitionID");
+            InitProperty("linkedRotatingElement");
+            InitProperty("beamShieldID");
+            InitProperty("collisionWeaponType");
+            InitProperty("particleEffectName");
+            InitProperty("beamType");
+            InitProperty("hitSound");
+            InitProperty("fireParticleName");
+            InitProperty("linkedMovingElement");
+            InitProperty("minimumShipClass");
+            InitProperty("hangarID");
+
+            InitProperty("fireSoundID");
+
+            InitProperty("distance");
+            InitProperty("roundsPerShot");
+            InitProperty("rotateSpeed");
+
+            InitProperty("damage");
+            InitProperty("range");
+            InitProperty("baseScale");
+            InitProperty("oscilateRange");
+            InitProperty("oscilateAmount");
+            InitProperty("capacity");
+            InitProperty("reloadTime");
+            InitProperty("assistDegree");
+            InitProperty("reFireRate");
+            InitProperty("parentPush");
+            InitProperty("penetrateZ");
+            InitProperty("speedChange");
+            InitProperty("weaponPush");
+            InitProperty("visualTimer");
+            InitProperty("pullSpeed");
+            InitProperty("disableRate");
+
+            InitProperty("scatterYaw");
+            InitProperty("scatterPitch");
+
+            InitProperty("bNoAimAssist");
+            InitProperty("bAlwaysPlayFireSound");
+            InitProperty("bFireFullAmmo");
+            InitProperty("bSticky");
+            InitProperty("bCapture");
+            InitProperty("bReduceMassOnStick");
+            InitProperty("bChargeGun");
+            InitProperty("bAntiCapShip");
+            InitProperty("bIgnoresShields");
+            InitProperty("bAddRandom");
+            InitProperty("bMining");
+            InitProperty("bRepair");
+            InitProperty("bAntiCapital");
+
+            InitProperty("size");
+            InitProperty("particlePosition");
+
+            InitProperty("color");
+
+            InitProperty("recoil");
+            InitProperty("rotateBones");
+
+        }
 
         public WeaponData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType");
-                _weaponID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponID");
-                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name");
-                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName");
-                _hitParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hitParticleName");
-                _muzzleFlashEffectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "muzzleFlashEffectID");
-                _gravityObjectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gravityObjectType");
-                _maxShipSize = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "maxShipSize");
-                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID");
-                _ammunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "ammunitionID");
-                _projectileWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "projectileWeaponType");
-                _instantType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "instantType");
-                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID");
-                _chargeSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargeSoundID");
-                _chargedSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargedSoundID");
-                _chargeParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargeParticleName");
-                _auxAmmunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "auxAmmunitionID");
-                _linkedRotatingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedRotatingElement");
-                _beamShieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "beamShieldID");
-                _collisionWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionWeaponType");
-                _particleEffectName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleEffectName");
-                _beamType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "beamType");
-                _hitSound = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hitSound");
-                _fireParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "fireParticleName");
-                _linkedMovingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedMovingElement");
-                _minimumShipClass = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "minimumShipClass");
-                _hangarID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hangarID");
+                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType", out exists);
+                SetPropertyExistsInBaseData("weaponType", exists);
+                SetPropertyExists("weaponType", exists);
+                _weaponID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponID", out exists);
+                SetPropertyExistsInBaseData("weaponID", exists);
+                SetPropertyExists("weaponID", exists);
+                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
+                SetPropertyExistsInBaseData("name", exists);
+                SetPropertyExists("name", exists);
+                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
+                SetPropertyExistsInBaseData("materialName", exists);
+                SetPropertyExists("materialName", exists);
+                _hitParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hitParticleName", out exists);
+                SetPropertyExistsInBaseData("hitParticleName", exists);
+                SetPropertyExists("hitParticleName", exists);
+                _muzzleFlashEffectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "muzzleFlashEffectID", out exists);
+                SetPropertyExistsInBaseData("muzzleFlashEffectID", exists);
+                SetPropertyExists("muzzleFlashEffectID", exists);
+                _gravityObjectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gravityObjectType", out exists);
+                SetPropertyExistsInBaseData("gravityObjectType", exists);
+                SetPropertyExists("gravityObjectType", exists);
+                _maxShipSize = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "maxShipSize", out exists);
+                SetPropertyExistsInBaseData("maxShipSize", exists);
+                SetPropertyExists("maxShipSize", exists);
+                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID", out exists);
+                SetPropertyExistsInBaseData("shieldID", exists);
+                SetPropertyExists("shieldID", exists);
+                _ammunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "ammunitionID", out exists);
+                SetPropertyExistsInBaseData("ammunitionID", exists);
+                SetPropertyExists("ammunitionID", exists);
+                _projectileWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "projectileWeaponType", out exists);
+                SetPropertyExistsInBaseData("projectileWeaponType", exists);
+                SetPropertyExists("projectileWeaponType", exists);
+                _instantType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "instantType", out exists);
+                SetPropertyExistsInBaseData("instantType", exists);
+                SetPropertyExists("instantType", exists);
+                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID", out exists);
+                SetPropertyExistsInBaseData("explosionID", exists);
+                SetPropertyExists("explosionID", exists);
+                _chargeSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargeSoundID", out exists);
+                SetPropertyExistsInBaseData("chargeSoundID", exists);
+                SetPropertyExists("chargeSoundID", exists);
+                _chargedSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargedSoundID", out exists);
+                SetPropertyExistsInBaseData("chargedSoundID", exists);
+                SetPropertyExists("chargedSoundID", exists);
+                _chargeParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "chargeParticleName", out exists);
+                SetPropertyExistsInBaseData("chargeParticleName", exists);
+                SetPropertyExists("chargeParticleName", exists);
+                _auxAmmunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "auxAmmunitionID", out exists);
+                SetPropertyExistsInBaseData("auxAmmunitionID", exists);
+                SetPropertyExists("auxAmmunitionID", exists);
+                _linkedRotatingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedRotatingElement", out exists);
+                SetPropertyExistsInBaseData("linkedRotatingElement", exists);
+                SetPropertyExists("linkedRotatingElement", exists);
+                _beamShieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "beamShieldID", out exists);
+                SetPropertyExistsInBaseData("beamShieldID", exists);
+                SetPropertyExists("beamShieldID", exists);
+                _collisionWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionWeaponType", out exists);
+                SetPropertyExistsInBaseData("collisionWeaponType", exists);
+                SetPropertyExists("collisionWeaponType", exists);
+                _particleEffectName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleEffectName", out exists);
+                SetPropertyExistsInBaseData("particleEffectName", exists);
+                SetPropertyExists("particleEffectName", exists);
+                _beamType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "beamType", out exists);
+                SetPropertyExistsInBaseData("beamType", exists);
+                SetPropertyExists("beamType", exists);
+                _hitSound = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hitSound", out exists);
+                SetPropertyExistsInBaseData("hitSound", exists);
+                SetPropertyExists("hitSound", exists);
+                _fireParticleName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "fireParticleName", out exists);
+                SetPropertyExistsInBaseData("fireParticleName", exists);
+                SetPropertyExists("fireParticleName", exists);
+                _linkedMovingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedMovingElement", out exists);
+                SetPropertyExistsInBaseData("linkedMovingElement", exists);
+                SetPropertyExists("linkedMovingElement", exists);
+                _minimumShipClass = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "minimumShipClass", out exists);
+                SetPropertyExistsInBaseData("minimumShipClass", exists);
+                SetPropertyExists("minimumShipClass", exists);
+                _hangarID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hangarID", out exists);
+                SetPropertyExistsInBaseData("hangarID", exists);
+                SetPropertyExists("hangarID", exists);
 
-                _fireSoundID = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "fireSoundID");
+                _fireSoundID = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "fireSoundID", out exists);
+                SetPropertyExistsInBaseData("fireSoundID", exists);
+                SetPropertyExists("fireSoundID", exists);
 
-                _distance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "distance");
-                _roundsPerShot = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "roundsPerShot");
-                _color = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "color");
-                _rotateSpeed = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rotateSpeed");
+                _distance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "distance", out exists);
+                SetPropertyExistsInBaseData("distance", exists);
+                SetPropertyExists("distance", exists);
+                _roundsPerShot = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "roundsPerShot", out exists);
+                SetPropertyExistsInBaseData("roundsPerShot", exists);
+                SetPropertyExists("roundsPerShot", exists);
+                _rotateSpeed = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rotateSpeed", out exists);
+                SetPropertyExistsInBaseData("rotateSpeed", exists);
+                SetPropertyExists("rotateSpeed", exists);
 
-                _damage = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "damage");
-                _range = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "range");
-                _baseScale = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "baseScale");
-                _oscilateRange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "oscilateRange");
-                _oscilateAmount = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "oscilateAmount");
-                _capacity = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "capacity");
-                _reloadTime = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "reloadTime");
-                _assistDegree = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "assistDegree");
-                _reFireRate = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "reFireRate");
-                _parentPush = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "parentPush");
-                _penetrateZ = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "penetrateZ");
-                _speedChange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "speedChange");
-                _weaponPush = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "weaponPush");
-                _visualTimer = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "visualTimer");
-                _pullSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pullSpeed");
-                _disableRate = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "disableRate");
+                _damage = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "damage", out exists);
+                SetPropertyExistsInBaseData("damage", exists);
+                SetPropertyExists("damage", exists);
+                _range = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "range", out exists);
+                SetPropertyExistsInBaseData("range", exists);
+                SetPropertyExists("range", exists);
+                _baseScale = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "baseScale", out exists);
+                SetPropertyExistsInBaseData("baseScale", exists);
+                SetPropertyExists("baseScale", exists);
+                _oscilateRange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "oscilateRange", out exists);
+                SetPropertyExistsInBaseData("oscilateRange", exists);
+                SetPropertyExists("oscilateRange", exists);
+                _oscilateAmount = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "oscilateAmount", out exists);
+                SetPropertyExistsInBaseData("oscilateAmount", exists);
+                SetPropertyExists("oscilateAmount", exists);
+                _capacity = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "capacity", out exists);
+                SetPropertyExistsInBaseData("capacity", exists);
+                SetPropertyExists("capacity", exists);
+                _reloadTime = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "reloadTime", out exists);
+                SetPropertyExistsInBaseData("reloadTime", exists);
+                SetPropertyExists("reloadTime", exists);
+                _assistDegree = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "assistDegree", out exists);
+                SetPropertyExistsInBaseData("assistDegree", exists);
+                SetPropertyExists("assistDegree", exists);
+                _reFireRate = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "reFireRate", out exists);
+                SetPropertyExistsInBaseData("reFireRate", exists);
+                SetPropertyExists("reFireRate", exists);
+                _parentPush = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "parentPush", out exists);
+                SetPropertyExistsInBaseData("parentPush", exists);
+                SetPropertyExists("parentPush", exists);
+                _penetrateZ = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "penetrateZ", out exists);
+                SetPropertyExistsInBaseData("penetrateZ", exists);
+                SetPropertyExists("penetrateZ", exists);
+                _speedChange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "speedChange", out exists);
+                SetPropertyExistsInBaseData("speedChange", exists);
+                SetPropertyExists("speedChange", exists);
+                _weaponPush = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "weaponPush", out exists);
+                SetPropertyExistsInBaseData("weaponPush", exists);
+                SetPropertyExists("weaponPush", exists);
+                _visualTimer = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "visualTimer", out exists);
+                SetPropertyExistsInBaseData("visualTimer", exists);
+                SetPropertyExists("visualTimer", exists);
+                _pullSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pullSpeed", out exists);
+                SetPropertyExistsInBaseData("pullSpeed", exists);
+                SetPropertyExists("pullSpeed", exists);
+                _disableRate = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "disableRate", out exists);
+                SetPropertyExistsInBaseData("disableRate", exists);
+                SetPropertyExists("disableRate", exists);
 
-                _scatterYaw = ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterYaw");
-                _scatterPitch = ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterPitch");
+                _scatterYaw = ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterYaw", out exists);
+                SetPropertyExistsInBaseData("scatterYaw", exists);
+                SetPropertyExists("scatterYaw", exists);
+                _scatterPitch = ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterPitch", out exists);
+                SetPropertyExistsInBaseData("scatterPitch", exists);
+                SetPropertyExists("scatterPitch", exists);
 
-                _bNoAimAssist = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoAimAssist");
-                _bAlwaysPlayFireSound = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAlwaysPlayFireSound");
-                _bFireFullAmmo = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bFireFullAmmo");
-                _bSticky = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSticky");
-                _bCapture = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCapture");
-                _bReduceMassOnStick = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bReduceMassOnStick");
-                _bChargeGun = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bChargeGun");
-                _bAntiCapShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAntiCapShip");
-                _bIgnoresShields = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bIgnoresShields");
-                _bAddRandom = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAddRandom");
-                _bMining = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMining");
-                _bRepair = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRepair");
-                _bAntiCapital = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAntiCapital");
+                _bNoAimAssist = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoAimAssist", out exists);
+                SetPropertyExistsInBaseData("bNoAimAssist", exists);
+                SetPropertyExists("bNoAimAssist", exists);
+                _bAlwaysPlayFireSound = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAlwaysPlayFireSound", out exists);
+                SetPropertyExistsInBaseData("bAlwaysPlayFireSound", exists);
+                SetPropertyExists("bAlwaysPlayFireSound", exists);
+                _bFireFullAmmo = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bFireFullAmmo", out exists);
+                SetPropertyExistsInBaseData("bFireFullAmmo", exists);
+                SetPropertyExists("bFireFullAmmo", exists);
+                _bSticky = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSticky", out exists);
+                SetPropertyExistsInBaseData("bSticky", exists);
+                SetPropertyExists("bSticky", exists);
+                _bCapture = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCapture", out exists);
+                SetPropertyExistsInBaseData("bCapture", exists);
+                SetPropertyExists("bCapture", exists);
+                _bReduceMassOnStick = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bReduceMassOnStick", out exists);
+                SetPropertyExistsInBaseData("bReduceMassOnStick", exists);
+                SetPropertyExists("bReduceMassOnStick", exists);
+                _bChargeGun = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bChargeGun", out exists);
+                SetPropertyExistsInBaseData("bChargeGun", exists);
+                SetPropertyExists("bChargeGun", exists);
+                _bAntiCapShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAntiCapShip", out exists);
+                SetPropertyExistsInBaseData("bAntiCapShip", exists);
+                SetPropertyExists("bAntiCapShip", exists);
+                _bIgnoresShields = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bIgnoresShields", out exists);
+                SetPropertyExistsInBaseData("bIgnoresShields", exists);
+                SetPropertyExists("bIgnoresShields", exists);
+                _bAddRandom = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAddRandom", out exists);
+                SetPropertyExistsInBaseData("bAddRandom", exists);
+                SetPropertyExists("bAddRandom", exists);
+                _bMining = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMining", out exists);
+                SetPropertyExistsInBaseData("bMining", exists);
+                SetPropertyExists("bMining", exists);
+                _bRepair = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRepair", out exists);
+                SetPropertyExistsInBaseData("bRepair", exists);
+                SetPropertyExists("bRepair", exists);
+                _bAntiCapital = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAntiCapital", out exists);
+                SetPropertyExistsInBaseData("bAntiCapital", exists);
+                SetPropertyExists("bAntiCapital", exists);
 
-                _size = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "size");
-                _particlePosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "particlePosition");
+                _size = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "size", out exists);
+                SetPropertyExistsInBaseData("size", exists);
+                SetPropertyExists("size", exists);
+                _particlePosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "particlePosition", out exists);
+                SetPropertyExistsInBaseData("particlePosition", exists);
+                SetPropertyExists("particlePosition", exists);
 
-                _recoil = DataStructureParseHelpers.GetrecoilDataStructureFromVD2Data(DataXMLDoc);
-                _rotateBones = DataStructureParseHelpers.GetrotateBonesDataStructureFromVD2Data(DataXMLDoc);
+                _color = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "color", out exists);
+                SetPropertyExistsInBaseData("color", exists);
+                SetPropertyExists("color", exists);
+
+                _recoil = DataStructureParseHelpers.GetrecoilDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("recoil", exists);
+                SetPropertyExists("recoil", exists);
+                _rotateBones = DataStructureParseHelpers.GetrotateBonesDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("rotateBones", exists);
+                SetPropertyExists("rotateBones", exists);
 
             }
         }

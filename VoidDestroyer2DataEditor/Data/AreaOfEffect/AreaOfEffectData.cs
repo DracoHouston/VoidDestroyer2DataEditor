@@ -23,82 +23,170 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _fieldSize;
 
-        [Description("objectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
-        [Description("particleSystemName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("particleSystemName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string particleSystemName
         {
-            get => _particleSystemName;
-            set => _particleSystemName = value;
+            get
+            {
+                return _particleSystemName;
+            }
+            set
+            {
+                _particleSystemName = value;
+                SetPropertyEdited("particleSystemName", true);
+            }
         }
 
-        [Description("affectedObjects is a plaintext string"), Category("Plaintext Strings")]
+        [Description("affectedObjects is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string affectedObjects
         {
-            get => _affectedObjects;
-            set => _affectedObjects = value;
+            get
+            {
+                return _affectedObjects;
+            }
+            set
+            {
+                _affectedObjects = value;
+                SetPropertyEdited("affectedObjects", true);
+            }
         }
 
 
-        [Description("damage is an integer"), Category("Integers")]
+        [Description("damage is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int damage
         {
-            get => _damage;
-            set => _damage = value;
+            get
+            {
+                return _damage;
+            }
+            set
+            {
+                _damage = value;
+                SetPropertyEdited("damage", true);
+            }
         }
 
-        [Description("lifeTimer is an integer"), Category("Integers")]
+        [Description("lifeTimer is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int lifeTimer
         {
-            get => _lifeTimer;
-            set => _lifeTimer = value;
+            get
+            {
+                return _lifeTimer;
+            }
+            set
+            {
+                _lifeTimer = value;
+                SetPropertyEdited("lifeTimer", true);
+            }
         }
 
 
-        [Description("bRefuel is a boolean value"), Category("Booleans")]
+        [Description("bRefuel is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bRefuel
         {
-            get => _bRefuel;
-            set => _bRefuel = value;
+            get
+            {
+                return _bRefuel;
+            }
+            set
+            {
+                _bRefuel = value;
+                SetPropertyEdited("bRefuel", true);
+            }
         }
 
-        [Description("bDebrisFieldRadiation is a boolean value"), Category("Booleans")]
+        [Description("bDebrisFieldRadiation is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bDebrisFieldRadiation
         {
-            get => _bDebrisFieldRadiation;
-            set => _bDebrisFieldRadiation = value;
+            get
+            {
+                return _bDebrisFieldRadiation;
+            }
+            set
+            {
+                _bDebrisFieldRadiation = value;
+                SetPropertyEdited("bDebrisFieldRadiation", true);
+            }
         }
 
 
-        [Description("fieldSize is a 3D vector"), Category("3D Vectors")]
+        [Description("fieldSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D fieldSize
         {
-            get => _fieldSize;
-            set => _fieldSize = value;
+            get
+            {
+                return _fieldSize;
+            }
+            set
+            {
+                _fieldSize = value;
+                SetPropertyEdited("fieldSize", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("objectID");
+            InitProperty("particleSystemName");
+            InitProperty("affectedObjects");
+
+            InitProperty("damage");
+            InitProperty("lifeTimer");
+
+            InitProperty("bRefuel");
+            InitProperty("bDebrisFieldRadiation");
+
+            InitProperty("fieldSize");
+
+        }
 
         public AreaOfEffectData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID");
-                _particleSystemName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleSystemName");
-                _affectedObjects = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "affectedObjects");
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                SetPropertyExistsInBaseData("objectID", exists);
+                SetPropertyExists("objectID", exists);
+                _particleSystemName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleSystemName", out exists);
+                SetPropertyExistsInBaseData("particleSystemName", exists);
+                SetPropertyExists("particleSystemName", exists);
+                _affectedObjects = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "affectedObjects", out exists);
+                SetPropertyExistsInBaseData("affectedObjects", exists);
+                SetPropertyExists("affectedObjects", exists);
 
-                _damage = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "damage");
-                _lifeTimer = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "lifeTimer");
+                _damage = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "damage", out exists);
+                SetPropertyExistsInBaseData("damage", exists);
+                SetPropertyExists("damage", exists);
+                _lifeTimer = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "lifeTimer", out exists);
+                SetPropertyExistsInBaseData("lifeTimer", exists);
+                SetPropertyExists("lifeTimer", exists);
 
-                _bRefuel = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRefuel");
-                _bDebrisFieldRadiation = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bDebrisFieldRadiation");
+                _bRefuel = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRefuel", out exists);
+                SetPropertyExistsInBaseData("bRefuel", exists);
+                SetPropertyExists("bRefuel", exists);
+                _bDebrisFieldRadiation = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bDebrisFieldRadiation", out exists);
+                SetPropertyExistsInBaseData("bDebrisFieldRadiation", exists);
+                SetPropertyExists("bDebrisFieldRadiation", exists);
 
-                _fieldSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "fieldSize");
+                _fieldSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "fieldSize", out exists);
+                SetPropertyExistsInBaseData("fieldSize", exists);
+                SetPropertyExists("fieldSize", exists);
 
             }
         }

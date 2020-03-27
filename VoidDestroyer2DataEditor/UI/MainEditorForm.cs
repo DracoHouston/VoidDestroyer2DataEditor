@@ -637,7 +637,11 @@ namespace VoidDestroyer2DataEditor
         public void PopulateSoundsTree()
         {
             SoundsTree.Nodes.Clear();
-            Sounds = new VD2DB<SoundData>("Sounds");
+            List<string> SoundsSubFolders = new List<string>();
+            SoundsSubFolders.Add("Dialog");
+            SoundsSubFolders.Add("Interior");
+            SoundsSubFolders.Add("UI");
+            Sounds = new VD2DB<SoundData>("Sounds", SoundsSubFolders);
             int i = 0;
             for (i = 0; i < Sounds.Data.Keys.Count; i++)
             {
@@ -717,7 +721,7 @@ namespace VoidDestroyer2DataEditor
                         DataFileProperties.SelectedObject = selectedupgrade;
                     }
                 }
-                else if ((e.Node.Parent.Text == "Light") || (e.Node.Parent.Text == "Medium") || (e.Node.Parent.Text == "Heavy") || (e.Node.Parent.Text == "Transport") || (e.Node.Parent.Text == "Mining") || (e.Node.Parent.Text == "Shuttle") || (e.Node.Parent.Text == "Repair") || (e.Node.Parent.Text == "Base Capture") || (e.Node.Parent.Text == "Ship Capture") || (e.Node.Parent.Text == "Builder")) 
+                else if ((e.Node.Parent.Text == "Light") || (e.Node.Parent.Text == "Medium") || (e.Node.Parent.Text == "Heavy") || (e.Node.Parent.Text == "Transport") || (e.Node.Parent.Text == "Mining") || (e.Node.Parent.Text == "Shuttle") || (e.Node.Parent.Text == "Repair") || (e.Node.Parent.Text == "Base Capture") || (e.Node.Parent.Text == "Ship Capture") || (e.Node.Parent.Text == "Builder") || (e.Node.Parent.Text == "Drones")) 
                 {
                     ShipData selectedship;
                     if (Ships.Data.TryGetValue(e.Node.Text, out selectedship))

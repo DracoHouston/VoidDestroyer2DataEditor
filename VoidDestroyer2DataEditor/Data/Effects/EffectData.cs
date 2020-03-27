@@ -15,132 +15,273 @@ namespace VoidDestroyer2DataEditor
         string _objectID;
         string _materialName;
 
-        int _initialColor;
         int _count;
         int _numberOfChains;
         int _maxChainElements;
         int _trailLength;
-        int _colorChange;
         int _maxRangeZ;
         int _defaultDimensions;
 
         float _widthChange;
         float _initialWidth;
 
-        [Description("effectType is a plaintext string"), Category("Plaintext Strings")]
+        ColorF _initialColor;
+        ColorF _colorChange;
+
+        [Description("effectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string effectType
         {
-            get => _effectType;
-            set => _effectType = value;
+            get
+            {
+                return _effectType;
+            }
+            set
+            {
+                _effectType = value;
+                SetPropertyEdited("effectType", true);
+            }
         }
 
-        [Description("objectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
-        [Description("materialName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("materialName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string materialName
         {
-            get => _materialName;
-            set => _materialName = value;
+            get
+            {
+                return _materialName;
+            }
+            set
+            {
+                _materialName = value;
+                SetPropertyEdited("materialName", true);
+            }
         }
 
 
-        [Description("initialColor is an integer"), Category("Integers")]
-        public int initialColor
-        {
-            get => _initialColor;
-            set => _initialColor = value;
-        }
-
-        [Description("count is an integer"), Category("Integers")]
+        [Description("count is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int count
         {
-            get => _count;
-            set => _count = value;
+            get
+            {
+                return _count;
+            }
+            set
+            {
+                _count = value;
+                SetPropertyEdited("count", true);
+            }
         }
 
-        [Description("numberOfChains is an integer"), Category("Integers")]
+        [Description("numberOfChains is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int numberOfChains
         {
-            get => _numberOfChains;
-            set => _numberOfChains = value;
+            get
+            {
+                return _numberOfChains;
+            }
+            set
+            {
+                _numberOfChains = value;
+                SetPropertyEdited("numberOfChains", true);
+            }
         }
 
-        [Description("maxChainElements is an integer"), Category("Integers")]
+        [Description("maxChainElements is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int maxChainElements
         {
-            get => _maxChainElements;
-            set => _maxChainElements = value;
+            get
+            {
+                return _maxChainElements;
+            }
+            set
+            {
+                _maxChainElements = value;
+                SetPropertyEdited("maxChainElements", true);
+            }
         }
 
-        [Description("trailLength is an integer"), Category("Integers")]
+        [Description("trailLength is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int trailLength
         {
-            get => _trailLength;
-            set => _trailLength = value;
+            get
+            {
+                return _trailLength;
+            }
+            set
+            {
+                _trailLength = value;
+                SetPropertyEdited("trailLength", true);
+            }
         }
 
-        [Description("colorChange is an integer"), Category("Integers")]
-        public int colorChange
-        {
-            get => _colorChange;
-            set => _colorChange = value;
-        }
-
-        [Description("maxRangeZ is an integer"), Category("Integers")]
+        [Description("maxRangeZ is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int maxRangeZ
         {
-            get => _maxRangeZ;
-            set => _maxRangeZ = value;
+            get
+            {
+                return _maxRangeZ;
+            }
+            set
+            {
+                _maxRangeZ = value;
+                SetPropertyEdited("maxRangeZ", true);
+            }
         }
 
-        [Description("defaultDimensions is an integer"), Category("Integers")]
+        [Description("defaultDimensions is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int defaultDimensions
         {
-            get => _defaultDimensions;
-            set => _defaultDimensions = value;
+            get
+            {
+                return _defaultDimensions;
+            }
+            set
+            {
+                _defaultDimensions = value;
+                SetPropertyEdited("defaultDimensions", true);
+            }
         }
 
 
-        [Description("widthChange is a real number"), Category("Real Numbers")]
+        [Description("widthChange is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float widthChange
         {
-            get => _widthChange;
-            set => _widthChange = value;
+            get
+            {
+                return _widthChange;
+            }
+            set
+            {
+                _widthChange = value;
+                SetPropertyEdited("widthChange", true);
+            }
         }
 
-        [Description("initialWidth is a real number"), Category("Real Numbers")]
+        [Description("initialWidth is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float initialWidth
         {
-            get => _initialWidth;
-            set => _initialWidth = value;
+            get
+            {
+                return _initialWidth;
+            }
+            set
+            {
+                _initialWidth = value;
+                SetPropertyEdited("initialWidth", true);
+            }
         }
 
 
+        [Description("initialColor is a Color"), Category("Colors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public ColorF initialColor
+        {
+            get
+            {
+                return _initialColor;
+            }
+            set
+            {
+                _initialColor = value;
+                SetPropertyEdited("initialColor", true);
+            }
+        }
+
+        [Description("colorChange is a Color"), Category("Colors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public ColorF colorChange
+        {
+            get
+            {
+                return _colorChange;
+            }
+            set
+            {
+                _colorChange = value;
+                SetPropertyEdited("colorChange", true);
+            }
+        }
+
+
+        public override void InitAllProperties()
+        {
+            InitProperty("effectType");
+            InitProperty("objectID");
+            InitProperty("materialName");
+
+            InitProperty("count");
+            InitProperty("numberOfChains");
+            InitProperty("maxChainElements");
+            InitProperty("trailLength");
+            InitProperty("maxRangeZ");
+            InitProperty("defaultDimensions");
+
+            InitProperty("widthChange");
+            InitProperty("initialWidth");
+
+            InitProperty("initialColor");
+            InitProperty("colorChange");
+
+        }
 
         public EffectData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType");
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID");
-                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName");
+                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
+                SetPropertyExistsInBaseData("effectType", exists);
+                SetPropertyExists("effectType", exists);
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                SetPropertyExistsInBaseData("objectID", exists);
+                SetPropertyExists("objectID", exists);
+                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
+                SetPropertyExistsInBaseData("materialName", exists);
+                SetPropertyExists("materialName", exists);
 
-                _initialColor = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "initialColor");
-                _count = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "count");
-                _numberOfChains = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "numberOfChains");
-                _maxChainElements = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxChainElements");
-                _trailLength = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "trailLength");
-                _colorChange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "colorChange");
-                _maxRangeZ = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxRangeZ");
-                _defaultDimensions = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "defaultDimensions");
+                _count = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "count", out exists);
+                SetPropertyExistsInBaseData("count", exists);
+                SetPropertyExists("count", exists);
+                _numberOfChains = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "numberOfChains", out exists);
+                SetPropertyExistsInBaseData("numberOfChains", exists);
+                SetPropertyExists("numberOfChains", exists);
+                _maxChainElements = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxChainElements", out exists);
+                SetPropertyExistsInBaseData("maxChainElements", exists);
+                SetPropertyExists("maxChainElements", exists);
+                _trailLength = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "trailLength", out exists);
+                SetPropertyExistsInBaseData("trailLength", exists);
+                SetPropertyExists("trailLength", exists);
+                _maxRangeZ = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxRangeZ", out exists);
+                SetPropertyExistsInBaseData("maxRangeZ", exists);
+                SetPropertyExists("maxRangeZ", exists);
+                _defaultDimensions = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "defaultDimensions", out exists);
+                SetPropertyExistsInBaseData("defaultDimensions", exists);
+                SetPropertyExists("defaultDimensions", exists);
 
-                _widthChange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "widthChange");
-                _initialWidth = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "initialWidth");
+                _widthChange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "widthChange", out exists);
+                SetPropertyExistsInBaseData("widthChange", exists);
+                SetPropertyExists("widthChange", exists);
+                _initialWidth = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "initialWidth", out exists);
+                SetPropertyExistsInBaseData("initialWidth", exists);
+                SetPropertyExists("initialWidth", exists);
+
+                _initialColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "initialColor", out exists);
+                SetPropertyExistsInBaseData("initialColor", exists);
+                SetPropertyExists("initialColor", exists);
+                _colorChange = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "colorChange", out exists);
+                SetPropertyExistsInBaseData("colorChange", exists);
+                SetPropertyExists("colorChange", exists);
 
             }
         }

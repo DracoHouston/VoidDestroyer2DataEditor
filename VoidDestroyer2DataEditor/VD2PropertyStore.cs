@@ -13,6 +13,12 @@ namespace VoidDestroyer2DataEditor
         public VD2PropertyStore()
         {
             VD2PropertyInfos = new Dictionary<string, VD2PropertyInfo>();
+            InitAllProperties();
+        }
+
+        public virtual void InitAllProperties()
+        {
+
         }
 
         public void InitProperty(string inName)

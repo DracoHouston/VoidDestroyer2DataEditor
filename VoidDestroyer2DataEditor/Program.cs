@@ -100,11 +100,11 @@ namespace VoidDestroyer2DataEditor
             _a = 0;
         }
 
-        public ColorF(float magnitude, float alpha = 1)
+        public ColorF(float intensity, float alpha = 1)
         {
-            _r = magnitude;
-            _g = magnitude;
-            _b = magnitude;
+            _r = intensity;
+            _g = intensity;
+            _b = intensity;
             _a = alpha;
         }
 

@@ -10,119 +10,31 @@ using System.Globalization;
 
 namespace VoidDestroyer2DataEditor
 {
-    class VD2DataStructure
-    {
-        public Dictionary<string, VD2PropertyInfo> VD2PropertyInfos;
-
-        public VD2DataStructure()
-        {
-            VD2PropertyInfos = new Dictionary<string, VD2PropertyInfo>();
-        }
-
-        public void SetPropertyEdited(string inName, bool inEdited)
-        {
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    info.EditedByUser = inEdited;
-                    UpdatePropertyInfo(inName, info);
-                }
-            }
-        }
-
-        public bool PropertyEdited(string inName)
-        {
-            bool result = false;
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    result = info.EditedByUser;
-                }
-            }
-            return result;
-        }
-
-        public void SetPropertyExists(string inName, bool inExists)
-        {
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    info.Exists = inExists;
-                    UpdatePropertyInfo(inName, info);
-                }
-            }
-        }
-
-        public bool PropertyExists(string inName)
-        {
-            bool result = false;
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    result = info.Exists;
-                }
-            }
-            return result;
-        }
-
-        public void SetPropertyExistsInBaseData(string inName, bool inExistsInBaseData)
-        {
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    info.ExistsInBaseData = inExistsInBaseData;
-                    UpdatePropertyInfo(inName, info);
-                }
-            }
-        }
-
-        public bool PropertyExistsInBaseData(string inName)
-        {
-            bool result = false;
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfo info = null;
-                if (VD2PropertyInfos.TryGetValue(inName, out info))
-                {
-                    result = info.ExistsInBaseData;
-                }
-            }
-            return result;
-        }
-
-        public void UpdatePropertyInfo(string inName, VD2PropertyInfo inInfo)
-        {
-            if (VD2PropertyInfos.ContainsKey(inName))
-            {
-                VD2PropertyInfos.Remove(inName);
-                VD2PropertyInfos.Add(inName, inInfo);
-            }
-        }
-    }
-
     [TypeConverter(typeof(debrisInfoDataStructureConverter))]
-    class debrisInfoDataStructure
+    class debrisInfoDataStructure : VD2PropertyStore
     {
         List<debrisDataStructure> _debris;
 
         [Description("debris is a collection of datastructures"), Category("Data Structure Collection")]
         public List<debrisDataStructure> debris
         {
-            get => _debris;
-            set => _debris = value;
+            get
+            {
+                return _debris;
+            }
+            set
+            {
+                _debris = value;
+                SetPropertyEdited("debris", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("debris");
+        }
 
         public debrisInfoDataStructure()
         {
@@ -197,28 +109,58 @@ namespace VoidDestroyer2DataEditor
         [Description("debrisID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string debrisID
         {
-            get => _debrisID;
-            set => _debrisID = value;
+            get
+            {
+                return _debrisID;
+            }
+            set
+            {
+                _debrisID = value;
+                SetPropertyEdited("debrisID", true);
+            }
         }
 
 
-        [Description("debrisMomentum is an integer"), Category("Integers")]
+        [Description("debrisMomentum is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int debrisMomentum
         {
-            get => _debrisMomentum;
-            set => _debrisMomentum = value;
+            get
+            {
+                return _debrisMomentum;
+            }
+            set
+            {
+                _debrisMomentum = value;
+                SetPropertyEdited("debrisMomentum", true);
+            }
         }
 
-        [Description("debrisAngular is an integer"), Category("Integers")]
+        [Description("debrisAngular is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int debrisAngular
         {
-            get => _debrisAngular;
-            set => _debrisAngular = value;
+            get
+            {
+                return _debrisAngular;
+            }
+            set
+            {
+                _debrisAngular = value;
+                SetPropertyEdited("debrisAngular", true);
+            }
         }
 
 
 
-        public debrisDataStructure() : base()
+        public override void InitAllProperties()
+        {
+            InitProperty("debrisID");
+
+            InitProperty("debrisMomentum");
+            InitProperty("debrisAngular");
+
+        }
+
+        public debrisDataStructure()
         {
             _debrisID = "";
 
@@ -227,7 +169,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public debrisDataStructure(string indebrisID, int indebrisMomentum, int indebrisAngular) : base()
+        public debrisDataStructure(string indebrisID, int indebrisMomentum, int indebrisAngular)
         {
             _debrisID = indebrisID;
 
@@ -236,7 +178,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public debrisDataStructure(debrisDataStructure inCopyFrom) : base()
+        public debrisDataStructure(debrisDataStructure inCopyFrom)
         {
             _debrisID = inCopyFrom.debrisID;
 
@@ -247,7 +189,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _debrisID;
             result += ", ";
@@ -290,7 +231,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(afterburnerDataStructureConverter))]
-    class afterburnerDataStructure
+    class afterburnerDataStructure : VD2PropertyStore
     {
         string _soundID;
         string _tailSoundID;
@@ -299,43 +240,89 @@ namespace VoidDestroyer2DataEditor
         float _capacity;
         float _recharge;
 
-        [Description("soundID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("soundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string soundID
         {
-            get => _soundID;
-            set => _soundID = value;
+            get
+            {
+                return _soundID;
+            }
+            set
+            {
+                _soundID = value;
+                SetPropertyEdited("soundID", true);
+            }
         }
 
-        [Description("tailSoundID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("tailSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string tailSoundID
         {
-            get => _tailSoundID;
-            set => _tailSoundID = value;
+            get
+            {
+                return _tailSoundID;
+            }
+            set
+            {
+                _tailSoundID = value;
+                SetPropertyEdited("tailSoundID", true);
+            }
         }
 
 
-        [Description("multiplier is a real number"), Category("Real Numbers")]
+        [Description("multiplier is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float multiplier
         {
-            get => _multiplier;
-            set => _multiplier = value;
+            get
+            {
+                return _multiplier;
+            }
+            set
+            {
+                _multiplier = value;
+                SetPropertyEdited("multiplier", true);
+            }
         }
 
-        [Description("capacity is a real number"), Category("Real Numbers")]
+        [Description("capacity is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float capacity
         {
-            get => _capacity;
-            set => _capacity = value;
+            get
+            {
+                return _capacity;
+            }
+            set
+            {
+                _capacity = value;
+                SetPropertyEdited("capacity", true);
+            }
         }
 
-        [Description("recharge is a real number"), Category("Real Numbers")]
+        [Description("recharge is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float recharge
         {
-            get => _recharge;
-            set => _recharge = value;
+            get
+            {
+                return _recharge;
+            }
+            set
+            {
+                _recharge = value;
+                SetPropertyEdited("recharge", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("soundID");
+            InitProperty("tailSoundID");
+
+            InitProperty("multiplier");
+            InitProperty("capacity");
+            InitProperty("recharge");
+
+        }
 
         public afterburnerDataStructure()
         {
@@ -372,7 +359,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _soundID;
             result += ", ";
@@ -419,18 +405,31 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(targetPriorityListDataStructureConverter))]
-    class targetPriorityListDataStructure
+    class targetPriorityListDataStructure : VD2PropertyStore
     {
         List<string> _targetClass;
 
-        [Description("targetClass is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("targetClass is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> targetClass
         {
-            get => _targetClass;
-            set => _targetClass = value;
+            get
+            {
+                return _targetClass;
+            }
+            set
+            {
+                _targetClass = value;
+                SetPropertyEdited("targetClass", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("targetClass");
+
+        }
 
         public targetPriorityListDataStructure()
         {
@@ -498,36 +497,66 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(upgradesDataStructureConverter))]
-    class upgradesDataStructure
+    class upgradesDataStructure : VD2PropertyStore
     {
         List<string> _upgradeID;
 
         int _primaryUpgradeCapacity;
         int _activeUpgradeCapacity;
 
-        [Description("upgradeID is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("upgradeID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> upgradeID
         {
-            get => _upgradeID;
-            set => _upgradeID = value;
+            get
+            {
+                return _upgradeID;
+            }
+            set
+            {
+                _upgradeID = value;
+                SetPropertyEdited("upgradeID", true);
+            }
         }
 
 
-        [Description("primaryUpgradeCapacity is an integer"), Category("Integers")]
+        [Description("primaryUpgradeCapacity is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int primaryUpgradeCapacity
         {
-            get => _primaryUpgradeCapacity;
-            set => _primaryUpgradeCapacity = value;
+            get
+            {
+                return _primaryUpgradeCapacity;
+            }
+            set
+            {
+                _primaryUpgradeCapacity = value;
+                SetPropertyEdited("primaryUpgradeCapacity", true);
+            }
         }
 
-        [Description("activeUpgradeCapacity is an integer"), Category("Integers")]
+        [Description("activeUpgradeCapacity is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int activeUpgradeCapacity
         {
-            get => _activeUpgradeCapacity;
-            set => _activeUpgradeCapacity = value;
+            get
+            {
+                return _activeUpgradeCapacity;
+            }
+            set
+            {
+                _activeUpgradeCapacity = value;
+                SetPropertyEdited("activeUpgradeCapacity", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("upgradeID");
+
+            InitProperty("primaryUpgradeCapacity");
+            InitProperty("activeUpgradeCapacity");
+
+        }
 
         public upgradesDataStructure()
         {
@@ -608,7 +637,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(propulsionDataStructureConverter))]
-    class propulsionDataStructure
+    class propulsionDataStructure : VD2PropertyStore
     {
         string _propulsionEffectID;
         string _direction;
@@ -620,52 +649,108 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("propulsionEffectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("propulsionEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string propulsionEffectID
         {
-            get => _propulsionEffectID;
-            set => _propulsionEffectID = value;
+            get
+            {
+                return _propulsionEffectID;
+            }
+            set
+            {
+                _propulsionEffectID = value;
+                SetPropertyEdited("propulsionEffectID", true);
+            }
         }
 
-        [Description("direction is a plaintext string"), Category("Plaintext Strings")]
+        [Description("direction is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string direction
         {
-            get => _direction;
-            set => _direction = value;
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
+                SetPropertyEdited("direction", true);
+            }
         }
 
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
 
-        [Description("bPlayerShipOnly is a boolean value"), Category("Booleans")]
+        [Description("bPlayerShipOnly is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bPlayerShipOnly
         {
-            get => _bPlayerShipOnly;
-            set => _bPlayerShipOnly = value;
+            get
+            {
+                return _bPlayerShipOnly;
+            }
+            set
+            {
+                _bPlayerShipOnly = value;
+                SetPropertyEdited("bPlayerShipOnly", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("propulsionEffectID");
+            InitProperty("direction");
+
+            InitProperty("pitch");
+            InitProperty("yaw");
+
+            InitProperty("bPlayerShipOnly");
+
+            InitProperty("position");
+
+        }
 
         public propulsionDataStructure()
         {
@@ -711,7 +796,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _propulsionEffectID;
             result += ", ";
@@ -760,7 +844,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(weaponDataStructureConverter))]
-    class weaponDataStructure
+    class weaponDataStructure : VD2PropertyStore
     {
         string _weaponType;
         string _hardpointID;
@@ -772,58 +856,121 @@ namespace VoidDestroyer2DataEditor
 
         List<Vector3D> _weaponPosition;
 
-        [Description("weaponType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
         {
-            get => _weaponType;
-            set => _weaponType = value;
+            get
+            {
+                return _weaponType;
+            }
+            set
+            {
+                _weaponType = value;
+                SetPropertyEdited("weaponType", true);
+            }
         }
 
-        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string hardpointID
         {
-            get => _hardpointID;
-            set => _hardpointID = value;
+            get
+            {
+                return _hardpointID;
+            }
+            set
+            {
+                _hardpointID = value;
+                SetPropertyEdited("hardpointID", true);
+            }
         }
 
-        [Description("weaponFire is a plaintext string"), Category("Plaintext Strings")]
+        [Description("weaponFire is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponFire
         {
-            get => _weaponFire;
-            set => _weaponFire = value;
+            get
+            {
+                return _weaponFire;
+            }
+            set
+            {
+                _weaponFire = value;
+                SetPropertyEdited("weaponFire", true);
+            }
         }
 
 
-        [Description("barrelDelay is a real number"), Category("Real Numbers")]
+        [Description("barrelDelay is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float barrelDelay
         {
-            get => _barrelDelay;
-            set => _barrelDelay = value;
+            get
+            {
+                return _barrelDelay;
+            }
+            set
+            {
+                _barrelDelay = value;
+                SetPropertyEdited("barrelDelay", true);
+            }
         }
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
 
         [Description("weaponPosition is a collection of 3D vectors"), Category("3D Vector Collections")]
         public List<Vector3D> weaponPosition
         {
-            get => _weaponPosition;
-            set => _weaponPosition = value;
+            get
+            {
+                return _weaponPosition;
+            }
+            set
+            {
+                _weaponPosition = value;
+                SetPropertyEdited("weaponPosition", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("weaponType");
+            InitProperty("hardpointID");
+            InitProperty("weaponFire");
+
+            InitProperty("barrelDelay");
+            InitProperty("yaw");
+            InitProperty("pitch");
+
+            InitProperty("weaponPosition");
+
+        }
 
         public weaponDataStructure()
         {
@@ -927,7 +1074,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(damageDataStructureConverter))]
-    class damageDataStructure
+    class damageDataStructure : VD2PropertyStore
     {
         string _damageEffectID;
 
@@ -938,51 +1085,106 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("damageEffectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("damageEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string damageEffectID
         {
-            get => _damageEffectID;
-            set => _damageEffectID = value;
+            get
+            {
+                return _damageEffectID;
+            }
+            set
+            {
+                _damageEffectID = value;
+                SetPropertyEdited("damageEffectID", true);
+            }
         }
 
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("healthPoint is a real number"), Category("Real Numbers")]
+        [Description("healthPoint is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float healthPoint
         {
-            get => _healthPoint;
-            set => _healthPoint = value;
+            get
+            {
+                return _healthPoint;
+            }
+            set
+            {
+                _healthPoint = value;
+                SetPropertyEdited("healthPoint", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("damageEffectID");
+
+            InitProperty("pitch");
+            InitProperty("roll");
+            InitProperty("yaw");
+            InitProperty("healthPoint");
+
+            InitProperty("position");
+
+        }
 
         public damageDataStructure()
         {
@@ -1025,7 +1227,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _damageEffectID;
             result += ", ";
@@ -1074,7 +1275,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(turretDataStructureConverter))]
-    class turretDataStructure
+    class turretDataStructure : VD2PropertyStore
     {
         string _turretID;
         string _turretOrientation;
@@ -1087,105 +1288,209 @@ namespace VoidDestroyer2DataEditor
 
         float _pitchLower;
         float _roll;
-
-        List<float> _yaw;
+        float _yaw;
 
         bool _bShowInCockpit;
         bool _bHideInHangar;
 
         Vector3D _position;
 
-        [Description("turretID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("turretID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string turretID
         {
-            get => _turretID;
-            set => _turretID = value;
+            get
+            {
+                return _turretID;
+            }
+            set
+            {
+                _turretID = value;
+                SetPropertyEdited("turretID", true);
+            }
         }
 
-        [Description("turretOrientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("turretOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string turretOrientation
         {
-            get => _turretOrientation;
-            set => _turretOrientation = value;
+            get
+            {
+                return _turretOrientation;
+            }
+            set
+            {
+                _turretOrientation = value;
+                SetPropertyEdited("turretOrientation", true);
+            }
         }
 
-        [Description("weaponFire is a plaintext string"), Category("Plaintext Strings")]
+        [Description("weaponFire is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponFire
         {
-            get => _weaponFire;
-            set => _weaponFire = value;
+            get
+            {
+                return _weaponFire;
+            }
+            set
+            {
+                _weaponFire = value;
+                SetPropertyEdited("weaponFire", true);
+            }
         }
 
 
-        [Description("turretRole is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("turretRole is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> turretRole
         {
-            get => _turretRole;
-            set => _turretRole = value;
+            get
+            {
+                return _turretRole;
+            }
+            set
+            {
+                _turretRole = value;
+                SetPropertyEdited("turretRole", true);
+            }
         }
 
 
-        [Description("yawPermitted is an integer"), Category("Integers")]
+        [Description("yawPermitted is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int yawPermitted
         {
-            get => _yawPermitted;
-            set => _yawPermitted = value;
+            get
+            {
+                return _yawPermitted;
+            }
+            set
+            {
+                _yawPermitted = value;
+                SetPropertyEdited("yawPermitted", true);
+            }
         }
 
-        [Description("weaponPositionID is an integer"), Category("Integers")]
+        [Description("weaponPositionID is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int weaponPositionID
         {
-            get => _weaponPositionID;
-            set => _weaponPositionID = value;
+            get
+            {
+                return _weaponPositionID;
+            }
+            set
+            {
+                _weaponPositionID = value;
+                SetPropertyEdited("weaponPositionID", true);
+            }
         }
 
 
-        [Description("pitchLower is a real number"), Category("Real Numbers")]
+        [Description("pitchLower is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitchLower
         {
-            get => _pitchLower;
-            set => _pitchLower = value;
+            get
+            {
+                return _pitchLower;
+            }
+            set
+            {
+                _pitchLower = value;
+                SetPropertyEdited("pitchLower", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
-
-        [Description("yaw is a collection of real numbers"), Category("Real Number Collections")]
-        public List<float> yaw
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
 
-        [Description("bShowInCockpit is a boolean value"), Category("Booleans")]
+        [Description("bShowInCockpit is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bShowInCockpit
         {
-            get => _bShowInCockpit;
-            set => _bShowInCockpit = value;
+            get
+            {
+                return _bShowInCockpit;
+            }
+            set
+            {
+                _bShowInCockpit = value;
+                SetPropertyEdited("bShowInCockpit", true);
+            }
         }
 
-        [Description("bHideInHangar is a boolean value"), Category("Booleans")]
+        [Description("bHideInHangar is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bHideInHangar
         {
-            get => _bHideInHangar;
-            set => _bHideInHangar = value;
+            get
+            {
+                return _bHideInHangar;
+            }
+            set
+            {
+                _bHideInHangar = value;
+                SetPropertyEdited("bHideInHangar", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("turretID");
+            InitProperty("turretOrientation");
+            InitProperty("weaponFire");
+
+            InitProperty("turretRole");
+
+            InitProperty("yawPermitted");
+            InitProperty("weaponPositionID");
+
+            InitProperty("pitchLower");
+            InitProperty("roll");
+            InitProperty("yaw");
+
+            InitProperty("bShowInCockpit");
+            InitProperty("bHideInHangar");
+
+            InitProperty("position");
+
+        }
 
         public turretDataStructure()
         {
@@ -1200,8 +1505,7 @@ namespace VoidDestroyer2DataEditor
 
             _pitchLower = 0;
             _roll = 0;
-
-            _yaw = new List<float>();
+            _yaw = 0;
 
             _bShowInCockpit = false;
             _bHideInHangar = false;
@@ -1210,7 +1514,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public turretDataStructure(string inturretID, string inturretOrientation, string inweaponFire, List<string> inturretRole, int inyawPermitted, int inweaponPositionID, float inpitchLower, float inroll, List<float> inyaw, bool inbShowInCockpit, bool inbHideInHangar, Vector3D inposition)
+        public turretDataStructure(string inturretID, string inturretOrientation, string inweaponFire, List<string> inturretRole, int inyawPermitted, int inweaponPositionID, float inpitchLower, float inroll, float inyaw, bool inbShowInCockpit, bool inbHideInHangar, Vector3D inposition)
         {
             _turretID = inturretID;
             _turretOrientation = inturretOrientation;
@@ -1223,7 +1527,6 @@ namespace VoidDestroyer2DataEditor
 
             _pitchLower = inpitchLower;
             _roll = inroll;
-
             _yaw = inyaw;
 
             _bShowInCockpit = inbShowInCockpit;
@@ -1246,7 +1549,6 @@ namespace VoidDestroyer2DataEditor
 
             _pitchLower = inCopyFrom.pitchLower;
             _roll = inCopyFrom.roll;
-
             _yaw = inCopyFrom.yaw;
 
             _bShowInCockpit = inCopyFrom.bShowInCockpit;
@@ -1283,14 +1585,7 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _roll.ToString();
             result += ", ";
-            for (i = 0; i < _yaw.Count; i++)
-            {
-                result += _yaw[i].ToString();
-                if (_yaw.Count - i != 1)
-                {
-                    result += ", ";
-                }
-            }
+            result += _yaw.ToString();
             result += ", ";
             result += _bShowInCockpit.ToString();
             result += ", ";
@@ -1333,7 +1628,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(attachmentDataStructureConverter))]
-    class attachmentDataStructure
+    class attachmentDataStructure : VD2PropertyStore
     {
         string _attachmentOrientation;
 
@@ -1341,30 +1636,61 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _attachmentPosition;
 
-        [Description("attachmentOrientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("attachmentOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string attachmentOrientation
         {
-            get => _attachmentOrientation;
-            set => _attachmentOrientation = value;
+            get
+            {
+                return _attachmentOrientation;
+            }
+            set
+            {
+                _attachmentOrientation = value;
+                SetPropertyEdited("attachmentOrientation", true);
+            }
         }
 
 
-        [Description("attachmentID is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("attachmentID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> attachmentID
         {
-            get => _attachmentID;
-            set => _attachmentID = value;
+            get
+            {
+                return _attachmentID;
+            }
+            set
+            {
+                _attachmentID = value;
+                SetPropertyEdited("attachmentID", true);
+            }
         }
 
 
-        [Description("attachmentPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("attachmentPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D attachmentPosition
         {
-            get => _attachmentPosition;
-            set => _attachmentPosition = value;
+            get
+            {
+                return _attachmentPosition;
+            }
+            set
+            {
+                _attachmentPosition = value;
+                SetPropertyEdited("attachmentPosition", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("attachmentOrientation");
+
+            InitProperty("attachmentID");
+
+            InitProperty("attachmentPosition");
+
+        }
 
         public attachmentDataStructure()
         {
@@ -1448,7 +1774,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(movingElementDataStructureConverter))]
-    class movingElementDataStructure
+    class movingElementDataStructure : VD2PropertyStore
     {
         string _boneName;
 
@@ -1462,66 +1788,138 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _translateAmount;
 
-        [Description("boneName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("boneName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string boneName
         {
-            get => _boneName;
-            set => _boneName = value;
+            get
+            {
+                return _boneName;
+            }
+            set
+            {
+                _boneName = value;
+                SetPropertyEdited("boneName", true);
+            }
         }
 
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
-        [Description("speedMultiplier is a real number"), Category("Real Numbers")]
+        [Description("speedMultiplier is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float speedMultiplier
         {
-            get => _speedMultiplier;
-            set => _speedMultiplier = value;
+            get
+            {
+                return _speedMultiplier;
+            }
+            set
+            {
+                _speedMultiplier = value;
+                SetPropertyEdited("speedMultiplier", true);
+            }
         }
 
 
-        [Description("bLinkedToWeapon is a boolean value"), Category("Booleans")]
+        [Description("bLinkedToWeapon is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLinkedToWeapon
         {
-            get => _bLinkedToWeapon;
-            set => _bLinkedToWeapon = value;
+            get
+            {
+                return _bLinkedToWeapon;
+            }
+            set
+            {
+                _bLinkedToWeapon = value;
+                SetPropertyEdited("bLinkedToWeapon", true);
+            }
         }
 
-        [Description("bCombat is a boolean value"), Category("Booleans")]
+        [Description("bCombat is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCombat
         {
-            get => _bCombat;
-            set => _bCombat = value;
+            get
+            {
+                return _bCombat;
+            }
+            set
+            {
+                _bCombat = value;
+                SetPropertyEdited("bCombat", true);
+            }
         }
 
 
-        [Description("translateAmount is a 3D vector"), Category("3D Vectors")]
+        [Description("translateAmount is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D translateAmount
         {
-            get => _translateAmount;
-            set => _translateAmount = value;
+            get
+            {
+                return _translateAmount;
+            }
+            set
+            {
+                _translateAmount = value;
+                SetPropertyEdited("translateAmount", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("boneName");
+
+            InitProperty("yaw");
+            InitProperty("pitch");
+            InitProperty("roll");
+            InitProperty("speedMultiplier");
+
+            InitProperty("bLinkedToWeapon");
+            InitProperty("bCombat");
+
+            InitProperty("translateAmount");
+
+        }
 
         public movingElementDataStructure()
         {
@@ -1573,7 +1971,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _boneName;
             result += ", ";
@@ -1626,7 +2023,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(dockDataStructureConverter))]
-    class dockDataStructure
+    class dockDataStructure : VD2PropertyStore
     {
         string _dockType;
         string _ejectOrientation;
@@ -1647,109 +2044,230 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("dockType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("dockType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string dockType
         {
-            get => _dockType;
-            set => _dockType = value;
+            get
+            {
+                return _dockType;
+            }
+            set
+            {
+                _dockType = value;
+                SetPropertyEdited("dockType", true);
+            }
         }
 
-        [Description("ejectOrientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("ejectOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string ejectOrientation
         {
-            get => _ejectOrientation;
-            set => _ejectOrientation = value;
+            get
+            {
+                return _ejectOrientation;
+            }
+            set
+            {
+                _ejectOrientation = value;
+                SetPropertyEdited("ejectOrientation", true);
+            }
         }
 
-        [Description("orientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("orientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string orientation
         {
-            get => _orientation;
-            set => _orientation = value;
+            get
+            {
+                return _orientation;
+            }
+            set
+            {
+                _orientation = value;
+                SetPropertyEdited("orientation", true);
+            }
         }
 
-        [Description("attachedID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("attachedID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string attachedID
         {
-            get => _attachedID;
-            set => _attachedID = value;
+            get
+            {
+                return _attachedID;
+            }
+            set
+            {
+                _attachedID = value;
+                SetPropertyEdited("attachedID", true);
+            }
         }
 
-        [Description("boneName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("boneName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string boneName
         {
-            get => _boneName;
-            set => _boneName = value;
+            get
+            {
+                return _boneName;
+            }
+            set
+            {
+                _boneName = value;
+                SetPropertyEdited("boneName", true);
+            }
         }
 
-        [Description("dockOrientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("dockOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string dockOrientation
         {
-            get => _dockOrientation;
-            set => _dockOrientation = value;
+            get
+            {
+                return _dockOrientation;
+            }
+            set
+            {
+                _dockOrientation = value;
+                SetPropertyEdited("dockOrientation", true);
+            }
         }
 
-        [Description("resourceOnly is a plaintext string"), Category("Plaintext Strings")]
+        [Description("resourceOnly is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string resourceOnly
         {
-            get => _resourceOnly;
-            set => _resourceOnly = value;
+            get
+            {
+                return _resourceOnly;
+            }
+            set
+            {
+                _resourceOnly = value;
+                SetPropertyEdited("resourceOnly", true);
+            }
         }
 
 
-        [Description("objectID is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("objectID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
 
-        [Description("ejectVelocity is an integer"), Category("Integers")]
+        [Description("ejectVelocity is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int ejectVelocity
         {
-            get => _ejectVelocity;
-            set => _ejectVelocity = value;
+            get
+            {
+                return _ejectVelocity;
+            }
+            set
+            {
+                _ejectVelocity = value;
+                SetPropertyEdited("ejectVelocity", true);
+            }
         }
 
-        [Description("dockRollOffset is an integer"), Category("Integers")]
+        [Description("dockRollOffset is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int dockRollOffset
         {
-            get => _dockRollOffset;
-            set => _dockRollOffset = value;
+            get
+            {
+                return _dockRollOffset;
+            }
+            set
+            {
+                _dockRollOffset = value;
+                SetPropertyEdited("dockRollOffset", true);
+            }
         }
 
-        [Description("dockYawOffset is an integer"), Category("Integers")]
+        [Description("dockYawOffset is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int dockYawOffset
         {
-            get => _dockYawOffset;
-            set => _dockYawOffset = value;
+            get
+            {
+                return _dockYawOffset;
+            }
+            set
+            {
+                _dockYawOffset = value;
+                SetPropertyEdited("dockYawOffset", true);
+            }
         }
 
 
-        [Description("bCanAcceptRawResource is a boolean value"), Category("Booleans")]
+        [Description("bCanAcceptRawResource is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCanAcceptRawResource
         {
-            get => _bCanAcceptRawResource;
-            set => _bCanAcceptRawResource = value;
+            get
+            {
+                return _bCanAcceptRawResource;
+            }
+            set
+            {
+                _bCanAcceptRawResource = value;
+                SetPropertyEdited("bCanAcceptRawResource", true);
+            }
         }
 
-        [Description("bInvisible is a boolean value"), Category("Booleans")]
+        [Description("bInvisible is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bInvisible
         {
-            get => _bInvisible;
-            set => _bInvisible = value;
+            get
+            {
+                return _bInvisible;
+            }
+            set
+            {
+                _bInvisible = value;
+                SetPropertyEdited("bInvisible", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("dockType");
+            InitProperty("ejectOrientation");
+            InitProperty("orientation");
+            InitProperty("attachedID");
+            InitProperty("boneName");
+            InitProperty("dockOrientation");
+            InitProperty("resourceOnly");
+
+            InitProperty("objectID");
+
+            InitProperty("ejectVelocity");
+            InitProperty("dockRollOffset");
+            InitProperty("dockYawOffset");
+
+            InitProperty("bCanAcceptRawResource");
+            InitProperty("bInvisible");
+
+            InitProperty("position");
+
+        }
 
         public dockDataStructure()
         {
@@ -1894,7 +2412,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(shieldDataStructureConverter))]
-    class shieldDataStructure
+    class shieldDataStructure : VD2PropertyStore
     {
         string _shieldID;
         string _shieldOrientation;
@@ -1904,44 +2422,91 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _shieldPosition;
 
-        [Description("shieldID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shieldID
         {
-            get => _shieldID;
-            set => _shieldID = value;
+            get
+            {
+                return _shieldID;
+            }
+            set
+            {
+                _shieldID = value;
+                SetPropertyEdited("shieldID", true);
+            }
         }
 
-        [Description("shieldOrientation is a plaintext string"), Category("Plaintext Strings")]
+        [Description("shieldOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shieldOrientation
         {
-            get => _shieldOrientation;
-            set => _shieldOrientation = value;
+            get
+            {
+                return _shieldOrientation;
+            }
+            set
+            {
+                _shieldOrientation = value;
+                SetPropertyEdited("shieldOrientation", true);
+            }
         }
 
 
-        [Description("pitch is an integer"), Category("Integers")]
+        [Description("pitch is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is an integer"), Category("Integers")]
+        [Description("roll is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
 
-        [Description("shieldPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("shieldPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D shieldPosition
         {
-            get => _shieldPosition;
-            set => _shieldPosition = value;
+            get
+            {
+                return _shieldPosition;
+            }
+            set
+            {
+                _shieldPosition = value;
+                SetPropertyEdited("shieldPosition", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("shieldID");
+            InitProperty("shieldOrientation");
+
+            InitProperty("pitch");
+            InitProperty("roll");
+
+            InitProperty("shieldPosition");
+
+        }
 
         public shieldDataStructure()
         {
@@ -1981,7 +2546,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _shieldID;
             result += ", ";
@@ -2028,7 +2592,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(rotatingElementDataStructureConverter))]
-    class rotatingElementDataStructure
+    class rotatingElementDataStructure : VD2PropertyStore
     {
         string _boneName;
 
@@ -2036,30 +2600,61 @@ namespace VoidDestroyer2DataEditor
 
         bool _bLinkedToWeapon;
 
-        [Description("boneName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("boneName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string boneName
         {
-            get => _boneName;
-            set => _boneName = value;
+            get
+            {
+                return _boneName;
+            }
+            set
+            {
+                _boneName = value;
+                SetPropertyEdited("boneName", true);
+            }
         }
 
 
-        [Description("rollSpeed is an integer"), Category("Integers")]
+        [Description("rollSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rollSpeed
         {
-            get => _rollSpeed;
-            set => _rollSpeed = value;
+            get
+            {
+                return _rollSpeed;
+            }
+            set
+            {
+                _rollSpeed = value;
+                SetPropertyEdited("rollSpeed", true);
+            }
         }
 
 
-        [Description("bLinkedToWeapon is a boolean value"), Category("Booleans")]
+        [Description("bLinkedToWeapon is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLinkedToWeapon
         {
-            get => _bLinkedToWeapon;
-            set => _bLinkedToWeapon = value;
+            get
+            {
+                return _bLinkedToWeapon;
+            }
+            set
+            {
+                _bLinkedToWeapon = value;
+                SetPropertyEdited("bLinkedToWeapon", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("boneName");
+
+            InitProperty("rollSpeed");
+
+            InitProperty("bLinkedToWeapon");
+
+        }
 
         public rotatingElementDataStructure()
         {
@@ -2093,7 +2688,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _boneName;
             result += ", ";
@@ -2136,7 +2730,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(recoilDataStructureConverter))]
-    class recoilDataStructure
+    class recoilDataStructure : VD2PropertyStore
     {
         string _recoilBone;
         string _muzzleBoneName;
@@ -2147,51 +2741,106 @@ namespace VoidDestroyer2DataEditor
         float _recoilZ;
         float _recoilTime;
 
-        [Description("recoilBone is a plaintext string"), Category("Plaintext Strings")]
+        [Description("recoilBone is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string recoilBone
         {
-            get => _recoilBone;
-            set => _recoilBone = value;
+            get
+            {
+                return _recoilBone;
+            }
+            set
+            {
+                _recoilBone = value;
+                SetPropertyEdited("recoilBone", true);
+            }
         }
 
-        [Description("muzzleBoneName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("muzzleBoneName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string muzzleBoneName
         {
-            get => _muzzleBoneName;
-            set => _muzzleBoneName = value;
+            get
+            {
+                return _muzzleBoneName;
+            }
+            set
+            {
+                _muzzleBoneName = value;
+                SetPropertyEdited("muzzleBoneName", true);
+            }
         }
 
-        [Description("recoilParentType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("recoilParentType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string recoilParentType
         {
-            get => _recoilParentType;
-            set => _recoilParentType = value;
+            get
+            {
+                return _recoilParentType;
+            }
+            set
+            {
+                _recoilParentType = value;
+                SetPropertyEdited("recoilParentType", true);
+            }
         }
 
 
-        [Description("muzzleBone is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("muzzleBone is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> muzzleBone
         {
-            get => _muzzleBone;
-            set => _muzzleBone = value;
+            get
+            {
+                return _muzzleBone;
+            }
+            set
+            {
+                _muzzleBone = value;
+                SetPropertyEdited("muzzleBone", true);
+            }
         }
 
 
-        [Description("recoilZ is a real number"), Category("Real Numbers")]
+        [Description("recoilZ is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float recoilZ
         {
-            get => _recoilZ;
-            set => _recoilZ = value;
+            get
+            {
+                return _recoilZ;
+            }
+            set
+            {
+                _recoilZ = value;
+                SetPropertyEdited("recoilZ", true);
+            }
         }
 
-        [Description("recoilTime is a real number"), Category("Real Numbers")]
+        [Description("recoilTime is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float recoilTime
         {
-            get => _recoilTime;
-            set => _recoilTime = value;
+            get
+            {
+                return _recoilTime;
+            }
+            set
+            {
+                _recoilTime = value;
+                SetPropertyEdited("recoilTime", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("recoilBone");
+            InitProperty("muzzleBoneName");
+            InitProperty("recoilParentType");
+
+            InitProperty("muzzleBone");
+
+            InitProperty("recoilZ");
+            InitProperty("recoilTime");
+
+        }
 
         public recoilDataStructure()
         {
@@ -2290,18 +2939,31 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(rotateBonesDataStructureConverter))]
-    class rotateBonesDataStructure
+    class rotateBonesDataStructure : VD2PropertyStore
     {
         string _rotateBone;
 
-        [Description("rotateBone is a plaintext string"), Category("Plaintext Strings")]
+        [Description("rotateBone is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string rotateBone
         {
-            get => _rotateBone;
-            set => _rotateBone = value;
+            get
+            {
+                return _rotateBone;
+            }
+            set
+            {
+                _rotateBone = value;
+                SetPropertyEdited("rotateBone", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("rotateBone");
+
+        }
 
         public rotateBonesDataStructure()
         {
@@ -2323,7 +2985,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _rotateBone;
             return result;
@@ -2362,124 +3023,211 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(canisterDataStructureConverter))]
-    class canisterDataStructure
+    class canisterDataStructure : VD2PropertyStore
     {
         string _projectileID;
 
         int _canisterCount;
+        int _blowBackCanisterCount;
         int _yawRange;
         int _pitchRange;
         int _rollRange;
         int _speedAddBase;
         int _speedAddRandom;
 
-        bool _blowBackCanisterCount;
         bool _bCanisterAimAssist;
         bool _bAddToRangeCalculations;
 
-        [Description("projectileID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("projectileID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string projectileID
         {
-            get => _projectileID;
-            set => _projectileID = value;
+            get
+            {
+                return _projectileID;
+            }
+            set
+            {
+                _projectileID = value;
+                SetPropertyEdited("projectileID", true);
+            }
         }
 
 
-        [Description("canisterCount is an integer"), Category("Integers")]
+        [Description("canisterCount is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int canisterCount
         {
-            get => _canisterCount;
-            set => _canisterCount = value;
+            get
+            {
+                return _canisterCount;
+            }
+            set
+            {
+                _canisterCount = value;
+                SetPropertyEdited("canisterCount", true);
+            }
         }
 
-        [Description("yawRange is an integer"), Category("Integers")]
+        [Description("blowBackCanisterCount is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int blowBackCanisterCount
+        {
+            get
+            {
+                return _blowBackCanisterCount;
+            }
+            set
+            {
+                _blowBackCanisterCount = value;
+                SetPropertyEdited("blowBackCanisterCount", true);
+            }
+        }
+
+        [Description("yawRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int yawRange
         {
-            get => _yawRange;
-            set => _yawRange = value;
+            get
+            {
+                return _yawRange;
+            }
+            set
+            {
+                _yawRange = value;
+                SetPropertyEdited("yawRange", true);
+            }
         }
 
-        [Description("pitchRange is an integer"), Category("Integers")]
+        [Description("pitchRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int pitchRange
         {
-            get => _pitchRange;
-            set => _pitchRange = value;
+            get
+            {
+                return _pitchRange;
+            }
+            set
+            {
+                _pitchRange = value;
+                SetPropertyEdited("pitchRange", true);
+            }
         }
 
-        [Description("rollRange is an integer"), Category("Integers")]
+        [Description("rollRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rollRange
         {
-            get => _rollRange;
-            set => _rollRange = value;
+            get
+            {
+                return _rollRange;
+            }
+            set
+            {
+                _rollRange = value;
+                SetPropertyEdited("rollRange", true);
+            }
         }
 
-        [Description("speedAddBase is an integer"), Category("Integers")]
+        [Description("speedAddBase is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int speedAddBase
         {
-            get => _speedAddBase;
-            set => _speedAddBase = value;
+            get
+            {
+                return _speedAddBase;
+            }
+            set
+            {
+                _speedAddBase = value;
+                SetPropertyEdited("speedAddBase", true);
+            }
         }
 
-        [Description("speedAddRandom is an integer"), Category("Integers")]
+        [Description("speedAddRandom is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int speedAddRandom
         {
-            get => _speedAddRandom;
-            set => _speedAddRandom = value;
+            get
+            {
+                return _speedAddRandom;
+            }
+            set
+            {
+                _speedAddRandom = value;
+                SetPropertyEdited("speedAddRandom", true);
+            }
         }
 
 
-        [Description("blowBackCanisterCount is a boolean value"), Category("Booleans")]
-        public bool blowBackCanisterCount
-        {
-            get => _blowBackCanisterCount;
-            set => _blowBackCanisterCount = value;
-        }
-
-        [Description("bCanisterAimAssist is a boolean value"), Category("Booleans")]
+        [Description("bCanisterAimAssist is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCanisterAimAssist
         {
-            get => _bCanisterAimAssist;
-            set => _bCanisterAimAssist = value;
+            get
+            {
+                return _bCanisterAimAssist;
+            }
+            set
+            {
+                _bCanisterAimAssist = value;
+                SetPropertyEdited("bCanisterAimAssist", true);
+            }
         }
 
-        [Description("bAddToRangeCalculations is a boolean value"), Category("Booleans")]
+        [Description("bAddToRangeCalculations is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bAddToRangeCalculations
         {
-            get => _bAddToRangeCalculations;
-            set => _bAddToRangeCalculations = value;
+            get
+            {
+                return _bAddToRangeCalculations;
+            }
+            set
+            {
+                _bAddToRangeCalculations = value;
+                SetPropertyEdited("bAddToRangeCalculations", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("projectileID");
+
+            InitProperty("canisterCount");
+            InitProperty("blowBackCanisterCount");
+            InitProperty("yawRange");
+            InitProperty("pitchRange");
+            InitProperty("rollRange");
+            InitProperty("speedAddBase");
+            InitProperty("speedAddRandom");
+
+            InitProperty("bCanisterAimAssist");
+            InitProperty("bAddToRangeCalculations");
+
+        }
 
         public canisterDataStructure()
         {
             _projectileID = "";
 
             _canisterCount = 0;
+            _blowBackCanisterCount = 0;
             _yawRange = 0;
             _pitchRange = 0;
             _rollRange = 0;
             _speedAddBase = 0;
             _speedAddRandom = 0;
 
-            _blowBackCanisterCount = false;
             _bCanisterAimAssist = false;
             _bAddToRangeCalculations = false;
 
         }
 
-        public canisterDataStructure(string inprojectileID, int incanisterCount, int inyawRange, int inpitchRange, int inrollRange, int inspeedAddBase, int inspeedAddRandom, bool inblowBackCanisterCount, bool inbCanisterAimAssist, bool inbAddToRangeCalculations)
+        public canisterDataStructure(string inprojectileID, int incanisterCount, int inblowBackCanisterCount, int inyawRange, int inpitchRange, int inrollRange, int inspeedAddBase, int inspeedAddRandom, bool inbCanisterAimAssist, bool inbAddToRangeCalculations)
         {
             _projectileID = inprojectileID;
 
             _canisterCount = incanisterCount;
+            _blowBackCanisterCount = inblowBackCanisterCount;
             _yawRange = inyawRange;
             _pitchRange = inpitchRange;
             _rollRange = inrollRange;
             _speedAddBase = inspeedAddBase;
             _speedAddRandom = inspeedAddRandom;
 
-            _blowBackCanisterCount = inblowBackCanisterCount;
             _bCanisterAimAssist = inbCanisterAimAssist;
             _bAddToRangeCalculations = inbAddToRangeCalculations;
 
@@ -2490,13 +3238,13 @@ namespace VoidDestroyer2DataEditor
             _projectileID = inCopyFrom.projectileID;
 
             _canisterCount = inCopyFrom.canisterCount;
+            _blowBackCanisterCount = inCopyFrom.blowBackCanisterCount;
             _yawRange = inCopyFrom.yawRange;
             _pitchRange = inCopyFrom.pitchRange;
             _rollRange = inCopyFrom.rollRange;
             _speedAddBase = inCopyFrom.speedAddBase;
             _speedAddRandom = inCopyFrom.speedAddRandom;
 
-            _blowBackCanisterCount = inCopyFrom.blowBackCanisterCount;
             _bCanisterAimAssist = inCopyFrom.bCanisterAimAssist;
             _bAddToRangeCalculations = inCopyFrom.bAddToRangeCalculations;
 
@@ -2504,11 +3252,12 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _projectileID;
             result += ", ";
             result += _canisterCount.ToString();
+            result += ", ";
+            result += _blowBackCanisterCount.ToString();
             result += ", ";
             result += _yawRange.ToString();
             result += ", ";
@@ -2519,8 +3268,6 @@ namespace VoidDestroyer2DataEditor
             result += _speedAddBase.ToString();
             result += ", ";
             result += _speedAddRandom.ToString();
-            result += ", ";
-            result += _blowBackCanisterCount.ToString();
             result += ", ";
             result += _bCanisterAimAssist.ToString();
             result += ", ";
@@ -2561,7 +3308,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(launchTubeDataStructureConverter))]
-    class launchTubeDataStructure
+    class launchTubeDataStructure : VD2PropertyStore
     {
         string _direction;
 
@@ -2570,43 +3317,89 @@ namespace VoidDestroyer2DataEditor
         Vector3D _dockPosition;
         Vector3D _dockSize;
 
-        [Description("direction is a plaintext string"), Category("Plaintext Strings")]
+        [Description("direction is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string direction
         {
-            get => _direction;
-            set => _direction = value;
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
+                SetPropertyEdited("direction", true);
+            }
         }
 
 
-        [Description("launchDeckBeg is a 3D vector"), Category("3D Vectors")]
+        [Description("launchDeckBeg is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D launchDeckBeg
         {
-            get => _launchDeckBeg;
-            set => _launchDeckBeg = value;
+            get
+            {
+                return _launchDeckBeg;
+            }
+            set
+            {
+                _launchDeckBeg = value;
+                SetPropertyEdited("launchDeckBeg", true);
+            }
         }
 
-        [Description("launchDeckEnd is a 3D vector"), Category("3D Vectors")]
+        [Description("launchDeckEnd is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D launchDeckEnd
         {
-            get => _launchDeckEnd;
-            set => _launchDeckEnd = value;
+            get
+            {
+                return _launchDeckEnd;
+            }
+            set
+            {
+                _launchDeckEnd = value;
+                SetPropertyEdited("launchDeckEnd", true);
+            }
         }
 
-        [Description("dockPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("dockPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D dockPosition
         {
-            get => _dockPosition;
-            set => _dockPosition = value;
+            get
+            {
+                return _dockPosition;
+            }
+            set
+            {
+                _dockPosition = value;
+                SetPropertyEdited("dockPosition", true);
+            }
         }
 
-        [Description("dockSize is a 3D vector"), Category("3D Vectors")]
+        [Description("dockSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D dockSize
         {
-            get => _dockSize;
-            set => _dockSize = value;
+            get
+            {
+                return _dockSize;
+            }
+            set
+            {
+                _dockSize = value;
+                SetPropertyEdited("dockSize", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("direction");
+
+            InitProperty("launchDeckBeg");
+            InitProperty("launchDeckEnd");
+            InitProperty("dockPosition");
+            InitProperty("dockSize");
+
+        }
 
         public launchTubeDataStructure()
         {
@@ -2643,7 +3436,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _direction;
             result += ", ";
@@ -2690,7 +3482,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(mirvDataStructureConverter))]
-    class mirvDataStructure
+    class mirvDataStructure : VD2PropertyStore
     {
         string _mirvObjectID;
 
@@ -2698,30 +3490,61 @@ namespace VoidDestroyer2DataEditor
 
         bool _bNoExplodeOnMirv;
 
-        [Description("mirvObjectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("mirvObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string mirvObjectID
         {
-            get => _mirvObjectID;
-            set => _mirvObjectID = value;
+            get
+            {
+                return _mirvObjectID;
+            }
+            set
+            {
+                _mirvObjectID = value;
+                SetPropertyEdited("mirvObjectID", true);
+            }
         }
 
 
-        [Description("mirvCount is an integer"), Category("Integers")]
+        [Description("mirvCount is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int mirvCount
         {
-            get => _mirvCount;
-            set => _mirvCount = value;
+            get
+            {
+                return _mirvCount;
+            }
+            set
+            {
+                _mirvCount = value;
+                SetPropertyEdited("mirvCount", true);
+            }
         }
 
 
-        [Description("bNoExplodeOnMirv is a boolean value"), Category("Booleans")]
+        [Description("bNoExplodeOnMirv is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoExplodeOnMirv
         {
-            get => _bNoExplodeOnMirv;
-            set => _bNoExplodeOnMirv = value;
+            get
+            {
+                return _bNoExplodeOnMirv;
+            }
+            set
+            {
+                _bNoExplodeOnMirv = value;
+                SetPropertyEdited("bNoExplodeOnMirv", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("mirvObjectID");
+
+            InitProperty("mirvCount");
+
+            InitProperty("bNoExplodeOnMirv");
+
+        }
 
         public mirvDataStructure()
         {
@@ -2755,7 +3578,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _mirvObjectID;
             result += ", ";
@@ -2798,7 +3620,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(weaponDirectionDataStructureConverter))]
-    class weaponDirectionDataStructure
+    class weaponDirectionDataStructure : VD2PropertyStore
     {
         string _mainDirection;
 
@@ -2806,36 +3628,74 @@ namespace VoidDestroyer2DataEditor
         float _pitch;
         float _roll;
 
-        [Description("mainDirection is a plaintext string"), Category("Plaintext Strings")]
+        [Description("mainDirection is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string mainDirection
         {
-            get => _mainDirection;
-            set => _mainDirection = value;
+            get
+            {
+                return _mainDirection;
+            }
+            set
+            {
+                _mainDirection = value;
+                SetPropertyEdited("mainDirection", true);
+            }
         }
 
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("mainDirection");
+
+            InitProperty("yaw");
+            InitProperty("pitch");
+            InitProperty("roll");
+
+        }
 
         public weaponDirectionDataStructure()
         {
@@ -2869,7 +3729,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _mainDirection;
             result += ", ";
@@ -2914,28 +3773,50 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(turretBarrelDataStructureConverter))]
-    class turretBarrelDataStructure
+    class turretBarrelDataStructure : VD2PropertyStore
     {
         string _boneName;
 
         Vector3D _weaponPosition;
 
-        [Description("boneName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("boneName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string boneName
         {
-            get => _boneName;
-            set => _boneName = value;
+            get
+            {
+                return _boneName;
+            }
+            set
+            {
+                _boneName = value;
+                SetPropertyEdited("boneName", true);
+            }
         }
 
 
-        [Description("weaponPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("weaponPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D weaponPosition
         {
-            get => _weaponPosition;
-            set => _weaponPosition = value;
+            get
+            {
+                return _weaponPosition;
+            }
+            set
+            {
+                _weaponPosition = value;
+                SetPropertyEdited("weaponPosition", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("boneName");
+
+            InitProperty("weaponPosition");
+
+        }
 
         public turretBarrelDataStructure()
         {
@@ -2963,7 +3844,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _boneName;
             result += ", ";
@@ -3004,18 +3884,31 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(deathSpawnDataStructureConverter))]
-    class deathSpawnDataStructure
+    class deathSpawnDataStructure : VD2PropertyStore
     {
         List<string> _asteroidID;
 
-        [Description("asteroidID is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("asteroidID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> asteroidID
         {
-            get => _asteroidID;
-            set => _asteroidID = value;
+            get
+            {
+                return _asteroidID;
+            }
+            set
+            {
+                _asteroidID = value;
+                SetPropertyEdited("asteroidID", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("asteroidID");
+
+        }
 
         public deathSpawnDataStructure()
         {
@@ -3083,7 +3976,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(babyDataStructureConverter))]
-    class babyDataStructure
+    class babyDataStructure : VD2PropertyStore
     {
         string _asteroidID;
 
@@ -3091,30 +3984,61 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _linearVelocity;
 
-        [Description("asteroidID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("asteroidID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string asteroidID
         {
-            get => _asteroidID;
-            set => _asteroidID = value;
+            get
+            {
+                return _asteroidID;
+            }
+            set
+            {
+                _asteroidID = value;
+                SetPropertyEdited("asteroidID", true);
+            }
         }
 
 
-        [Description("lifeTimer is a real number"), Category("Real Numbers")]
+        [Description("lifeTimer is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float lifeTimer
         {
-            get => _lifeTimer;
-            set => _lifeTimer = value;
+            get
+            {
+                return _lifeTimer;
+            }
+            set
+            {
+                _lifeTimer = value;
+                SetPropertyEdited("lifeTimer", true);
+            }
         }
 
 
-        [Description("linearVelocity is a 3D vector"), Category("3D Vectors")]
+        [Description("linearVelocity is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D linearVelocity
         {
-            get => _linearVelocity;
-            set => _linearVelocity = value;
+            get
+            {
+                return _linearVelocity;
+            }
+            set
+            {
+                _linearVelocity = value;
+                SetPropertyEdited("linearVelocity", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("asteroidID");
+
+            InitProperty("lifeTimer");
+
+            InitProperty("linearVelocity");
+
+        }
 
         public babyDataStructure()
         {
@@ -3148,7 +4072,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _asteroidID;
             result += ", ";
@@ -3191,36 +4114,66 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(largeDockDataStructureConverter))]
-    class largeDockDataStructure
+    class largeDockDataStructure : VD2PropertyStore
     {
         int _rollRotation;
 
         Vector3D _dockPosition;
         Vector3D _dockSize;
 
-        [Description("rollRotation is an integer"), Category("Integers")]
+        [Description("rollRotation is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rollRotation
         {
-            get => _rollRotation;
-            set => _rollRotation = value;
+            get
+            {
+                return _rollRotation;
+            }
+            set
+            {
+                _rollRotation = value;
+                SetPropertyEdited("rollRotation", true);
+            }
         }
 
 
-        [Description("dockPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("dockPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D dockPosition
         {
-            get => _dockPosition;
-            set => _dockPosition = value;
+            get
+            {
+                return _dockPosition;
+            }
+            set
+            {
+                _dockPosition = value;
+                SetPropertyEdited("dockPosition", true);
+            }
         }
 
-        [Description("dockSize is a 3D vector"), Category("3D Vectors")]
+        [Description("dockSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D dockSize
         {
-            get => _dockSize;
-            set => _dockSize = value;
+            get
+            {
+                return _dockSize;
+            }
+            set
+            {
+                _dockSize = value;
+                SetPropertyEdited("dockSize", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("rollRotation");
+
+            InitProperty("dockPosition");
+            InitProperty("dockSize");
+
+        }
 
         public largeDockDataStructure()
         {
@@ -3251,7 +4204,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _rollRotation.ToString();
             result += ", ";
@@ -3294,7 +4246,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(physicalRotatingElementDataStructureConverter))]
-    class physicalRotatingElementDataStructure
+    class physicalRotatingElementDataStructure : VD2PropertyStore
     {
         string _meshName;
         string _collisionShape;
@@ -3303,43 +4255,89 @@ namespace VoidDestroyer2DataEditor
         int _yawSpeed;
         int _pitchSpeed;
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string meshName
         {
-            get => _meshName;
-            set => _meshName = value;
+            get
+            {
+                return _meshName;
+            }
+            set
+            {
+                _meshName = value;
+                SetPropertyEdited("meshName", true);
+            }
         }
 
-        [Description("collisionShape is a plaintext string"), Category("Plaintext Strings")]
+        [Description("collisionShape is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionShape
         {
-            get => _collisionShape;
-            set => _collisionShape = value;
+            get
+            {
+                return _collisionShape;
+            }
+            set
+            {
+                _collisionShape = value;
+                SetPropertyEdited("collisionShape", true);
+            }
         }
 
 
-        [Description("rollSpeed is an integer"), Category("Integers")]
+        [Description("rollSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rollSpeed
         {
-            get => _rollSpeed;
-            set => _rollSpeed = value;
+            get
+            {
+                return _rollSpeed;
+            }
+            set
+            {
+                _rollSpeed = value;
+                SetPropertyEdited("rollSpeed", true);
+            }
         }
 
-        [Description("yawSpeed is an integer"), Category("Integers")]
+        [Description("yawSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int yawSpeed
         {
-            get => _yawSpeed;
-            set => _yawSpeed = value;
+            get
+            {
+                return _yawSpeed;
+            }
+            set
+            {
+                _yawSpeed = value;
+                SetPropertyEdited("yawSpeed", true);
+            }
         }
 
-        [Description("pitchSpeed is an integer"), Category("Integers")]
+        [Description("pitchSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int pitchSpeed
         {
-            get => _pitchSpeed;
-            set => _pitchSpeed = value;
+            get
+            {
+                return _pitchSpeed;
+            }
+            set
+            {
+                _pitchSpeed = value;
+                SetPropertyEdited("pitchSpeed", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("meshName");
+            InitProperty("collisionShape");
+
+            InitProperty("rollSpeed");
+            InitProperty("yawSpeed");
+            InitProperty("pitchSpeed");
+
+        }
 
         public physicalRotatingElementDataStructure()
         {
@@ -3376,7 +4374,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _meshName;
             result += ", ";
@@ -3423,28 +4420,50 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(alwaysOnEffectDataStructureConverter))]
-    class alwaysOnEffectDataStructure
+    class alwaysOnEffectDataStructure : VD2PropertyStore
     {
         string _effectID;
 
         Vector3D _position;
 
-        [Description("effectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("effectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string effectID
         {
-            get => _effectID;
-            set => _effectID = value;
+            get
+            {
+                return _effectID;
+            }
+            set
+            {
+                _effectID = value;
+                SetPropertyEdited("effectID", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("effectID");
+
+            InitProperty("position");
+
+        }
 
         public alwaysOnEffectDataStructure()
         {
@@ -3472,7 +4491,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _effectID;
             result += ", ";
@@ -3513,28 +4531,50 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(cargoBayDataStructureConverter))]
-    class cargoBayDataStructure
+    class cargoBayDataStructure : VD2PropertyStore
     {
         string _cargoBayType;
 
         int _maxAmount;
 
-        [Description("cargoBayType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("cargoBayType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string cargoBayType
         {
-            get => _cargoBayType;
-            set => _cargoBayType = value;
+            get
+            {
+                return _cargoBayType;
+            }
+            set
+            {
+                _cargoBayType = value;
+                SetPropertyEdited("cargoBayType", true);
+            }
         }
 
 
-        [Description("maxAmount is an integer"), Category("Integers")]
+        [Description("maxAmount is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int maxAmount
         {
-            get => _maxAmount;
-            set => _maxAmount = value;
+            get
+            {
+                return _maxAmount;
+            }
+            set
+            {
+                _maxAmount = value;
+                SetPropertyEdited("maxAmount", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("cargoBayType");
+
+            InitProperty("maxAmount");
+
+        }
 
         public cargoBayDataStructure()
         {
@@ -3562,7 +4602,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _cargoBayType;
             result += ", ";
@@ -3603,18 +4642,31 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(gateCollisionDataStructureConverter))]
-    class gateCollisionDataStructure
+    class gateCollisionDataStructure : VD2PropertyStore
     {
         Vector3D _gateCollisionSize;
 
-        [Description("gateCollisionSize is a 3D vector"), Category("3D Vectors")]
+        [Description("gateCollisionSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D gateCollisionSize
         {
-            get => _gateCollisionSize;
-            set => _gateCollisionSize = value;
+            get
+            {
+                return _gateCollisionSize;
+            }
+            set
+            {
+                _gateCollisionSize = value;
+                SetPropertyEdited("gateCollisionSize", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("gateCollisionSize");
+
+        }
 
         public gateCollisionDataStructure()
         {
@@ -3636,7 +4688,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _gateCollisionSize.ToString();
             return result;
@@ -3675,36 +4726,66 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(refuelAreaDataStructureConverter))]
-    class refuelAreaDataStructure
+    class refuelAreaDataStructure : VD2PropertyStore
     {
         string _refuelParticleSystem;
 
         Vector3D _refuelPosition;
         Vector3D _refuelSize;
 
-        [Description("refuelParticleSystem is a plaintext string"), Category("Plaintext Strings")]
+        [Description("refuelParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string refuelParticleSystem
         {
-            get => _refuelParticleSystem;
-            set => _refuelParticleSystem = value;
+            get
+            {
+                return _refuelParticleSystem;
+            }
+            set
+            {
+                _refuelParticleSystem = value;
+                SetPropertyEdited("refuelParticleSystem", true);
+            }
         }
 
 
-        [Description("refuelPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("refuelPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D refuelPosition
         {
-            get => _refuelPosition;
-            set => _refuelPosition = value;
+            get
+            {
+                return _refuelPosition;
+            }
+            set
+            {
+                _refuelPosition = value;
+                SetPropertyEdited("refuelPosition", true);
+            }
         }
 
-        [Description("refuelSize is a 3D vector"), Category("3D Vectors")]
+        [Description("refuelSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D refuelSize
         {
-            get => _refuelSize;
-            set => _refuelSize = value;
+            get
+            {
+                return _refuelSize;
+            }
+            set
+            {
+                _refuelSize = value;
+                SetPropertyEdited("refuelSize", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("refuelParticleSystem");
+
+            InitProperty("refuelPosition");
+            InitProperty("refuelSize");
+
+        }
 
         public refuelAreaDataStructure()
         {
@@ -3735,7 +4816,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _refuelParticleSystem;
             result += ", ";
@@ -3778,7 +4858,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(repairAreaDataStructureConverter))]
-    class repairAreaDataStructure
+    class repairAreaDataStructure : VD2PropertyStore
     {
         string _repairParticleSystem;
         string _repairSoundID;
@@ -3787,43 +4867,89 @@ namespace VoidDestroyer2DataEditor
         Vector3D _repairPosition;
         Vector3D _repairSize;
 
-        [Description("repairParticleSystem is a plaintext string"), Category("Plaintext Strings")]
+        [Description("repairParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string repairParticleSystem
         {
-            get => _repairParticleSystem;
-            set => _repairParticleSystem = value;
+            get
+            {
+                return _repairParticleSystem;
+            }
+            set
+            {
+                _repairParticleSystem = value;
+                SetPropertyEdited("repairParticleSystem", true);
+            }
         }
 
-        [Description("repairSoundID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("repairSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string repairSoundID
         {
-            get => _repairSoundID;
-            set => _repairSoundID = value;
+            get
+            {
+                return _repairSoundID;
+            }
+            set
+            {
+                _repairSoundID = value;
+                SetPropertyEdited("repairSoundID", true);
+            }
         }
 
-        [Description("maxRepairClass is a plaintext string"), Category("Plaintext Strings")]
+        [Description("maxRepairClass is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string maxRepairClass
         {
-            get => _maxRepairClass;
-            set => _maxRepairClass = value;
+            get
+            {
+                return _maxRepairClass;
+            }
+            set
+            {
+                _maxRepairClass = value;
+                SetPropertyEdited("maxRepairClass", true);
+            }
         }
 
 
-        [Description("repairPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("repairPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D repairPosition
         {
-            get => _repairPosition;
-            set => _repairPosition = value;
+            get
+            {
+                return _repairPosition;
+            }
+            set
+            {
+                _repairPosition = value;
+                SetPropertyEdited("repairPosition", true);
+            }
         }
 
-        [Description("repairSize is a 3D vector"), Category("3D Vectors")]
+        [Description("repairSize is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D repairSize
         {
-            get => _repairSize;
-            set => _repairSize = value;
+            get
+            {
+                return _repairSize;
+            }
+            set
+            {
+                _repairSize = value;
+                SetPropertyEdited("repairSize", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("repairParticleSystem");
+            InitProperty("repairSoundID");
+            InitProperty("maxRepairClass");
+
+            InitProperty("repairPosition");
+            InitProperty("repairSize");
+
+        }
 
         public repairAreaDataStructure()
         {
@@ -3860,7 +4986,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _repairParticleSystem;
             result += ", ";
@@ -3907,36 +5032,66 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(mineDataStructureConverter))]
-    class mineDataStructure
+    class mineDataStructure : VD2PropertyStore
     {
         string _mineID;
 
         Vector3D _position;
         Vector3D _linearVelocity;
 
-        [Description("mineID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("mineID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string mineID
         {
-            get => _mineID;
-            set => _mineID = value;
+            get
+            {
+                return _mineID;
+            }
+            set
+            {
+                _mineID = value;
+                SetPropertyEdited("mineID", true);
+            }
         }
 
 
-        [Description("position is a 3D vector"), Category("3D Vectors")]
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D position
         {
-            get => _position;
-            set => _position = value;
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                SetPropertyEdited("position", true);
+            }
         }
 
-        [Description("linearVelocity is a 3D vector"), Category("3D Vectors")]
+        [Description("linearVelocity is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D linearVelocity
         {
-            get => _linearVelocity;
-            set => _linearVelocity = value;
+            get
+            {
+                return _linearVelocity;
+            }
+            set
+            {
+                _linearVelocity = value;
+                SetPropertyEdited("linearVelocity", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("mineID");
+
+            InitProperty("position");
+            InitProperty("linearVelocity");
+
+        }
 
         public mineDataStructure()
         {
@@ -3967,7 +5122,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _mineID;
             result += ", ";
@@ -4010,26 +5164,47 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(damageCollisionFieldDataStructureConverter))]
-    class damageCollisionFieldDataStructure
+    class damageCollisionFieldDataStructure : VD2PropertyStore
     {
         int _damage;
         int _scale;
 
-        [Description("damage is an integer"), Category("Integers")]
+        [Description("damage is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int damage
         {
-            get => _damage;
-            set => _damage = value;
+            get
+            {
+                return _damage;
+            }
+            set
+            {
+                _damage = value;
+                SetPropertyEdited("damage", true);
+            }
         }
 
-        [Description("scale is an integer"), Category("Integers")]
+        [Description("scale is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int scale
         {
-            get => _scale;
-            set => _scale = value;
+            get
+            {
+                return _scale;
+            }
+            set
+            {
+                _scale = value;
+                SetPropertyEdited("scale", true);
+            }
         }
 
 
+
+        public override void InitAllProperties()
+        {
+            InitProperty("damage");
+            InitProperty("scale");
+
+        }
 
         public damageCollisionFieldDataStructure()
         {
@@ -4054,7 +5229,6 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _damage.ToString();
             result += ", ";

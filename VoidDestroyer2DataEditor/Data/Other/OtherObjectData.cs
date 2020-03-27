@@ -24,6 +24,7 @@ namespace VoidDestroyer2DataEditor
 
         List<string> _descriptionText;
 
+        int _isMassInfinite;
         int _rockSubPosition;
 
         float _health;
@@ -35,211 +36,450 @@ namespace VoidDestroyer2DataEditor
 
         bool _bNoShow;
         bool _bShowInTactical;
-        bool _isMassInfinite;
 
         cargoBayDataStructure _cargoBay;
         gateCollisionDataStructure _gateCollision;
 
-        [Description("objectType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
         {
-            get => _objectType;
-            set => _objectType = value;
+            get
+            {
+                return _objectType;
+            }
+            set
+            {
+                _objectType = value;
+                SetPropertyEdited("objectType", true);
+            }
         }
 
-        [Description("name is a plaintext string"), Category("Plaintext Strings")]
+        [Description("name is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string name
         {
-            get => _name;
-            set => _name = value;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                SetPropertyEdited("name", true);
+            }
         }
 
-        [Description("objectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
-        [Description("faction is a plaintext string"), Category("Plaintext Strings")]
+        [Description("faction is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string faction
         {
-            get => _faction;
-            set => _faction = value;
+            get
+            {
+                return _faction;
+            }
+            set
+            {
+                _faction = value;
+                SetPropertyEdited("faction", true);
+            }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string meshName
         {
-            get => _meshName;
-            set => _meshName = value;
+            get
+            {
+                return _meshName;
+            }
+            set
+            {
+                _meshName = value;
+                SetPropertyEdited("meshName", true);
+            }
         }
 
-        [Description("wireframeMaterial is a plaintext string"), Category("Plaintext Strings")]
+        [Description("wireframeMaterial is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string wireframeMaterial
         {
-            get => _wireframeMaterial;
-            set => _wireframeMaterial = value;
+            get
+            {
+                return _wireframeMaterial;
+            }
+            set
+            {
+                _wireframeMaterial = value;
+                SetPropertyEdited("wireframeMaterial", true);
+            }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string explosionID
         {
-            get => _explosionID;
-            set => _explosionID = value;
+            get
+            {
+                return _explosionID;
+            }
+            set
+            {
+                _explosionID = value;
+                SetPropertyEdited("explosionID", true);
+            }
         }
 
-        [Description("collisionShape is a plaintext string"), Category("Plaintext Strings")]
+        [Description("collisionShape is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionShape
         {
-            get => _collisionShape;
-            set => _collisionShape = value;
+            get
+            {
+                return _collisionShape;
+            }
+            set
+            {
+                _collisionShape = value;
+                SetPropertyEdited("collisionShape", true);
+            }
         }
 
-        [Description("gateInParticleSystem is a plaintext string"), Category("Plaintext Strings")]
+        [Description("gateInParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string gateInParticleSystem
         {
-            get => _gateInParticleSystem;
-            set => _gateInParticleSystem = value;
+            get
+            {
+                return _gateInParticleSystem;
+            }
+            set
+            {
+                _gateInParticleSystem = value;
+                SetPropertyEdited("gateInParticleSystem", true);
+            }
         }
 
-        [Description("gateOutParticleSystem is a plaintext string"), Category("Plaintext Strings")]
+        [Description("gateOutParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string gateOutParticleSystem
         {
-            get => _gateOutParticleSystem;
-            set => _gateOutParticleSystem = value;
+            get
+            {
+                return _gateOutParticleSystem;
+            }
+            set
+            {
+                _gateOutParticleSystem = value;
+                SetPropertyEdited("gateOutParticleSystem", true);
+            }
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections")]
+        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> descriptionText
         {
-            get => _descriptionText;
-            set => _descriptionText = value;
+            get
+            {
+                return _descriptionText;
+            }
+            set
+            {
+                _descriptionText = value;
+                SetPropertyEdited("descriptionText", true);
+            }
         }
 
 
-        [Description("rockSubPosition is an integer"), Category("Integers")]
+        [Description("isMassInfinite is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int isMassInfinite
+        {
+            get
+            {
+                return _isMassInfinite;
+            }
+            set
+            {
+                _isMassInfinite = value;
+                SetPropertyEdited("isMassInfinite", true);
+            }
+        }
+
+        [Description("rockSubPosition is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rockSubPosition
         {
-            get => _rockSubPosition;
-            set => _rockSubPosition = value;
+            get
+            {
+                return _rockSubPosition;
+            }
+            set
+            {
+                _rockSubPosition = value;
+                SetPropertyEdited("rockSubPosition", true);
+            }
         }
 
 
-        [Description("health is a real number"), Category("Real Numbers")]
+        [Description("health is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float health
         {
-            get => _health;
-            set => _health = value;
+            get
+            {
+                return _health;
+            }
+            set
+            {
+                _health = value;
+                SetPropertyEdited("health", true);
+            }
         }
 
-        [Description("cruiseSpeed is a real number"), Category("Real Numbers")]
+        [Description("cruiseSpeed is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float cruiseSpeed
         {
-            get => _cruiseSpeed;
-            set => _cruiseSpeed = value;
+            get
+            {
+                return _cruiseSpeed;
+            }
+            set
+            {
+                _cruiseSpeed = value;
+                SetPropertyEdited("cruiseSpeed", true);
+            }
         }
 
-        [Description("timeTillCruise is a real number"), Category("Real Numbers")]
+        [Description("timeTillCruise is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float timeTillCruise
         {
-            get => _timeTillCruise;
-            set => _timeTillCruise = value;
+            get
+            {
+                return _timeTillCruise;
+            }
+            set
+            {
+                _timeTillCruise = value;
+                SetPropertyEdited("timeTillCruise", true);
+            }
         }
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
 
-        [Description("bNoShow is a boolean value"), Category("Booleans")]
+        [Description("bNoShow is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoShow
         {
-            get => _bNoShow;
-            set => _bNoShow = value;
+            get
+            {
+                return _bNoShow;
+            }
+            set
+            {
+                _bNoShow = value;
+                SetPropertyEdited("bNoShow", true);
+            }
         }
 
-        [Description("bShowInTactical is a boolean value"), Category("Booleans")]
+        [Description("bShowInTactical is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bShowInTactical
         {
-            get => _bShowInTactical;
-            set => _bShowInTactical = value;
+            get
+            {
+                return _bShowInTactical;
+            }
+            set
+            {
+                _bShowInTactical = value;
+                SetPropertyEdited("bShowInTactical", true);
+            }
         }
 
-        [Description("isMassInfinite is a boolean value"), Category("Booleans")]
-        public bool isMassInfinite
-        {
-            get => _isMassInfinite;
-            set => _isMassInfinite = value;
-        }
 
-
-        [Description("cargoBay is a datastructure"), Category("Data Structures")]
+        [Description("cargoBay is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public cargoBayDataStructure cargoBay
         {
-            get => _cargoBay;
-            set => _cargoBay = value;
+            get
+            {
+                return _cargoBay;
+            }
+            set
+            {
+                _cargoBay = value;
+                SetPropertyEdited("cargoBay", true);
+            }
         }
 
-        [Description("gateCollision is a datastructure"), Category("Data Structures")]
+        [Description("gateCollision is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public gateCollisionDataStructure gateCollision
         {
-            get => _gateCollision;
-            set => _gateCollision = value;
+            get
+            {
+                return _gateCollision;
+            }
+            set
+            {
+                _gateCollision = value;
+                SetPropertyEdited("gateCollision", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("objectType");
+            InitProperty("name");
+            InitProperty("objectID");
+            InitProperty("faction");
+            InitProperty("meshName");
+            InitProperty("wireframeMaterial");
+            InitProperty("explosionID");
+            InitProperty("collisionShape");
+            InitProperty("gateInParticleSystem");
+            InitProperty("gateOutParticleSystem");
+
+            InitProperty("descriptionText");
+
+            InitProperty("isMassInfinite");
+            InitProperty("rockSubPosition");
+
+            InitProperty("health");
+            InitProperty("cruiseSpeed");
+            InitProperty("timeTillCruise");
+            InitProperty("yaw");
+            InitProperty("pitch");
+            InitProperty("roll");
+
+            InitProperty("bNoShow");
+            InitProperty("bShowInTactical");
+
+            InitProperty("cargoBay");
+            InitProperty("gateCollision");
+
+        }
 
         public OtherObjectData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType");
-                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name");
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID");
-                _faction = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "faction");
-                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName");
-                _wireframeMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "wireframeMaterial");
-                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID");
-                _collisionShape = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionShape");
-                _gateInParticleSystem = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gateInParticleSystem");
-                _gateOutParticleSystem = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gateOutParticleSystem");
+                _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
+                SetPropertyExistsInBaseData("objectType", exists);
+                SetPropertyExists("objectType", exists);
+                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
+                SetPropertyExistsInBaseData("name", exists);
+                SetPropertyExists("name", exists);
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                SetPropertyExistsInBaseData("objectID", exists);
+                SetPropertyExists("objectID", exists);
+                _faction = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "faction", out exists);
+                SetPropertyExistsInBaseData("faction", exists);
+                SetPropertyExists("faction", exists);
+                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
+                SetPropertyExistsInBaseData("meshName", exists);
+                SetPropertyExists("meshName", exists);
+                _wireframeMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "wireframeMaterial", out exists);
+                SetPropertyExistsInBaseData("wireframeMaterial", exists);
+                SetPropertyExists("wireframeMaterial", exists);
+                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID", out exists);
+                SetPropertyExistsInBaseData("explosionID", exists);
+                SetPropertyExists("explosionID", exists);
+                _collisionShape = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionShape", out exists);
+                SetPropertyExistsInBaseData("collisionShape", exists);
+                SetPropertyExists("collisionShape", exists);
+                _gateInParticleSystem = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gateInParticleSystem", out exists);
+                SetPropertyExistsInBaseData("gateInParticleSystem", exists);
+                SetPropertyExists("gateInParticleSystem", exists);
+                _gateOutParticleSystem = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "gateOutParticleSystem", out exists);
+                SetPropertyExistsInBaseData("gateOutParticleSystem", exists);
+                SetPropertyExists("gateOutParticleSystem", exists);
 
-                _descriptionText = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText");
+                _descriptionText = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists);
+                SetPropertyExistsInBaseData("descriptionText", exists);
+                SetPropertyExists("descriptionText", exists);
 
-                _rockSubPosition = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rockSubPosition");
+                _isMassInfinite = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "isMassInfinite", out exists);
+                SetPropertyExistsInBaseData("isMassInfinite", exists);
+                SetPropertyExists("isMassInfinite", exists);
+                _rockSubPosition = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rockSubPosition", out exists);
+                SetPropertyExistsInBaseData("rockSubPosition", exists);
+                SetPropertyExists("rockSubPosition", exists);
 
-                _health = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "health");
-                _cruiseSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "cruiseSpeed");
-                _timeTillCruise = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "timeTillCruise");
-                _yaw = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "yaw");
-                _pitch = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pitch");
-                _roll = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "roll");
+                _health = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "health", out exists);
+                SetPropertyExistsInBaseData("health", exists);
+                SetPropertyExists("health", exists);
+                _cruiseSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "cruiseSpeed", out exists);
+                SetPropertyExistsInBaseData("cruiseSpeed", exists);
+                SetPropertyExists("cruiseSpeed", exists);
+                _timeTillCruise = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "timeTillCruise", out exists);
+                SetPropertyExistsInBaseData("timeTillCruise", exists);
+                SetPropertyExists("timeTillCruise", exists);
+                _yaw = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "yaw", out exists);
+                SetPropertyExistsInBaseData("yaw", exists);
+                SetPropertyExists("yaw", exists);
+                _pitch = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pitch", out exists);
+                SetPropertyExistsInBaseData("pitch", exists);
+                SetPropertyExists("pitch", exists);
+                _roll = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "roll", out exists);
+                SetPropertyExistsInBaseData("roll", exists);
+                SetPropertyExists("roll", exists);
 
-                _bNoShow = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoShow");
-                _bShowInTactical = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInTactical");
-                _isMassInfinite = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "isMassInfinite");
+                _bNoShow = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoShow", out exists);
+                SetPropertyExistsInBaseData("bNoShow", exists);
+                SetPropertyExists("bNoShow", exists);
+                _bShowInTactical = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInTactical", out exists);
+                SetPropertyExistsInBaseData("bShowInTactical", exists);
+                SetPropertyExists("bShowInTactical", exists);
 
-                _cargoBay = DataStructureParseHelpers.GetcargoBayDataStructureFromVD2Data(DataXMLDoc);
-                _gateCollision = DataStructureParseHelpers.GetgateCollisionDataStructureFromVD2Data(DataXMLDoc);
+                _cargoBay = DataStructureParseHelpers.GetcargoBayDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("cargoBay", exists);
+                SetPropertyExists("cargoBay", exists);
+                _gateCollision = DataStructureParseHelpers.GetgateCollisionDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("gateCollision", exists);
+                SetPropertyExists("gateCollision", exists);
 
             }
         }

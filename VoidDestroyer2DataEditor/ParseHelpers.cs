@@ -14,6 +14,7 @@ namespace VoidDestroyer2DataEditor
         realnumber,
         integer,
         vector,
+        color,
         datastructure
     }
 
@@ -77,7 +78,6 @@ namespace VoidDestroyer2DataEditor
                 //We look for the 2 lines and fix them before reading, or the parser gets rather cross at us.
                 for (int i = 0; i < xmltextlines.Count; i++)
                 {
-                    xmltextlines[i] = xmltextlines[i].Replace("&", "&amp;");
                     if (xmltextlines[i].StartsWith("<minimumShipClass="))
                     {
                         xmltextlines.Insert(i, xmltextlines[i].Substring(0, 17) + " attr1" + xmltextlines[i].Substring(17));
@@ -88,6 +88,14 @@ namespace VoidDestroyer2DataEditor
                         xmltextlines.Insert(i, xmltextlines[i].Substring(0, 12) + " attr1" + xmltextlines[i].Substring(12));
                         xmltextlines.RemoveAt(i + 1);
                     }
+
+                    //Here we look for literal '&', Paul makes no use of the xml reference system and all '&' he uses in the files are the character '&'
+                    //XML, however, has other ideas. If you have ever wondered why web things sometimes show you '&amp;', this is why.
+                    //An '&' is the opening for a special character, similar to the escape character ('\') system in c strings
+                    //So, to preserve the meaning of these literal '&' characters we must feed the standards compliant parser
+                    //the special character for a literal '&', which is '&amp;'. Basically, it is XMLs version of '\\'.
+                    //This process will likely need to be reversed on save, unless it turns out in testing that VD2 behaves :(
+                    xmltextlines[i] = xmltextlines[i].Replace("&", "&amp;");
                 }
 
                 File.WriteAllLines("TempLoadStage.xml", xmltextlines);
@@ -110,19 +118,6 @@ namespace VoidDestroyer2DataEditor
             {
                 result = inXMLNode.Attributes[inAttributeIndex].InnerText;
             }
-            return result;
-        }
-
-        public static string GetStringFromXMLNodeAttributeAtIndex(int inAttributeIndex, XmlNode inXMLNode, out bool outExists)
-        {
-            string result = "";
-            bool exists = false;
-            if (inXMLNode.Attributes.Count > inAttributeIndex)
-            {
-                result = inXMLNode.Attributes[inAttributeIndex].InnerText;
-            }
-
-            outExists = exists;
             return result;
         }
 
@@ -290,7 +285,7 @@ namespace VoidDestroyer2DataEditor
 
 
 
-        //Gets the value of 3 attributes representing a 3D Vector, named x, y and z from an XML Node as a Vector3D.
+        //Gets the value of 4 attributes representing a Color, named r, g, b and a from an XML Node as a ColorF.
         public static ColorF GetColorFromXMLNode(XmlNode inXMLNode)
         {
             ColorF result = new ColorF();
@@ -301,8 +296,8 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
-        //Get values with this name from the child nodes of this xml node, as 3D vectors. 
-        //Used for properties that are in a collection. See GetVector3DFromXMLNodeNamedChild for a single value as a 3D vector.
+        //Get values with this name from the child nodes of this xml node, as Colors. 
+        //Used for properties that are in a collection. See GetColorFromXMLNodeNamedChild for a single value as a Color.
         public static List<ColorF> GetColorListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
         {
             List<ColorF> result = new List<ColorF>();
@@ -322,8 +317,8 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
-        //Get the first value with this name from the child nodes of this xml node, as a 3D vector. 
-        //Used for properties that are not in a collection. See GetVector3DListFromXMLNodeNamedChildren for collections of 3D vectors.
+        //Get the first value with this name from the child nodes of this xml node, as a Color. 
+        //Used for properties that are not in a collection. See GetColorListFromXMLNodeNamedChildren for collections of 3D vectors.
         public static ColorF GetColorFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)
         {
             ColorF result = new ColorF();
@@ -861,6 +856,22 @@ namespace VoidDestroyer2DataEditor
             return results;
         }
 
+        public static List<bool> GetBoolListFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            List<bool> results = new List<bool>();
+            bool exists = false;
+            int i = 0;
+            for (i = 0; i < xmlnodes.Count; i++)
+            {
+                exists = true;
+                results.Add(GetBoolFromXMLNode(xmlnodes[i]));
+            }
+
+            outExists = exists;
+            return results;
+        }
+
         //Get the first value of a node in this document with a certain name as an integer
         //Used for properties that are not in a collection. See GetInt32ListFromVD2Data for a collection of values as integers
         public static bool GetBoolFromVD2Data(XmlDocument inXML, string inTagName)
@@ -872,6 +883,20 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static bool GetBoolFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            bool result = false;
+            bool exists = false;
+            List<bool> results = GetBoolListFromVD2Data(inXML, inTagName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -892,6 +917,22 @@ namespace VoidDestroyer2DataEditor
             return results;
         }
 
+        public static List<Vector3D> GetVector3DListFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            List<Vector3D> results = new List<Vector3D>();
+            bool exists = false;
+            int i = 0;
+            for (i = 0; i < xmlnodes.Count; i++)
+            {
+                exists = true;
+                results.Add(GetVector3DFromXMLNode(xmlnodes[i]));
+            }
+
+            outExists = exists;
+            return results;
+        }
+
         //Get the first value of a node in this document with a certain name as an integer
         //Used for properties that are not in a collection. See GetInt32ListFromVD2Data for a collection of values as integers
         public static Vector3D GetVector3DFromVD2Data(XmlDocument inXML, string inTagName)
@@ -903,6 +944,52 @@ namespace VoidDestroyer2DataEditor
                 result = results[0];
             }
 
+            return result;
+        }
+
+        public static Vector3D GetVector3DFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            Vector3D result = new Vector3D();
+            bool exists = false;
+            List<Vector3D> results = GetVector3DListFromVD2Data(inXML, inTagName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
+            return result;
+        }
+
+
+
+        public static List<ColorF> GetColorListFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            XmlNodeList xmlnodes = inXML.GetElementsByTagName(inTagName);
+            List<ColorF> results = new List<ColorF>();
+            bool exists = false;
+            int i = 0;
+            for (i = 0; i < xmlnodes.Count; i++)
+            {
+                exists = true;
+                results.Add(GetColorFromXMLNode(xmlnodes[i]));
+            }
+
+            outExists = exists;
+            return results;
+        }
+
+        public static ColorF GetColorFromVD2Data(XmlDocument inXML, string inTagName, out bool outExists)
+        {
+            ColorF result = new ColorF();
+            bool exists = false;
+            List<ColorF> results = GetColorListFromVD2Data(inXML, inTagName, out exists);
+            if (results.Count > 0)
+            {
+                result = results[0];
+            }
+
+            outExists = exists;
             return result;
         }
 
@@ -937,6 +1024,10 @@ namespace VoidDestroyer2DataEditor
             {
                 inEntry.NodeType = TagNameReportNodeTypes.vector;
             }
+            else if (inNode.Attributes.Count == 4)
+            {
+                inEntry.NodeType = TagNameReportNodeTypes.color;
+            }
             else if (inNode.Attributes.Count == 0)
             {
                 inEntry.NodeType = TagNameReportNodeTypes.datastructure;
@@ -965,6 +1056,8 @@ namespace VoidDestroyer2DataEditor
             listtagnameblacklist.Add("shipClassSize");//one ship file has this twice and it is a mistake to make it a list
             listtagnameblacklist.Add("cockpitActualPos");//one ship file has this twice and it is a mistake to make it a list
             listtagnameblacklist.Add("yaw");//one ship file has this twice in a turret def and it is a mistake to make it a list
+            listtagnameblacklist.Add("backgroundColor");//most of the faction files have this duplicated twice, the same values, clearly copy paste error.
+            listtagnameblacklist.Add("cloudsColor");//most of the faction files have this duplicated twice, the same values, clearly copy paste error.
             bool OnTagNameBlacklistForLists = false;
             for (int blacklistidx = 0; blacklistidx < listtagnameblacklist.Count; blacklistidx++)
             {

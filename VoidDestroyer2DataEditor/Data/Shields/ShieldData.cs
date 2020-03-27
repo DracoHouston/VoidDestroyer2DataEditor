@@ -20,70 +20,146 @@ namespace VoidDestroyer2DataEditor
 
         bool _bInvisible;
 
-        [Description("objectType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
         {
-            get => _objectType;
-            set => _objectType = value;
+            get
+            {
+                return _objectType;
+            }
+            set
+            {
+                _objectType = value;
+                SetPropertyEdited("objectType", true);
+            }
         }
 
-        [Description("name is a plaintext string"), Category("Plaintext Strings")]
+        [Description("name is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string name
         {
-            get => _name;
-            set => _name = value;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                SetPropertyEdited("name", true);
+            }
         }
 
-        [Description("shieldID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shieldID
         {
-            get => _shieldID;
-            set => _shieldID = value;
+            get
+            {
+                return _shieldID;
+            }
+            set
+            {
+                _shieldID = value;
+                SetPropertyEdited("shieldID", true);
+            }
         }
 
-        [Description("collisionMeshName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("collisionMeshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionMeshName
         {
-            get => _collisionMeshName;
-            set => _collisionMeshName = value;
+            get
+            {
+                return _collisionMeshName;
+            }
+            set
+            {
+                _collisionMeshName = value;
+                SetPropertyEdited("collisionMeshName", true);
+            }
         }
 
-        [Description("shieldType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("shieldType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shieldType
         {
-            get => _shieldType;
-            set => _shieldType = value;
+            get
+            {
+                return _shieldType;
+            }
+            set
+            {
+                _shieldType = value;
+                SetPropertyEdited("shieldType", true);
+            }
         }
 
-        [Description("materialName is a plaintext string"), Category("Plaintext Strings")]
+        [Description("materialName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string materialName
         {
-            get => _materialName;
-            set => _materialName = value;
+            get
+            {
+                return _materialName;
+            }
+            set
+            {
+                _materialName = value;
+                SetPropertyEdited("materialName", true);
+            }
         }
 
 
-        [Description("bInvisible is a boolean value"), Category("Booleans")]
+        [Description("bInvisible is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bInvisible
         {
-            get => _bInvisible;
-            set => _bInvisible = value;
+            get
+            {
+                return _bInvisible;
+            }
+            set
+            {
+                _bInvisible = value;
+                SetPropertyEdited("bInvisible", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("objectType");
+            InitProperty("name");
+            InitProperty("shieldID");
+            InitProperty("collisionMeshName");
+            InitProperty("shieldType");
+            InitProperty("materialName");
+
+            InitProperty("bInvisible");
+
+        }
 
         public ShieldData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType");
-                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name");
-                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID");
-                _collisionMeshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionMeshName");
-                _shieldType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldType");
-                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName");
+                _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
+                SetPropertyExistsInBaseData("objectType", exists);
+                SetPropertyExists("objectType", exists);
+                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
+                SetPropertyExistsInBaseData("name", exists);
+                SetPropertyExists("name", exists);
+                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID", out exists);
+                SetPropertyExistsInBaseData("shieldID", exists);
+                SetPropertyExists("shieldID", exists);
+                _collisionMeshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionMeshName", out exists);
+                SetPropertyExistsInBaseData("collisionMeshName", exists);
+                SetPropertyExists("collisionMeshName", exists);
+                _shieldType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldType", out exists);
+                SetPropertyExistsInBaseData("shieldType", exists);
+                SetPropertyExists("shieldType", exists);
+                _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
+                SetPropertyExistsInBaseData("materialName", exists);
+                SetPropertyExists("materialName", exists);
 
-                _bInvisible = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bInvisible");
+                _bInvisible = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bInvisible", out exists);
+                SetPropertyExistsInBaseData("bInvisible", exists);
+                SetPropertyExists("bInvisible", exists);
 
             }
         }

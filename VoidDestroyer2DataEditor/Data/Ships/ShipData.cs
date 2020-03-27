@@ -41,6 +41,7 @@ namespace VoidDestroyer2DataEditor
         List<string> _preExplosionID;
 
         int _creditCost;
+        int _isMassInfinite;
         int _shipHangarYOffset;
         int _rockSubPosition;
         int _missionRankRequired;
@@ -48,6 +49,7 @@ namespace VoidDestroyer2DataEditor
         int _detectionRange;
         int _shieldHealth;
         int _captureRating;
+        int _boardingCrew;
         int _aggressiveRange;
         int _passangerCapacity;
 
@@ -66,7 +68,6 @@ namespace VoidDestroyer2DataEditor
 
         bool _bCommsOverride;
         bool _bGravityDrive;
-        bool _isMassInfinite;
         bool _bHideShipInCockpitAcutal;
         bool _bPlayerSharedFire;
         bool _bNotSoldUnlessOwnedBase;
@@ -79,7 +80,6 @@ namespace VoidDestroyer2DataEditor
         bool _bNoTargetAimNodeOffset;
         bool _bEveryShipyardOk;
         bool _bShowInCockpitWeaponParticles;
-        bool _boardingCrew;
         bool _bBaseBuildOverride;
         bool _bSaveFileUnlockShip;
         bool _bLargeDockOnly;
@@ -118,181 +118,349 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                SetPropertyEdited("objectType", true);
                 _objectType = value;
+                SetPropertyEdited("objectType", true);
             }
         }
 
         [Description("name is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string name
         {
-            get => _name;
-            set => _name = value;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                SetPropertyEdited("name", true);
+            }
         }
 
         [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
         [Description("faction is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string faction
         {
-            get => _faction;
-            set => _faction = value;
+            get
+            {
+                return _faction;
+            }
+            set
+            {
+                _faction = value;
+                SetPropertyEdited("faction", true);
+            }
         }
 
         [Description("shipClass is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shipClass
         {
-            get => _shipClass;
-            set => _shipClass = value;
+            get
+            {
+                return _shipClass;
+            }
+            set
+            {
+                _shipClass = value;
+                SetPropertyEdited("shipClass", true);
+            }
         }
 
         [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string meshName
         {
-            get => _meshName;
-            set => _meshName = value;
+            get
+            {
+                return _meshName;
+            }
+            set
+            {
+                _meshName = value;
+                SetPropertyEdited("meshName", true);
+            }
         }
 
         [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string explosionID
         {
-            get => _explosionID;
-            set => _explosionID = value;
+            get
+            {
+                return _explosionID;
+            }
+            set
+            {
+                _explosionID = value;
+                SetPropertyEdited("explosionID", true);
+            }
         }
 
         [Description("tacticalExplosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string tacticalExplosionID
         {
-            get => _tacticalExplosionID;
-            set => _tacticalExplosionID = value;
+            get
+            {
+                return _tacticalExplosionID;
+            }
+            set
+            {
+                _tacticalExplosionID = value;
+                SetPropertyEdited("tacticalExplosionID", true);
+            }
         }
 
         [Description("engineSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string engineSoundID
         {
-            get => _engineSoundID;
-            set => _engineSoundID = value;
+            get
+            {
+                return _engineSoundID;
+            }
+            set
+            {
+                _engineSoundID = value;
+                SetPropertyEdited("engineSoundID", true);
+            }
         }
 
         [Description("propulsionRibbonID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string propulsionRibbonID
         {
-            get => _propulsionRibbonID;
-            set => _propulsionRibbonID = value;
+            get
+            {
+                return _propulsionRibbonID;
+            }
+            set
+            {
+                _propulsionRibbonID = value;
+                SetPropertyEdited("propulsionRibbonID", true);
+            }
         }
 
         [Description("collisionShape is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionShape
         {
-            get => _collisionShape;
-            set => _collisionShape = value;
+            get
+            {
+                return _collisionShape;
+            }
+            set
+            {
+                _collisionShape = value;
+                SetPropertyEdited("collisionShape", true);
+            }
         }
 
         [Description("wireframeMaterial is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string wireframeMaterial
         {
-            get => _wireframeMaterial;
-            set => _wireframeMaterial = value;
+            get
+            {
+                return _wireframeMaterial;
+            }
+            set
+            {
+                _wireframeMaterial = value;
+                SetPropertyEdited("wireframeMaterial", true);
+            }
         }
 
         [Description("cockpitActualMesh is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string cockpitActualMesh
         {
-            get => _cockpitActualMesh;
-            set => _cockpitActualMesh = value;
+            get
+            {
+                return _cockpitActualMesh;
+            }
+            set
+            {
+                _cockpitActualMesh = value;
+                SetPropertyEdited("cockpitActualMesh", true);
+            }
         }
 
         [Description("shipClassSize is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string shipClassSize
         {
-            get => _shipClassSize;
-            set => _shipClassSize = value;
+            get
+            {
+                return _shipClassSize;
+            }
+            set
+            {
+                _shipClassSize = value;
+                SetPropertyEdited("shipClassSize", true);
+            }
         }
 
         [Description("soldByFaction is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string soldByFaction
         {
-            get => _soldByFaction;
-            set => _soldByFaction = value;
+            get
+            {
+                return _soldByFaction;
+            }
+            set
+            {
+                _soldByFaction = value;
+                SetPropertyEdited("soldByFaction", true);
+            }
         }
 
         [Description("cockpitID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string cockpitID
         {
-            get => _cockpitID;
-            set => _cockpitID = value;
+            get
+            {
+                return _cockpitID;
+            }
+            set
+            {
+                _cockpitID = value;
+                SetPropertyEdited("cockpitID", true);
+            }
         }
 
         [Description("collisionMeshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string collisionMeshName
         {
-            get => _collisionMeshName;
-            set => _collisionMeshName = value;
+            get
+            {
+                return _collisionMeshName;
+            }
+            set
+            {
+                _collisionMeshName = value;
+                SetPropertyEdited("collisionMeshName", true);
+            }
         }
 
         [Description("sizeShipClass is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string sizeShipClass
         {
-            get => _sizeShipClass;
-            set => _sizeShipClass = value;
+            get
+            {
+                return _sizeShipClass;
+            }
+            set
+            {
+                _sizeShipClass = value;
+                SetPropertyEdited("sizeShipClass", true);
+            }
         }
 
         [Description("combatAIClass is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string combatAIClass
         {
-            get => _combatAIClass;
-            set => _combatAIClass = value;
+            get
+            {
+                return _combatAIClass;
+            }
+            set
+            {
+                _combatAIClass = value;
+                SetPropertyEdited("combatAIClass", true);
+            }
         }
 
         [Description("minimumMiningRoidSize is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string minimumMiningRoidSize
         {
-            get => _minimumMiningRoidSize;
-            set => _minimumMiningRoidSize = value;
+            get
+            {
+                return _minimumMiningRoidSize;
+            }
+            set
+            {
+                _minimumMiningRoidSize = value;
+                SetPropertyEdited("minimumMiningRoidSize", true);
+            }
         }
 
         [Description("hangarID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string hangarID
         {
-            get => _hangarID;
-            set => _hangarID = value;
+            get
+            {
+                return _hangarID;
+            }
+            set
+            {
+                _hangarID = value;
+                SetPropertyEdited("hangarID", true);
+            }
         }
 
         [Description("gravityDriveParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string gravityDriveParticleSystem
         {
-            get => _gravityDriveParticleSystem;
-            set => _gravityDriveParticleSystem = value;
+            get
+            {
+                return _gravityDriveParticleSystem;
+            }
+            set
+            {
+                _gravityDriveParticleSystem = value;
+                SetPropertyEdited("gravityDriveParticleSystem", true);
+            }
         }
 
         [Description("selfDestructAreaOfEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string selfDestructAreaOfEffectID
         {
-            get => _selfDestructAreaOfEffectID;
-            set => _selfDestructAreaOfEffectID = value;
+            get
+            {
+                return _selfDestructAreaOfEffectID;
+            }
+            set
+            {
+                _selfDestructAreaOfEffectID = value;
+                SetPropertyEdited("selfDestructAreaOfEffectID", true);
+            }
         }
 
         [Description("towardsEnemy is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string towardsEnemy
         {
-            get => _towardsEnemy;
-            set => _towardsEnemy = value;
+            get
+            {
+                return _towardsEnemy;
+            }
+            set
+            {
+                _towardsEnemy = value;
+                SetPropertyEdited("towardsEnemy", true);
+            }
         }
 
         [Description("baseID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string baseID
         {
-            get => _baseID;
-            set => _baseID = value;
+            get
+            {
+                return _baseID;
+            }
+            set
+            {
+                _baseID = value;
+                SetPropertyEdited("baseID", true);
+            }
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor(typeof(VD2CollectionEditor), typeof(System.ComponentModel.Design.CollectionEditor))]
+        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> descriptionText
         {
             get
@@ -302,573 +470,1052 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _descriptionText = value;
+                SetPropertyEdited("descriptionText", true);
             }
         }
 
-        [Description("preExplosionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor(typeof(VD2CollectionEditor), typeof(System.ComponentModel.Design.CollectionEditor))]
+        [Description("preExplosionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public List<string> preExplosionID
         {
-            get => _preExplosionID;
-            set => _preExplosionID = value;
+            get
+            {
+                return _preExplosionID;
+            }
+            set
+            {
+                _preExplosionID = value;
+                SetPropertyEdited("preExplosionID", true);
+            }
         }
 
 
-        [Description("creditCost is an integer"), Category("Integers")]
+        [Description("creditCost is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int creditCost
         {
-            get => _creditCost;
-            set => _creditCost = value;
+            get
+            {
+                return _creditCost;
+            }
+            set
+            {
+                _creditCost = value;
+                SetPropertyEdited("creditCost", true);
+            }
         }
 
-        [Description("shipHangarYOffset is an integer"), Category("Integers")]
+        [Description("isMassInfinite is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int isMassInfinite
+        {
+            get
+            {
+                return _isMassInfinite;
+            }
+            set
+            {
+                _isMassInfinite = value;
+                SetPropertyEdited("isMassInfinite", true);
+            }
+        }
+
+        [Description("shipHangarYOffset is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int shipHangarYOffset
         {
-            get => _shipHangarYOffset;
-            set => _shipHangarYOffset = value;
+            get
+            {
+                return _shipHangarYOffset;
+            }
+            set
+            {
+                _shipHangarYOffset = value;
+                SetPropertyEdited("shipHangarYOffset", true);
+            }
         }
 
-        [Description("rockSubPosition is an integer"), Category("Integers")]
+        [Description("rockSubPosition is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int rockSubPosition
         {
-            get => _rockSubPosition;
-            set => _rockSubPosition = value;
+            get
+            {
+                return _rockSubPosition;
+            }
+            set
+            {
+                _rockSubPosition = value;
+                SetPropertyEdited("rockSubPosition", true);
+            }
         }
 
-        [Description("missionRankRequired is an integer"), Category("Integers")]
+        [Description("missionRankRequired is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int missionRankRequired
         {
-            get => _missionRankRequired;
-            set => _missionRankRequired = value;
+            get
+            {
+                return _missionRankRequired;
+            }
+            set
+            {
+                _missionRankRequired = value;
+                SetPropertyEdited("missionRankRequired", true);
+            }
         }
 
-        [Description("discoveryRange is an integer"), Category("Integers")]
+        [Description("discoveryRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int discoveryRange
         {
-            get => _discoveryRange;
-            set => _discoveryRange = value;
+            get
+            {
+                return _discoveryRange;
+            }
+            set
+            {
+                _discoveryRange = value;
+                SetPropertyEdited("discoveryRange", true);
+            }
         }
 
-        [Description("detectionRange is an integer"), Category("Integers")]
+        [Description("detectionRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int detectionRange
         {
-            get => _detectionRange;
-            set => _detectionRange = value;
+            get
+            {
+                return _detectionRange;
+            }
+            set
+            {
+                _detectionRange = value;
+                SetPropertyEdited("detectionRange", true);
+            }
         }
 
-        [Description("shieldHealth is an integer"), Category("Integers")]
+        [Description("shieldHealth is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int shieldHealth
         {
-            get => _shieldHealth;
-            set => _shieldHealth = value;
+            get
+            {
+                return _shieldHealth;
+            }
+            set
+            {
+                _shieldHealth = value;
+                SetPropertyEdited("shieldHealth", true);
+            }
         }
 
-        [Description("captureRating is an integer"), Category("Integers")]
+        [Description("captureRating is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int captureRating
         {
-            get => _captureRating;
-            set => _captureRating = value;
+            get
+            {
+                return _captureRating;
+            }
+            set
+            {
+                _captureRating = value;
+                SetPropertyEdited("captureRating", true);
+            }
         }
 
-        [Description("aggressiveRange is an integer"), Category("Integers")]
+        [Description("boardingCrew is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int boardingCrew
+        {
+            get
+            {
+                return _boardingCrew;
+            }
+            set
+            {
+                _boardingCrew = value;
+                SetPropertyEdited("boardingCrew", true);
+            }
+        }
+
+        [Description("aggressiveRange is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int aggressiveRange
         {
-            get => _aggressiveRange;
-            set => _aggressiveRange = value;
+            get
+            {
+                return _aggressiveRange;
+            }
+            set
+            {
+                _aggressiveRange = value;
+                SetPropertyEdited("aggressiveRange", true);
+            }
         }
 
-        [Description("passangerCapacity is an integer"), Category("Integers")]
+        [Description("passangerCapacity is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int passangerCapacity
         {
-            get => _passangerCapacity;
-            set => _passangerCapacity = value;
+            get
+            {
+                return _passangerCapacity;
+            }
+            set
+            {
+                _passangerCapacity = value;
+                SetPropertyEdited("passangerCapacity", true);
+            }
         }
 
 
-        [Description("cruiseSpeed is a real number"), Category("Real Numbers")]
+        [Description("cruiseSpeed is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float cruiseSpeed
         {
-            get => _cruiseSpeed;
-            set => _cruiseSpeed = value;
+            get
+            {
+                return _cruiseSpeed;
+            }
+            set
+            {
+                _cruiseSpeed = value;
+                SetPropertyEdited("cruiseSpeed", true);
+            }
         }
 
-        [Description("timeTillCruise is a real number"), Category("Real Numbers")]
+        [Description("timeTillCruise is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float timeTillCruise
         {
-            get => _timeTillCruise;
-            set => _timeTillCruise = value;
+            get
+            {
+                return _timeTillCruise;
+            }
+            set
+            {
+                _timeTillCruise = value;
+                SetPropertyEdited("timeTillCruise", true);
+            }
         }
 
-        [Description("yaw is a real number"), Category("Real Numbers")]
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float yaw
         {
-            get => _yaw;
-            set => _yaw = value;
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                _yaw = value;
+                SetPropertyEdited("yaw", true);
+            }
         }
 
-        [Description("pitch is a real number"), Category("Real Numbers")]
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float pitch
         {
-            get => _pitch;
-            set => _pitch = value;
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                SetPropertyEdited("pitch", true);
+            }
         }
 
-        [Description("roll is a real number"), Category("Real Numbers")]
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float roll
         {
-            get => _roll;
-            set => _roll = value;
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                _roll = value;
+                SetPropertyEdited("roll", true);
+            }
         }
 
-        [Description("health is a real number"), Category("Real Numbers")]
+        [Description("health is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float health
         {
-            get => _health;
-            set => _health = value;
+            get
+            {
+                return _health;
+            }
+            set
+            {
+                _health = value;
+                SetPropertyEdited("health", true);
+            }
         }
 
-        [Description("buildTime is a real number"), Category("Real Numbers")]
+        [Description("buildTime is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float buildTime
         {
-            get => _buildTime;
-            set => _buildTime = value;
+            get
+            {
+                return _buildTime;
+            }
+            set
+            {
+                _buildTime = value;
+                SetPropertyEdited("buildTime", true);
+            }
         }
 
-        [Description("crew is a real number"), Category("Real Numbers")]
+        [Description("crew is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float crew
         {
-            get => _crew;
-            set => _crew = value;
+            get
+            {
+                return _crew;
+            }
+            set
+            {
+                _crew = value;
+                SetPropertyEdited("crew", true);
+            }
         }
 
-        [Description("energy is a real number"), Category("Real Numbers")]
+        [Description("energy is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float energy
         {
-            get => _energy;
-            set => _energy = value;
+            get
+            {
+                return _energy;
+            }
+            set
+            {
+                _energy = value;
+                SetPropertyEdited("energy", true);
+            }
         }
 
-        [Description("ore is a real number"), Category("Real Numbers")]
+        [Description("ore is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float ore
         {
-            get => _ore;
-            set => _ore = value;
+            get
+            {
+                return _ore;
+            }
+            set
+            {
+                _ore = value;
+                SetPropertyEdited("ore", true);
+            }
         }
 
-        [Description("deathTimer is a real number"), Category("Real Numbers")]
+        [Description("deathTimer is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float deathTimer
         {
-            get => _deathTimer;
-            set => _deathTimer = value;
+            get
+            {
+                return _deathTimer;
+            }
+            set
+            {
+                _deathTimer = value;
+                SetPropertyEdited("deathTimer", true);
+            }
         }
 
-        [Description("armor is a real number"), Category("Real Numbers")]
+        [Description("armor is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float armor
         {
-            get => _armor;
-            set => _armor = value;
+            get
+            {
+                return _armor;
+            }
+            set
+            {
+                _armor = value;
+                SetPropertyEdited("armor", true);
+            }
         }
 
 
-        [Description("bCommsOverride is a boolean value"), Category("Booleans")]
+        [Description("bCommsOverride is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCommsOverride
         {
-            get => _bCommsOverride;
-            set => _bCommsOverride = value;
+            get
+            {
+                return _bCommsOverride;
+            }
+            set
+            {
+                _bCommsOverride = value;
+                SetPropertyEdited("bCommsOverride", true);
+            }
         }
 
-        [Description("bGravityDrive is a boolean value"), Category("Booleans")]
+        [Description("bGravityDrive is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bGravityDrive
         {
-            get => _bGravityDrive;
-            set => _bGravityDrive = value;
+            get
+            {
+                return _bGravityDrive;
+            }
+            set
+            {
+                _bGravityDrive = value;
+                SetPropertyEdited("bGravityDrive", true);
+            }
         }
 
-        [Description("isMassInfinite is a boolean value"), Category("Booleans")]
-        public bool isMassInfinite
-        {
-            get => _isMassInfinite;
-            set => _isMassInfinite = value;
-        }
-
-        [Description("bHideShipInCockpitAcutal is a boolean value"), Category("Booleans")]
+        [Description("bHideShipInCockpitAcutal is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bHideShipInCockpitAcutal
         {
-            get => _bHideShipInCockpitAcutal;
-            set => _bHideShipInCockpitAcutal = value;
+            get
+            {
+                return _bHideShipInCockpitAcutal;
+            }
+            set
+            {
+                _bHideShipInCockpitAcutal = value;
+                SetPropertyEdited("bHideShipInCockpitAcutal", true);
+            }
         }
 
-        [Description("bPlayerSharedFire is a boolean value"), Category("Booleans")]
+        [Description("bPlayerSharedFire is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bPlayerSharedFire
         {
-            get => _bPlayerSharedFire;
-            set => _bPlayerSharedFire = value;
+            get
+            {
+                return _bPlayerSharedFire;
+            }
+            set
+            {
+                _bPlayerSharedFire = value;
+                SetPropertyEdited("bPlayerSharedFire", true);
+            }
         }
 
-        [Description("bNotSoldUnlessOwnedBase is a boolean value"), Category("Booleans")]
+        [Description("bNotSoldUnlessOwnedBase is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNotSoldUnlessOwnedBase
         {
-            get => _bNotSoldUnlessOwnedBase;
-            set => _bNotSoldUnlessOwnedBase = value;
+            get
+            {
+                return _bNotSoldUnlessOwnedBase;
+            }
+            set
+            {
+                _bNotSoldUnlessOwnedBase = value;
+                SetPropertyEdited("bNotSoldUnlessOwnedBase", true);
+            }
         }
 
-        [Description("bBlackMarket is a boolean value"), Category("Booleans")]
+        [Description("bBlackMarket is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bBlackMarket
         {
-            get => _bBlackMarket;
-            set => _bBlackMarket = value;
+            get
+            {
+                return _bBlackMarket;
+            }
+            set
+            {
+                _bBlackMarket = value;
+                SetPropertyEdited("bBlackMarket", true);
+            }
         }
 
-        [Description("bUniqueShip is a boolean value"), Category("Booleans")]
+        [Description("bUniqueShip is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bUniqueShip
         {
-            get => _bUniqueShip;
-            set => _bUniqueShip = value;
+            get
+            {
+                return _bUniqueShip;
+            }
+            set
+            {
+                _bUniqueShip = value;
+                SetPropertyEdited("bUniqueShip", true);
+            }
         }
 
-        [Description("bShowInCockpitParticles is a boolean value"), Category("Booleans")]
+        [Description("bShowInCockpitParticles is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bShowInCockpitParticles
         {
-            get => _bShowInCockpitParticles;
-            set => _bShowInCockpitParticles = value;
+            get
+            {
+                return _bShowInCockpitParticles;
+            }
+            set
+            {
+                _bShowInCockpitParticles = value;
+                SetPropertyEdited("bShowInCockpitParticles", true);
+            }
         }
 
-        [Description("bRequiresKnowledge is a boolean value"), Category("Booleans")]
+        [Description("bRequiresKnowledge is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bRequiresKnowledge
         {
-            get => _bRequiresKnowledge;
-            set => _bRequiresKnowledge = value;
+            get
+            {
+                return _bRequiresKnowledge;
+            }
+            set
+            {
+                _bRequiresKnowledge = value;
+                SetPropertyEdited("bRequiresKnowledge", true);
+            }
         }
 
-        [Description("bListedNoPurchase is a boolean value"), Category("Booleans")]
+        [Description("bListedNoPurchase is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bListedNoPurchase
         {
-            get => _bListedNoPurchase;
-            set => _bListedNoPurchase = value;
+            get
+            {
+                return _bListedNoPurchase;
+            }
+            set
+            {
+                _bListedNoPurchase = value;
+                SetPropertyEdited("bListedNoPurchase", true);
+            }
         }
 
-        [Description("bLargeHangarOnly is a boolean value"), Category("Booleans")]
+        [Description("bLargeHangarOnly is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLargeHangarOnly
         {
-            get => _bLargeHangarOnly;
-            set => _bLargeHangarOnly = value;
+            get
+            {
+                return _bLargeHangarOnly;
+            }
+            set
+            {
+                _bLargeHangarOnly = value;
+                SetPropertyEdited("bLargeHangarOnly", true);
+            }
         }
 
-        [Description("bNoTargetAimNodeOffset is a boolean value"), Category("Booleans")]
+        [Description("bNoTargetAimNodeOffset is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoTargetAimNodeOffset
         {
-            get => _bNoTargetAimNodeOffset;
-            set => _bNoTargetAimNodeOffset = value;
+            get
+            {
+                return _bNoTargetAimNodeOffset;
+            }
+            set
+            {
+                _bNoTargetAimNodeOffset = value;
+                SetPropertyEdited("bNoTargetAimNodeOffset", true);
+            }
         }
 
-        [Description("bEveryShipyardOk is a boolean value"), Category("Booleans")]
+        [Description("bEveryShipyardOk is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bEveryShipyardOk
         {
-            get => _bEveryShipyardOk;
-            set => _bEveryShipyardOk = value;
+            get
+            {
+                return _bEveryShipyardOk;
+            }
+            set
+            {
+                _bEveryShipyardOk = value;
+                SetPropertyEdited("bEveryShipyardOk", true);
+            }
         }
 
-        [Description("bShowInCockpitWeaponParticles is a boolean value"), Category("Booleans")]
+        [Description("bShowInCockpitWeaponParticles is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bShowInCockpitWeaponParticles
         {
-            get => _bShowInCockpitWeaponParticles;
-            set => _bShowInCockpitWeaponParticles = value;
+            get
+            {
+                return _bShowInCockpitWeaponParticles;
+            }
+            set
+            {
+                _bShowInCockpitWeaponParticles = value;
+                SetPropertyEdited("bShowInCockpitWeaponParticles", true);
+            }
         }
 
-        [Description("boardingCrew is a boolean value"), Category("Booleans")]
-        public bool boardingCrew
-        {
-            get => _boardingCrew;
-            set => _boardingCrew = value;
-        }
-
-        [Description("bBaseBuildOverride is a boolean value"), Category("Booleans")]
+        [Description("bBaseBuildOverride is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bBaseBuildOverride
         {
-            get => _bBaseBuildOverride;
-            set => _bBaseBuildOverride = value;
+            get
+            {
+                return _bBaseBuildOverride;
+            }
+            set
+            {
+                _bBaseBuildOverride = value;
+                SetPropertyEdited("bBaseBuildOverride", true);
+            }
         }
 
-        [Description("bSaveFileUnlockShip is a boolean value"), Category("Booleans")]
+        [Description("bSaveFileUnlockShip is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bSaveFileUnlockShip
         {
-            get => _bSaveFileUnlockShip;
-            set => _bSaveFileUnlockShip = value;
+            get
+            {
+                return _bSaveFileUnlockShip;
+            }
+            set
+            {
+                _bSaveFileUnlockShip = value;
+                SetPropertyEdited("bSaveFileUnlockShip", true);
+            }
         }
 
-        [Description("bLargeDockOnly is a boolean value"), Category("Booleans")]
+        [Description("bLargeDockOnly is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLargeDockOnly
         {
-            get => _bLargeDockOnly;
-            set => _bLargeDockOnly = value;
+            get
+            {
+                return _bLargeDockOnly;
+            }
+            set
+            {
+                _bLargeDockOnly = value;
+                SetPropertyEdited("bLargeDockOnly", true);
+            }
         }
 
-        [Description("bCanPurchase is a boolean value"), Category("Booleans")]
+        [Description("bCanPurchase is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bCanPurchase
         {
-            get => _bCanPurchase;
-            set => _bCanPurchase = value;
+            get
+            {
+                return _bCanPurchase;
+            }
+            set
+            {
+                _bCanPurchase = value;
+                SetPropertyEdited("bCanPurchase", true);
+            }
         }
 
-        [Description("bNoShipyardRequirement is a boolean value"), Category("Booleans")]
+        [Description("bNoShipyardRequirement is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoShipyardRequirement
         {
-            get => _bNoShipyardRequirement;
-            set => _bNoShipyardRequirement = value;
+            get
+            {
+                return _bNoShipyardRequirement;
+            }
+            set
+            {
+                _bNoShipyardRequirement = value;
+                SetPropertyEdited("bNoShipyardRequirement", true);
+            }
         }
 
 
-        [Description("cockpitInitPos is a 3D vector"), Category("3D Vectors")]
+        [Description("cockpitInitPos is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D cockpitInitPos
         {
-            get => _cockpitInitPos;
-            set => _cockpitInitPos = value;
+            get
+            {
+                return _cockpitInitPos;
+            }
+            set
+            {
+                _cockpitInitPos = value;
+                SetPropertyEdited("cockpitInitPos", true);
+            }
         }
 
-        [Description("cockpitTransLimit is a 3D vector"), Category("3D Vectors")]
+        [Description("cockpitTransLimit is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D cockpitTransLimit
         {
-            get => _cockpitTransLimit;
-            set => _cockpitTransLimit = value;
+            get
+            {
+                return _cockpitTransLimit;
+            }
+            set
+            {
+                _cockpitTransLimit = value;
+                SetPropertyEdited("cockpitTransLimit", true);
+            }
         }
 
-        [Description("chaseInitPos is a 3D vector"), Category("3D Vectors")]
+        [Description("chaseInitPos is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D chaseInitPos
         {
-            get => _chaseInitPos;
-            set => _chaseInitPos = value;
+            get
+            {
+                return _chaseInitPos;
+            }
+            set
+            {
+                _chaseInitPos = value;
+                SetPropertyEdited("chaseInitPos", true);
+            }
         }
 
-        [Description("chaseTransLimit is a 3D vector"), Category("3D Vectors")]
+        [Description("chaseTransLimit is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D chaseTransLimit
         {
-            get => _chaseTransLimit;
-            set => _chaseTransLimit = value;
+            get
+            {
+                return _chaseTransLimit;
+            }
+            set
+            {
+                _chaseTransLimit = value;
+                SetPropertyEdited("chaseTransLimit", true);
+            }
         }
 
-        [Description("deathSpin is a 3D vector"), Category("3D Vectors")]
+        [Description("deathSpin is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D deathSpin
         {
-            get => _deathSpin;
-            set => _deathSpin = value;
+            get
+            {
+                return _deathSpin;
+            }
+            set
+            {
+                _deathSpin = value;
+                SetPropertyEdited("deathSpin", true);
+            }
         }
 
-        [Description("cockpitActualPos is a 3D vector"), Category("3D Vectors")]
+        [Description("cockpitActualPos is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D cockpitActualPos
         {
-            get => _cockpitActualPos;
-            set => _cockpitActualPos = value;
+            get
+            {
+                return _cockpitActualPos;
+            }
+            set
+            {
+                _cockpitActualPos = value;
+                SetPropertyEdited("cockpitActualPos", true);
+            }
         }
 
-        [Description("shipHangarPosition is a 3D vector"), Category("3D Vectors")]
+        [Description("shipHangarPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D shipHangarPosition
         {
-            get => _shipHangarPosition;
-            set => _shipHangarPosition = value;
+            get
+            {
+                return _shipHangarPosition;
+            }
+            set
+            {
+                _shipHangarPosition = value;
+                SetPropertyEdited("shipHangarPosition", true);
+            }
         }
 
 
-        [Description("debrisInfo is a datastructure"), Category("Data Structures")]
+        [Description("debrisInfo is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public debrisInfoDataStructure debrisInfo
         {
-            get => _debrisInfo;
-            set => _debrisInfo = value;
+            get
+            {
+                return _debrisInfo;
+            }
+            set
+            {
+                _debrisInfo = value;
+                SetPropertyEdited("debrisInfo", true);
+            }
         }
 
-        [Description("afterburner is a datastructure"), Category("Data Structures")]
+        [Description("afterburner is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public afterburnerDataStructure afterburner
         {
-            get => _afterburner;
-            set => _afterburner = value;
+            get
+            {
+                return _afterburner;
+            }
+            set
+            {
+                _afterburner = value;
+                SetPropertyEdited("afterburner", true);
+            }
         }
 
-        [Description("targetPriorityList is a datastructure"), Category("Data Structures")]
+        [Description("targetPriorityList is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public targetPriorityListDataStructure targetPriorityList
         {
-            get => _targetPriorityList;
-            set => _targetPriorityList = value;
+            get
+            {
+                return _targetPriorityList;
+            }
+            set
+            {
+                _targetPriorityList = value;
+                SetPropertyEdited("targetPriorityList", true);
+            }
         }
 
-        [Description("upgrades is a datastructure"), Category("Data Structures")]
+        [Description("upgrades is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public upgradesDataStructure upgrades
         {
-            get => _upgrades;
-            set => _upgrades = value;
+            get
+            {
+                return _upgrades;
+            }
+            set
+            {
+                _upgrades = value;
+                SetPropertyEdited("upgrades", true);
+            }
         }
 
 
         [Description("propulsion is a collection of datastructures"), Category("Data Structure Collections")]
         public List<propulsionDataStructure> propulsion
         {
-            get => _propulsion;
-            set => _propulsion = value;
+            get
+            {
+                return _propulsion;
+            }
+            set
+            {
+                _propulsion = value;
+                SetPropertyEdited("propulsion", true);
+            }
         }
 
         [Description("weapon is a collection of datastructures"), Category("Data Structure Collections")]
         public List<weaponDataStructure> weapon
         {
-            get => _weapon;
-            set => _weapon = value;
+            get
+            {
+                return _weapon;
+            }
+            set
+            {
+                _weapon = value;
+                SetPropertyEdited("weapon", true);
+            }
         }
 
         [Description("damage is a collection of datastructures"), Category("Data Structure Collections")]
         public List<damageDataStructure> damage
         {
-            get => _damage;
-            set => _damage = value;
+            get
+            {
+                return _damage;
+            }
+            set
+            {
+                _damage = value;
+                SetPropertyEdited("damage", true);
+            }
         }
 
         [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
         public List<turretDataStructure> turret
         {
-            get => _turret;
-            set => _turret = value;
+            get
+            {
+                return _turret;
+            }
+            set
+            {
+                _turret = value;
+                SetPropertyEdited("turret", true);
+            }
         }
 
         [Description("attachment is a collection of datastructures"), Category("Data Structure Collections")]
         public List<attachmentDataStructure> attachment
         {
-            get => _attachment;
-            set => _attachment = value;
+            get
+            {
+                return _attachment;
+            }
+            set
+            {
+                _attachment = value;
+                SetPropertyEdited("attachment", true);
+            }
         }
 
         [Description("movingElement is a collection of datastructures"), Category("Data Structure Collections")]
         public List<movingElementDataStructure> movingElement
         {
-            get => _movingElement;
-            set => _movingElement = value;
+            get
+            {
+                return _movingElement;
+            }
+            set
+            {
+                _movingElement = value;
+                SetPropertyEdited("movingElement", true);
+            }
         }
 
         [Description("dock is a collection of datastructures"), Category("Data Structure Collections")]
         public List<dockDataStructure> dock
         {
-            get => _dock;
-            set => _dock = value;
+            get
+            {
+                return _dock;
+            }
+            set
+            {
+                _dock = value;
+                SetPropertyEdited("dock", true);
+            }
         }
 
         [Description("shield is a collection of datastructures"), Category("Data Structure Collections")]
         public List<shieldDataStructure> shield
         {
-            get => _shield;
-            set => _shield = value;
+            get
+            {
+                return _shield;
+            }
+            set
+            {
+                _shield = value;
+                SetPropertyEdited("shield", true);
+            }
         }
 
         [Description("rotatingElement is a collection of datastructures"), Category("Data Structure Collections")]
         public List<rotatingElementDataStructure> rotatingElement
         {
-            get => _rotatingElement;
-            set => _rotatingElement = value;
+            get
+            {
+                return _rotatingElement;
+            }
+            set
+            {
+                _rotatingElement = value;
+                SetPropertyEdited("rotatingElement", true);
+            }
         }
 
+        public override void InitAllProperties()
+        {
+            InitProperty("objectType");
+            InitProperty("name");
+            InitProperty("objectID");
+            InitProperty("faction");
+            InitProperty("shipClass");
+            InitProperty("meshName");
+            InitProperty("explosionID");
+            InitProperty("tacticalExplosionID");
+            InitProperty("engineSoundID");
+            InitProperty("propulsionRibbonID");
+            InitProperty("collisionShape");
+            InitProperty("wireframeMaterial");
+            InitProperty("cockpitActualMesh");
+            InitProperty("shipClassSize");
+            InitProperty("soldByFaction");
+            InitProperty("cockpitID");
+            InitProperty("collisionMeshName");
+            InitProperty("sizeShipClass");
+            InitProperty("combatAIClass");
+            InitProperty("minimumMiningRoidSize");
+            InitProperty("hangarID");
+            InitProperty("gravityDriveParticleSystem");
+            InitProperty("selfDestructAreaOfEffectID");
+            InitProperty("towardsEnemy");
+            InitProperty("baseID");
+
+            InitProperty("descriptionText");
+            InitProperty("preExplosionID");
+
+            InitProperty("creditCost");
+            InitProperty("isMassInfinite");
+            InitProperty("shipHangarYOffset");
+            InitProperty("rockSubPosition");
+            InitProperty("missionRankRequired");
+            InitProperty("discoveryRange");
+            InitProperty("detectionRange");
+            InitProperty("shieldHealth");
+            InitProperty("captureRating");
+            InitProperty("boardingCrew");
+            InitProperty("aggressiveRange");
+            InitProperty("passangerCapacity");
+
+            InitProperty("cruiseSpeed");
+            InitProperty("timeTillCruise");
+            InitProperty("yaw");
+            InitProperty("pitch");
+            InitProperty("roll");
+            InitProperty("health");
+            InitProperty("buildTime");
+            InitProperty("crew");
+            InitProperty("energy");
+            InitProperty("ore");
+            InitProperty("deathTimer");
+            InitProperty("armor");
+
+            InitProperty("bCommsOverride");
+            InitProperty("bGravityDrive");
+            InitProperty("bHideShipInCockpitAcutal");
+            InitProperty("bPlayerSharedFire");
+            InitProperty("bNotSoldUnlessOwnedBase");
+            InitProperty("bBlackMarket");
+            InitProperty("bUniqueShip");
+            InitProperty("bShowInCockpitParticles");
+            InitProperty("bRequiresKnowledge");
+            InitProperty("bListedNoPurchase");
+            InitProperty("bLargeHangarOnly");
+            InitProperty("bNoTargetAimNodeOffset");
+            InitProperty("bEveryShipyardOk");
+            InitProperty("bShowInCockpitWeaponParticles");
+            InitProperty("bBaseBuildOverride");
+            InitProperty("bSaveFileUnlockShip");
+            InitProperty("bLargeDockOnly");
+            InitProperty("bCanPurchase");
+            InitProperty("bNoShipyardRequirement");
+
+            InitProperty("cockpitInitPos");
+            InitProperty("cockpitTransLimit");
+            InitProperty("chaseInitPos");
+            InitProperty("chaseTransLimit");
+            InitProperty("deathSpin");
+            InitProperty("cockpitActualPos");
+            InitProperty("shipHangarPosition");
+
+            InitProperty("debrisInfo");
+            InitProperty("afterburner");
+            InitProperty("targetPriorityList");
+            InitProperty("upgrades");
+
+            InitProperty("propulsion");
+            InitProperty("weapon");
+            InitProperty("damage");
+            InitProperty("turret");
+            InitProperty("attachment");
+            InitProperty("movingElement");
+            InitProperty("dock");
+            InitProperty("shield");
+            InitProperty("rotatingElement");
+        }
 
         public ShipData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                InitProperty("objectType");
-                InitProperty("name");
-                InitProperty("objectID");
-                InitProperty("faction");
-                InitProperty("shipClass");
-                InitProperty("meshName");
-                InitProperty("explosionID");
-                InitProperty("tacticalExplosionID");
-                InitProperty("engineSoundID");
-                InitProperty("propulsionRibbonID");
-                InitProperty("collisionShape");
-                InitProperty("wireframeMaterial");
-                InitProperty("cockpitActualMesh");
-                InitProperty("shipClassSize");
-                InitProperty("soldByFaction");
-                InitProperty("cockpitID");
-                InitProperty("collisionMeshName");
-                InitProperty("sizeShipClass");
-                InitProperty("combatAIClass");
-                InitProperty("minimumMiningRoidSize");
-                InitProperty("hangarID");
-                InitProperty("gravityDriveParticleSystem");
-                InitProperty("selfDestructAreaOfEffectID");
-                InitProperty("towardsEnemy");
-                InitProperty("baseID");
-
-                InitProperty("descriptionText");
-                InitProperty("preExplosionID");
-
-                InitProperty("creditCost");
-                InitProperty("shipHangarYOffset");
-                InitProperty("rockSubPosition");
-                InitProperty("missionRankRequired");
-                InitProperty("discoveryRange");
-                InitProperty("detectionRange");
-                InitProperty("shieldHealth");
-                InitProperty("captureRating");
-                InitProperty("aggressiveRange");
-                InitProperty("passangerCapacity");
-
-                InitProperty("cruiseSpeed");
-                InitProperty("timeTillCruise");
-                InitProperty("yaw");
-                InitProperty("pitch");
-                InitProperty("roll");
-                InitProperty("health");
-                InitProperty("buildTime");
-                InitProperty("crew");
-                InitProperty("energy");
-                InitProperty("ore");
-                InitProperty("deathTimer");
-                InitProperty("armor");
-
-                InitProperty("bCommsOverride");
-                InitProperty("bGravityDrive");
-                InitProperty("isMassInfinite");
-                InitProperty("bHideShipInCockpitAcutal");
-                InitProperty("bPlayerSharedFire");
-                InitProperty("bNotSoldUnlessOwnedBase");
-                InitProperty("bBlackMarket");
-                InitProperty("bUniqueShip");
-                InitProperty("bShowInCockpitParticles");
-                InitProperty("bRequiresKnowledge");
-                InitProperty("bListedNoPurchase");
-                InitProperty("bLargeHangarOnly");
-                InitProperty("bNoTargetAimNodeOffset");
-                InitProperty("armor");
-                InitProperty("armor");
-
-                bool exists = false;
                 _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
-                
                 SetPropertyExistsInBaseData("objectType", exists);
                 SetPropertyExists("objectType", exists);
-                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);                
+                _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
                 SetPropertyExistsInBaseData("name", exists);
                 SetPropertyExists("name", exists);
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);                
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
                 SetPropertyExistsInBaseData("objectID", exists);
                 SetPropertyExists("objectID", exists);
                 _faction = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "faction", out exists);
                 SetPropertyExistsInBaseData("faction", exists);
                 SetPropertyExists("faction", exists);
-                _shipClass = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shipClass", out exists);                
+                _shipClass = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shipClass", out exists);
                 SetPropertyExistsInBaseData("shipClass", exists);
                 SetPropertyExists("shipClass", exists);
-                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);                
+                _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
                 SetPropertyExistsInBaseData("meshName", exists);
                 SetPropertyExists("meshName", exists);
-                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID", out exists);                
+                _explosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionID", out exists);
                 SetPropertyExistsInBaseData("explosionID", exists);
                 SetPropertyExists("explosionID", exists);
-                _tacticalExplosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "tacticalExplosionID", out exists);                
+                _tacticalExplosionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "tacticalExplosionID", out exists);
                 SetPropertyExistsInBaseData("tacticalExplosionID", exists);
                 SetPropertyExists("tacticalExplosionID", exists);
-                _engineSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "engineSoundID", out exists);                
+                _engineSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "engineSoundID", out exists);
                 SetPropertyExistsInBaseData("engineSoundID", exists);
                 SetPropertyExists("engineSoundID", exists);
-                _propulsionRibbonID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "propulsionRibbonID", out exists);                
+                _propulsionRibbonID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "propulsionRibbonID", out exists);
                 SetPropertyExistsInBaseData("propulsionRibbonID", exists);
                 SetPropertyExists("propulsionRibbonID", exists);
-                _collisionShape = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionShape", out exists);                
+                _collisionShape = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionShape", out exists);
                 SetPropertyExistsInBaseData("collisionShape", exists);
                 SetPropertyExists("collisionShape", exists);
-                _wireframeMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "wireframeMaterial", out exists);                
+                _wireframeMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "wireframeMaterial", out exists);
                 SetPropertyExistsInBaseData("wireframeMaterial", exists);
                 SetPropertyExists("wireframeMaterial", exists);
                 _cockpitActualMesh = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "cockpitActualMesh", out exists);
@@ -911,77 +1558,207 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExistsInBaseData("baseID", exists);
                 SetPropertyExists("baseID", exists);
 
-                _descriptionText = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText");
-                _preExplosionID = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "preExplosionID");
+                _descriptionText = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists);
+                SetPropertyExistsInBaseData("descriptionText", exists);
+                SetPropertyExists("descriptionText", exists);
+                _preExplosionID = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "preExplosionID", out exists);
+                SetPropertyExistsInBaseData("preExplosionID", exists);
+                SetPropertyExists("preExplosionID", exists);
 
-                _creditCost = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "creditCost");
-                _shipHangarYOffset = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "shipHangarYOffset");
-                _rockSubPosition = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rockSubPosition");
-                _missionRankRequired = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "missionRankRequired");
-                _discoveryRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "discoveryRange");
-                _detectionRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "detectionRange");
-                _shieldHealth = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "shieldHealth");
-                _captureRating = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "captureRating");
-                _aggressiveRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "aggressiveRange");
-                _passangerCapacity = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "passangerCapacity");
+                _creditCost = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "creditCost", out exists);
+                SetPropertyExistsInBaseData("creditCost", exists);
+                SetPropertyExists("creditCost", exists);
+                _isMassInfinite = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "isMassInfinite", out exists);
+                SetPropertyExistsInBaseData("isMassInfinite", exists);
+                SetPropertyExists("isMassInfinite", exists);
+                _shipHangarYOffset = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "shipHangarYOffset", out exists);
+                SetPropertyExistsInBaseData("shipHangarYOffset", exists);
+                SetPropertyExists("shipHangarYOffset", exists);
+                _rockSubPosition = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rockSubPosition", out exists);
+                SetPropertyExistsInBaseData("rockSubPosition", exists);
+                SetPropertyExists("rockSubPosition", exists);
+                _missionRankRequired = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "missionRankRequired", out exists);
+                SetPropertyExistsInBaseData("missionRankRequired", exists);
+                SetPropertyExists("missionRankRequired", exists);
+                _discoveryRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "discoveryRange", out exists);
+                SetPropertyExistsInBaseData("discoveryRange", exists);
+                SetPropertyExists("discoveryRange", exists);
+                _detectionRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "detectionRange", out exists);
+                SetPropertyExistsInBaseData("detectionRange", exists);
+                SetPropertyExists("detectionRange", exists);
+                _shieldHealth = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "shieldHealth", out exists);
+                SetPropertyExistsInBaseData("shieldHealth", exists);
+                SetPropertyExists("shieldHealth", exists);
+                _captureRating = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "captureRating", out exists);
+                SetPropertyExistsInBaseData("captureRating", exists);
+                SetPropertyExists("captureRating", exists);
+                _boardingCrew = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "boardingCrew", out exists);
+                SetPropertyExistsInBaseData("boardingCrew", exists);
+                SetPropertyExists("boardingCrew", exists);
+                _aggressiveRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "aggressiveRange", out exists);
+                SetPropertyExistsInBaseData("aggressiveRange", exists);
+                SetPropertyExists("aggressiveRange", exists);
+                _passangerCapacity = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "passangerCapacity", out exists);
+                SetPropertyExistsInBaseData("passangerCapacity", exists);
+                SetPropertyExists("passangerCapacity", exists);
 
-                _cruiseSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "cruiseSpeed");
-                _timeTillCruise = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "timeTillCruise");
-                _yaw = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "yaw");
-                _pitch = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pitch");
-                _roll = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "roll");
-                _health = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "health");
-                _buildTime = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "buildTime");
-                _crew = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "crew");
-                _energy = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "energy");
-                _ore = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "ore");
-                _deathTimer = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "deathTimer");
-                _armor = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "armor");
+                _cruiseSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "cruiseSpeed", out exists);
+                SetPropertyExistsInBaseData("cruiseSpeed", exists);
+                SetPropertyExists("cruiseSpeed", exists);
+                _timeTillCruise = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "timeTillCruise", out exists);
+                SetPropertyExistsInBaseData("timeTillCruise", exists);
+                SetPropertyExists("timeTillCruise", exists);
+                _yaw = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "yaw", out exists);
+                SetPropertyExistsInBaseData("yaw", exists);
+                SetPropertyExists("yaw", exists);
+                _pitch = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pitch", out exists);
+                SetPropertyExistsInBaseData("pitch", exists);
+                SetPropertyExists("pitch", exists);
+                _roll = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "roll", out exists);
+                SetPropertyExistsInBaseData("roll", exists);
+                SetPropertyExists("roll", exists);
+                _health = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "health", out exists);
+                SetPropertyExistsInBaseData("health", exists);
+                SetPropertyExists("health", exists);
+                _buildTime = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "buildTime", out exists);
+                SetPropertyExistsInBaseData("buildTime", exists);
+                SetPropertyExists("buildTime", exists);
+                _crew = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "crew", out exists);
+                SetPropertyExistsInBaseData("crew", exists);
+                SetPropertyExists("crew", exists);
+                _energy = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "energy", out exists);
+                SetPropertyExistsInBaseData("energy", exists);
+                SetPropertyExists("energy", exists);
+                _ore = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "ore", out exists);
+                SetPropertyExistsInBaseData("ore", exists);
+                SetPropertyExists("ore", exists);
+                _deathTimer = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "deathTimer", out exists);
+                SetPropertyExistsInBaseData("deathTimer", exists);
+                SetPropertyExists("deathTimer", exists);
+                _armor = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "armor", out exists);
+                SetPropertyExistsInBaseData("armor", exists);
+                SetPropertyExists("armor", exists);
 
-                _bCommsOverride = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCommsOverride");
-                _bGravityDrive = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bGravityDrive");
-                _isMassInfinite = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "isMassInfinite");
-                _bHideShipInCockpitAcutal = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bHideShipInCockpitAcutal");
-                _bPlayerSharedFire = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bPlayerSharedFire");
-                _bNotSoldUnlessOwnedBase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNotSoldUnlessOwnedBase");
-                _bBlackMarket = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bBlackMarket");
-                _bUniqueShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bUniqueShip");
-                _bShowInCockpitParticles = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInCockpitParticles");
-                _bRequiresKnowledge = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRequiresKnowledge");
-                _bListedNoPurchase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bListedNoPurchase");
-                _bLargeHangarOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeHangarOnly");
-                _bNoTargetAimNodeOffset = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoTargetAimNodeOffset");
-                _bEveryShipyardOk = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bEveryShipyardOk");
-                _bShowInCockpitWeaponParticles = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInCockpitWeaponParticles");
-                _boardingCrew = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "boardingCrew");
-                _bBaseBuildOverride = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bBaseBuildOverride");
-                _bSaveFileUnlockShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSaveFileUnlockShip");
-                _bLargeDockOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeDockOnly");
-                _bCanPurchase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCanPurchase");
-                _bNoShipyardRequirement = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoShipyardRequirement");
+                _bCommsOverride = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCommsOverride", out exists);
+                SetPropertyExistsInBaseData("bCommsOverride", exists);
+                SetPropertyExists("bCommsOverride", exists);
+                _bGravityDrive = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bGravityDrive", out exists);
+                SetPropertyExistsInBaseData("bGravityDrive", exists);
+                SetPropertyExists("bGravityDrive", exists);
+                _bHideShipInCockpitAcutal = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bHideShipInCockpitAcutal", out exists);
+                SetPropertyExistsInBaseData("bHideShipInCockpitAcutal", exists);
+                SetPropertyExists("bHideShipInCockpitAcutal", exists);
+                _bPlayerSharedFire = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bPlayerSharedFire", out exists);
+                SetPropertyExistsInBaseData("bPlayerSharedFire", exists);
+                SetPropertyExists("bPlayerSharedFire", exists);
+                _bNotSoldUnlessOwnedBase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNotSoldUnlessOwnedBase", out exists);
+                SetPropertyExistsInBaseData("bNotSoldUnlessOwnedBase", exists);
+                SetPropertyExists("bNotSoldUnlessOwnedBase", exists);
+                _bBlackMarket = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bBlackMarket", out exists);
+                SetPropertyExistsInBaseData("bBlackMarket", exists);
+                SetPropertyExists("bBlackMarket", exists);
+                _bUniqueShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bUniqueShip", out exists);
+                SetPropertyExistsInBaseData("bUniqueShip", exists);
+                SetPropertyExists("bUniqueShip", exists);
+                _bShowInCockpitParticles = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInCockpitParticles", out exists);
+                SetPropertyExistsInBaseData("bShowInCockpitParticles", exists);
+                SetPropertyExists("bShowInCockpitParticles", exists);
+                _bRequiresKnowledge = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRequiresKnowledge", out exists);
+                SetPropertyExistsInBaseData("bRequiresKnowledge", exists);
+                SetPropertyExists("bRequiresKnowledge", exists);
+                _bListedNoPurchase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bListedNoPurchase", out exists);
+                SetPropertyExistsInBaseData("bListedNoPurchase", exists);
+                SetPropertyExists("bListedNoPurchase", exists);
+                _bLargeHangarOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeHangarOnly", out exists);
+                SetPropertyExistsInBaseData("bLargeHangarOnly", exists);
+                SetPropertyExists("bLargeHangarOnly", exists);
+                _bNoTargetAimNodeOffset = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoTargetAimNodeOffset", out exists);
+                SetPropertyExistsInBaseData("bNoTargetAimNodeOffset", exists);
+                SetPropertyExists("bNoTargetAimNodeOffset", exists);
+                _bEveryShipyardOk = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bEveryShipyardOk", out exists);
+                SetPropertyExistsInBaseData("bEveryShipyardOk", exists);
+                SetPropertyExists("bEveryShipyardOk", exists);
+                _bShowInCockpitWeaponParticles = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bShowInCockpitWeaponParticles", out exists);
+                SetPropertyExistsInBaseData("bShowInCockpitWeaponParticles", exists);
+                SetPropertyExists("bShowInCockpitWeaponParticles", exists);
+                _bBaseBuildOverride = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bBaseBuildOverride", out exists);
+                SetPropertyExistsInBaseData("bBaseBuildOverride", exists);
+                SetPropertyExists("bBaseBuildOverride", exists);
+                _bSaveFileUnlockShip = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSaveFileUnlockShip", out exists);
+                SetPropertyExistsInBaseData("bSaveFileUnlockShip", exists);
+                SetPropertyExists("bSaveFileUnlockShip", exists);
+                _bLargeDockOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeDockOnly", out exists);
+                SetPropertyExistsInBaseData("bLargeDockOnly", exists);
+                SetPropertyExists("bLargeDockOnly", exists);
+                _bCanPurchase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCanPurchase", out exists);
+                SetPropertyExistsInBaseData("bCanPurchase", exists);
+                SetPropertyExists("bCanPurchase", exists);
+                _bNoShipyardRequirement = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoShipyardRequirement", out exists);
+                SetPropertyExistsInBaseData("bNoShipyardRequirement", exists);
+                SetPropertyExists("bNoShipyardRequirement", exists);
 
-                _cockpitInitPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitInitPos");
-                _cockpitTransLimit = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitTransLimit");
-                _chaseInitPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "chaseInitPos");
-                _chaseTransLimit = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "chaseTransLimit");
-                _deathSpin = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "deathSpin");
-                _cockpitActualPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitActualPos");
-                _shipHangarPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "shipHangarPosition");
+                _cockpitInitPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitInitPos", out exists);
+                SetPropertyExistsInBaseData("cockpitInitPos", exists);
+                SetPropertyExists("cockpitInitPos", exists);
+                _cockpitTransLimit = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitTransLimit", out exists);
+                SetPropertyExistsInBaseData("cockpitTransLimit", exists);
+                SetPropertyExists("cockpitTransLimit", exists);
+                _chaseInitPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "chaseInitPos", out exists);
+                SetPropertyExistsInBaseData("chaseInitPos", exists);
+                SetPropertyExists("chaseInitPos", exists);
+                _chaseTransLimit = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "chaseTransLimit", out exists);
+                SetPropertyExistsInBaseData("chaseTransLimit", exists);
+                SetPropertyExists("chaseTransLimit", exists);
+                _deathSpin = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "deathSpin", out exists);
+                SetPropertyExistsInBaseData("deathSpin", exists);
+                SetPropertyExists("deathSpin", exists);
+                _cockpitActualPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitActualPos", out exists);
+                SetPropertyExistsInBaseData("cockpitActualPos", exists);
+                SetPropertyExists("cockpitActualPos", exists);
+                _shipHangarPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "shipHangarPosition", out exists);
+                SetPropertyExistsInBaseData("shipHangarPosition", exists);
+                SetPropertyExists("shipHangarPosition", exists);
 
-                _debrisInfo = DataStructureParseHelpers.GetdebrisInfoDataStructureFromVD2Data(DataXMLDoc);
-                _afterburner = DataStructureParseHelpers.GetafterburnerDataStructureFromVD2Data(DataXMLDoc);
-                _targetPriorityList = DataStructureParseHelpers.GettargetPriorityListDataStructureFromVD2Data(DataXMLDoc);
-                _upgrades = DataStructureParseHelpers.GetupgradesDataStructureFromVD2Data(DataXMLDoc);
+                _debrisInfo = DataStructureParseHelpers.GetdebrisInfoDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("debrisInfo", exists);
+                SetPropertyExists("debrisInfo", exists);
+                _afterburner = DataStructureParseHelpers.GetafterburnerDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("afterburner", exists);
+                SetPropertyExists("afterburner", exists);
+                _targetPriorityList = DataStructureParseHelpers.GettargetPriorityListDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("targetPriorityList", exists);
+                SetPropertyExists("targetPriorityList", exists);
+                _upgrades = DataStructureParseHelpers.GetupgradesDataStructureFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("upgrades", exists);
+                SetPropertyExists("upgrades", exists);
 
-                _propulsion = DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(DataXMLDoc);
-                _weapon = DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(DataXMLDoc);
-                _damage = DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(DataXMLDoc);
-                _turret = DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(DataXMLDoc);
-                _attachment = DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(DataXMLDoc);
-                _movingElement = DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(DataXMLDoc);
-                _dock = DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(DataXMLDoc);
-                _shield = DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(DataXMLDoc);
-                _rotatingElement = DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(DataXMLDoc);
+                _propulsion = DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("propulsion", exists);
+                SetPropertyExists("propulsion", exists);
+                _weapon = DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("weapon", exists);
+                SetPropertyExists("weapon", exists);
+                _damage = DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("damage", exists);
+                SetPropertyExists("damage", exists);
+                _turret = DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("turret", exists);
+                SetPropertyExists("turret", exists);
+                _attachment = DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("attachment", exists);
+                SetPropertyExists("attachment", exists);
+                _movingElement = DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("movingElement", exists);
+                SetPropertyExists("movingElement", exists);
+                _dock = DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("dock", exists);
+                SetPropertyExists("dock", exists);
+                _shield = DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("shield", exists);
+                SetPropertyExists("shield", exists);
+                _rotatingElement = DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(DataXMLDoc, out exists);
+                SetPropertyExistsInBaseData("rotatingElement", exists);
+                SetPropertyExists("rotatingElement", exists);
             }
         }
     }

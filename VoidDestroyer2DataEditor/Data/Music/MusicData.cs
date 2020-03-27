@@ -20,64 +20,131 @@ namespace VoidDestroyer2DataEditor
 
         bool _bLooping;
 
-        [Description("effectType is a plaintext string"), Category("Plaintext Strings")]
+        [Description("effectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string effectType
         {
-            get => _effectType;
-            set => _effectType = value;
+            get
+            {
+                return _effectType;
+            }
+            set
+            {
+                _effectType = value;
+                SetPropertyEdited("effectType", true);
+            }
         }
 
-        [Description("objectID is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectID
         {
-            get => _objectID;
-            set => _objectID = value;
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                _objectID = value;
+                SetPropertyEdited("objectID", true);
+            }
         }
 
-        [Description("musicFile is a plaintext string"), Category("Plaintext Strings")]
+        [Description("musicFile is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string musicFile
         {
-            get => _musicFile;
-            set => _musicFile = value;
+            get
+            {
+                return _musicFile;
+            }
+            set
+            {
+                _musicFile = value;
+                SetPropertyEdited("musicFile", true);
+            }
         }
 
-        [Description("objectTypeMusic is a plaintext string"), Category("Plaintext Strings")]
+        [Description("objectTypeMusic is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectTypeMusic
         {
-            get => _objectTypeMusic;
-            set => _objectTypeMusic = value;
+            get
+            {
+                return _objectTypeMusic;
+            }
+            set
+            {
+                _objectTypeMusic = value;
+                SetPropertyEdited("objectTypeMusic", true);
+            }
         }
 
 
-        [Description("defaultVolume is a real number"), Category("Real Numbers")]
+        [Description("defaultVolume is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float defaultVolume
         {
-            get => _defaultVolume;
-            set => _defaultVolume = value;
+            get
+            {
+                return _defaultVolume;
+            }
+            set
+            {
+                _defaultVolume = value;
+                SetPropertyEdited("defaultVolume", true);
+            }
         }
 
 
-        [Description("bLooping is a boolean value"), Category("Booleans")]
+        [Description("bLooping is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLooping
         {
-            get => _bLooping;
-            set => _bLooping = value;
+            get
+            {
+                return _bLooping;
+            }
+            set
+            {
+                _bLooping = value;
+                SetPropertyEdited("bLooping", true);
+            }
         }
 
 
+        public override void InitAllProperties()
+        {
+            InitProperty("effectType");
+            InitProperty("objectID");
+            InitProperty("musicFile");
+            InitProperty("objectTypeMusic");
+
+            InitProperty("defaultVolume");
+
+            InitProperty("bLooping");
+
+        }
 
         public MusicData(string inPath) : base(inPath)
         {
+            bool exists = false;
             if (DataXMLDoc != null)
             {
-                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType");
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID");
-                _musicFile = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "musicFile");
-                _objectTypeMusic = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectTypeMusic");
+                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
+                SetPropertyExistsInBaseData("effectType", exists);
+                SetPropertyExists("effectType", exists);
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                SetPropertyExistsInBaseData("objectID", exists);
+                SetPropertyExists("objectID", exists);
+                _musicFile = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "musicFile", out exists);
+                SetPropertyExistsInBaseData("musicFile", exists);
+                SetPropertyExists("musicFile", exists);
+                _objectTypeMusic = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectTypeMusic", out exists);
+                SetPropertyExistsInBaseData("objectTypeMusic", exists);
+                SetPropertyExists("objectTypeMusic", exists);
 
-                _defaultVolume = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "defaultVolume");
+                _defaultVolume = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "defaultVolume", out exists);
+                SetPropertyExistsInBaseData("defaultVolume", exists);
+                SetPropertyExists("defaultVolume", exists);
 
-                _bLooping = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLooping");
+                _bLooping = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLooping", out exists);
+                SetPropertyExistsInBaseData("bLooping", exists);
+                SetPropertyExists("bLooping", exists);
 
             }
         }
