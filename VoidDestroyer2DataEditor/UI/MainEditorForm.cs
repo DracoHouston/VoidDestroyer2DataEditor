@@ -677,28 +677,34 @@ namespace VoidDestroyer2DataEditor
             EditorUserSettings.UserSettings.InitUserSettings();
             if (EditorUserSettings.UserSettings.VD2Path != "")
             {
-                PopulateShipsTree();
-                PopulateWeaponsTree();
-                PopulateAreaOfEffectTree();
-                PopulateAsteroidsTree();
-                PopulateBasesTree();
-                PopulateCharactersTree();
-                PopulateCockpitsTree();
-                PopulateDebrisTree();
-                PopulateDialogTree();
-                PopulateDockedMovingElementsTree();
-                PopulateDoorsTree();
-                PopulateEffectsTree();
-                PopulateExplosionsTree();
-                PopulateFactionsTree();
-                PopulateMusicTree();
-                PopulateOtherTree();
-                PopulateShieldsTree();
-                PopulateSkyboxesTree();
-                PopulateSoundsTree();
-                PopulateStationsTree();
-                PopulateSunsTree();
+                RepopulateAllTrees();
             }
+        }
+
+        public void RepopulateAllTrees()
+        {
+            PopulateShipsTree();
+            PopulateWeaponsTree();
+            PopulateAreaOfEffectTree();
+            PopulateAsteroidsTree();
+            PopulateBasesTree();
+            PopulateCharactersTree();
+            PopulateCockpitsTree();
+            PopulateDebrisTree();
+            PopulateDialogTree();
+            PopulateDockedMovingElementsTree();
+            PopulateDoorsTree();
+            PopulateEffectsTree();
+            PopulateExplosionsTree();
+            PopulateFactionsTree();
+            PopulateMusicTree();
+            PopulateOtherTree();
+            PopulateShieldsTree();
+            PopulateSkyboxesTree();
+            PopulateSoundsTree();
+            PopulateStationsTree();
+            PopulateSunsTree();
+            DataFileProperties.SelectedObject = null;
         }
 
         private void ShipsTree_AfterSelect(object sender, TreeViewEventArgs e)

@@ -85,7 +85,7 @@
             this.EditorSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.VD2PathFinderDialog = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1.SuspendLayout();
             this.ShipsTab.SuspendLayout();
             this.WeaponsTab.SuspendLayout();
@@ -665,11 +665,13 @@
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // openFileDialog1
+            // VD2PathFinderDialog
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Void Destroyer 2.exe|Void Destroyer 2.exe";
-            this.openFileDialog1.InitialDirectory = "MyComputer";
+            this.VD2PathFinderDialog.DefaultExt = "exe";
+            this.VD2PathFinderDialog.FileName = "Void Destroyer 2.exe";
+            this.VD2PathFinderDialog.Filter = "Void Destroyer 2.exe|Void Destroyer 2.exe";
+            this.VD2PathFinderDialog.InitialDirectory = "MyComputer";
+            this.VD2PathFinderDialog.Title = "Please find your \'Void Destroyer 2.exe\'";
             // 
             // MainEditorForm
             // 
@@ -777,7 +779,7 @@
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.OpenFileDialog VD2PathFinderDialog;
     }
 }
 

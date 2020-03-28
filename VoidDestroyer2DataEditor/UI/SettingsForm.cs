@@ -26,10 +26,11 @@ namespace VoidDestroyer2DataEditor
         private void BrowseFolderButton_Click(object sender, EventArgs e)
         {
 
-            DialogResult result = folderBrowserDialog1.ShowDialog();
-            if (result == DialogResult.OK)
+            //DialogResult result = folderBrowserDialog1.ShowDialog();
+            string result;
+            if (EditorUI.UI.GetVD2PathUsingDialog(out result) == DialogResult.OK)
             {
-                textBox1.Text = folderBrowserDialog1.SelectedPath;
+                textBox1.Text = result;
             }
         }
 

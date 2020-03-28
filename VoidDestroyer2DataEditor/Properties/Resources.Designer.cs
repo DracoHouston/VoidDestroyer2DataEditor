@@ -73,6 +73,16 @@ namespace VoidDestroyer2DataEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap jcStubFemale_Nana {
+            get {
+                object obj = ResourceManager.GetObject("jcStubFemale-Nana", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sungateicon {
             get {
                 object obj = ResourceManager.GetObject("sungateicon", resourceCulture);

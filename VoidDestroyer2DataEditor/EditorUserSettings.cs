@@ -37,6 +37,7 @@ namespace VoidDestroyer2DataEditor
             List<string> configlines = new List<string>();
             configlines.Add("VD2Path|" + VD2Path);
             File.WriteAllLines("EditorUserSettings.cfg", configlines);
+            EditorUI.UI.EditorForm.RepopulateAllTrees();
         }
 
         public void InitUserSettings()
@@ -66,7 +67,7 @@ namespace VoidDestroyer2DataEditor
             }
             if (!configfoundandvalid)
             {
-                string SteamPath = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Valve\\Steam", "SteamPath", "C:\\Program Files (x86)\\Steam");
+                /*string SteamPath = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Valve\\Steam", "SteamPath", "C:\\Program Files (x86)\\Steam");
                 if (Directory.Exists(SteamPath + "\\steamapps\\common\\Void Destroyer 2"))
                 {
                     VD2Path = SteamPath + "\\steamapps\\common\\Void Destroyer 2";
@@ -82,7 +83,9 @@ namespace VoidDestroyer2DataEditor
 
                 List<string> configlines = new List<string>();
                 configlines.Add("VD2Path|" + VD2Path);
-                File.WriteAllLines("EditorUserSettings.cfg", configlines);
+                File.WriteAllLines("EditorUserSettings.cfg", configlines);*/
+                FirstTimeSetupWizard wizard = new FirstTimeSetupWizard();
+                wizard.ShowDialog();
             }
         }
     }
