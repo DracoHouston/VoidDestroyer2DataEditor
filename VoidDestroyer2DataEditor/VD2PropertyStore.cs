@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace VoidDestroyer2DataEditor
 {
-    class VD2PropertyStore
+    public class VD2PropertyStore
     {
-        public Dictionary<string, VD2PropertyInfo> VD2PropertyInfos;
+        protected Dictionary<string, VD2PropertyInfo> VD2PropertyInfos;
 
         public VD2PropertyStore()
         {
@@ -54,6 +54,22 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public bool Unsaved
+        {
+            get
+            {
+                List<VD2PropertyInfo> props = VD2PropertyInfos.Values.ToList();
+                for (int i = 0; i < props.Count; i++)
+                {
+                    if (props[i].EditedByUser)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         public void SetPropertyExists(string inName, bool inExists)

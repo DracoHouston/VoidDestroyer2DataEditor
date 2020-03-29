@@ -12,6 +12,9 @@ namespace VoidDestroyer2DataEditor
         private static EditorUI Instance = null;
 
         public MainEditorForm EditorForm;
+
+        public EditorModes CurrentEditorMode;
+
         public static EditorUI UI
         {
             get
@@ -26,12 +29,13 @@ namespace VoidDestroyer2DataEditor
 
         private EditorUI()
         {
-
+            
         }
 
         public void InitUI(MainEditorForm inEditorForm)
         {
             EditorForm = inEditorForm;
+            CurrentEditorMode = EditorModes.BaseReadOnly;
         }
 
         public DialogResult GetVD2PathUsingDialog(out string outPath)

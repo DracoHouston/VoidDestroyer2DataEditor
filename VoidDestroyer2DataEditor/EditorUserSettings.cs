@@ -9,12 +9,23 @@ using System.IO;
 
 namespace VoidDestroyer2DataEditor
 {
+    class VD2FileSource
+    {
+        public string DisplayName;
+        public string ShortName;
+        public string Path;
+        public bool WriteAccess;
+        public bool FilterIn;
+    }
+
     class EditorUserSettings
     {
         private static EditorUserSettings Instance = null;
 
         public string VD2Path;
-        public MainEditorForm EditorForm;
+        public List<VD2FileSource> Sources;
+
+
         public static EditorUserSettings UserSettings
         {
             get
@@ -29,7 +40,7 @@ namespace VoidDestroyer2DataEditor
         private EditorUserSettings()
         {
             VD2Path = "";
-            EditorForm = null;
+            Sources = new List<VD2FileSource>();
         }
 
         public void SaveSettings()
@@ -42,6 +53,22 @@ namespace VoidDestroyer2DataEditor
 
         public void InitUserSettings()
         {
+            Sources.Clear();
+            VD2FileSource currentsource = new VD2FileSource();
+            currentsource.DisplayName = "Base Game";
+            currentsource.ShortName = "Base";
+            currentsource.Path = "";
+            currentsource.WriteAccess = false;
+            currentsource.FilterIn = true;
+            Sources.Add(currentsource);
+            currentsource = new VD2FileSource();
+            currentsource.DisplayName = "Mod Game";
+            currentsource.ShortName = "Mod";
+            currentsource.Path = "Mod\\";
+            currentsource.WriteAccess = true;
+            currentsource.FilterIn = true;
+            Sources.Add(currentsource);
+
             bool configfoundandvalid = false;
             if (File.Exists("EditorUserSettings.cfg"))
             {
@@ -87,6 +114,18 @@ namespace VoidDestroyer2DataEditor
                 FirstTimeSetupWizard wizard = new FirstTimeSetupWizard();
                 wizard.ShowDialog();
             }
+        }
+
+        public bool SourceIsReadWrite(string inName)
+        {
+            for (int i = 0; i < Sources.Count; i++)
+            {
+                if (Sources[i].ShortName == inName)
+                {
+                    return Sources[i].WriteAccess;
+                }
+            }
+            return false;
         }
     }
 }

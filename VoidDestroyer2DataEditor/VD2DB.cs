@@ -33,7 +33,14 @@ namespace VoidDestroyer2DataEditor
             //string SteamPath = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Valve\\Steam", "SteamPath", "C:\\Program Files (x86)\\Steam");
             string VD2Path = EditorUserSettings.UserSettings.VD2Path;//SteamPath + "\\steamapps\\common\\Void Destroyer 2";
             //VD2Path = (string)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 369530", "InstallLocation", "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Void Destroyer 2");
-            DataPath = "\\Data";
+            if ((EditorUI.UI.CurrentEditorMode == EditorModes.BaseReadOnly) || (EditorUI.UI.CurrentEditorMode == EditorModes.BaseReadWrite))
+            {
+                DataPath = "\\Data";
+            }
+            else
+            {
+                DataPath = "\\Mod\\Data";
+            }
             FolderName = inFolderName;
             AdditionalSubfolders = new List<string>();
             Data = new Dictionary<string, T>();
@@ -46,7 +53,14 @@ namespace VoidDestroyer2DataEditor
             //string SteamPath = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Valve\\Steam", "SteamPath", "C:\\Program Files (x86)\\Steam");
             string VD2Path = EditorUserSettings.UserSettings.VD2Path;//SteamPath + "\\steamapps\\common\\Void Destroyer 2";
             //VD2Path = (string)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 369530", "InstallLocation", "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Void Destroyer 2");
-            DataPath = "\\Data";
+            if ((EditorUI.UI.CurrentEditorMode == EditorModes.BaseReadOnly) || (EditorUI.UI.CurrentEditorMode == EditorModes.BaseReadWrite))
+            {
+                DataPath = "\\Data";
+            }
+            else
+            {
+                DataPath = "\\Mod\\Data";
+            }
             FolderName = inFolderName;
             AdditionalSubfolders = inAdditionalSubfolders;
             Data = new Dictionary<string, T>();
@@ -60,14 +74,17 @@ namespace VoidDestroyer2DataEditor
 
         public virtual void LoadData(string inPath)
         {
-            List<string> datafiles = Directory.EnumerateFiles(inPath).ToList();
-            for (int i = 0; i < datafiles.Count; i++)
+            if (Directory.Exists(inPath))
             {
-                if (datafiles[i].EndsWith(".xml"))
+                List<string> datafiles = Directory.EnumerateFiles(inPath).ToList();
+                for (int i = 0; i < datafiles.Count; i++)
                 {
-                    string dataname = datafiles[i].Substring(inPath.Length + 1, (datafiles[i].Length - inPath.Length) - 5);
-                    T currentdata = System.Activator.CreateInstance(typeof(T), datafiles[i]) as T;
-                    Data.Add(dataname, currentdata);
+                    if (datafiles[i].EndsWith(".xml"))
+                    {
+                        string dataname = datafiles[i].Substring(inPath.Length + 1, (datafiles[i].Length - inPath.Length) - 5);
+                        T currentdata = System.Activator.CreateInstance(typeof(T), datafiles[i]) as T;
+                        Data.Add(dataname, currentdata);
+                    }
                 }
             }
         }

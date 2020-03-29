@@ -112,6 +112,18 @@
     <Compile Include="UI\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\VD2SourceDropdown.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\VD2SourceDropdown.Designer.cs">
+      <DependentUpon>VD2SourceDropdown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\VD2SourceDropdownItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\VD2SourceDropdownItem.Designer.cs">
+      <DependentUpon>VD2SourceDropdownItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\VD2UITypeEditor.cs" />
     <Compile Include="VD2Data.cs" />
     <Compile Include="VD2DB.cs" />
@@ -139,6 +151,12 @@
     </Compile>
     <EmbeddedResource Include="UI\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\VD2SourceDropdown.resx">
+      <DependentUpon>VD2SourceDropdown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\VD2SourceDropdownItem.resx">
+      <DependentUpon>VD2SourceDropdownItem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

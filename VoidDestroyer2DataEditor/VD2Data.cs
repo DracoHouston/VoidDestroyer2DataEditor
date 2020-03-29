@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class VD2PropertyInfo
+    public class VD2PropertyInfo
     {
         public bool ExistsInBaseData;//whether we can reset to the base data default value, if false this property is only set in mod data
         public bool Exists;//whether the data contains a setter for this property
@@ -48,7 +48,7 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    class VD2Data : VD2PropertyStore
+    public class VD2Data : VD2PropertyStore
     {
         protected string _FilePath;
         protected XmlDocument DataXMLDoc;

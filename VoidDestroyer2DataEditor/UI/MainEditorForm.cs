@@ -7,42 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using VoidDestroyer2DataEditor.UI;
 
 namespace VoidDestroyer2DataEditor
 {
-    //the order of this enum and the base nodes hard coded below must match!
-    enum ShipClassIndex
-    {
-        fighter,
-        gunship,
-        corvette,
-        frigate,
-        destroyer,
-        cruiser,
-        carrier,
-        dreadnaught,
-        fighter_drone
-    };
-    enum ShipClassSizeIndex
-    {
-        light,
-        medium,
-        heavy
-    };
     
-    enum WeaponTypeIndex
-    {
-        projectile,
-        instant,
-        beam,
-        collision,
-        shield,
-        tractor_beam,
-        speed,
-        ecm,
-        ship_shooter,
-        release_attached_ship
-    };
 
     public partial class MainEditorForm : Form
     {
@@ -76,14 +46,414 @@ namespace VoidDestroyer2DataEditor
         private VD2DB<SoundData> Sounds;
         private VD2DB<StationData> Stations;
         private VD2DB<SunData> Suns;
+        private VD2SourceDropdown sourcedropdown;
+        public List<FilesTreeItem> FilesTreeItems;
+        public List<string> ActiveFilters;
         public MainEditorForm()
         {
             InitializeComponent();
+            ActiveFilters = new List<string>();
+            FilesTreeItems = new List<FilesTreeItem>();
         }
 
-        public void PopulateShipsTree()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            ShipsTree.Nodes.Clear();
+            EditorUI.UI.InitUI(this);
+            EditorUserSettings.UserSettings.InitUserSettings();
+            toolStripComboBox1.SelectedIndex = 0;
+            if (EditorUserSettings.UserSettings.VD2Path != "")
+            {
+                RepopulateAllTrees();
+            }
+        }
+
+        public void RepopulateAllTrees()
+        {
+            FilesTreeItem currentitem = new FilesTreeItem();
+            currentitem.Name = "Data";
+            FilesTreeItems.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Ships";
+            FilesTreeItems[0].Children.Add(currentitem);
+            PopulateShipsTree(FilesTreeItems[0].Children[0]);
+            
+                    /*
+                    
+                    PopulateWeaponsTree();
+                    PopulateAreaOfEffectTree();
+                    PopulateAsteroidsTree();
+                    PopulateBasesTree();
+                    PopulateCharactersTree();
+                    PopulateCockpitsTree();
+                    PopulateDebrisTree();
+                    PopulateDialogTree();
+                    PopulateDockedMovingElementsTree();
+                    PopulateDoorsTree();
+                    PopulateEffectsTree();
+                    PopulateExplosionsTree();
+                    PopulateFactionsTree();
+                    PopulateMusicTree();
+                    PopulateOtherTree();
+                    PopulateShieldsTree();
+                    PopulateSkyboxesTree();
+                    PopulateSoundsTree();
+                    PopulateStationsTree();
+                    PopulateSunsTree();*/
+                    FilesTree.Nodes.Clear();
+            PopulateFilesTree(FilesTree.Nodes, FilesTreeItems);
+
+            DataFileProperties.SelectedObject = null;
+        }
+
+        private void PopulateFilesTree(TreeNodeCollection inNodes, List<FilesTreeItem> inItems)
+        {
+            for (int i = 0; i < inItems.Count; i++)
+            {
+                if (!inItems[i].FilteredOut)
+                {
+                    if (inItems[i].DataFile != null)
+                    {
+                        inNodes.Add(inItems[i].Name, inItems[i].DisplayName, 1);
+                    }
+                    else
+                    {
+                        inNodes.Add(inItems[i].DisplayName);
+                    }
+                    if (inItems[i].IsCategory)
+                    {
+                        PopulateFilesTree(inNodes[inNodes.Count - 1].Nodes, inItems[i].Children);
+                    }
+                }
+            }
+        }
+
+        public void PopulateShipsTree(FilesTreeItem inItem)
+        {
+            FilesTreeItem currentitem = new FilesTreeItem();
+            currentitem.Name = "Combat";
+            inItem.Children.Add(currentitem);
+            
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Drones";
+            inItem.Children[0].Children.Add(currentitem);
+            
+            currentitem = new FilesTreeItem();            
+            currentitem.Name = "Fighters";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[1].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[1].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "GunShips";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[2].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[2].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[2].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Corvettes";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[3].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[3].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[3].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Frigates";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[4].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[4].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[4].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Destroyers";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[5].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[5].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[5].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Cruisers";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[6].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[6].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[6].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Carriers";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[7].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[7].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[7].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Dreadnaughts";
+            inItem.Children[0].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Light";
+            inItem.Children[0].Children[8].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Medium";
+            inItem.Children[0].Children[8].Children.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Heavy";
+            inItem.Children[0].Children[8].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Non Combat";
+            inItem.Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Transport";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Miner";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Shuttle";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Repair";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Ship Capture";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Base Capture";
+            inItem.Children[1].Children.Add(currentitem);
+
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Builder";
+            inItem.Children[1].Children.Add(currentitem);
+
+
+
+            List<string> ShipsSubFolders = new List<string>();
+            ShipsSubFolders.Add("Drones");
+            ShipsSubFolders.Add("Fighters");
+            ShipsSubFolders.Add("GunShips");
+            ShipsSubFolders.Add("Corvettes");
+            ShipsSubFolders.Add("Frigates");
+            ShipsSubFolders.Add("Destroyers");
+            ShipsSubFolders.Add("Cruisers");
+            ShipsSubFolders.Add("Carriers");
+            ShipsSubFolders.Add("Dread");
+            Ships = new VD2DB<ShipData>("Ships", ShipsSubFolders);
+
+            for (int i = 0; i < Ships.Data.Keys.Count; i++)
+            {
+                ShipData currentship;
+                if (Ships.Data.TryGetValue(Ships.Data.Keys.ElementAt(i), out currentship))
+                {
+                    currentitem = new FilesTreeItem();
+                    currentitem.Name = Path.GetFileNameWithoutExtension(currentship.FilePath);
+                    currentitem.Source = "Base";
+                    currentitem.FilterTags.Add("Faction:" + currentship.faction);
+                    currentitem.FilterTags.Add("Class:" + currentship.shipClass);
+                    currentitem.FilterTags.Add("Size:" + currentship.shipClassSize);
+                    currentitem.DataFile = currentship;
+                    if (currentship.shipClass == "fighter")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[1].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[1].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[1].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "fighter_drone")
+                    {
+                        inItem.Children[0].Children[0].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "gunship")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[2].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[2].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[2].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "corvette")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[3].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[3].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[3].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "frigate")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[4].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[4].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[4].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "destroyer")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[5].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[5].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[5].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "cruiser")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[6].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[6].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[6].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "carrier")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[7].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[7].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[7].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "dreadnaught")
+                    {
+                        if (currentship.shipClassSize == "light")
+                        {
+                            inItem.Children[0].Children[8].Children[0].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "medium")
+                        {
+                            inItem.Children[0].Children[8].Children[1].Children.Add(currentitem);
+                        }
+                        else if (currentship.shipClassSize == "heavy")
+                        {
+                            inItem.Children[0].Children[8].Children[2].Children.Add(currentitem);
+                        }
+                    }
+                    else if (currentship.shipClass == "transport")
+                    {
+                        inItem.Children[1].Children[0].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "mining")
+                    {
+                        inItem.Children[1].Children[1].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "shuttle")
+                    {
+                        inItem.Children[1].Children[2].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "repair")
+                    {
+                        inItem.Children[1].Children[3].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "capture")
+                    {
+                        inItem.Children[1].Children[5].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "ship_capture")
+                    {
+                        inItem.Children[1].Children[4].Children.Add(currentitem);
+                    }
+                    else if (currentship.shipClass == "builder")
+                    {
+                        inItem.Children[1].Children[6].Children.Add(currentitem);
+                    }
+                }
+            }
+            /*ShipsTree.Nodes.Clear();
             ShipsTree.Nodes.Add("Combat Ships");
             ShipsTree.Nodes[0].Nodes.Add("Fighters");
             ShipsTree.Nodes[0].Nodes[0].Nodes.Add("Light");
@@ -320,7 +690,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     ShipsTree.Nodes[2].Nodes[1].Nodes.Add(ActiveUpgrades.Data.Keys.ElementAt(i));
                 }
-            }
+            }*/
         }
 
         public void PopulateWeaponsTree()
@@ -671,42 +1041,6 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            EditorUI.UI.InitUI(this);
-            EditorUserSettings.UserSettings.InitUserSettings();
-            if (EditorUserSettings.UserSettings.VD2Path != "")
-            {
-                RepopulateAllTrees();
-            }
-        }
-
-        public void RepopulateAllTrees()
-        {
-            PopulateShipsTree();
-            PopulateWeaponsTree();
-            PopulateAreaOfEffectTree();
-            PopulateAsteroidsTree();
-            PopulateBasesTree();
-            PopulateCharactersTree();
-            PopulateCockpitsTree();
-            PopulateDebrisTree();
-            PopulateDialogTree();
-            PopulateDockedMovingElementsTree();
-            PopulateDoorsTree();
-            PopulateEffectsTree();
-            PopulateExplosionsTree();
-            PopulateFactionsTree();
-            PopulateMusicTree();
-            PopulateOtherTree();
-            PopulateShieldsTree();
-            PopulateSkyboxesTree();
-            PopulateSoundsTree();
-            PopulateStationsTree();
-            PopulateSunsTree();
-            DataFileProperties.SelectedObject = null;
-        }
-
         private void ShipsTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Parent != null)
@@ -1001,6 +1335,283 @@ namespace VoidDestroyer2DataEditor
         {
             SettingsForm settings = new SettingsForm();
             settings.Show();
-        }       
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (toolStripComboBox1.SelectedIndex)
+            {
+                case (int)EditorModes.BaseReadOnly:
+                    break;
+                case (int)EditorModes.ModReadOnly:
+                    EditorUI.UI.CurrentEditorMode = EditorModes.ModReadOnly;
+                    RepopulateAllTrees();
+                    break;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (sourcedropdown == null)
+            {
+                VD2SourceDropdown test = new VD2SourceDropdown();
+                Controls.Add(test);
+                sourcedropdown = test;
+                test.Location = new Point(button1.Location.X, button1.Location.Y + button1.Size.Height);
+                test.BringToFront();
+            }
+            else
+            {
+                sourcedropdown.Dispose();
+                sourcedropdown = null;
+            }
+        }
+
+        private FilesTreeItem GetFilesTreeItemByPath(string inPath)
+        {
+            FilesTreeItem result = null;
+            List<string> splitpath = inPath.Split("\\".ToCharArray()).ToList();
+
+            for (int splitidx = 0; splitidx < splitpath.Count; splitidx++)
+            {
+                if (result != null)
+                {
+                    for (int i = 0; i < result.Children.Count; i++)
+                    {
+                        if (result.Children[i].DisplayName == splitpath[splitidx])
+                        {
+                            result = result.Children[i];
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < FilesTreeItems.Count; i++)
+                    {
+                        if (FilesTreeItems[i].DisplayName == splitpath[splitidx])
+                        {
+                            result = FilesTreeItems[i];
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
+        }
+
+        private void FilesTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            List<int> indexes = new List<int>();
+            indexes.Add(e.Node.Index);
+            TreeNode currentnode = e.Node;
+            FilesTreeItem item = GetFilesTreeItemByPath(e.Node.FullPath);
+            DataFileProperties.SelectedObject = item.DataFile;
+            /*while (currentnode.Parent != null)
+            {
+                indexes.Add(currentnode.Parent.Index);
+                currentnode = currentnode.Parent;
+            }
+            FilesTreeItem currentitem = null;
+            if (FilesTreeItems.Count > 0)
+            {
+                currentitem = FilesTreeItems[indexes[indexes.Count - 1]];
+            }
+            
+            for (int i = indexes.Count - 2; i > -1; i--)
+            {
+                currentitem = currentitem.Children[indexes[i]];
+            }
+            if (currentitem.DisplayName == e.Node.Name)
+            {
+                DataFileProperties.SelectedObject = currentitem.DataFile;
+            }*/
+        }
+
+        
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ActiveFilters.Add("Faction:rockGuys");
+            ActiveFilters.Add("Faction:beggar");
+            ActiveFilters.Add("Faction:reborn");
+            ActiveFilters.Add("Faction:civilian");
+            ActiveFilters.Add("Faction:stubs");
+            ActiveFilters.Add("Faction:thePride");
+            ActiveFilters.Add("Faction:kind");
+            ActiveFilters.Add("Faction:outsider");
+            ActiveFilters.Add("Faction:outsider2");
+            FilesTree.Nodes.Clear();
+            PopulateFilesTree(FilesTree.Nodes, FilesTreeItems);
+        }
+    }
+
+    //the order of this enum and the base nodes hard coded below must match!
+    enum ShipClassIndex
+    {
+        fighter,
+        gunship,
+        corvette,
+        frigate,
+        destroyer,
+        cruiser,
+        carrier,
+        dreadnaught,
+        fighter_drone
+    };
+    enum ShipClassSizeIndex
+    {
+        light,
+        medium,
+        heavy
+    };
+
+    enum WeaponTypeIndex
+    {
+        projectile,
+        instant,
+        beam,
+        collision,
+        shield,
+        tractor_beam,
+        speed,
+        ecm,
+        ship_shooter,
+        release_attached_ship
+    };
+
+    enum EditorModes
+    {
+        BaseReadOnly,
+        ModReadOnly,
+        BaseReadWrite,
+        ModReadWrite
+    }
+
+    public class FilesTreeItem
+    {
+        public string Name;
+        public string Source;
+        public bool Saved;
+        public VD2Data DataFile;
+        public List<string> FilterTags;
+        public List<FilesTreeItem> Children;
+
+        public bool IsCategory
+        {
+            get
+            {
+                if (Children.Count > 0)
+                {
+                    return true;
+                }
+                if (DataFile == null)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool FilteredOut
+        {
+            get
+            {
+                if (IsCategory)
+                {
+                    if (Children.Count == 0)
+                    {
+                        return true;
+                    }
+                    bool allfiltered = true;
+                    for (int idx = 0; idx < Children.Count; idx++)
+                    {
+                        if (!Children[idx].FilteredOut)
+                        {
+                            allfiltered = false;
+                        }
+                    }
+                    if (allfiltered)
+                    {
+                        return true;
+                    }
+                }
+                for (int i = 0; i < EditorUI.UI.EditorForm.ActiveFilters.Count; i++)
+                {
+                    for (int j = 0; j < FilterTags.Count; j++)
+                    {
+                        if (EditorUI.UI.EditorForm.ActiveFilters[i] == FilterTags[j])
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (IsCategory)
+                {
+                    return Name;
+                }
+
+                string savestring = "";
+                if (Unsaved)
+                {
+                    savestring = "*";
+                }
+
+                string rwstring = "";
+                if (EditorUserSettings.UserSettings.SourceIsReadWrite(Source))
+                {
+                    rwstring = "[RW]";
+                }
+                else
+                {
+                    rwstring = "[R]";
+                }
+
+                return "(" + Source + rwstring + ") " + savestring + Name;
+            }
+        }
+
+        public bool Unsaved
+        {
+            get
+            {
+                if (IsCategory)
+                {
+                    for (int i = 0; i < Children.Count; i++)
+                    {
+                        if (Children[i].Unsaved)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (DataFile != null)
+                {
+                    return DataFile.Unsaved;
+                }
+
+                return false;
+            }
+        }
+
+        public FilesTreeItem()
+        {
+            Name = "";
+            Source = "";
+            Saved = true;
+            DataFile = null;
+            Children = new List<FilesTreeItem>();
+            FilterTags = new List<string>();
+        }
     }
 }
