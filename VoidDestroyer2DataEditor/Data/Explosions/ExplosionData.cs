@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class ExplosionData : VD2Data
+    public class ExplosionData : VD2Data
     {
         string _effectType;
         string _objectID;
@@ -39,8 +40,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _effectType = value;
-                SetPropertyEdited("effectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _effectType = value;
+                        SetPropertyEdited("effectType", true);
+                    }
+                }
             }
         }
 
@@ -53,8 +60,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -67,8 +80,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _particleSystemName = value;
-                SetPropertyEdited("particleSystemName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _particleSystemName = value;
+                        SetPropertyEdited("particleSystemName", true);
+                    }
+                }
             }
         }
 
@@ -81,8 +100,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _explosionSoundID = value;
-                SetPropertyEdited("explosionSoundID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _explosionSoundID = value;
+                        SetPropertyEdited("explosionSoundID", true);
+                    }
+                }
             }
         }
 
@@ -95,8 +120,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _explosionType = value;
-                SetPropertyEdited("explosionType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _explosionType = value;
+                        SetPropertyEdited("explosionType", true);
+                    }
+                }
             }
         }
 
@@ -110,8 +141,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _renderingDistance = value;
-                SetPropertyEdited("renderingDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _renderingDistance = value;
+                        SetPropertyEdited("renderingDistance", true);
+                    }
+                }
             }
         }
 
@@ -124,8 +161,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shakeDistance = value;
-                SetPropertyEdited("shakeDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shakeDistance = value;
+                        SetPropertyEdited("shakeDistance", true);
+                    }
+                }
             }
         }
 
@@ -138,8 +181,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _pushForce = value;
-                SetPropertyEdited("pushForce", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _pushForce = value;
+                        SetPropertyEdited("pushForce", true);
+                    }
+                }
             }
         }
 
@@ -152,8 +201,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _damage = value;
-                SetPropertyEdited("damage", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _damage = value;
+                        SetPropertyEdited("damage", true);
+                    }
+                }
             }
         }
 
@@ -166,8 +221,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxSounds = value;
-                SetPropertyEdited("maxSounds", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxSounds = value;
+                        SetPropertyEdited("maxSounds", true);
+                    }
+                }
             }
         }
 
@@ -181,8 +242,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _life = value;
-                SetPropertyEdited("life", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _life = value;
+                        SetPropertyEdited("life", true);
+                    }
+                }
             }
         }
 
@@ -195,8 +262,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _angularForce = value;
-                SetPropertyEdited("angularForce", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _angularForce = value;
+                        SetPropertyEdited("angularForce", true);
+                    }
+                }
             }
         }
 
@@ -210,8 +283,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bCausesShake = value;
-                SetPropertyEdited("bCausesShake", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bCausesShake = value;
+                        SetPropertyEdited("bCausesShake", true);
+                    }
+                }
             }
         }
 
@@ -225,8 +304,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _impactSize = value;
-                SetPropertyEdited("impactSize", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _impactSize = value;
+                        SetPropertyEdited("impactSize", true);
+                    }
+                }
             }
         }
 
@@ -235,6 +320,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("effectType");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("particleSystemName");
             InitProperty("explosionSoundID");
             InitProperty("explosionType");
@@ -254,56 +340,155 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public ExplosionData(string inPath) : base(inPath)
+        public ExplosionData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
-                SetPropertyExistsInBaseData("effectType", exists);
-                SetPropertyExists("effectType", exists);
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
+                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("effectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("effectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "effectType"));
+                }
+                SetPropertyExists("effectType", exists);
                 _particleSystemName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleSystemName", out exists);
-                SetPropertyExistsInBaseData("particleSystemName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("particleSystemName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("particleSystemName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "particleSystemName"));
+                }
                 SetPropertyExists("particleSystemName", exists);
                 _explosionSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionSoundID", out exists);
-                SetPropertyExistsInBaseData("explosionSoundID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("explosionSoundID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("explosionSoundID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "explosionSoundID"));
+                }
                 SetPropertyExists("explosionSoundID", exists);
                 _explosionType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "explosionType", out exists);
-                SetPropertyExistsInBaseData("explosionType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("explosionType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("explosionType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "explosionType"));
+                }
                 SetPropertyExists("explosionType", exists);
 
                 _renderingDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "renderingDistance", out exists);
-                SetPropertyExistsInBaseData("renderingDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("renderingDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("renderingDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "renderingDistance"));
+                }
                 SetPropertyExists("renderingDistance", exists);
                 _shakeDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "shakeDistance", out exists);
-                SetPropertyExistsInBaseData("shakeDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shakeDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shakeDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shakeDistance"));
+                }
                 SetPropertyExists("shakeDistance", exists);
                 _pushForce = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "pushForce", out exists);
-                SetPropertyExistsInBaseData("pushForce", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("pushForce", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("pushForce", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "pushForce"));
+                }
                 SetPropertyExists("pushForce", exists);
                 _damage = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "damage", out exists);
-                SetPropertyExistsInBaseData("damage", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("damage", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("damage", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damage"));
+                }
                 SetPropertyExists("damage", exists);
                 _maxSounds = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxSounds", out exists);
-                SetPropertyExistsInBaseData("maxSounds", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxSounds", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxSounds", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxSounds"));
+                }
                 SetPropertyExists("maxSounds", exists);
 
                 _life = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "life", out exists);
-                SetPropertyExistsInBaseData("life", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("life", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("life", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "life"));
+                }
                 SetPropertyExists("life", exists);
                 _angularForce = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "angularForce", out exists);
-                SetPropertyExistsInBaseData("angularForce", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("angularForce", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("angularForce", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "angularForce"));
+                }
                 SetPropertyExists("angularForce", exists);
 
                 _bCausesShake = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCausesShake", out exists);
-                SetPropertyExistsInBaseData("bCausesShake", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bCausesShake", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bCausesShake", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bCausesShake"));
+                }
                 SetPropertyExists("bCausesShake", exists);
 
                 _impactSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "impactSize", out exists);
-                SetPropertyExistsInBaseData("impactSize", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("impactSize", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("impactSize", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "impactSize"));
+                }
                 SetPropertyExists("impactSize", exists);
 
             }

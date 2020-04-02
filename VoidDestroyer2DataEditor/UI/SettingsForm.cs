@@ -13,6 +13,7 @@ namespace VoidDestroyer2DataEditor
 {
     public partial class SettingsForm : Form
     {
+        int TreeIconSize;
         public SettingsForm()
         {
             InitializeComponent();
@@ -20,7 +21,25 @@ namespace VoidDestroyer2DataEditor
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
+            switch (EditorUserSettings.UserSettings.TreeIconSize)
+            {
+                case 16:
+                    TreeIconSize = 16;
+                    break;
+                case 32:
+                    TreeIconSize = 32;
+                    break;
+            }
             textBox1.Text = EditorUserSettings.UserSettings.VD2Path;
+            switch (EditorUserSettings.UserSettings.TreeIconSize)
+            {
+                case 16:
+                    checkedListBox1.SetItemChecked(0, true);
+                    break;
+                case 32:
+                    checkedListBox1.SetItemChecked(1, true);
+                    break;
+            }            
         }
 
         private void BrowseFolderButton_Click(object sender, EventArgs e)
@@ -57,6 +76,12 @@ namespace VoidDestroyer2DataEditor
         private void SaveConfig()
         {
             EditorUserSettings.UserSettings.VD2Path = textBox1.Text;
+            if ((TreeIconSize != 16) && (TreeIconSize != 32))
+            {
+                TreeIconSize = 16;
+            }
+            EditorUserSettings.UserSettings.TreeIconSize = TreeIconSize;
+            
             EditorUserSettings.UserSettings.SaveSettings();
         }
 
@@ -69,6 +94,10 @@ namespace VoidDestroyer2DataEditor
                 {
                     result = true;
                 }
+            }
+            if (EditorUserSettings.UserSettings.TreeIconSize != TreeIconSize)
+            {
+                result = true;
             }
             return result;
         }
@@ -93,6 +122,33 @@ namespace VoidDestroyer2DataEditor
                 ValidPathIndicator.BackColor = Color.Red;
             }
             
+        }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (e.NewValue == CheckState.Checked)
+            {
+                if (e.Index == 0)
+                {
+                    checkedListBox1.SetItemChecked(1, false);
+                    TreeIconSize = 16;
+                    if (HasUnsavedSettings())
+                    {
+                        button3.Enabled = true;
+                        button1.Enabled = true;
+                    }
+                }
+                else if (e.Index == 1)
+                {
+                    checkedListBox1.SetItemChecked(0, false);
+                    TreeIconSize = 32;
+                    if (HasUnsavedSettings())
+                    {
+                        button3.Enabled = true;
+                        button1.Enabled = true;
+                    }
+                }
+            }
         }
     }
 }

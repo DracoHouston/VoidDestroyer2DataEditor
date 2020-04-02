@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class SoundData : VD2Data
+    public class SoundData : VD2Data
     {
         string _effectType;
         string _soundType;
@@ -19,13 +20,13 @@ namespace VoidDestroyer2DataEditor
         string _startSoundFile;
         string _soundEngineSoundType;
 
-        List<string> _soundFile;
+        ObservableCollection<string> _soundFile;
 
         int _maxDistance;
         int _referenceDistance;
         int _maxSounds;
 
-        List<int> _soundPriority;
+        ObservableCollection<int> _soundPriority;
 
         float _defaultVolume;
 
@@ -40,8 +41,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _effectType = value;
-                SetPropertyEdited("effectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _effectType = value;
+                        SetPropertyEdited("effectType", true);
+                    }
+                }
             }
         }
 
@@ -54,8 +61,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _soundType = value;
-                SetPropertyEdited("soundType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _soundType = value;
+                        SetPropertyEdited("soundType", true);
+                    }
+                }
             }
         }
 
@@ -68,8 +81,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -82,8 +101,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _tailSound = value;
-                SetPropertyEdited("tailSound", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _tailSound = value;
+                        SetPropertyEdited("tailSound", true);
+                    }
+                }
             }
         }
 
@@ -96,8 +121,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _startSound = value;
-                SetPropertyEdited("startSound", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _startSound = value;
+                        SetPropertyEdited("startSound", true);
+                    }
+                }
             }
         }
 
@@ -110,8 +141,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _startSoundFile = value;
-                SetPropertyEdited("startSoundFile", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _startSoundFile = value;
+                        SetPropertyEdited("startSoundFile", true);
+                    }
+                }
             }
         }
 
@@ -124,14 +161,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _soundEngineSoundType = value;
-                SetPropertyEdited("soundEngineSoundType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _soundEngineSoundType = value;
+                        SetPropertyEdited("soundEngineSoundType", true);
+                    }
+                }
             }
         }
 
 
         [Description("soundFile is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public List<string> soundFile
+        public ObservableCollection<string> soundFile
         {
             get
             {
@@ -140,7 +183,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _soundFile = value;
-                SetPropertyEdited("soundFile", true);
+            }
+        }
+
+        private void OnsoundFileChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("soundFile", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _soundFile = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "soundFile", out exists));
+                    _soundFile.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundFileChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("soundFile", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("soundFile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundFile"));
+                    }
+                    SetPropertyExists("soundFile", exists);
+                }
             }
         }
 
@@ -154,8 +222,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxDistance = value;
-                SetPropertyEdited("maxDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxDistance = value;
+                        SetPropertyEdited("maxDistance", true);
+                    }
+                }
             }
         }
 
@@ -168,8 +242,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _referenceDistance = value;
-                SetPropertyEdited("referenceDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _referenceDistance = value;
+                        SetPropertyEdited("referenceDistance", true);
+                    }
+                }
             }
         }
 
@@ -182,14 +262,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxSounds = value;
-                SetPropertyEdited("maxSounds", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxSounds = value;
+                        SetPropertyEdited("maxSounds", true);
+                    }
+                }
             }
         }
 
 
         [Description("soundPriority is a collection of integers"), Category("Integer Collections")]
-        public List<int> soundPriority
+        public ObservableCollection<int> soundPriority
         {
             get
             {
@@ -198,7 +284,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _soundPriority = value;
-                SetPropertyEdited("soundPriority", true);
+            }
+        }
+
+        private void OnsoundPriorityChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("soundPriority", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _soundPriority = new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, "soundPriority", out exists));
+                    _soundPriority.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundPriorityChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("soundPriority", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("soundPriority", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundPriority"));
+                    }
+                    SetPropertyExists("soundPriority", exists);
+                }
             }
         }
 
@@ -212,8 +323,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _defaultVolume = value;
-                SetPropertyEdited("defaultVolume", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _defaultVolume = value;
+                        SetPropertyEdited("defaultVolume", true);
+                    }
+                }
             }
         }
 
@@ -227,8 +344,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bDisable3d = value;
-                SetPropertyEdited("bDisable3d", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bDisable3d = value;
+                        SetPropertyEdited("bDisable3d", true);
+                    }
+                }
             }
         }
 
@@ -238,6 +361,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("effectType");
             InitProperty("soundType");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("tailSound");
             InitProperty("startSound");
             InitProperty("startSoundFile");
@@ -257,57 +381,158 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public SoundData(string inPath) : base(inPath)
+        public SoundData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
+                SetPropertyExists("objectID", exists);
+
                 _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
-                SetPropertyExistsInBaseData("effectType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("effectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("effectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "effectType"));
+                }
                 SetPropertyExists("effectType", exists);
                 _soundType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "soundType", out exists);
-                SetPropertyExistsInBaseData("soundType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("soundType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("soundType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundType"));
+                }
                 SetPropertyExists("soundType", exists);
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
-                SetPropertyExists("objectID", exists);
                 _tailSound = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "tailSound", out exists);
-                SetPropertyExistsInBaseData("tailSound", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("tailSound", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("tailSound", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "tailSound"));
+                }
                 SetPropertyExists("tailSound", exists);
                 _startSound = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "startSound", out exists);
-                SetPropertyExistsInBaseData("startSound", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("startSound", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("startSound", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "startSound"));
+                }
                 SetPropertyExists("startSound", exists);
                 _startSoundFile = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "startSoundFile", out exists);
-                SetPropertyExistsInBaseData("startSoundFile", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("startSoundFile", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("startSoundFile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "startSoundFile"));
+                }
                 SetPropertyExists("startSoundFile", exists);
                 _soundEngineSoundType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "soundEngineSoundType", out exists);
-                SetPropertyExistsInBaseData("soundEngineSoundType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("soundEngineSoundType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("soundEngineSoundType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundEngineSoundType"));
+                }
                 SetPropertyExists("soundEngineSoundType", exists);
 
-                _soundFile = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "soundFile", out exists);
-                SetPropertyExistsInBaseData("soundFile", exists);
+                _soundFile = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "soundFile", out exists));
+                _soundFile.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundFileChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("soundFile", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("soundFile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundFile"));
+                }
                 SetPropertyExists("soundFile", exists);
 
                 _maxDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxDistance", out exists);
-                SetPropertyExistsInBaseData("maxDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxDistance"));
+                }
                 SetPropertyExists("maxDistance", exists);
                 _referenceDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "referenceDistance", out exists);
-                SetPropertyExistsInBaseData("referenceDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("referenceDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("referenceDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "referenceDistance"));
+                }
                 SetPropertyExists("referenceDistance", exists);
                 _maxSounds = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxSounds", out exists);
-                SetPropertyExistsInBaseData("maxSounds", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxSounds", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxSounds", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxSounds"));
+                }
                 SetPropertyExists("maxSounds", exists);
 
-                _soundPriority = ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, "soundPriority", out exists);
-                SetPropertyExistsInBaseData("soundPriority", exists);
+                _soundPriority =  new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, "soundPriority", out exists));
+                _soundPriority.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundPriorityChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("soundPriority", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("soundPriority", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundPriority"));
+                }
                 SetPropertyExists("soundPriority", exists);
 
                 _defaultVolume = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "defaultVolume", out exists);
-                SetPropertyExistsInBaseData("defaultVolume", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("defaultVolume", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("defaultVolume", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "defaultVolume"));
+                }
                 SetPropertyExists("defaultVolume", exists);
 
                 _bDisable3d = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bDisable3d", out exists);
-                SetPropertyExistsInBaseData("bDisable3d", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bDisable3d", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bDisable3d", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bDisable3d"));
+                }
                 SetPropertyExists("bDisable3d", exists);
 
             }

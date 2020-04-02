@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class ShieldData : VD2Data
+    public class ShieldData : VD2Data
     {
         string _objectType;
         string _name;
@@ -29,8 +30,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectType = value;
-                SetPropertyEdited("objectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectType = value;
+                        SetPropertyEdited("objectType", true);
+                    }
+                }
             }
         }
 
@@ -43,8 +50,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _name = value;
-                SetPropertyEdited("name", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _name = value;
+                        SetPropertyEdited("name", true);
+                    }
+                }
             }
         }
 
@@ -57,8 +70,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shieldID = value;
-                SetPropertyEdited("shieldID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shieldID = value;
+                        SetPropertyEdited("shieldID", true);
+                    }
+                }
             }
         }
 
@@ -71,8 +90,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _collisionMeshName = value;
-                SetPropertyEdited("collisionMeshName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _collisionMeshName = value;
+                        SetPropertyEdited("collisionMeshName", true);
+                    }
+                }
             }
         }
 
@@ -85,8 +110,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shieldType = value;
-                SetPropertyEdited("shieldType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shieldType = value;
+                        SetPropertyEdited("shieldType", true);
+                    }
+                }
             }
         }
 
@@ -99,8 +130,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _materialName = value;
-                SetPropertyEdited("materialName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _materialName = value;
+                        SetPropertyEdited("materialName", true);
+                    }
+                }
             }
         }
 
@@ -114,8 +151,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bInvisible = value;
-                SetPropertyEdited("bInvisible", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bInvisible = value;
+                        SetPropertyEdited("bInvisible", true);
+                    }
+                }
             }
         }
 
@@ -125,6 +168,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("objectType");
             InitProperty("name");
             InitProperty("shieldID");
+            SetPropertyIsObjectID("shieldID", true);
             InitProperty("collisionMeshName");
             InitProperty("shieldType");
             InitProperty("materialName");
@@ -133,32 +177,82 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public ShieldData(string inPath) : base(inPath)
+        public ShieldData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
+                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shieldID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shieldID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(shieldID, "shieldID"));
+                }
+                SetPropertyExists("shieldID", exists);
+
                 _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
-                SetPropertyExistsInBaseData("objectType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "objectType"));
+                }
                 SetPropertyExists("objectType", exists);
                 _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
-                SetPropertyExistsInBaseData("name", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("name", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("name", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "name"));
+                }
                 SetPropertyExists("name", exists);
-                _shieldID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldID", out exists);
-                SetPropertyExistsInBaseData("shieldID", exists);
-                SetPropertyExists("shieldID", exists);
                 _collisionMeshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionMeshName", out exists);
-                SetPropertyExistsInBaseData("collisionMeshName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("collisionMeshName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("collisionMeshName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "collisionMeshName"));
+                }
                 SetPropertyExists("collisionMeshName", exists);
                 _shieldType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldType", out exists);
-                SetPropertyExistsInBaseData("shieldType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shieldType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shieldType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shieldType"));
+                }
                 SetPropertyExists("shieldType", exists);
                 _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
-                SetPropertyExistsInBaseData("materialName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("materialName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("materialName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "materialName"));
+                }
                 SetPropertyExists("materialName", exists);
 
                 _bInvisible = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bInvisible", out exists);
-                SetPropertyExistsInBaseData("bInvisible", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bInvisible", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bInvisible", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bInvisible"));
+                }
                 SetPropertyExists("bInvisible", exists);
 
             }

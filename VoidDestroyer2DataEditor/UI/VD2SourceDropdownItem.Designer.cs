@@ -30,9 +30,9 @@
         {
             this.SourceNameLabel = new System.Windows.Forms.Label();
             this.WriteAccessCheckBox = new System.Windows.Forms.CheckBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.FolderLabel = new System.Windows.Forms.Label();
             this.FilterCheckbox = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,24 +54,13 @@
             this.WriteAccessCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.WriteAccessCheckBox.Enabled = false;
             this.WriteAccessCheckBox.Location = new System.Drawing.Point(3, 20);
             this.WriteAccessCheckBox.Name = "WriteAccessCheckBox";
             this.WriteAccessCheckBox.Size = new System.Drawing.Size(89, 17);
             this.WriteAccessCheckBox.TabIndex = 1;
             this.WriteAccessCheckBox.Text = "Write Access";
             this.WriteAccessCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Image = global::VoidDestroyer2DataEditor.Properties.Resources.foldericon;
-            this.pictureBox1.Location = new System.Drawing.Point(92, 17);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(19, 20);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
             // 
             // FolderLabel
             // 
@@ -95,16 +84,31 @@
             this.FilterCheckbox.Size = new System.Drawing.Size(15, 14);
             this.FilterCheckbox.TabIndex = 4;
             this.FilterCheckbox.UseVisualStyleBackColor = true;
+            this.FilterCheckbox.CheckedChanged += new System.EventHandler(this.FilterCheckbox_CheckedChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Image = global::VoidDestroyer2DataEditor.Properties.Resources.foldericon;
+            this.pictureBox1.Location = new System.Drawing.Point(92, 17);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(19, 20);
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
             // 
             // VD2SourceDropdownItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.Controls.Add(this.FilterCheckbox);
             this.Controls.Add(this.FolderLabel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.WriteAccessCheckBox);
             this.Controls.Add(this.SourceNameLabel);
+            this.ForeColor = System.Drawing.Color.White;
             this.MaximumSize = new System.Drawing.Size(200, 40);
             this.MinimumSize = new System.Drawing.Size(200, 40);
             this.Name = "VD2SourceDropdownItem";

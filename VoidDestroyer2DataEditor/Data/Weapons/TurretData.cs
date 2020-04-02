@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class TurretData : VD2Data
+    public class TurretData : VD2Data
     {
         string _weaponType;
         string _weaponID;
@@ -36,7 +37,7 @@ namespace VoidDestroyer2DataEditor
         weaponDirectionDataStructure _weaponDirection;
         targetPriorityListDataStructure _targetPriorityList;
 
-        List<turretBarrelDataStructure> _turretBarrel;
+        ObservableCollection<turretBarrelDataStructure> _turretBarrel;
 
         [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
@@ -47,8 +48,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _weaponType = value;
-                SetPropertyEdited("weaponType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _weaponType = value;
+                        SetPropertyEdited("weaponType", true);
+                    }
+                }
             }
         }
 
@@ -61,8 +68,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _weaponID = value;
-                SetPropertyEdited("weaponID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _weaponID = value;
+                        SetPropertyEdited("weaponID", true);
+                    }
+                }
             }
         }
 
@@ -75,8 +88,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _name = value;
-                SetPropertyEdited("name", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _name = value;
+                        SetPropertyEdited("name", true);
+                    }
+                }
             }
         }
 
@@ -89,8 +108,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _turretWeapon = value;
-                SetPropertyEdited("turretWeapon", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _turretWeapon = value;
+                        SetPropertyEdited("turretWeapon", true);
+                    }
+                }
             }
         }
 
@@ -103,8 +128,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _hardpointID = value;
-                SetPropertyEdited("hardpointID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _hardpointID = value;
+                        SetPropertyEdited("hardpointID", true);
+                    }
+                }
             }
         }
 
@@ -117,8 +148,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _linkedMovingElement = value;
-                SetPropertyEdited("linkedMovingElement", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _linkedMovingElement = value;
+                        SetPropertyEdited("linkedMovingElement", true);
+                    }
+                }
             }
         }
 
@@ -131,8 +168,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _meshName = value;
-                SetPropertyEdited("meshName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _meshName = value;
+                        SetPropertyEdited("meshName", true);
+                    }
+                }
             }
         }
 
@@ -145,8 +188,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _turnSoundID = value;
-                SetPropertyEdited("turnSoundID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _turnSoundID = value;
+                        SetPropertyEdited("turnSoundID", true);
+                    }
+                }
             }
         }
 
@@ -160,8 +209,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _mineQuota = value;
-                SetPropertyEdited("mineQuota", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _mineQuota = value;
+                        SetPropertyEdited("mineQuota", true);
+                    }
+                }
             }
         }
 
@@ -175,8 +230,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _barrelDelay = value;
-                SetPropertyEdited("barrelDelay", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _barrelDelay = value;
+                        SetPropertyEdited("barrelDelay", true);
+                    }
+                }
             }
         }
 
@@ -189,8 +250,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _pitchMax = value;
-                SetPropertyEdited("pitchMax", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _pitchMax = value;
+                        SetPropertyEdited("pitchMax", true);
+                    }
+                }
             }
         }
 
@@ -203,8 +270,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _dMoveSpeed = value;
-                SetPropertyEdited("dMoveSpeed", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _dMoveSpeed = value;
+                        SetPropertyEdited("dMoveSpeed", true);
+                    }
+                }
             }
         }
 
@@ -218,8 +291,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bAlwaysShowInTactical = value;
-                SetPropertyEdited("bAlwaysShowInTactical", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bAlwaysShowInTactical = value;
+                        SetPropertyEdited("bAlwaysShowInTactical", true);
+                    }
+                }
             }
         }
 
@@ -232,8 +311,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bPhysicalBody = value;
-                SetPropertyEdited("bPhysicalBody", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bPhysicalBody = value;
+                        SetPropertyEdited("bPhysicalBody", true);
+                    }
+                }
             }
         }
 
@@ -246,8 +331,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bInvisibleTurret = value;
-                SetPropertyEdited("bInvisibleTurret", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bInvisibleTurret = value;
+                        SetPropertyEdited("bInvisibleTurret", true);
+                    }
+                }
             }
         }
 
@@ -260,8 +351,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bOssilateTargetAimNodeOffset = value;
-                SetPropertyEdited("bOssilateTargetAimNodeOffset", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bOssilateTargetAimNodeOffset = value;
+                        SetPropertyEdited("bOssilateTargetAimNodeOffset", true);
+                    }
+                }
             }
         }
 
@@ -275,8 +372,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _turretViewPos = value;
-                SetPropertyEdited("turretViewPos", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _turretViewPos = value;
+                        SetPropertyEdited("turretViewPos", true);
+                    }
+                }
             }
         }
 
@@ -291,7 +394,6 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _weaponDirection = value;
-                SetPropertyEdited("weaponDirection", true);
             }
         }
 
@@ -305,13 +407,12 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _targetPriorityList = value;
-                SetPropertyEdited("targetPriorityList", true);
             }
         }
 
 
         [Description("turretBarrel is a collection of datastructures"), Category("Data Structure Collections")]
-        public List<turretBarrelDataStructure> turretBarrel
+        public ObservableCollection<turretBarrelDataStructure> turretBarrel
         {
             get
             {
@@ -320,7 +421,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _turretBarrel = value;
-                SetPropertyEdited("turretBarrel", true);
+            }
+        }
+
+        private void OnturretBarrelChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("turretBarrel", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _turretBarrel = new ObservableCollection<turretBarrelDataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turretBarrel.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretBarrelChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("turretBarrel", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("turretBarrel", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turretBarrel"));
+                    }
+                    SetPropertyExists("turretBarrel", exists);
+                }
             }
         }
 
@@ -328,6 +454,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("weaponType");
             InitProperty("weaponID");
+            SetPropertyIsObjectID("weaponID", true);
             InitProperty("name");
             InitProperty("turretWeapon");
             InitProperty("hardpointID");
@@ -354,76 +481,218 @@ namespace VoidDestroyer2DataEditor
             InitProperty("turretBarrel");
         }
 
-        public TurretData(string inPath) : base(inPath)
+        public TurretData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType", out exists);
-                SetPropertyExistsInBaseData("weaponType", exists);
-                SetPropertyExists("weaponType", exists);
                 _weaponID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponID", out exists);
-                SetPropertyExistsInBaseData("weaponID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("weaponID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("weaponID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(weaponID, "weaponID"));
+                }
                 SetPropertyExists("weaponID", exists);
+
+                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("weaponType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("weaponType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weaponType"));
+                }
+                SetPropertyExists("weaponType", exists);
                 _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
-                SetPropertyExistsInBaseData("name", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("name", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("name", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "name"));
+                }
                 SetPropertyExists("name", exists);
                 _turretWeapon = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "turretWeapon", out exists);
-                SetPropertyExistsInBaseData("turretWeapon", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("turretWeapon", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("turretWeapon", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turretWeapon"));
+                }
                 SetPropertyExists("turretWeapon", exists);
                 _hardpointID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hardpointID", out exists);
-                SetPropertyExistsInBaseData("hardpointID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("hardpointID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("hardpointID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "hardpointID"));
+                }
                 SetPropertyExists("hardpointID", exists);
                 _linkedMovingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedMovingElement", out exists);
-                SetPropertyExistsInBaseData("linkedMovingElement", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("linkedMovingElement", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("linkedMovingElement", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "linkedMovingElement"));
+                }
                 SetPropertyExists("linkedMovingElement", exists);
                 _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
-                SetPropertyExistsInBaseData("meshName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("meshName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("meshName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "meshName"));
+                }
                 SetPropertyExists("meshName", exists);
                 _turnSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "turnSoundID", out exists);
-                SetPropertyExistsInBaseData("turnSoundID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("turnSoundID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("turnSoundID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turnSoundID"));
+                }
                 SetPropertyExists("turnSoundID", exists);
 
                 _mineQuota = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "mineQuota", out exists);
-                SetPropertyExistsInBaseData("mineQuota", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("mineQuota", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("mineQuota", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "mineQuota"));
+                }
                 SetPropertyExists("mineQuota", exists);
 
                 _barrelDelay = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "barrelDelay", out exists);
-                SetPropertyExistsInBaseData("barrelDelay", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("barrelDelay", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("barrelDelay", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "barrelDelay"));
+                }
                 SetPropertyExists("barrelDelay", exists);
                 _pitchMax = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "pitchMax", out exists);
-                SetPropertyExistsInBaseData("pitchMax", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("pitchMax", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("pitchMax", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "pitchMax"));
+                }
                 SetPropertyExists("pitchMax", exists);
                 _dMoveSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "dMoveSpeed", out exists);
-                SetPropertyExistsInBaseData("dMoveSpeed", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("dMoveSpeed", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("dMoveSpeed", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "dMoveSpeed"));
+                }
                 SetPropertyExists("dMoveSpeed", exists);
 
                 _bAlwaysShowInTactical = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAlwaysShowInTactical", out exists);
-                SetPropertyExistsInBaseData("bAlwaysShowInTactical", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bAlwaysShowInTactical", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bAlwaysShowInTactical", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bAlwaysShowInTactical"));
+                }
                 SetPropertyExists("bAlwaysShowInTactical", exists);
                 _bPhysicalBody = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bPhysicalBody", out exists);
-                SetPropertyExistsInBaseData("bPhysicalBody", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bPhysicalBody", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bPhysicalBody", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bPhysicalBody"));
+                }
                 SetPropertyExists("bPhysicalBody", exists);
                 _bInvisibleTurret = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bInvisibleTurret", out exists);
-                SetPropertyExistsInBaseData("bInvisibleTurret", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bInvisibleTurret", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bInvisibleTurret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bInvisibleTurret"));
+                }
                 SetPropertyExists("bInvisibleTurret", exists);
                 _bOssilateTargetAimNodeOffset = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bOssilateTargetAimNodeOffset", out exists);
-                SetPropertyExistsInBaseData("bOssilateTargetAimNodeOffset", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bOssilateTargetAimNodeOffset", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bOssilateTargetAimNodeOffset", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bOssilateTargetAimNodeOffset"));
+                }
                 SetPropertyExists("bOssilateTargetAimNodeOffset", exists);
 
                 _turretViewPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "turretViewPos", out exists);
-                SetPropertyExistsInBaseData("turretViewPos", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("turretViewPos", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("turretViewPos", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turretViewPos"));
+                }
                 SetPropertyExists("turretViewPos", exists);
 
-                _weaponDirection = DataStructureParseHelpers.GetweaponDirectionDataStructureFromVD2Data(DataXMLDoc, out exists);
-                SetPropertyExistsInBaseData("weaponDirection", exists);
+                _weaponDirection = DataStructureParseHelpers.GetweaponDirectionDataStructureFromVD2Data(this, DataXMLDoc, out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("weaponDirection", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("weaponDirection", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weaponDirection"));
+                }
                 SetPropertyExists("weaponDirection", exists);
-                _targetPriorityList = DataStructureParseHelpers.GettargetPriorityListDataStructureFromVD2Data(DataXMLDoc, out exists);
-                SetPropertyExistsInBaseData("targetPriorityList", exists);
+                _targetPriorityList = DataStructureParseHelpers.GettargetPriorityListDataStructureFromVD2Data(this, DataXMLDoc, out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("targetPriorityList", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("targetPriorityList", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "targetPriorityList"));
+                }
                 SetPropertyExists("targetPriorityList", exists);
 
-                _turretBarrel = DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(DataXMLDoc, out exists);
-                SetPropertyExistsInBaseData("turretBarrel", exists);
+                _turretBarrel =  new ObservableCollection<turretBarrelDataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turretBarrel.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretBarrelChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("turretBarrel", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("turretBarrel", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turretBarrel"));
+                }
                 SetPropertyExists("turretBarrel", exists);
             }
         }

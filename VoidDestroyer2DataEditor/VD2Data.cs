@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using System.Windows.Forms;
 using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
@@ -51,7 +52,10 @@ namespace VoidDestroyer2DataEditor
     public class VD2Data : VD2PropertyStore
     {
         protected string _FilePath;
-        protected XmlDocument DataXMLDoc;
+        public XmlDocument DataXMLDoc;
+        public VD2FileSource Source;
+        public TreeNode FilesTreeNode;
+        public FilesTreeItem TreeItem;
 
         [Description("The path to the ship data file. Used internally by this editor."), Category("Misc")]
         public string FilePath
@@ -60,12 +64,40 @@ namespace VoidDestroyer2DataEditor
             set => _FilePath = value;
         }
 
-        public VD2Data(string inPath) : base()
+        public VD2Data(string inPath, VD2FileSource inSource) : base()
         {
             _FilePath = inPath;
             DataXMLDoc = ParseHelpers.SafeLoadVD2DataXMLFile(inPath);
+            Source = inSource;
         }
 
-        
+        public virtual string GetObjectID()
+        {
+            for (int i = 0; i < VD2PropertyInfos.Keys.Count; i++)
+            {
+                VD2PropertyInfo info;
+                if (VD2PropertyInfos.TryGetValue(VD2PropertyInfos.Keys.ElementAt(i), out info))
+                {
+                    if (info.IsObjectID)
+                    {
+                        object objvalue = GetType().GetProperty(VD2PropertyInfos.Keys.ElementAt(i)).GetValue(this);
+                        if (objvalue is string)
+                        {
+                            return (string)objvalue;
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
+        public override void SetPropertyEdited(string inName, bool inEdited)
+        {
+            base.SetPropertyEdited(inName, inEdited);
+            if ((FilesTreeNode != null) && (TreeItem != null))
+            {
+                FilesTreeNode.Text = TreeItem.DisplayName;
+            }
+        }
     }
 }

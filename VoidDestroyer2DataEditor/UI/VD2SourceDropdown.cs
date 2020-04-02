@@ -22,18 +22,19 @@ namespace VoidDestroyer2DataEditor.UI
         private void VD2SourceDropdown_Load(object sender, EventArgs e)
         {
             
-            int yoff = 3;
+            //int yoff = 3;
             for (int i = 0; i < EditorUserSettings.UserSettings.Sources.Count; i++)
             {
                 VD2SourceDropdownItem newitem = new VD2SourceDropdownItem();
-                panel1.Controls.Add(newitem);
+                flowLayoutPanel1.Controls.Add(newitem);
                 Items.Add(newitem);
                 newitem.FolderLabel.Text = "(VD2\\" + EditorUserSettings.UserSettings.Sources[i].Path + ")";
                 newitem.SourceNameLabel.Text = EditorUserSettings.UserSettings.Sources[i].DisplayName + "(" + EditorUserSettings.UserSettings.Sources[i].ShortName + ")";
                 newitem.WriteAccessCheckBox.Checked = EditorUserSettings.UserSettings.Sources[i].WriteAccess;
                 newitem.FilterCheckbox.Checked = EditorUserSettings.UserSettings.Sources[i].FilterIn;
-                newitem.Location = new Point(3, yoff);
-                yoff += newitem.Size.Height;
+                newitem.AssociatedSource = EditorUserSettings.UserSettings.Sources[i];
+                //newitem.Location = new Point(3, yoff);
+                //yoff += newitem.Size.Height;
             }
             
             

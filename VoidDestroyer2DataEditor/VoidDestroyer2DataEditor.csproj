@@ -75,6 +75,7 @@
     <Compile Include="Data\Sounds\SoundData.cs" />
     <Compile Include="Data\Stations\StationData.cs" />
     <Compile Include="Data\Suns\SunData.cs" />
+    <Compile Include="Data\VD2Datastructure.cs" />
     <Compile Include="Data\Weapons\AmmoData.cs" />
     <Compile Include="Data\Weapons\HangarData.cs" />
     <Compile Include="Data\Weapons\LauncherData.cs" />
@@ -112,6 +113,18 @@
     <Compile Include="UI\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\TreeFilterDropdownItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TreeFilterDropdownItem.Designer.cs">
+      <DependentUpon>TreeFilterDropdownItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TreeFilterDropdownSubitem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TreeFilterDropdownSubitem.Designer.cs">
+      <DependentUpon>TreeFilterDropdownSubitem.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\VD2SourceDropdown.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +136,12 @@
     </Compile>
     <Compile Include="UI\VD2SourceDropdownItem.Designer.cs">
       <DependentUpon>VD2SourceDropdownItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\VD2TreeFilterDropdown.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\VD2TreeFilterDropdown.Designer.cs">
+      <DependentUpon>VD2TreeFilterDropdown.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\VD2UITypeEditor.cs" />
     <Compile Include="VD2Data.cs" />
@@ -152,11 +171,20 @@
     <EmbeddedResource Include="UI\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\TreeFilterDropdownItem.resx">
+      <DependentUpon>TreeFilterDropdownItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TreeFilterDropdownSubitem.resx">
+      <DependentUpon>TreeFilterDropdownSubitem.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\VD2SourceDropdown.resx">
       <DependentUpon>VD2SourceDropdown.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\VD2SourceDropdownItem.resx">
       <DependentUpon>VD2SourceDropdownItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\VD2TreeFilterDropdown.resx">
+      <DependentUpon>VD2TreeFilterDropdown.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

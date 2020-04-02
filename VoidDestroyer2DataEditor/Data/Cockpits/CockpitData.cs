@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class CockpitData : VD2Data
+    public class CockpitData : VD2Data
     {
         string _objectID;
         string _meshName;
@@ -25,8 +26,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -39,8 +46,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _meshName = value;
-                SetPropertyEdited("meshName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _meshName = value;
+                        SetPropertyEdited("meshName", true);
+                    }
+                }
             }
         }
 
@@ -54,8 +67,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _offsetPosition = value;
-                SetPropertyEdited("offsetPosition", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _offsetPosition = value;
+                        SetPropertyEdited("offsetPosition", true);
+                    }
+                }
             }
         }
 
@@ -63,26 +82,49 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("meshName");
 
             InitProperty("offsetPosition");
 
         }
 
-        public CockpitData(string inPath) : base(inPath)
+        public CockpitData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
                 _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
-                SetPropertyExistsInBaseData("meshName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("meshName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("meshName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "meshName"));
+                }
                 SetPropertyExists("meshName", exists);
 
                 _offsetPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "offsetPosition", out exists);
-                SetPropertyExistsInBaseData("offsetPosition", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("offsetPosition", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("offsetPosition", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "offsetPosition"));
+                }
                 SetPropertyExists("offsetPosition", exists);
 
             }

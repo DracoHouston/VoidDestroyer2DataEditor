@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class MusicData : VD2Data
+    public class MusicData : VD2Data
     {
         string _effectType;
         string _objectID;
@@ -29,8 +30,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _effectType = value;
-                SetPropertyEdited("effectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _effectType = value;
+                        SetPropertyEdited("effectType", true);
+                    }
+                }
             }
         }
 
@@ -43,8 +50,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -57,8 +70,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _musicFile = value;
-                SetPropertyEdited("musicFile", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _musicFile = value;
+                        SetPropertyEdited("musicFile", true);
+                    }
+                }
             }
         }
 
@@ -71,8 +90,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectTypeMusic = value;
-                SetPropertyEdited("objectTypeMusic", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectTypeMusic = value;
+                        SetPropertyEdited("objectTypeMusic", true);
+                    }
+                }
             }
         }
 
@@ -86,8 +111,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _defaultVolume = value;
-                SetPropertyEdited("defaultVolume", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _defaultVolume = value;
+                        SetPropertyEdited("defaultVolume", true);
+                    }
+                }
             }
         }
 
@@ -101,8 +132,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bLooping = value;
-                SetPropertyEdited("bLooping", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bLooping = value;
+                        SetPropertyEdited("bLooping", true);
+                    }
+                }
             }
         }
 
@@ -111,6 +148,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("effectType");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("musicFile");
             InitProperty("objectTypeMusic");
 
@@ -120,30 +158,73 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public MusicData(string inPath) : base(inPath)
+        public MusicData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
-                SetPropertyExistsInBaseData("effectType", exists);
-                SetPropertyExists("effectType", exists);
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
+                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("effectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("effectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "effectType"));
+                }
+                SetPropertyExists("effectType", exists);
                 _musicFile = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "musicFile", out exists);
-                SetPropertyExistsInBaseData("musicFile", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("musicFile", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("musicFile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "musicFile"));
+                }
                 SetPropertyExists("musicFile", exists);
                 _objectTypeMusic = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectTypeMusic", out exists);
-                SetPropertyExistsInBaseData("objectTypeMusic", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectTypeMusic", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectTypeMusic", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "objectTypeMusic"));
+                }
                 SetPropertyExists("objectTypeMusic", exists);
 
                 _defaultVolume = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "defaultVolume", out exists);
-                SetPropertyExistsInBaseData("defaultVolume", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("defaultVolume", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("defaultVolume", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "defaultVolume"));
+                }
                 SetPropertyExists("defaultVolume", exists);
 
                 _bLooping = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLooping", out exists);
-                SetPropertyExistsInBaseData("bLooping", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bLooping", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bLooping", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bLooping"));
+                }
                 SetPropertyExists("bLooping", exists);
 
             }

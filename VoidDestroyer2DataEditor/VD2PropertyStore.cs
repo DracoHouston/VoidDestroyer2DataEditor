@@ -29,7 +29,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        public void SetPropertyEdited(string inName, bool inEdited)
+        public virtual void SetPropertyEdited(string inName, bool inEdited)
         {
             if (VD2PropertyInfos.ContainsKey(inName))
             {
@@ -37,6 +37,12 @@ namespace VoidDestroyer2DataEditor
                 if (VD2PropertyInfos.TryGetValue(inName, out info))
                 {
                     info.EditedByUser = inEdited;
+                    
+                    if (!info.Exists)
+                    {
+                        info.Exists = true;
+                    }
+
                     UpdatePropertyInfo(inName, info);
                 }
             }
@@ -121,6 +127,33 @@ namespace VoidDestroyer2DataEditor
                 if (VD2PropertyInfos.TryGetValue(inName, out info))
                 {
                     result = info.ExistsInBaseData;
+                }
+            }
+            return result;
+        }
+
+        public void SetPropertyIsObjectID(string inName, bool inIsObjectID)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.IsObjectID = inIsObjectID;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyIsObjectID(string inName)
+        {
+            bool result = false;
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.IsObjectID;
                 }
             }
             return result;

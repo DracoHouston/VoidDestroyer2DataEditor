@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class ParticleData : VD2Data
+    public class ParticleData : VD2Data
     {
         string _objectID;
         string _systemName;
@@ -25,8 +26,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -39,8 +46,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _systemName = value;
-                SetPropertyEdited("systemName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _systemName = value;
+                        SetPropertyEdited("systemName", true);
+                    }
+                }
             }
         }
 
@@ -54,8 +67,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _renderDistance = value;
-                SetPropertyEdited("renderDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _renderDistance = value;
+                        SetPropertyEdited("renderDistance", true);
+                    }
+                }
             }
         }
 
@@ -63,26 +82,49 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("systemName");
 
             InitProperty("renderDistance");
 
         }
 
-        public ParticleData(string inPath) : base(inPath)
+        public ParticleData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
                 _systemName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "systemName", out exists);
-                SetPropertyExistsInBaseData("systemName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("systemName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("systemName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "systemName"));
+                }
                 SetPropertyExists("systemName", exists);
 
                 _renderDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "renderDistance", out exists);
-                SetPropertyExistsInBaseData("renderDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("renderDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("renderDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "renderDistance"));
+                }
                 SetPropertyExists("renderDistance", exists);
 
             }

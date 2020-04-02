@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class ActiveUpgradeData : VD2Data
+    public class ActiveUpgradeData : VD2Data
     {
         string _displayName;
         string _objectID;
@@ -25,7 +26,7 @@ namespace VoidDestroyer2DataEditor
         string _platformObjectID;
         string _shipID;
 
-        List<string> _description;
+        ObservableCollection<string> _description;
 
         int _cost;
         int _rechargeTime;
@@ -48,8 +49,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _displayName = value;
-                SetPropertyEdited("displayName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _displayName = value;
+                        SetPropertyEdited("displayName", true);
+                    }
+                }
             }
         }
 
@@ -62,8 +69,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -76,8 +89,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _upgradeCategory = value;
-                SetPropertyEdited("upgradeCategory", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _upgradeCategory = value;
+                        SetPropertyEdited("upgradeCategory", true);
+                    }
+                }
             }
         }
 
@@ -90,8 +109,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _upgradeType = value;
-                SetPropertyEdited("upgradeType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _upgradeType = value;
+                        SetPropertyEdited("upgradeType", true);
+                    }
+                }
             }
         }
 
@@ -104,8 +129,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shipActiveUpgradeType = value;
-                SetPropertyEdited("shipActiveUpgradeType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shipActiveUpgradeType = value;
+                        SetPropertyEdited("shipActiveUpgradeType", true);
+                    }
+                }
             }
         }
 
@@ -118,8 +149,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _imageSet = value;
-                SetPropertyEdited("imageSet", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _imageSet = value;
+                        SetPropertyEdited("imageSet", true);
+                    }
+                }
             }
         }
 
@@ -132,8 +169,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _image = value;
-                SetPropertyEdited("image", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _image = value;
+                        SetPropertyEdited("image", true);
+                    }
+                }
             }
         }
 
@@ -146,8 +189,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _particleSystemName = value;
-                SetPropertyEdited("particleSystemName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _particleSystemName = value;
+                        SetPropertyEdited("particleSystemName", true);
+                    }
+                }
             }
         }
 
@@ -160,8 +209,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shieldObjectID = value;
-                SetPropertyEdited("shieldObjectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shieldObjectID = value;
+                        SetPropertyEdited("shieldObjectID", true);
+                    }
+                }
             }
         }
 
@@ -174,8 +229,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _activeSoundID = value;
-                SetPropertyEdited("activeSoundID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _activeSoundID = value;
+                        SetPropertyEdited("activeSoundID", true);
+                    }
+                }
             }
         }
 
@@ -188,8 +249,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _missileID = value;
-                SetPropertyEdited("missileID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _missileID = value;
+                        SetPropertyEdited("missileID", true);
+                    }
+                }
             }
         }
 
@@ -202,8 +269,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _platformObjectID = value;
-                SetPropertyEdited("platformObjectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _platformObjectID = value;
+                        SetPropertyEdited("platformObjectID", true);
+                    }
+                }
             }
         }
 
@@ -216,14 +289,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _shipID = value;
-                SetPropertyEdited("shipID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _shipID = value;
+                        SetPropertyEdited("shipID", true);
+                    }
+                }
             }
         }
 
 
         [Description("description is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public List<string> description
+        public ObservableCollection<string> description
         {
             get
             {
@@ -232,7 +311,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _description = value;
-                SetPropertyEdited("description", true);
+            }
+        }
+
+        private void OndescriptionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("description", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
+                    _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("description", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("description", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "description"));
+                    }
+                    SetPropertyExists("description", exists);
+                }
             }
         }
 
@@ -246,8 +350,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _cost = value;
-                SetPropertyEdited("cost", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _cost = value;
+                        SetPropertyEdited("cost", true);
+                    }
+                }
             }
         }
 
@@ -260,8 +370,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _rechargeTime = value;
-                SetPropertyEdited("rechargeTime", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _rechargeTime = value;
+                        SetPropertyEdited("rechargeTime", true);
+                    }
+                }
             }
         }
 
@@ -275,8 +391,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _addCostAsPercentOfShip = value;
-                SetPropertyEdited("addCostAsPercentOfShip", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _addCostAsPercentOfShip = value;
+                        SetPropertyEdited("addCostAsPercentOfShip", true);
+                    }
+                }
             }
         }
 
@@ -289,8 +411,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _durationTime = value;
-                SetPropertyEdited("durationTime", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _durationTime = value;
+                        SetPropertyEdited("durationTime", true);
+                    }
+                }
             }
         }
 
@@ -303,8 +431,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _healthShieldRechargePercent = value;
-                SetPropertyEdited("healthShieldRechargePercent", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _healthShieldRechargePercent = value;
+                        SetPropertyEdited("healthShieldRechargePercent", true);
+                    }
+                }
             }
         }
 
@@ -317,8 +451,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maneuveringMultiplier = value;
-                SetPropertyEdited("maneuveringMultiplier", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maneuveringMultiplier = value;
+                        SetPropertyEdited("maneuveringMultiplier", true);
+                    }
+                }
             }
         }
 
@@ -332,8 +472,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bIllegalUpgrade = value;
-                SetPropertyEdited("bIllegalUpgrade", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bIllegalUpgrade = value;
+                        SetPropertyEdited("bIllegalUpgrade", true);
+                    }
+                }
             }
         }
 
@@ -346,8 +492,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bOneAtATimeUpgrade = value;
-                SetPropertyEdited("bOneAtATimeUpgrade", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bOneAtATimeUpgrade = value;
+                        SetPropertyEdited("bOneAtATimeUpgrade", true);
+                    }
+                }
             }
         }
 
@@ -360,8 +512,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bAlwaysAvailableUpgrade = value;
-                SetPropertyEdited("bAlwaysAvailableUpgrade", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bAlwaysAvailableUpgrade = value;
+                        SetPropertyEdited("bAlwaysAvailableUpgrade", true);
+                    }
+                }
             }
         }
 
@@ -370,6 +528,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("displayName");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("upgradeCategory");
             InitProperty("upgradeType");
             InitProperty("shipActiveUpgradeType");
@@ -398,83 +557,246 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public ActiveUpgradeData(string inPath) : base(inPath)
+        public ActiveUpgradeData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _displayName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "displayName", out exists);
-                SetPropertyExistsInBaseData("displayName", exists);
-                SetPropertyExists("displayName", exists);
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
+                _displayName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "displayName", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("displayName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("displayName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "displayName"));
+                }
+                SetPropertyExists("displayName", exists);
                 _upgradeCategory = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "upgradeCategory", out exists);
-                SetPropertyExistsInBaseData("upgradeCategory", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("upgradeCategory", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("upgradeCategory", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "upgradeCategory"));
+                }
                 SetPropertyExists("upgradeCategory", exists);
                 _upgradeType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "upgradeType", out exists);
-                SetPropertyExistsInBaseData("upgradeType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("upgradeType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("upgradeType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "upgradeType"));
+                }
                 SetPropertyExists("upgradeType", exists);
                 _shipActiveUpgradeType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shipActiveUpgradeType", out exists);
-                SetPropertyExistsInBaseData("shipActiveUpgradeType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shipActiveUpgradeType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shipActiveUpgradeType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shipActiveUpgradeType"));
+                }
                 SetPropertyExists("shipActiveUpgradeType", exists);
                 _imageSet = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "imageSet", out exists);
-                SetPropertyExistsInBaseData("imageSet", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("imageSet", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("imageSet", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "imageSet"));
+                }
                 SetPropertyExists("imageSet", exists);
                 _image = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "image", out exists);
-                SetPropertyExistsInBaseData("image", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("image", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("image", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "image"));
+                }
                 SetPropertyExists("image", exists);
                 _particleSystemName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleSystemName", out exists);
-                SetPropertyExistsInBaseData("particleSystemName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("particleSystemName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("particleSystemName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "particleSystemName"));
+                }
                 SetPropertyExists("particleSystemName", exists);
                 _shieldObjectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shieldObjectID", out exists);
-                SetPropertyExistsInBaseData("shieldObjectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shieldObjectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shieldObjectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shieldObjectID"));
+                }
                 SetPropertyExists("shieldObjectID", exists);
                 _activeSoundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "activeSoundID", out exists);
-                SetPropertyExistsInBaseData("activeSoundID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("activeSoundID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("activeSoundID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "activeSoundID"));
+                }
                 SetPropertyExists("activeSoundID", exists);
                 _missileID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "missileID", out exists);
-                SetPropertyExistsInBaseData("missileID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("missileID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("missileID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "missileID"));
+                }
                 SetPropertyExists("missileID", exists);
                 _platformObjectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "platformObjectID", out exists);
-                SetPropertyExistsInBaseData("platformObjectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("platformObjectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("platformObjectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "platformObjectID"));
+                }
                 SetPropertyExists("platformObjectID", exists);
                 _shipID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "shipID", out exists);
-                SetPropertyExistsInBaseData("shipID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("shipID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("shipID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shipID"));
+                }
                 SetPropertyExists("shipID", exists);
 
-                _description = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists);
-                SetPropertyExistsInBaseData("description", exists);
+                _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
+                _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("description", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("description", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "description"));
+                }
                 SetPropertyExists("description", exists);
 
                 _cost = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "cost", out exists);
-                SetPropertyExistsInBaseData("cost", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("cost", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("cost", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "cost"));
+                }
                 SetPropertyExists("cost", exists);
                 _rechargeTime = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rechargeTime", out exists);
-                SetPropertyExistsInBaseData("rechargeTime", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("rechargeTime", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("rechargeTime", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "rechargeTime"));
+                }
                 SetPropertyExists("rechargeTime", exists);
 
                 _addCostAsPercentOfShip = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "addCostAsPercentOfShip", out exists);
-                SetPropertyExistsInBaseData("addCostAsPercentOfShip", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("addCostAsPercentOfShip", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("addCostAsPercentOfShip", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "addCostAsPercentOfShip"));
+                }
                 SetPropertyExists("addCostAsPercentOfShip", exists);
                 _durationTime = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "durationTime", out exists);
-                SetPropertyExistsInBaseData("durationTime", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("durationTime", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("durationTime", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "durationTime"));
+                }
                 SetPropertyExists("durationTime", exists);
                 _healthShieldRechargePercent = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "healthShieldRechargePercent", out exists);
-                SetPropertyExistsInBaseData("healthShieldRechargePercent", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("healthShieldRechargePercent", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("healthShieldRechargePercent", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "healthShieldRechargePercent"));
+                }
                 SetPropertyExists("healthShieldRechargePercent", exists);
                 _maneuveringMultiplier = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "maneuveringMultiplier", out exists);
-                SetPropertyExistsInBaseData("maneuveringMultiplier", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maneuveringMultiplier", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maneuveringMultiplier", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maneuveringMultiplier"));
+                }
                 SetPropertyExists("maneuveringMultiplier", exists);
 
                 _bIllegalUpgrade = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bIllegalUpgrade", out exists);
-                SetPropertyExistsInBaseData("bIllegalUpgrade", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bIllegalUpgrade", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bIllegalUpgrade", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bIllegalUpgrade"));
+                }
                 SetPropertyExists("bIllegalUpgrade", exists);
                 _bOneAtATimeUpgrade = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bOneAtATimeUpgrade", out exists);
-                SetPropertyExistsInBaseData("bOneAtATimeUpgrade", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bOneAtATimeUpgrade", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bOneAtATimeUpgrade", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bOneAtATimeUpgrade"));
+                }
                 SetPropertyExists("bOneAtATimeUpgrade", exists);
                 _bAlwaysAvailableUpgrade = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAlwaysAvailableUpgrade", out exists);
-                SetPropertyExistsInBaseData("bAlwaysAvailableUpgrade", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bAlwaysAvailableUpgrade", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bAlwaysAvailableUpgrade", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bAlwaysAvailableUpgrade"));
+                }
                 SetPropertyExists("bAlwaysAvailableUpgrade", exists);
 
             }

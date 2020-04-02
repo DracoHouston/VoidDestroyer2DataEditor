@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class HangarData : VD2Data
+    public class HangarData : VD2Data
     {
         string _weaponType;
         string _hangarID;
@@ -27,7 +28,7 @@ namespace VoidDestroyer2DataEditor
         bool _bIndependent;
         bool _bSecondaryFire;
 
-        List<launchTubeDataStructure> _launchTube;
+        ObservableCollection<launchTubeDataStructure> _launchTube;
 
         [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
@@ -38,8 +39,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _weaponType = value;
-                SetPropertyEdited("weaponType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _weaponType = value;
+                        SetPropertyEdited("weaponType", true);
+                    }
+                }
             }
         }
 
@@ -52,8 +59,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _hangarID = value;
-                SetPropertyEdited("hangarID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _hangarID = value;
+                        SetPropertyEdited("hangarID", true);
+                    }
+                }
             }
         }
 
@@ -66,8 +79,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _fighterShipID = value;
-                SetPropertyEdited("fighterShipID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _fighterShipID = value;
+                        SetPropertyEdited("fighterShipID", true);
+                    }
+                }
             }
         }
 
@@ -80,8 +99,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _name = value;
-                SetPropertyEdited("name", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _name = value;
+                        SetPropertyEdited("name", true);
+                    }
+                }
             }
         }
 
@@ -95,8 +120,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxFighters = value;
-                SetPropertyEdited("maxFighters", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxFighters = value;
+                        SetPropertyEdited("maxFighters", true);
+                    }
+                }
             }
         }
 
@@ -109,8 +140,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _launchRange = value;
-                SetPropertyEdited("launchRange", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _launchRange = value;
+                        SetPropertyEdited("launchRange", true);
+                    }
+                }
             }
         }
 
@@ -124,8 +161,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _launchSpeedMultiplier = value;
-                SetPropertyEdited("launchSpeedMultiplier", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _launchSpeedMultiplier = value;
+                        SetPropertyEdited("launchSpeedMultiplier", true);
+                    }
+                }
             }
         }
 
@@ -139,8 +182,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bPrimary = value;
-                SetPropertyEdited("bPrimary", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bPrimary = value;
+                        SetPropertyEdited("bPrimary", true);
+                    }
+                }
             }
         }
 
@@ -153,8 +202,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bRepairHangar = value;
-                SetPropertyEdited("bRepairHangar", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bRepairHangar = value;
+                        SetPropertyEdited("bRepairHangar", true);
+                    }
+                }
             }
         }
 
@@ -167,8 +222,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bForceSearchAndDestroy = value;
-                SetPropertyEdited("bForceSearchAndDestroy", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bForceSearchAndDestroy = value;
+                        SetPropertyEdited("bForceSearchAndDestroy", true);
+                    }
+                }
             }
         }
 
@@ -181,8 +242,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bIndependent = value;
-                SetPropertyEdited("bIndependent", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bIndependent = value;
+                        SetPropertyEdited("bIndependent", true);
+                    }
+                }
             }
         }
 
@@ -195,14 +262,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bSecondaryFire = value;
-                SetPropertyEdited("bSecondaryFire", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bSecondaryFire = value;
+                        SetPropertyEdited("bSecondaryFire", true);
+                    }
+                }
             }
         }
 
 
         [Description("launchTube is a collection of datastructures"), Category("Data Structure Collections")]
-        public List<launchTubeDataStructure> launchTube
+        public ObservableCollection<launchTubeDataStructure> launchTube
         {
             get
             {
@@ -211,7 +284,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _launchTube = value;
-                SetPropertyEdited("launchTube", true);
+            }
+        }
+
+        private void OnlaunchTubeChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("launchTube", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _launchTube = new ObservableCollection<launchTubeDataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _launchTube.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnlaunchTubeChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("launchTube", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("launchTube", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "launchTube"));
+                    }
+                    SetPropertyExists("launchTube", exists);
+                }
             }
         }
 
@@ -219,6 +317,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("weaponType");
             InitProperty("hangarID");
+            SetPropertyIsObjectID("hangarID", true);
             InitProperty("fighterShipID");
             InitProperty("name");
 
@@ -236,53 +335,146 @@ namespace VoidDestroyer2DataEditor
             InitProperty("launchTube");
         }
 
-        public HangarData(string inPath) : base(inPath)
+        public HangarData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType", out exists);
-                SetPropertyExistsInBaseData("weaponType", exists);
-                SetPropertyExists("weaponType", exists);
                 _hangarID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "hangarID", out exists);
-                SetPropertyExistsInBaseData("hangarID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("hangarID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("hangarID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(hangarID, "hangarID"));
+                }
                 SetPropertyExists("hangarID", exists);
+
+                _weaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "weaponType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("weaponType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("weaponType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weaponType"));
+                }
+                SetPropertyExists("weaponType", exists);
                 _fighterShipID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "fighterShipID", out exists);
-                SetPropertyExistsInBaseData("fighterShipID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("fighterShipID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("fighterShipID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "fighterShipID"));
+                }
                 SetPropertyExists("fighterShipID", exists);
                 _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
-                SetPropertyExistsInBaseData("name", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("name", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("name", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "name"));
+                }
                 SetPropertyExists("name", exists);
 
                 _maxFighters = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxFighters", out exists);
-                SetPropertyExistsInBaseData("maxFighters", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxFighters", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxFighters", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxFighters"));
+                }
                 SetPropertyExists("maxFighters", exists);
                 _launchRange = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "launchRange", out exists);
-                SetPropertyExistsInBaseData("launchRange", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("launchRange", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("launchRange", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "launchRange"));
+                }
                 SetPropertyExists("launchRange", exists);
 
                 _launchSpeedMultiplier = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "launchSpeedMultiplier", out exists);
-                SetPropertyExistsInBaseData("launchSpeedMultiplier", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("launchSpeedMultiplier", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("launchSpeedMultiplier", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "launchSpeedMultiplier"));
+                }
                 SetPropertyExists("launchSpeedMultiplier", exists);
 
                 _bPrimary = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bPrimary", out exists);
-                SetPropertyExistsInBaseData("bPrimary", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bPrimary", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bPrimary", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bPrimary"));
+                }
                 SetPropertyExists("bPrimary", exists);
                 _bRepairHangar = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRepairHangar", out exists);
-                SetPropertyExistsInBaseData("bRepairHangar", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bRepairHangar", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bRepairHangar", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bRepairHangar"));
+                }
                 SetPropertyExists("bRepairHangar", exists);
                 _bForceSearchAndDestroy = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bForceSearchAndDestroy", out exists);
-                SetPropertyExistsInBaseData("bForceSearchAndDestroy", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bForceSearchAndDestroy", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bForceSearchAndDestroy", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bForceSearchAndDestroy"));
+                }
                 SetPropertyExists("bForceSearchAndDestroy", exists);
                 _bIndependent = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bIndependent", out exists);
-                SetPropertyExistsInBaseData("bIndependent", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bIndependent", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bIndependent", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bIndependent"));
+                }
                 SetPropertyExists("bIndependent", exists);
                 _bSecondaryFire = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSecondaryFire", out exists);
-                SetPropertyExistsInBaseData("bSecondaryFire", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bSecondaryFire", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bSecondaryFire", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bSecondaryFire"));
+                }
                 SetPropertyExists("bSecondaryFire", exists);
 
-                _launchTube = DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(DataXMLDoc, out exists);
-                SetPropertyExistsInBaseData("launchTube", exists);
+                _launchTube =  new ObservableCollection<launchTubeDataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _launchTube.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnlaunchTubeChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("launchTube", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("launchTube", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "launchTube"));
+                }
                 SetPropertyExists("launchTube", exists);
             }
         }

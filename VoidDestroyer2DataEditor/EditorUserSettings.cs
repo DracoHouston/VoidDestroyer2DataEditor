@@ -9,7 +9,7 @@ using System.IO;
 
 namespace VoidDestroyer2DataEditor
 {
-    class VD2FileSource
+    public class VD2FileSource
     {
         public string DisplayName;
         public string ShortName;
@@ -18,11 +18,12 @@ namespace VoidDestroyer2DataEditor
         public bool FilterIn;
     }
 
-    class EditorUserSettings
+    public class EditorUserSettings
     {
         private static EditorUserSettings Instance = null;
 
         public string VD2Path;
+        public int TreeIconSize;
         public List<VD2FileSource> Sources;
 
 
@@ -40,6 +41,7 @@ namespace VoidDestroyer2DataEditor
         private EditorUserSettings()
         {
             VD2Path = "";
+            TreeIconSize = 16;
             Sources = new List<VD2FileSource>();
         }
 
@@ -47,8 +49,11 @@ namespace VoidDestroyer2DataEditor
         {
             List<string> configlines = new List<string>();
             configlines.Add("VD2Path|" + VD2Path);
+            configlines.Add("TreeIconSize|" + TreeIconSize.ToString());
             File.WriteAllLines("EditorUserSettings.cfg", configlines);
+            EditorUI.UI.EditorForm.InitAllTrees(); 
             EditorUI.UI.EditorForm.RepopulateAllTrees();
+            EditorUI.UI.EditorForm.SetTreeIconSize(TreeIconSize);
         }
 
         public void InitUserSettings()
@@ -73,20 +78,45 @@ namespace VoidDestroyer2DataEditor
             if (File.Exists("EditorUserSettings.cfg"))
             {
                 List<string> configlines = File.ReadAllLines("EditorUserSettings.cfg").ToList();
-                if (configlines.Count == 1)
+                if (configlines.Count >0)
                 {
-
-                    List<string> currentlinesplit = configlines[0].Split('|').ToList();
-                    if (currentlinesplit.Count == 2)
+                    for (int i = 0; i < configlines.Count; i++)
                     {
-                        if (currentlinesplit[0] == "VD2Path")
+                        List<string> currentlinesplit = configlines[i].Split('|').ToList();
+                        if (currentlinesplit.Count == 2)
                         {
-                            if (File.Exists(currentlinesplit[1] + "/Void Destroyer 2.exe"))
+                            if (currentlinesplit[0] == "VD2Path")
                             {
-                                VD2Path = currentlinesplit[1];
-                                configfoundandvalid = true;
-                            }
+                                if (File.Exists(currentlinesplit[1] + "/Void Destroyer 2.exe"))
+                                {
+                                    VD2Path = currentlinesplit[1];
+                                    configfoundandvalid = true;
+                                }
 
+                            }
+                            else if (currentlinesplit[0] == "TreeIconSize")
+                            {
+                                int treeiconsizeresult;
+
+                                if (int.TryParse(currentlinesplit[1], out treeiconsizeresult))
+                                {
+                                    if (treeiconsizeresult == 16)
+                                    {
+                                        TreeIconSize = 16;
+                                    }
+                                    else if (treeiconsizeresult == 32)
+                                    {
+                                        TreeIconSize = 32;
+                                    }
+                                    else
+                                    {
+                                        TreeIconSize = 16;
+                                    }
+                                    //unlike vd2path, we gracefully default to 16 here if the value isn't in the file. 
+                                    //next time it saves the proper value will be set in the right format, no biggie.
+                                }
+
+                            }
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class DockedMovingElementData : VD2Data
+    public class DockedMovingElementData : VD2Data
     {
         string _objectType;
         string _name;
@@ -34,8 +35,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectType = value;
-                SetPropertyEdited("objectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectType = value;
+                        SetPropertyEdited("objectType", true);
+                    }
+                }
             }
         }
 
@@ -48,8 +55,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _name = value;
-                SetPropertyEdited("name", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _name = value;
+                        SetPropertyEdited("name", true);
+                    }
+                }
             }
         }
 
@@ -62,8 +75,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -76,8 +95,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _meshName = value;
-                SetPropertyEdited("meshName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _meshName = value;
+                        SetPropertyEdited("meshName", true);
+                    }
+                }
             }
         }
 
@@ -90,8 +115,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _soundID = value;
-                SetPropertyEdited("soundID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _soundID = value;
+                        SetPropertyEdited("soundID", true);
+                    }
+                }
             }
         }
 
@@ -105,8 +136,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _proximityDistance = value;
-                SetPropertyEdited("proximityDistance", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _proximityDistance = value;
+                        SetPropertyEdited("proximityDistance", true);
+                    }
+                }
             }
         }
 
@@ -120,8 +157,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _moveAwayTimeDuration = value;
-                SetPropertyEdited("moveAwayTimeDuration", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _moveAwayTimeDuration = value;
+                        SetPropertyEdited("moveAwayTimeDuration", true);
+                    }
+                }
             }
         }
 
@@ -135,8 +178,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bOpenOnProximity = value;
-                SetPropertyEdited("bOpenOnProximity", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bOpenOnProximity = value;
+                        SetPropertyEdited("bOpenOnProximity", true);
+                    }
+                }
             }
         }
 
@@ -150,8 +199,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _translateVector = value;
-                SetPropertyEdited("translateVector", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _translateVector = value;
+                        SetPropertyEdited("translateVector", true);
+                    }
+                }
             }
         }
 
@@ -161,6 +216,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("objectType");
             InitProperty("name");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("meshName");
             InitProperty("soundID");
 
@@ -174,41 +230,105 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public DockedMovingElementData(string inPath) : base(inPath)
+        public DockedMovingElementData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
+                SetPropertyExists("objectID", exists);
+
                 _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
-                SetPropertyExistsInBaseData("objectType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "objectType"));
+                }
                 SetPropertyExists("objectType", exists);
                 _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
-                SetPropertyExistsInBaseData("name", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("name", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("name", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "name"));
+                }
                 SetPropertyExists("name", exists);
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
-                SetPropertyExists("objectID", exists);
                 _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
-                SetPropertyExistsInBaseData("meshName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("meshName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("meshName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "meshName"));
+                }
                 SetPropertyExists("meshName", exists);
                 _soundID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "soundID", out exists);
-                SetPropertyExistsInBaseData("soundID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("soundID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("soundID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "soundID"));
+                }
                 SetPropertyExists("soundID", exists);
 
                 _proximityDistance = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "proximityDistance", out exists);
-                SetPropertyExistsInBaseData("proximityDistance", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("proximityDistance", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("proximityDistance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "proximityDistance"));
+                }
                 SetPropertyExists("proximityDistance", exists);
 
                 _moveAwayTimeDuration = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "moveAwayTimeDuration", out exists);
-                SetPropertyExistsInBaseData("moveAwayTimeDuration", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("moveAwayTimeDuration", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("moveAwayTimeDuration", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "moveAwayTimeDuration"));
+                }
                 SetPropertyExists("moveAwayTimeDuration", exists);
 
                 _bOpenOnProximity = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bOpenOnProximity", out exists);
-                SetPropertyExistsInBaseData("bOpenOnProximity", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bOpenOnProximity", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bOpenOnProximity", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bOpenOnProximity"));
+                }
                 SetPropertyExists("bOpenOnProximity", exists);
 
                 _translateVector = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "translateVector", out exists);
-                SetPropertyExistsInBaseData("translateVector", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("translateVector", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("translateVector", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "translateVector"));
+                }
                 SetPropertyExists("translateVector", exists);
 
             }

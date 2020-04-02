@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,12 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class SkyboxData : VD2Data
+    public class SkyboxData : VD2Data
     {
         string _objectID;
         string _materialName;
 
-        List<string> _factionType;
+        ObservableCollection<string> _factionType;
 
         bool _bGeneric;
 
@@ -27,8 +28,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -41,14 +48,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _materialName = value;
-                SetPropertyEdited("materialName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _materialName = value;
+                        SetPropertyEdited("materialName", true);
+                    }
+                }
             }
         }
 
 
         [Description("factionType is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public List<string> factionType
+        public ObservableCollection<string> factionType
         {
             get
             {
@@ -57,7 +70,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _factionType = value;
-                SetPropertyEdited("factionType", true);
+            }
+        }
+
+        private void OnfactionTypeChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("factionType", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _factionType = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionType", out exists));
+                    _factionType.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionTypeChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("factionType", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("factionType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "factionType"));
+                    }
+                    SetPropertyExists("factionType", exists);
+                }
             }
         }
 
@@ -71,8 +109,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _bGeneric = value;
-                SetPropertyEdited("bGeneric", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bGeneric = value;
+                        SetPropertyEdited("bGeneric", true);
+                    }
+                }
             }
         }
 
@@ -80,6 +124,7 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("materialName");
 
             InitProperty("factionType");
@@ -88,24 +133,54 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public SkyboxData(string inPath) : base(inPath)
+        public SkyboxData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
                 _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
-                SetPropertyExistsInBaseData("materialName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("materialName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("materialName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "materialName"));
+                }
                 SetPropertyExists("materialName", exists);
 
-                _factionType = ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionType", out exists);
-                SetPropertyExistsInBaseData("factionType", exists);
+                _factionType = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionType", out exists));
+                _factionType.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionTypeChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("factionType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("factionType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "factionType"));
+                }
                 SetPropertyExists("factionType", exists);
 
                 _bGeneric = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bGeneric", out exists);
-                SetPropertyExistsInBaseData("bGeneric", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bGeneric", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bGeneric", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bGeneric"));
+                }
                 SetPropertyExists("bGeneric", exists);
 
             }

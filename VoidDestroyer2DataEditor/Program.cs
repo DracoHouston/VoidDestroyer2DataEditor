@@ -9,7 +9,7 @@ namespace VoidDestroyer2DataEditor
 {
 
     [TypeConverter(typeof(Vector3DConverter))]
-    class Vector3D
+    public class Vector3D
     {
         float _x;
         public float x
@@ -65,7 +65,7 @@ namespace VoidDestroyer2DataEditor
     }
 
     [TypeConverter(typeof(Vector3DConverter))]
-    class ColorF
+    public class ColorF
     {
         float _r;
         public float r
@@ -138,7 +138,7 @@ namespace VoidDestroyer2DataEditor
         static void Main()
         {
 
-            //VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
+            VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
             
             //C:\Steam\steamapps\common\Void Destroyer 2\Data\Ships\Destroyers
             //ShipData mendozadata = new ShipData("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Destroyers\\Mendoza.xml");

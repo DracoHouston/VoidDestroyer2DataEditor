@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class EffectData : VD2Data
+    public class EffectData : VD2Data
     {
         string _effectType;
         string _objectID;
@@ -37,8 +38,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _effectType = value;
-                SetPropertyEdited("effectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _effectType = value;
+                        SetPropertyEdited("effectType", true);
+                    }
+                }
             }
         }
 
@@ -51,8 +58,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -65,8 +78,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _materialName = value;
-                SetPropertyEdited("materialName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _materialName = value;
+                        SetPropertyEdited("materialName", true);
+                    }
+                }
             }
         }
 
@@ -80,8 +99,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _count = value;
-                SetPropertyEdited("count", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _count = value;
+                        SetPropertyEdited("count", true);
+                    }
+                }
             }
         }
 
@@ -94,8 +119,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _numberOfChains = value;
-                SetPropertyEdited("numberOfChains", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _numberOfChains = value;
+                        SetPropertyEdited("numberOfChains", true);
+                    }
+                }
             }
         }
 
@@ -108,8 +139,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxChainElements = value;
-                SetPropertyEdited("maxChainElements", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxChainElements = value;
+                        SetPropertyEdited("maxChainElements", true);
+                    }
+                }
             }
         }
 
@@ -122,8 +159,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _trailLength = value;
-                SetPropertyEdited("trailLength", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _trailLength = value;
+                        SetPropertyEdited("trailLength", true);
+                    }
+                }
             }
         }
 
@@ -136,8 +179,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _maxRangeZ = value;
-                SetPropertyEdited("maxRangeZ", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _maxRangeZ = value;
+                        SetPropertyEdited("maxRangeZ", true);
+                    }
+                }
             }
         }
 
@@ -150,8 +199,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _defaultDimensions = value;
-                SetPropertyEdited("defaultDimensions", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _defaultDimensions = value;
+                        SetPropertyEdited("defaultDimensions", true);
+                    }
+                }
             }
         }
 
@@ -165,8 +220,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _widthChange = value;
-                SetPropertyEdited("widthChange", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _widthChange = value;
+                        SetPropertyEdited("widthChange", true);
+                    }
+                }
             }
         }
 
@@ -179,8 +240,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _initialWidth = value;
-                SetPropertyEdited("initialWidth", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _initialWidth = value;
+                        SetPropertyEdited("initialWidth", true);
+                    }
+                }
             }
         }
 
@@ -194,8 +261,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _initialColor = value;
-                SetPropertyEdited("initialColor", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _initialColor = value;
+                        SetPropertyEdited("initialColor", true);
+                    }
+                }
             }
         }
 
@@ -208,8 +281,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _colorChange = value;
-                SetPropertyEdited("colorChange", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _colorChange = value;
+                        SetPropertyEdited("colorChange", true);
+                    }
+                }
             }
         }
 
@@ -218,6 +297,7 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("effectType");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("materialName");
 
             InitProperty("count");
@@ -235,52 +315,144 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public EffectData(string inPath) : base(inPath)
+        public EffectData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
-                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
-                SetPropertyExistsInBaseData("effectType", exists);
-                SetPropertyExists("effectType", exists);
                 _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
                 SetPropertyExists("objectID", exists);
+
+                _effectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "effectType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("effectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("effectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "effectType"));
+                }
+                SetPropertyExists("effectType", exists);
                 _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
-                SetPropertyExistsInBaseData("materialName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("materialName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("materialName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "materialName"));
+                }
                 SetPropertyExists("materialName", exists);
 
                 _count = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "count", out exists);
-                SetPropertyExistsInBaseData("count", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("count", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("count", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "count"));
+                }
                 SetPropertyExists("count", exists);
                 _numberOfChains = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "numberOfChains", out exists);
-                SetPropertyExistsInBaseData("numberOfChains", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("numberOfChains", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("numberOfChains", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "numberOfChains"));
+                }
                 SetPropertyExists("numberOfChains", exists);
                 _maxChainElements = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxChainElements", out exists);
-                SetPropertyExistsInBaseData("maxChainElements", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxChainElements", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxChainElements", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxChainElements"));
+                }
                 SetPropertyExists("maxChainElements", exists);
                 _trailLength = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "trailLength", out exists);
-                SetPropertyExistsInBaseData("trailLength", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("trailLength", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("trailLength", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "trailLength"));
+                }
                 SetPropertyExists("trailLength", exists);
                 _maxRangeZ = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "maxRangeZ", out exists);
-                SetPropertyExistsInBaseData("maxRangeZ", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("maxRangeZ", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("maxRangeZ", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "maxRangeZ"));
+                }
                 SetPropertyExists("maxRangeZ", exists);
                 _defaultDimensions = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "defaultDimensions", out exists);
-                SetPropertyExistsInBaseData("defaultDimensions", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("defaultDimensions", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("defaultDimensions", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "defaultDimensions"));
+                }
                 SetPropertyExists("defaultDimensions", exists);
 
                 _widthChange = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "widthChange", out exists);
-                SetPropertyExistsInBaseData("widthChange", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("widthChange", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("widthChange", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "widthChange"));
+                }
                 SetPropertyExists("widthChange", exists);
                 _initialWidth = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "initialWidth", out exists);
-                SetPropertyExistsInBaseData("initialWidth", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("initialWidth", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("initialWidth", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "initialWidth"));
+                }
                 SetPropertyExists("initialWidth", exists);
 
                 _initialColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "initialColor", out exists);
-                SetPropertyExistsInBaseData("initialColor", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("initialColor", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("initialColor", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "initialColor"));
+                }
                 SetPropertyExists("initialColor", exists);
                 _colorChange = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "colorChange", out exists);
-                SetPropertyExistsInBaseData("colorChange", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("colorChange", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("colorChange", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "colorChange"));
+                }
                 SetPropertyExists("colorChange", exists);
 
             }

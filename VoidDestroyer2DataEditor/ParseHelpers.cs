@@ -1036,7 +1036,7 @@ namespace VoidDestroyer2DataEditor
                     inEntry.UsageWithinThisDataStructure.Clear();
                     for (int i = 0; i < inNode.ChildNodes.Count; i++)
                     {
-                        if ((inNode.ChildNodes[i].Name != "note_to_self") && !(inNode.ChildNodes[i].Name.StartsWith("_")))
+                        if (((inNode.ChildNodes[i].Name != "note_to_self") && (inNode.ChildNodes[i].Name != "noteToSelf")) && !(inNode.ChildNodes[i].Name.StartsWith("_")))
                         {
                             TagNameReportEntry currentchildentry = new TagNameReportEntry();
                             if (inEntry.DataStructureProperties.ContainsKey(inNode.ChildNodes[i].Name))

@@ -29,7 +29,7 @@ namespace VoidDestroyer2DataEditor
             List<KeyValuePair<string, TagNameReportEntry>> datastructurelistcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
             List<KeyValuePair<string, TagNameReportEntry>> datastructurelistdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
             inTextLines.Add("    [TypeConverter(typeof(" + inDataStructure.Key + "DataStructureConverter))]");
-            inTextLines.Add("    class " + inDataStructure.Key + "DataStructure : VD2PropertyStore");
+            inTextLines.Add("    public class " + inDataStructure.Key + "DataStructure : VD2DataStructure");
             inTextLines.Add("    {");
             int propidx = 0;
                 
@@ -136,7 +136,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("        List<string> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<string> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -158,7 +158,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
-                inTextLines.Add("        List<int> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<int> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -180,7 +180,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("        List<float> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<float> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -202,7 +202,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
-                inTextLines.Add("        List<bool> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<bool> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -224,7 +224,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
-                inTextLines.Add("        List<Vector3D> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<Vector3D> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -246,7 +246,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
-                inTextLines.Add("        List<ColorF> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<ColorF> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -268,7 +268,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("        List<" + currentresult.Key + "DataStructure> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<" + currentresult.Key + "DataStructure> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -289,8 +289,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -305,7 +315,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of plaintext strings\"), Category(\"Plaintext String Collections\"), Editor(\"System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a\", typeof(System.Drawing.Design.UITypeEditor))]");
-                inTextLines.Add("        public List<string> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<string> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -314,7 +324,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -337,8 +371,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -353,7 +397,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of integers\"), Category(\"Integer Collections\")]");
-                inTextLines.Add("        public List<int> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<int> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -362,7 +406,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<int>(ParseHelpers.GetInt32ListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -385,8 +453,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -401,7 +479,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of real numbers\"), Category(\"Real Number Collections\")]");
-                inTextLines.Add("        public List<float> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<float> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -410,7 +488,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<float>(ParseHelpers.GetFloatListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -433,8 +535,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -449,7 +561,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of boolean values\"), Category(\"Boolean Collections\")]");
-                inTextLines.Add("        public List<bool> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<bool> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -458,7 +570,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<bool>(ParseHelpers.GetBoolListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -481,8 +617,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -497,7 +643,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of 3D vectors\"), Category(\"3D Vector Collections\")]");
-                inTextLines.Add("        public List<Vector3D> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<Vector3D> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -506,7 +652,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<Vector3D>(ParseHelpers.GetVector3DListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -529,8 +699,18 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
-                inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                if (ParentDataFile != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source != null)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            _" + currentresult.Key + " = value;");
+                inTextLines.Add("                            SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                            ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -545,7 +725,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of Colors\"), Category(\"Color Collections\")]");
-                inTextLines.Add("        public List<ColorF> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<ColorF> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -554,7 +734,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<ColorF>(ParseHelpers.GetColorListFromXMLNodeNamedChildren(DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -578,7 +782,6 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -593,7 +796,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of datastructures\"), Category(\"Data Structure Collection\")]");
-                inTextLines.Add("        public List<" + currentresult.Key + "DataStructure> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<" + currentresult.Key + "DataStructure> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -602,7 +805,31 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            set");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + " = value;");
-                inTextLines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("            }");
+                inTextLines.Add("        }");
+                inTextLines.Add("");
+                inTextLines.Add("        public void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                inTextLines.Add("        {");
+                inTextLines.Add("            if (ParentDataFile != null)");
+                inTextLines.Add("            {");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                    else");
+                inTextLines.Add("                    {");
+                inTextLines.Add("                        if (DataNode != null)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            bool exists = false;");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                inTextLines.Add("                        }");
+                inTextLines.Add("                    }");
+                inTextLines.Add("                }");
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
@@ -765,7 +992,8 @@ namespace VoidDestroyer2DataEditor
             }
             inTextLines.Add("        }");
             inTextLines.Add("");
-            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure()");
+            inTextLines.Add("        //Only called by collections editor, so we use the data file that is open right now.");
+            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure() : base(null, null)");
             inTextLines.Add("        {");
             skipnewline = true;
             for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
@@ -783,7 +1011,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<string>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>();");
             }
             if (!skipnewline)
             {
@@ -805,7 +1033,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<int>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>();");
             }
             if (!skipnewline)
             {
@@ -827,7 +1055,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<float>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>();");
             }
             if (!skipnewline)
             {
@@ -849,7 +1077,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<bool>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>();");
             }
             if (!skipnewline)
             {
@@ -871,7 +1099,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<Vector3D>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
             }
             if (!skipnewline)
             {
@@ -893,7 +1121,166 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<ColorF>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+
+            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            {
+
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>();");
+            }
+            inTextLines.Add("");
+            inTextLines.Add("            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)");
+            inTextLines.Add("            {");
+            inTextLines.Add("                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;");
+            inTextLines.Add("            }");
+            inTextLines.Add("        }");
+            inTextLines.Add("");
+            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)");
+            inTextLines.Add("        {");
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = \"\";");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = 0;");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = 0;");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = false;");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new Vector3D();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ColorF();");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
             }
             if (!skipnewline)
             {
@@ -915,12 +1302,12 @@ namespace VoidDestroyer2DataEditor
             {
                
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new List<" + currentresult.Key + "DataStructure>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>();");
             }
 
             inTextLines.Add("        }");
             inTextLines.Add("");
-            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(");
+            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(VD2Data inParentDataFile, XmlNode inDataNode, ");
             bool isfirstarg = true;
             for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
             {
@@ -1063,7 +1450,7 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<" + currentresult.Key + "DataStructure> in" + currentresult.Key;
             }
-            inTextLines[inTextLines.Count - 1] += ")";
+            inTextLines[inTextLines.Count - 1] += ") : base(inParentDataFile, inDataNode)";
             inTextLines.Add("        {");
 
             skipnewline = true;
@@ -1082,7 +1469,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1104,7 +1491,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1126,7 +1513,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1148,7 +1535,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1170,7 +1557,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1192,7 +1579,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
             {
@@ -1214,12 +1601,12 @@ namespace VoidDestroyer2DataEditor
             {
 
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(in" + currentresult.Key + ");");
             }
 
             inTextLines.Add("        }");
             inTextLines.Add("");
-            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(" + inDataStructure.Key + "DataStructure inCopyFrom)");
+            inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(" + inDataStructure.Key + "DataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)");
             inTextLines.Add("        {");
 
             skipnewline = true;
@@ -1664,7 +2051,7 @@ namespace VoidDestroyer2DataEditor
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
-                        if ((inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b") || (inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx) == "isMassInfinite")) && (char.IsUpper(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).ElementAt(1))))
+                        if (((inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b")) && (char.IsUpper(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).ElementAt(1)))) || (inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx) == "isMassInfinite"))
                         {
                             if (currentdatastructureproperty.IsList)
                             {
@@ -1742,7 +2129,7 @@ namespace VoidDestroyer2DataEditor
             }
 
             inTextLines.Add("        //Gets the value of child nodes to get a '" + inDataStructure.Key + "' data structure as a " + inDataStructure.Key + "DataStructure.");
-            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromXMLNode(XmlNode inXMLNode)");
+            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromXMLNode(VD2Data inParentDataFile, XmlNode inXMLNode)");
             inTextLines.Add("        {");
             skipnewline = true;
             for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
@@ -1906,13 +2293,13 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
-                inTextLines.Add("            List<" + currentresult.Key + "DataStructure> " + currentresult.Key + " = DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
+                inTextLines.Add("            List<" + currentresult.Key + "DataStructure> " + currentresult.Key + " = DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(inParentDataFile, inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
             {
                 inTextLines.Add("");
             }
-            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure(");
+            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure(inParentDataFile, inXMLNode, ");
             bool isfirstarg = true;
             for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
             {
@@ -2062,7 +2449,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2074,8 +2460,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2086,7 +2472,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2098,8 +2483,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2110,7 +2495,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2122,8 +2506,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2134,7 +2518,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2146,8 +2529,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2158,7 +2541,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2170,8 +2552,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2182,7 +2564,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2194,8 +2575,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2206,7 +2587,6 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -2218,8 +2598,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.On" + currentresult.Key + "Changed);");
             }
             if (!skipnewline)
             {
@@ -2230,7 +2610,7 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        //Get data structures with this name from the child nodes of this xml node, as a list of '" + inDataStructure.Key + "' data structures. ");
             inTextLines.Add("        //Used for properties that are in a collection. See Get" + inDataStructure.Key + "DataStructureFromXMLNodeNamedChild for a single '" + inDataStructure.Key + "' data structure.");
-            inTextLines.Add("        public static List<" + inDataStructure.Key + "DataStructure> Get" + inDataStructure.Key + "DataStructureListFromXMLNodeNamedChildren(XmlNode inXMLNode, string inChildNodeName, out bool outExists)");
+            inTextLines.Add("        public static List<" + inDataStructure.Key + "DataStructure> Get" + inDataStructure.Key + "DataStructureListFromXMLNodeNamedChildren(VD2Data inParentDataFile, XmlNode inXMLNode, string inChildNodeName, out bool outExists)");
             inTextLines.Add("        {");
             inTextLines.Add("            List<" + inDataStructure.Key + "DataStructure> result = new List<" + inDataStructure.Key + "DataStructure>();");
             inTextLines.Add("            bool exists = false;");
@@ -2241,7 +2621,7 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("                if (CurrentChildNode.Name == inChildNodeName)");
             inTextLines.Add("                {");
             inTextLines.Add("                    exists = true;");
-            inTextLines.Add("                    result.Add(Get" + inDataStructure.Key + "DataStructureFromXMLNode(CurrentChildNode));");
+            inTextLines.Add("                    result.Add(Get" + inDataStructure.Key + "DataStructureFromXMLNode(inParentDataFile, CurrentChildNode));");
             inTextLines.Add("                }");
             inTextLines.Add("            }");
             inTextLines.Add("");
@@ -2251,11 +2631,11 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        //Get the first data structure with this name from the child nodes of this xml node, as a '" + inDataStructure.Key + "' data structure. ");
             inTextLines.Add("        //Used for properties that are not in a collection. See Get" + inDataStructure.Key + "DataStructureListFromXMLNodeNamedChildren for collections of '" + inDataStructure.Key + "' data structures.");
-            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromXMLNodeNamedChild(XmlNode inXMLNode, string inChildNodeName, out bool outExists)");
+            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromXMLNodeNamedChild(VD2Data inParentDataFile, XmlNode inXMLNode, string inChildNodeName, out bool outExists)");
             inTextLines.Add("        {");
-            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure();");
+            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure(inParentDataFile, null);");
             inTextLines.Add("            bool exists = false;");
-            inTextLines.Add("            List <" + inDataStructure.Key + "DataStructure> results = Get" + inDataStructure.Key + "DataStructureListFromXMLNodeNamedChildren(inXMLNode, inChildNodeName, out exists);");
+            inTextLines.Add("            List <" + inDataStructure.Key + "DataStructure> results = Get" + inDataStructure.Key + "DataStructureListFromXMLNodeNamedChildren(inParentDataFile, inXMLNode, inChildNodeName, out exists);");
             inTextLines.Add("            if (results.Count > 0)");
             inTextLines.Add("            {");
             inTextLines.Add("                result = results[0];");
@@ -2267,7 +2647,7 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        //Gets a list of '" + inDataStructure.Key + "' data structures from a definition XML");
             inTextLines.Add("        //Used for data structures that are in a collection. See Get" + "DataStructureFromVD2Data for a single '" + inDataStructure.Key + "' data structure");
-            inTextLines.Add("        public static List<" + inDataStructure.Key + "DataStructure> Get" + inDataStructure.Key + "DataStructureListFromVD2Data(XmlDocument inXML, out bool outExists)");
+            inTextLines.Add("        public static List<" + inDataStructure.Key + "DataStructure> Get" + inDataStructure.Key + "DataStructureListFromVD2Data(VD2Data inParentDataFile, XmlDocument inXML, out bool outExists)");
             inTextLines.Add("        {");
             inTextLines.Add("            XmlNodeList xmlnodes = inXML.GetElementsByTagName(\"" + inDataStructure.Key + "\");");
             inTextLines.Add("            List <" + inDataStructure.Key + "DataStructure> result = new List<" + inDataStructure.Key + "DataStructure>();");
@@ -2276,7 +2656,7 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("            for (nodeindex = 0; nodeindex < xmlnodes.Count; nodeindex++)");
             inTextLines.Add("            {");
             inTextLines.Add("                XmlNode currentnode = xmlnodes[nodeindex];");            
-            inTextLines.Add("                " + inDataStructure.Key + "DataStructure currentdata = DataStructureParseHelpers.Get" + inDataStructure.Key + "DataStructureFromXMLNode(currentnode);");
+            inTextLines.Add("                " + inDataStructure.Key + "DataStructure currentdata = DataStructureParseHelpers.Get" + inDataStructure.Key + "DataStructureFromXMLNode(inParentDataFile, currentnode);");
             inTextLines.Add("                exists = true;");
             inTextLines.Add("                result.Add(currentdata);");
             inTextLines.Add("            }");
@@ -2286,11 +2666,11 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        //Gets the first '" + inDataStructure.Key + "' data structure from a definition XML");
             inTextLines.Add("        //Used for data structures that are not in a collection. See Get" + inDataStructure.Key + "DataStructureListFromVD2Data for a collection of '" + inDataStructure.Key + "' data structures");
-            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromVD2Data(XmlDocument inXML, out bool outExists)");
+            inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromVD2Data(VD2Data inParentDataFile, XmlDocument inXML, out bool outExists)");
             inTextLines.Add("        {");
             inTextLines.Add("            bool exists = false;");
-            inTextLines.Add("            List <" + inDataStructure.Key + "DataStructure> results = Get" + inDataStructure.Key + "DataStructureListFromVD2Data(inXML, out exists);");
-            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure();");
+            inTextLines.Add("            List <" + inDataStructure.Key + "DataStructure> results = Get" + inDataStructure.Key + "DataStructureListFromVD2Data(inParentDataFile, inXML, out exists);");
+            inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure(inParentDataFile, null);");
             inTextLines.Add("");
             inTextLines.Add("            if (results.Count > 0)");
             inTextLines.Add("            {");
@@ -2299,10 +2679,11 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("            outExists = exists;");
             inTextLines.Add("            return result;");
             inTextLines.Add("        }");
+            inTextLines.Add("");
             //skipnewline = true;
-            
 
-            
+
+
             return inTextLines;
         }
 
@@ -2416,6 +2797,7 @@ namespace VoidDestroyer2DataEditor
             List<string> datastructurefiletextlines = new List<string>();
             datastructurefiletextlines.Add("using System;");
             datastructurefiletextlines.Add("using System.Collections.Generic;");
+            datastructurefiletextlines.Add("using System.Collections.ObjectModel;");
             datastructurefiletextlines.Add("using System.Linq;");
             datastructurefiletextlines.Add("using System.Text;");
             datastructurefiletextlines.Add("using System.Threading.Tasks;");
@@ -2436,6 +2818,7 @@ namespace VoidDestroyer2DataEditor
             List<string> datastructureparsehelpersfiletextlines = new List<string>();
             datastructureparsehelpersfiletextlines.Add("using System;");
             datastructureparsehelpersfiletextlines.Add("using System.Collections.Generic;");
+            datastructureparsehelpersfiletextlines.Add("using System.Collections.ObjectModel;");
             datastructureparsehelpersfiletextlines.Add("using System.Linq;");
             datastructureparsehelpersfiletextlines.Add("using System.Text;");
             datastructureparsehelpersfiletextlines.Add("using System.Xml;");
@@ -2516,7 +2899,7 @@ namespace VoidDestroyer2DataEditor
                     int nodeindex = 0;
                     for (nodeindex = 0; nodeindex < nodelist.Count; nodeindex++)
                     {
-                        if ((nodelist[nodeindex].Name != "note_to_self") && !(nodelist[nodeindex].Name.StartsWith("_")))
+                        if (((nodelist[nodeindex].Name != "note_to_self") && (nodelist[nodeindex].Name != "noteToSelf")) && !(nodelist[nodeindex].Name.StartsWith("_")))
                         {
                             TagNameReportEntry currententry = new TagNameReportEntry();
                             if (roottagresults.ContainsKey(nodelist[nodeindex].Name))
@@ -2524,9 +2907,12 @@ namespace VoidDestroyer2DataEditor
                                 roottagresults.TryGetValue(nodelist[nodeindex].Name, out currententry);
                             }
                             currententry = ParseHelpers.UpdateTagNameReportEntry(currententry, nodelist[nodeindex], UsageWithinThisFile, out UsageWithinThisFile);
-                            if (currententry.NodeType == TagNameReportNodeTypes.datastructure)
+                            if (inClassName != "HangarData")
                             {
-
+                                if (nodelist[nodeindex].Name == "hangarID")
+                                {
+                                    currententry.IsList = true;//this actually can be a list despite never showing up in any base data files like this. clever, Paul!
+                                }                              //but obviously we shouldn't do this to the objectID of hangars, which use the same tag name!
                             }
 
                             if (roottagresults.ContainsKey(nodelist[nodeindex].Name))
@@ -2571,7 +2957,7 @@ namespace VoidDestroyer2DataEditor
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
-                        if ((currentresult.Key.StartsWith("b")|| (currentresult.Key == "isMassInfinite")) && (char.IsUpper(currentresult.Key.ElementAt(1))))
+                        if (((currentresult.Key.StartsWith("b")) && (char.IsUpper(currentresult.Key.ElementAt(1)))) || (currentresult.Key == "isMassInfinite"))
                         {
                             if (currentresult.Value.IsList)
                             {
@@ -2646,6 +3032,7 @@ namespace VoidDestroyer2DataEditor
             bool skipnewline = true;
             reporttextlines.Add("using System;");
             reporttextlines.Add("using System.Collections.Generic;");
+            reporttextlines.Add("using System.Collections.ObjectModel;");
             reporttextlines.Add("using System.Linq;");
             reporttextlines.Add("using System.Text;");
             reporttextlines.Add("using System.Threading.Tasks;");
@@ -2655,7 +3042,7 @@ namespace VoidDestroyer2DataEditor
             reporttextlines.Add("");
             reporttextlines.Add("namespace VoidDestroyer2DataEditor");
             reporttextlines.Add("{");
-            reporttextlines.Add("    class " + inClassName + " : VD2Data");
+            reporttextlines.Add("    public class " + inClassName + " : VD2Data");
             reporttextlines.Add("    {");
             skipnewline = true;
             for (i = 0; i < strings.Count; i++)
@@ -2673,7 +3060,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(i);
-                reporttextlines.Add("        List<string> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<string> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2695,7 +3082,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(i);
-                reporttextlines.Add("        List<int> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<int> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2717,7 +3104,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(i);
-                reporttextlines.Add("        List<float> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<float> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2739,7 +3126,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(i);
-                reporttextlines.Add("        List<bool> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<bool> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2761,7 +3148,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(i);
-                reporttextlines.Add("        List<Vector3D> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<Vector3D> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2783,7 +3170,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(i);
-                reporttextlines.Add("        List<ColorF> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<ColorF> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2805,7 +3192,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
-                reporttextlines.Add("        List<" + currentresult.Key + "DataStructure> _" + currentresult.Key + ";");
+                reporttextlines.Add("        ObservableCollection<" + currentresult.Key + "DataStructure> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2825,8 +3212,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2841,7 +3234,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of plaintext strings\"), Category(\"Plaintext String Collections\"), Editor(\"System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a\", typeof(System.Drawing.Design.UITypeEditor))]");
-                reporttextlines.Add("        public List<string> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<string> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -2850,7 +3243,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2873,8 +3291,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2889,7 +3313,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of integers\"), Category(\"Integer Collections\")]");
-                reporttextlines.Add("        public List<int> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<int> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -2898,7 +3322,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2921,8 +3370,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2937,7 +3392,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of real numbers\"), Category(\"Real Number Collections\")]");
-                reporttextlines.Add("        public List<float> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<float> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -2946,7 +3401,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2969,8 +3449,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -2985,7 +3471,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of boolean values\"), Category(\"Boolean Collections\")]");
-                reporttextlines.Add("        public List<bool> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<bool> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -2994,7 +3480,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<bool>(ParseHelpers.GetBoolListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3017,8 +3528,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3033,7 +3550,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of 3D vectors\"), Category(\"3D Vector Collections\")]");
-                reporttextlines.Add("        public List<Vector3D> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<Vector3D> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -3042,7 +3559,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<Vector3D>(ParseHelpers.GetVector3DListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3065,8 +3607,14 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            }");
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
-                reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                if (Source != null)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    if (Source.WriteAccess)");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        _" + currentresult.Key + " = value;");
+                reporttextlines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3081,7 +3629,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of Colors\"), Category(\"Color Collections\")]");
-                reporttextlines.Add("        public List<ColorF> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<ColorF> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -3090,7 +3638,32 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<ColorF>(ParseHelpers.GetColorListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3114,7 +3687,6 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
@@ -3127,7 +3699,7 @@ namespace VoidDestroyer2DataEditor
             {
                 KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
                 reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a collection of datastructures\"), Category(\"Data Structure Collections\")]");
-                reporttextlines.Add("        public List<" + currentresult.Key + "DataStructure> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<" + currentresult.Key + "DataStructure> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -3136,11 +3708,37 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("            set");
                 reporttextlines.Add("            {");
                 reporttextlines.Add("                _" + currentresult.Key + " = value;");
-                reporttextlines.Add("                SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("            }");
+                reporttextlines.Add("        }");
+                reporttextlines.Add("");
+                reporttextlines.Add("        private void On" + currentresult.Key + "Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)");
+                reporttextlines.Add("        {");
+                reporttextlines.Add("            if (Source != null)");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                if (Source.WriteAccess)");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    bool exists = false;");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    else");
+                reporttextlines.Add("                    {");
+                reporttextlines.Add("                        SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                    }");
+                reporttextlines.Add("                    SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("            }");
                 reporttextlines.Add("        }");
                 reporttextlines.Add("");
             }
+            string objectIDPropertyName = "";
             reporttextlines.Add("        public override void InitAllProperties()");
             reporttextlines.Add("        {");
             skipnewline = true;
@@ -3149,6 +3747,219 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(i);
                 reporttextlines.Add("            InitProperty(\"" + currentresult.Key + "\");");
+                switch (inClassName)
+                {
+                    case "ShipData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "PrimaryUpgradeData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "ActiveUpgradeData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "WeaponData":
+                        if (currentresult.Key == "weaponID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "weaponID";
+                        }
+                        break;
+                    case "TurretData":
+                        if (currentresult.Key == "weaponID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "weaponID";
+                        }
+                        break;
+                    case "LauncherData":
+                        if (currentresult.Key == "weaponID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "weaponID";
+                        }
+                        break;
+                    case "HangarData":
+                        if (currentresult.Key == "hangarID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "hangarID";
+                        }
+                        break;
+                    case "AmmoData":
+                        if (currentresult.Key == "projectileID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "projectileID";
+                        }
+                        break;
+                    case "MissileData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "MineData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "AreaOfEffectData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "AsteroidData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "BaseData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "CharacterData":
+                        if (currentresult.Key == "characterID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "characterID";
+                        }
+                        break;
+                    case "CockpitData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "DebrisData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "DialogData":
+                        if (currentresult.Key == "dialogID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "dialogID";
+                        }
+                        break;
+                    case "DockedMovingElementData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "DoorData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "EffectData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "ParticleData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "ExplosionData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "FactionData":
+                        if (currentresult.Key == "factionID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "factionID";
+                        }
+                        break;
+                    case "MusicData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "OtherObjectData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "ShieldData":
+                        if (currentresult.Key == "shieldID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "shieldID";
+                        }
+                        break;
+                    case "SkyboxData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "SoundData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "StationData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                    case "SunData":
+                        if (currentresult.Key == "objectID")
+                        {
+                            reporttextlines.Add("            SetPropertyIsObjectID(\"" + currentresult.Key + "\", true);");
+                            objectIDPropertyName = "objectID";
+                        }
+                        break;
+                }
             }
             if (!skipnewline)
             {
@@ -3293,19 +4104,52 @@ namespace VoidDestroyer2DataEditor
             }            
             reporttextlines.Add("        }");
             reporttextlines.Add("");
-            reporttextlines.Add("        public " + inClassName + "(string inPath) : base(inPath)");
+            reporttextlines.Add("        public " + inClassName + "(string inPath, VD2FileSource inSource) : base(inPath, inSource)");
             reporttextlines.Add("        {");
             reporttextlines.Add("            bool exists = false;");
             reporttextlines.Add("            if (DataXMLDoc != null)");
             reporttextlines.Add("            {");
             skipnewline = true;
+            for (i = 0; i < strings.Count; i++)//object id happens first, or else nothing can get the object id!
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(i);
+                if (currentresult.Key == objectIDPropertyName)
+                {
+                    reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetStringFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                    reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                    reporttextlines.Add("                {");
+                    reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                    reporttextlines.Add("                }");
+                    reporttextlines.Add("                else");
+                    reporttextlines.Add("                {");
+                    reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(" + currentresult.Key + ", \"" + currentresult.Key + "\"));");
+                    reporttextlines.Add("                }");
+                    reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                }
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            skipnewline = true;
             for (i = 0; i < strings.Count; i++)
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetStringFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
-                reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                if (currentresult.Key != objectIDPropertyName)
+                {
+                    reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetStringFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                    reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                    reporttextlines.Add("                {");
+                    reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                    reporttextlines.Add("                }");
+                    reporttextlines.Add("                else");
+                    reporttextlines.Add("                {");
+                    reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                    reporttextlines.Add("                }");
+                    reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
+                }
             }
             if (!skipnewline)
             {
@@ -3316,8 +4160,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3329,8 +4181,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3342,8 +4201,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3355,8 +4222,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3368,8 +4242,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3381,8 +4263,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3394,8 +4283,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetBoolListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<bool>(ParseHelpers.GetBoolListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3407,8 +4304,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3420,8 +4324,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetVector3DListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<Vector3D>(ParseHelpers.GetVector3DListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3433,8 +4345,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetColorFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3446,8 +4365,16 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "ParseHelpers.GetColorListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<ColorF>(ParseHelpers.GetColorListFromVD2Data(DataXMLDoc, \"" + currentresult.Key + "\", out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3459,8 +4386,15 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureFromVD2Data(DataXMLDoc, out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " = DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureFromVD2Data(this, DataXMLDoc, out exists);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             if (!skipnewline)
@@ -3470,8 +4404,16 @@ namespace VoidDestroyer2DataEditor
             for (i = 0; i < listdatastructures.Count; i++)
             {
                 KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " = " + "DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(DataXMLDoc, out exists);");
-                reporttextlines.Add("                SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.On" + currentresult.Key + "Changed);");
+                reporttextlines.Add("                if (Source.ShortName == \"Base\")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", exists);");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                else");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    SetPropertyExistsInBaseData(\"" + currentresult.Key + "\", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), \"" + currentresult.Key + "\"));");
+                reporttextlines.Add("                }");
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             reporttextlines.Add("            }");

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
-    class SunData : VD2Data
+    public class SunData : VD2Data
     {
         string _objectType;
         string _sunType;
@@ -28,13 +29,14 @@ namespace VoidDestroyer2DataEditor
         int _scale;
         int _overworldScale;
         int _rotateSpeed;
-        int _isMassInfinite;
         int _collisionShapeScale;
+
+        bool _isMassInfinite;
 
         ColorF _specularColor;
         ColorF _diffuseColor;
 
-        List<damageCollisionFieldDataStructure> _damageCollisionField;
+        ObservableCollection<damageCollisionFieldDataStructure> _damageCollisionField;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -45,8 +47,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectType = value;
-                SetPropertyEdited("objectType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectType = value;
+                        SetPropertyEdited("objectType", true);
+                    }
+                }
             }
         }
 
@@ -59,8 +67,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _sunType = value;
-                SetPropertyEdited("sunType", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _sunType = value;
+                        SetPropertyEdited("sunType", true);
+                    }
+                }
             }
         }
 
@@ -73,8 +87,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _name = value;
-                SetPropertyEdited("name", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _name = value;
+                        SetPropertyEdited("name", true);
+                    }
+                }
             }
         }
 
@@ -87,8 +107,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _objectID = value;
-                SetPropertyEdited("objectID", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _objectID = value;
+                        SetPropertyEdited("objectID", true);
+                    }
+                }
             }
         }
 
@@ -101,8 +127,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _materialName = value;
-                SetPropertyEdited("materialName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _materialName = value;
+                        SetPropertyEdited("materialName", true);
+                    }
+                }
             }
         }
 
@@ -115,8 +147,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _billboardFlareMaterial = value;
-                SetPropertyEdited("billboardFlareMaterial", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _billboardFlareMaterial = value;
+                        SetPropertyEdited("billboardFlareMaterial", true);
+                    }
+                }
             }
         }
 
@@ -129,8 +167,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _faction = value;
-                SetPropertyEdited("faction", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _faction = value;
+                        SetPropertyEdited("faction", true);
+                    }
+                }
             }
         }
 
@@ -143,8 +187,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _meshName = value;
-                SetPropertyEdited("meshName", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _meshName = value;
+                        SetPropertyEdited("meshName", true);
+                    }
+                }
             }
         }
 
@@ -157,8 +207,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _wireframeMaterial = value;
-                SetPropertyEdited("wireframeMaterial", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _wireframeMaterial = value;
+                        SetPropertyEdited("wireframeMaterial", true);
+                    }
+                }
             }
         }
 
@@ -171,8 +227,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _sunFlareParticleSystem = value;
-                SetPropertyEdited("sunFlareParticleSystem", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _sunFlareParticleSystem = value;
+                        SetPropertyEdited("sunFlareParticleSystem", true);
+                    }
+                }
             }
         }
 
@@ -185,8 +247,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _collisionShape = value;
-                SetPropertyEdited("collisionShape", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _collisionShape = value;
+                        SetPropertyEdited("collisionShape", true);
+                    }
+                }
             }
         }
 
@@ -199,8 +267,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _additionalObjectMesh = value;
-                SetPropertyEdited("additionalObjectMesh", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _additionalObjectMesh = value;
+                        SetPropertyEdited("additionalObjectMesh", true);
+                    }
+                }
             }
         }
 
@@ -214,8 +288,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _flareSize = value;
-                SetPropertyEdited("flareSize", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _flareSize = value;
+                        SetPropertyEdited("flareSize", true);
+                    }
+                }
             }
         }
 
@@ -228,8 +308,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _scale = value;
-                SetPropertyEdited("scale", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _scale = value;
+                        SetPropertyEdited("scale", true);
+                    }
+                }
             }
         }
 
@@ -242,8 +328,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _overworldScale = value;
-                SetPropertyEdited("overworldScale", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _overworldScale = value;
+                        SetPropertyEdited("overworldScale", true);
+                    }
+                }
             }
         }
 
@@ -256,22 +348,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _rotateSpeed = value;
-                SetPropertyEdited("rotateSpeed", true);
-            }
-        }
-
-        [Description("isMassInfinite is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public int isMassInfinite
-        {
-            get
-            {
-                return _isMassInfinite;
-            }
-            set
-            {
-                _isMassInfinite = value;
-                SetPropertyEdited("isMassInfinite", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _rotateSpeed = value;
+                        SetPropertyEdited("rotateSpeed", true);
+                    }
+                }
             }
         }
 
@@ -284,8 +368,35 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _collisionShapeScale = value;
-                SetPropertyEdited("collisionShapeScale", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _collisionShapeScale = value;
+                        SetPropertyEdited("collisionShapeScale", true);
+                    }
+                }
+            }
+        }
+
+
+        [Description("isMassInfinite is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool isMassInfinite
+        {
+            get
+            {
+                return _isMassInfinite;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _isMassInfinite = value;
+                        SetPropertyEdited("isMassInfinite", true);
+                    }
+                }
             }
         }
 
@@ -299,8 +410,14 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _specularColor = value;
-                SetPropertyEdited("specularColor", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _specularColor = value;
+                        SetPropertyEdited("specularColor", true);
+                    }
+                }
             }
         }
 
@@ -313,14 +430,20 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _diffuseColor = value;
-                SetPropertyEdited("diffuseColor", true);
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _diffuseColor = value;
+                        SetPropertyEdited("diffuseColor", true);
+                    }
+                }
             }
         }
 
 
         [Description("damageCollisionField is a collection of datastructures"), Category("Data Structure Collections")]
-        public List<damageCollisionFieldDataStructure> damageCollisionField
+        public ObservableCollection<damageCollisionFieldDataStructure> damageCollisionField
         {
             get
             {
@@ -329,7 +452,32 @@ namespace VoidDestroyer2DataEditor
             set
             {
                 _damageCollisionField = value;
-                SetPropertyEdited("damageCollisionField", true);
+            }
+        }
+
+        private void OndamageCollisionFieldChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("damageCollisionField", true);
+                }
+                else
+                {
+                    bool exists = false;
+                    _damageCollisionField = new ObservableCollection<damageCollisionFieldDataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _damageCollisionField.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageCollisionFieldChanged);
+                    if (Source.ShortName == "Base")
+                    {
+                        SetPropertyExistsInBaseData("damageCollisionField", exists);
+                    }
+                    else
+                    {
+                        SetPropertyExistsInBaseData("damageCollisionField", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damageCollisionField"));
+                    }
+                    SetPropertyExists("damageCollisionField", exists);
+                }
             }
         }
 
@@ -339,6 +487,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("sunType");
             InitProperty("name");
             InitProperty("objectID");
+            SetPropertyIsObjectID("objectID", true);
             InitProperty("materialName");
             InitProperty("billboardFlareMaterial");
             InitProperty("faction");
@@ -352,8 +501,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("scale");
             InitProperty("overworldScale");
             InitProperty("rotateSpeed");
-            InitProperty("isMassInfinite");
             InitProperty("collisionShapeScale");
+
+            InitProperty("isMassInfinite");
 
             InitProperty("specularColor");
             InitProperty("diffuseColor");
@@ -361,76 +511,226 @@ namespace VoidDestroyer2DataEditor
             InitProperty("damageCollisionField");
         }
 
-        public SunData(string inPath) : base(inPath)
+        public SunData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
             bool exists = false;
             if (DataXMLDoc != null)
             {
+                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(objectID, "objectID"));
+                }
+                SetPropertyExists("objectID", exists);
+
                 _objectType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectType", out exists);
-                SetPropertyExistsInBaseData("objectType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("objectType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("objectType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "objectType"));
+                }
                 SetPropertyExists("objectType", exists);
                 _sunType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "sunType", out exists);
-                SetPropertyExistsInBaseData("sunType", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("sunType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("sunType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "sunType"));
+                }
                 SetPropertyExists("sunType", exists);
                 _name = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "name", out exists);
-                SetPropertyExistsInBaseData("name", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("name", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("name", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "name"));
+                }
                 SetPropertyExists("name", exists);
-                _objectID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "objectID", out exists);
-                SetPropertyExistsInBaseData("objectID", exists);
-                SetPropertyExists("objectID", exists);
                 _materialName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "materialName", out exists);
-                SetPropertyExistsInBaseData("materialName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("materialName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("materialName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "materialName"));
+                }
                 SetPropertyExists("materialName", exists);
                 _billboardFlareMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "billboardFlareMaterial", out exists);
-                SetPropertyExistsInBaseData("billboardFlareMaterial", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("billboardFlareMaterial", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("billboardFlareMaterial", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "billboardFlareMaterial"));
+                }
                 SetPropertyExists("billboardFlareMaterial", exists);
                 _faction = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "faction", out exists);
-                SetPropertyExistsInBaseData("faction", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("faction", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("faction", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "faction"));
+                }
                 SetPropertyExists("faction", exists);
                 _meshName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "meshName", out exists);
-                SetPropertyExistsInBaseData("meshName", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("meshName", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("meshName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "meshName"));
+                }
                 SetPropertyExists("meshName", exists);
                 _wireframeMaterial = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "wireframeMaterial", out exists);
-                SetPropertyExistsInBaseData("wireframeMaterial", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("wireframeMaterial", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("wireframeMaterial", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "wireframeMaterial"));
+                }
                 SetPropertyExists("wireframeMaterial", exists);
                 _sunFlareParticleSystem = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "sunFlareParticleSystem", out exists);
-                SetPropertyExistsInBaseData("sunFlareParticleSystem", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("sunFlareParticleSystem", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("sunFlareParticleSystem", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "sunFlareParticleSystem"));
+                }
                 SetPropertyExists("sunFlareParticleSystem", exists);
                 _collisionShape = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionShape", out exists);
-                SetPropertyExistsInBaseData("collisionShape", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("collisionShape", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("collisionShape", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "collisionShape"));
+                }
                 SetPropertyExists("collisionShape", exists);
                 _additionalObjectMesh = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "additionalObjectMesh", out exists);
-                SetPropertyExistsInBaseData("additionalObjectMesh", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("additionalObjectMesh", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("additionalObjectMesh", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "additionalObjectMesh"));
+                }
                 SetPropertyExists("additionalObjectMesh", exists);
 
                 _flareSize = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "flareSize", out exists);
-                SetPropertyExistsInBaseData("flareSize", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("flareSize", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("flareSize", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "flareSize"));
+                }
                 SetPropertyExists("flareSize", exists);
                 _scale = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "scale", out exists);
-                SetPropertyExistsInBaseData("scale", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("scale", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("scale", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "scale"));
+                }
                 SetPropertyExists("scale", exists);
                 _overworldScale = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "overworldScale", out exists);
-                SetPropertyExistsInBaseData("overworldScale", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("overworldScale", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("overworldScale", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "overworldScale"));
+                }
                 SetPropertyExists("overworldScale", exists);
                 _rotateSpeed = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rotateSpeed", out exists);
-                SetPropertyExistsInBaseData("rotateSpeed", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("rotateSpeed", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("rotateSpeed", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "rotateSpeed"));
+                }
                 SetPropertyExists("rotateSpeed", exists);
-                _isMassInfinite = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "isMassInfinite", out exists);
-                SetPropertyExistsInBaseData("isMassInfinite", exists);
-                SetPropertyExists("isMassInfinite", exists);
                 _collisionShapeScale = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "collisionShapeScale", out exists);
-                SetPropertyExistsInBaseData("collisionShapeScale", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("collisionShapeScale", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("collisionShapeScale", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "collisionShapeScale"));
+                }
                 SetPropertyExists("collisionShapeScale", exists);
 
+                _isMassInfinite = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "isMassInfinite", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("isMassInfinite", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("isMassInfinite", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "isMassInfinite"));
+                }
+                SetPropertyExists("isMassInfinite", exists);
+
                 _specularColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "specularColor", out exists);
-                SetPropertyExistsInBaseData("specularColor", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("specularColor", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("specularColor", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "specularColor"));
+                }
                 SetPropertyExists("specularColor", exists);
                 _diffuseColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "diffuseColor", out exists);
-                SetPropertyExistsInBaseData("diffuseColor", exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("diffuseColor", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("diffuseColor", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "diffuseColor"));
+                }
                 SetPropertyExists("diffuseColor", exists);
 
-                _damageCollisionField = DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(DataXMLDoc, out exists);
-                SetPropertyExistsInBaseData("damageCollisionField", exists);
+                _damageCollisionField =  new ObservableCollection<damageCollisionFieldDataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _damageCollisionField.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageCollisionFieldChanged);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("damageCollisionField", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("damageCollisionField", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damageCollisionField"));
+                }
                 SetPropertyExists("damageCollisionField", exists);
             }
         }
