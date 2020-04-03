@@ -90,7 +90,7 @@ namespace VoidDestroyer2DataEditor
             bool result = false;
             if (EditorUserSettings.UserSettings.VD2Path != textBox1.Text)
             {
-                if (File.Exists(textBox1.Text + "/Void Destroyer 2.exe"))
+                if (File.Exists(textBox1.Text + "Void Destroyer 2.exe"))
                 {
                     result = true;
                 }
@@ -104,7 +104,7 @@ namespace VoidDestroyer2DataEditor
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (File.Exists(textBox1.Text + "/Void Destroyer 2.exe"))
+            if (File.Exists(textBox1.Text + "Void Destroyer 2.exe"))
             {
                 if (HasUnsavedSettings())
                 { 

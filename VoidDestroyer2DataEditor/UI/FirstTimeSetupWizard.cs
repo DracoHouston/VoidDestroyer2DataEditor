@@ -43,7 +43,7 @@ namespace VoidDestroyer2DataEditor
                     break;
                 case FirstTimeSetupWizardPages.path:
                     EditorUserSettings.UserSettings.VD2Path = textBox1.Text;
-                    EditorUserSettings.UserSettings.SaveSettings();
+                    EditorUserSettings.UserSettings.SaveSettings(false);
                     Close();
                     break;
             }
@@ -53,9 +53,9 @@ namespace VoidDestroyer2DataEditor
         {
             string SteamPath = (string)Registry.GetValue("HKEY_CURRENT_USER\\Software\\Valve\\Steam", "SteamPath", "C:\\Program Files (x86)\\Steam");
             SteamPath = SteamPath.Replace("/", "\\");//the different slashes looks ugly.
-            if (Directory.Exists(SteamPath + "\\steamapps\\common\\Void Destroyer 2"))
+            if (File.Exists(SteamPath + "\\steamapps\\common\\Void Destroyer 2\\Void Destroyer 2.exe"))
             {
-                textBox1.Text = SteamPath + "\\steamapps\\common\\Void Destroyer 2";
+                textBox1.Text = SteamPath + "\\steamapps\\common\\Void Destroyer 2\\";
             }
         }
 
@@ -87,7 +87,7 @@ namespace VoidDestroyer2DataEditor
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (File.Exists(textBox1.Text + "/Void Destroyer 2.exe"))
+            if (File.Exists(textBox1.Text + "Void Destroyer 2.exe"))
             {
                 /*if (HasUnsavedSettings())
                 {

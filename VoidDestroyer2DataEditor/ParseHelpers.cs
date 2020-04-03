@@ -100,7 +100,18 @@ namespace VoidDestroyer2DataEditor
 
                 File.WriteAllLines("TempLoadStage.xml", xmltextlines);
                 result = new XmlDocument();
-                result.Load("TempLoadStage.xml");
+                try 
+                {
+                    result.Load("TempLoadStage.xml");
+                }
+                catch (System.Xml.XmlException ex)
+                {
+                    VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
+                    errordialog.ErrorTitleText = "System.Xml.XmlException";
+                    errordialog.ErrorMessageText = "The following error occurred when reading " + inPath + "! This file will not be loaded! Please fix! " + ex.Message;
+                    errordialog.ShowDialog();
+                    return new XmlDocument();
+                }
             }
             return result;
         }

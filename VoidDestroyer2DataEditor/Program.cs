@@ -138,8 +138,13 @@ namespace VoidDestroyer2DataEditor
         static void Main()
         {
 
-            VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
-            
+
+            //UNCOMMENT TO RUN THE LOAD CODE GENERATOR (most of the source files in /Data/) you can find the results alongside the exe
+            //VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
+
+
+            //UNCOMMENT TO RUN TAG NAME REPORTS ON THE BASE DATA, creates human readable versions of the information the code generator goes off.
+            //results can be found as extensionless text files alongside the exe
             //C:\Steam\steamapps\common\Void Destroyer 2\Data\Ships\Destroyers
             //ShipData mendozadata = new ShipData("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Destroyers\\Mendoza.xml");
             /*List<Dictionary<string, TagNameReportEntry>> rootreports = new List<Dictionary<string, TagNameReportEntry>>();

@@ -49,6 +49,12 @@ namespace VoidDestroyer2DataEditor
                             _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
                             SetPropertyExists("debris", exists);
                         }
+                        else
+                        {
+                            _debris.CollectionChanged -= this.OndebrisChanged;
+                            _debris.Clear();
+                            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
+                        }
                     }
                 }
             }
@@ -65,6 +71,7 @@ namespace VoidDestroyer2DataEditor
         public debrisInfoDataStructure() : base(null, null)
         {
             _debris = new ObservableCollection<debrisDataStructure>();
+            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
 
             if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
@@ -72,9 +79,11 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _debris = new ObservableCollection<debrisDataStructure>();
+            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
         }
 
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, List<debrisDataStructure> indebris) : base(inParentDataFile, inDataNode)
@@ -241,6 +250,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public debrisDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _debrisID = "";
@@ -472,6 +482,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public afterburnerDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _soundID = "";
@@ -590,6 +601,12 @@ namespace VoidDestroyer2DataEditor
                             _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
                             SetPropertyExists("targetClass", exists);
                         }
+                        else
+                        {
+                            _targetClass.CollectionChanged -= this.OntargetClassChanged;
+                            _targetClass.Clear();
+                            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
+                        }
                     }
                 }
             }
@@ -607,6 +624,7 @@ namespace VoidDestroyer2DataEditor
         public targetPriorityListDataStructure() : base(null, null)
         {
             _targetClass = new ObservableCollection<string>();
+            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
 
 
             if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
@@ -615,9 +633,11 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public targetPriorityListDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _targetClass = new ObservableCollection<string>();
+            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
 
         }
 
@@ -721,6 +741,12 @@ namespace VoidDestroyer2DataEditor
                             _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
                             SetPropertyExists("upgradeID", exists);
                         }
+                        else
+                        {
+                            _upgradeID.CollectionChanged -= this.OnupgradeIDChanged;
+                            _upgradeID.Clear();
+                            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
+                        }
                     }
                 }
             }
@@ -790,6 +816,7 @@ namespace VoidDestroyer2DataEditor
         public upgradesDataStructure() : base(null, null)
         {
             _upgradeID = new ObservableCollection<string>();
+            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
 
             _primaryUpgradeCapacity = 0;
             _activeUpgradeCapacity = 0;
@@ -801,9 +828,11 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public upgradesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _upgradeID = new ObservableCollection<string>();
+            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
 
             _primaryUpgradeCapacity = 0;
             _activeUpgradeCapacity = 0;
@@ -1075,6 +1104,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public propulsionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _propulsionEffectID = "";
@@ -1358,6 +1388,12 @@ namespace VoidDestroyer2DataEditor
                             _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
                             SetPropertyExists("weaponPosition", exists);
                         }
+                        else
+                        {
+                            _weaponPosition.CollectionChanged -= this.OnweaponPositionChanged;
+                            _weaponPosition.Clear();
+                            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
+                        }
                     }
                 }
             }
@@ -1391,6 +1427,7 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
 
             _weaponPosition = new ObservableCollection<Vector3D>();
+            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
 
 
             if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
@@ -1399,6 +1436,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public weaponDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _weaponType = "";
@@ -1410,6 +1448,7 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
 
             _weaponPosition = new ObservableCollection<Vector3D>();
+            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
 
         }
 
@@ -1692,6 +1731,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public damageDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _damageEffectID = "";
@@ -1906,6 +1946,12 @@ namespace VoidDestroyer2DataEditor
                             _turretRole = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "turretRole", out exists));
                             _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
                             SetPropertyExists("turretRole", exists);
+                        }
+                        else
+                        {
+                            _turretRole.CollectionChanged -= this.OnturretRoleChanged;
+                            _turretRole.Clear();
+                            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
                         }
                     }
                 }
@@ -2140,6 +2186,7 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = "";
 
             _turretRole = new ObservableCollection<string>();
+            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
 
             _yawPermitted = 0;
             _weaponPositionID = 0;
@@ -2160,6 +2207,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public turretDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _turretID = "";
@@ -2167,6 +2215,7 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = "";
 
             _turretRole = new ObservableCollection<string>();
+            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
 
             _yawPermitted = 0;
             _weaponPositionID = 0;
@@ -2362,6 +2411,12 @@ namespace VoidDestroyer2DataEditor
                             _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
                             SetPropertyExists("attachmentID", exists);
                         }
+                        else
+                        {
+                            _attachmentID.CollectionChanged -= this.OnattachmentIDChanged;
+                            _attachmentID.Clear();
+                            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
+                        }
                     }
                 }
             }
@@ -2410,6 +2465,7 @@ namespace VoidDestroyer2DataEditor
             _attachmentOrientation = "";
 
             _attachmentID = new ObservableCollection<string>();
+            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
 
             _attachmentPosition = new Vector3D();
 
@@ -2420,11 +2476,13 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public attachmentDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _attachmentOrientation = "";
 
             _attachmentID = new ObservableCollection<string>();
+            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
 
             _attachmentPosition = new Vector3D();
 
@@ -2751,6 +2809,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public movingElementDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _boneName = "";
@@ -3076,6 +3135,12 @@ namespace VoidDestroyer2DataEditor
                             _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
                             SetPropertyExists("objectID", exists);
                         }
+                        else
+                        {
+                            _objectID.CollectionChanged -= this.OnobjectIDChanged;
+                            _objectID.Clear();
+                            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
+                        }
                     }
                 }
             }
@@ -3265,6 +3330,7 @@ namespace VoidDestroyer2DataEditor
             _resourceOnly = "";
 
             _objectID = new ObservableCollection<string>();
+            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -3282,6 +3348,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public dockDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _dockType = "";
@@ -3293,6 +3360,7 @@ namespace VoidDestroyer2DataEditor
             _resourceOnly = "";
 
             _objectID = new ObservableCollection<string>();
+            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -3589,6 +3657,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public shieldDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _shieldID = "";
@@ -3783,6 +3852,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public rotatingElementDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _boneName = "";
@@ -3974,6 +4044,12 @@ namespace VoidDestroyer2DataEditor
                             _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
                             SetPropertyExists("muzzleBone", exists);
                         }
+                        else
+                        {
+                            _muzzleBone.CollectionChanged -= this.OnmuzzleBoneChanged;
+                            _muzzleBone.Clear();
+                            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
+                        }
                     }
                 }
             }
@@ -4051,6 +4127,7 @@ namespace VoidDestroyer2DataEditor
             _recoilParentType = "";
 
             _muzzleBone = new ObservableCollection<string>();
+            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
 
             _recoilZ = 0;
             _recoilTime = 0;
@@ -4062,6 +4139,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public recoilDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _recoilBone = "";
@@ -4069,6 +4147,7 @@ namespace VoidDestroyer2DataEditor
             _recoilParentType = "";
 
             _muzzleBone = new ObservableCollection<string>();
+            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
 
             _recoilZ = 0;
             _recoilTime = 0;
@@ -4207,6 +4286,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public rotateBonesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _rotateBone = "";
@@ -4564,6 +4644,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public canisterDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _projectileID = "";
@@ -4833,6 +4914,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public launchTubeDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _direction = "";
@@ -5024,6 +5106,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public mirvDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _mirvObjectID = "";
@@ -5231,6 +5314,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public weaponDirectionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _mainDirection = "";
@@ -5386,6 +5470,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public turretBarrelDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _boneName = "";
@@ -5489,6 +5574,12 @@ namespace VoidDestroyer2DataEditor
                             _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
                             SetPropertyExists("asteroidID", exists);
                         }
+                        else
+                        {
+                            _asteroidID.CollectionChanged -= this.OnasteroidIDChanged;
+                            _asteroidID.Clear();
+                            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
+                        }
                     }
                 }
             }
@@ -5506,6 +5597,7 @@ namespace VoidDestroyer2DataEditor
         public deathSpawnDataStructure() : base(null, null)
         {
             _asteroidID = new ObservableCollection<string>();
+            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
 
 
             if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
@@ -5514,9 +5606,11 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public deathSpawnDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _asteroidID = new ObservableCollection<string>();
+            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
 
         }
 
@@ -5690,6 +5784,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public babyDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _asteroidID = "";
@@ -5870,6 +5965,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public largeDockDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _rollRotation = 0;
@@ -6101,6 +6197,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public physicalRotatingElementDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _meshName = "";
@@ -6261,6 +6358,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public alwaysOnEffectDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _effectID = "";
@@ -6406,6 +6504,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public cargoBayDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _cargoBayType = "";
@@ -6520,6 +6619,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public gateCollisionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _gateCollisionSize = new Vector3D();
@@ -6684,6 +6784,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public refuelAreaDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _refuelParticleSystem = "";
@@ -6915,6 +7016,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public repairAreaDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _repairParticleSystem = "";
@@ -7102,6 +7204,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public mineDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _mineID = "";
@@ -7248,6 +7351,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public damageCollisionFieldDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _damage = 0;

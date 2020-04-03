@@ -45,15 +45,19 @@ namespace VoidDestroyer2DataEditor
             Sources = new List<VD2FileSource>();
         }
 
-        public void SaveSettings()
+        public void SaveSettings(bool RefreshData = true)
         {
             List<string> configlines = new List<string>();
             configlines.Add("VD2Path|" + VD2Path);
             configlines.Add("TreeIconSize|" + TreeIconSize.ToString());
             File.WriteAllLines("EditorUserSettings.cfg", configlines);
-            EditorUI.UI.EditorForm.InitAllTrees(); 
-            EditorUI.UI.EditorForm.RepopulateAllTrees();
-            EditorUI.UI.EditorForm.SetTreeIconSize(TreeIconSize);
+            if (RefreshData)
+            {
+                EditorUI.UI.ReloadData();
+                EditorUI.UI.EditorForm.InitAllTrees();
+                EditorUI.UI.EditorForm.RepopulateAllTrees();
+                EditorUI.UI.EditorForm.SetTreeIconSize(TreeIconSize);
+            }
         }
 
         public void InitUserSettings()
@@ -70,7 +74,7 @@ namespace VoidDestroyer2DataEditor
             currentsource.DisplayName = "Mod Game";
             currentsource.ShortName = "Mod";
             currentsource.Path = "Mod\\";
-            currentsource.WriteAccess = true;
+            currentsource.WriteAccess = false;
             currentsource.FilterIn = true;
             Sources.Add(currentsource);
 
