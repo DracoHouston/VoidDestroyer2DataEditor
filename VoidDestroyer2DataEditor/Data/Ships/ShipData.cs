@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -100,15 +101,15 @@ namespace VoidDestroyer2DataEditor
         targetPriorityListDataStructure _targetPriorityList;
         upgradesDataStructure _upgrades;
 
-        ObservableCollection<propulsionDataStructure> _propulsion;
-        ObservableCollection<weaponDataStructure> _weapon;
-        ObservableCollection<damageDataStructure> _damage;
-        ObservableCollection<turretDataStructure> _turret;
-        ObservableCollection<attachmentDataStructure> _attachment;
-        ObservableCollection<movingElementDataStructure> _movingElement;
-        ObservableCollection<dockDataStructure> _dock;
-        ObservableCollection<shieldDataStructure> _shield;
-        ObservableCollection<rotatingElementDataStructure> _rotatingElement;
+        ObservableCollection<VD2DataStructure> _propulsion;
+        ObservableCollection<VD2DataStructure> _weapon;
+        ObservableCollection<VD2DataStructure> _damage;
+        ObservableCollection<VD2DataStructure> _turret;
+        ObservableCollection<VD2DataStructure> _attachment;
+        ObservableCollection<VD2DataStructure> _movingElement;
+        ObservableCollection<VD2DataStructure> _dock;
+        ObservableCollection<VD2DataStructure> _shield;
+        ObservableCollection<VD2DataStructure> _rotatingElement;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -591,7 +592,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> descriptionText
         {
             get
@@ -630,7 +631,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("preExplosionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("preExplosionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> preExplosionID
         {
             get
@@ -669,7 +670,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> hangarID
         {
             get
@@ -1767,7 +1768,7 @@ namespace VoidDestroyer2DataEditor
 
 
         [Description("propulsion is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<propulsionDataStructure> propulsion
+        public ObservableCollection<VD2DataStructure> propulsion
         {
             get
             {
@@ -1790,7 +1791,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _propulsion = new ObservableCollection<propulsionDataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _propulsion = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _propulsion.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnpropulsionChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -1806,7 +1807,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("weapon is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<weaponDataStructure> weapon
+        public ObservableCollection<VD2DataStructure> weapon
         {
             get
             {
@@ -1829,7 +1830,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _weapon = new ObservableCollection<weaponDataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _weapon = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _weapon.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -1845,7 +1846,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("damage is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<damageDataStructure> damage
+        public ObservableCollection<VD2DataStructure> damage
         {
             get
             {
@@ -1868,7 +1869,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _damage = new ObservableCollection<damageDataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _damage = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _damage.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -1884,7 +1885,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<turretDataStructure> turret
+        public ObservableCollection<VD2DataStructure> turret
         {
             get
             {
@@ -1907,7 +1908,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _turret = new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -1923,7 +1924,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("attachment is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<attachmentDataStructure> attachment
+        public ObservableCollection<VD2DataStructure> attachment
         {
             get
             {
@@ -1946,7 +1947,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _attachment = new ObservableCollection<attachmentDataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _attachment = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _attachment.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -1962,7 +1963,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("movingElement is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<movingElementDataStructure> movingElement
+        public ObservableCollection<VD2DataStructure> movingElement
         {
             get
             {
@@ -1985,7 +1986,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _movingElement = new ObservableCollection<movingElementDataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _movingElement = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _movingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmovingElementChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -2001,7 +2002,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("dock is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<dockDataStructure> dock
+        public ObservableCollection<VD2DataStructure> dock
         {
             get
             {
@@ -2024,7 +2025,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _dock = new ObservableCollection<dockDataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _dock = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _dock.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndockChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -2040,7 +2041,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("shield is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<shieldDataStructure> shield
+        public ObservableCollection<VD2DataStructure> shield
         {
             get
             {
@@ -2063,7 +2064,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _shield = new ObservableCollection<shieldDataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _shield = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _shield.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnshieldChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -2079,7 +2080,7 @@ namespace VoidDestroyer2DataEditor
         }
 
         [Description("rotatingElement is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<rotatingElementDataStructure> rotatingElement
+        public ObservableCollection<VD2DataStructure> rotatingElement
         {
             get
             {
@@ -2102,7 +2103,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _rotatingElement = new ObservableCollection<rotatingElementDataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _rotatingElement = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _rotatingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnrotatingElementChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -2209,14 +2210,23 @@ namespace VoidDestroyer2DataEditor
             InitProperty("upgrades");
 
             InitProperty("propulsion");
+            SetPropertyIsCollection("propulsion", true, typeof(propulsionDataStructure));
             InitProperty("weapon");
+            SetPropertyIsCollection("weapon", true, typeof(weaponDataStructure));
             InitProperty("damage");
+            SetPropertyIsCollection("damage", true, typeof(damageDataStructure));
             InitProperty("turret");
+            SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
             InitProperty("attachment");
+            SetPropertyIsCollection("attachment", true, typeof(attachmentDataStructure));
             InitProperty("movingElement");
+            SetPropertyIsCollection("movingElement", true, typeof(movingElementDataStructure));
             InitProperty("dock");
+            SetPropertyIsCollection("dock", true, typeof(dockDataStructure));
             InitProperty("shield");
+            SetPropertyIsCollection("shield", true, typeof(shieldDataStructure));
             InitProperty("rotatingElement");
+            SetPropertyIsCollection("rotatingElement", true, typeof(rotatingElementDataStructure));
         }
 
         public ShipData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
@@ -3045,7 +3055,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("upgrades", exists);
 
-                _propulsion =  new ObservableCollection<propulsionDataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _propulsion =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _propulsion.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnpropulsionChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3056,7 +3066,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("propulsion", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "propulsion"));
                 }
                 SetPropertyExists("propulsion", exists);
-                _weapon =  new ObservableCollection<weaponDataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _weapon =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _weapon.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3067,7 +3077,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("weapon", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weapon"));
                 }
                 SetPropertyExists("weapon", exists);
-                _damage =  new ObservableCollection<damageDataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _damage =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _damage.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3078,7 +3088,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("damage", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damage"));
                 }
                 SetPropertyExists("damage", exists);
-                _turret =  new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3089,7 +3099,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turret"));
                 }
                 SetPropertyExists("turret", exists);
-                _attachment =  new ObservableCollection<attachmentDataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _attachment =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _attachment.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3100,7 +3110,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("attachment", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "attachment"));
                 }
                 SetPropertyExists("attachment", exists);
-                _movingElement =  new ObservableCollection<movingElementDataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _movingElement =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _movingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmovingElementChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3111,7 +3121,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("movingElement", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "movingElement"));
                 }
                 SetPropertyExists("movingElement", exists);
-                _dock =  new ObservableCollection<dockDataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _dock =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _dock.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndockChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3122,7 +3132,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("dock", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "dock"));
                 }
                 SetPropertyExists("dock", exists);
-                _shield =  new ObservableCollection<shieldDataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _shield =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _shield.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnshieldChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3133,7 +3143,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("shield", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shield"));
                 }
                 SetPropertyExists("shield", exists);
-                _rotatingElement =  new ObservableCollection<rotatingElementDataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _rotatingElement =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _rotatingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnrotatingElementChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3144,6 +3154,619 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("rotatingElement", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "rotatingElement"));
                 }
                 SetPropertyExists("rotatingElement", exists);
+            }
+        }
+
+        public override void SaveData()
+        {
+            List<string> xmltextlines = new List<string>();
+            xmltextlines.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            xmltextlines.Add("<note_to_self attr1=\"Generated by Void Destroyer 2 Data Editor\"/>");
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Strings...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("objectType"))
+            {
+                xmltextlines.Add("<objectType attr1=\"" + _objectType + "\"/>");
+            }
+            if (PropertyExists("name"))
+            {
+                xmltextlines.Add("<name attr1=\"" + _name + "\"/>");
+            }
+            if (PropertyExists("objectID"))
+            {
+                xmltextlines.Add("<objectID attr1=\"" + _objectID + "\"/>");
+            }
+            if (PropertyExists("faction"))
+            {
+                xmltextlines.Add("<faction attr1=\"" + _faction + "\"/>");
+            }
+            if (PropertyExists("shipClass"))
+            {
+                xmltextlines.Add("<shipClass attr1=\"" + _shipClass + "\"/>");
+            }
+            if (PropertyExists("meshName"))
+            {
+                xmltextlines.Add("<meshName attr1=\"" + _meshName + "\"/>");
+            }
+            if (PropertyExists("explosionID"))
+            {
+                xmltextlines.Add("<explosionID attr1=\"" + _explosionID + "\"/>");
+            }
+            if (PropertyExists("tacticalExplosionID"))
+            {
+                xmltextlines.Add("<tacticalExplosionID attr1=\"" + _tacticalExplosionID + "\"/>");
+            }
+            if (PropertyExists("engineSoundID"))
+            {
+                xmltextlines.Add("<engineSoundID attr1=\"" + _engineSoundID + "\"/>");
+            }
+            if (PropertyExists("propulsionRibbonID"))
+            {
+                xmltextlines.Add("<propulsionRibbonID attr1=\"" + _propulsionRibbonID + "\"/>");
+            }
+            if (PropertyExists("collisionShape"))
+            {
+                xmltextlines.Add("<collisionShape attr1=\"" + _collisionShape + "\"/>");
+            }
+            if (PropertyExists("wireframeMaterial"))
+            {
+                xmltextlines.Add("<wireframeMaterial attr1=\"" + _wireframeMaterial + "\"/>");
+            }
+            if (PropertyExists("cockpitActualMesh"))
+            {
+                xmltextlines.Add("<cockpitActualMesh attr1=\"" + _cockpitActualMesh + "\"/>");
+            }
+            if (PropertyExists("shipClassSize"))
+            {
+                xmltextlines.Add("<shipClassSize attr1=\"" + _shipClassSize + "\"/>");
+            }
+            if (PropertyExists("soldByFaction"))
+            {
+                xmltextlines.Add("<soldByFaction attr1=\"" + _soldByFaction + "\"/>");
+            }
+            if (PropertyExists("cockpitID"))
+            {
+                xmltextlines.Add("<cockpitID attr1=\"" + _cockpitID + "\"/>");
+            }
+            if (PropertyExists("collisionMeshName"))
+            {
+                xmltextlines.Add("<collisionMeshName attr1=\"" + _collisionMeshName + "\"/>");
+            }
+            if (PropertyExists("sizeShipClass"))
+            {
+                xmltextlines.Add("<sizeShipClass attr1=\"" + _sizeShipClass + "\"/>");
+            }
+            if (PropertyExists("combatAIClass"))
+            {
+                xmltextlines.Add("<combatAIClass attr1=\"" + _combatAIClass + "\"/>");
+            }
+            if (PropertyExists("minimumMiningRoidSize"))
+            {
+                xmltextlines.Add("<minimumMiningRoidSize attr1=\"" + _minimumMiningRoidSize + "\"/>");
+            }
+            if (PropertyExists("gravityDriveParticleSystem"))
+            {
+                xmltextlines.Add("<gravityDriveParticleSystem attr1=\"" + _gravityDriveParticleSystem + "\"/>");
+            }
+            if (PropertyExists("selfDestructAreaOfEffectID"))
+            {
+                xmltextlines.Add("<selfDestructAreaOfEffectID attr1=\"" + _selfDestructAreaOfEffectID + "\"/>");
+            }
+            if (PropertyExists("towardsEnemy"))
+            {
+                xmltextlines.Add("<towardsEnemy attr1=\"" + _towardsEnemy + "\"/>");
+            }
+            if (PropertyExists("baseID"))
+            {
+                xmltextlines.Add("<baseID attr1=\"" + _baseID + "\"/>");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"String Collections...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("descriptionText"))
+            {
+                foreach (string result in _descriptionText)
+                {
+                    xmltextlines.Add("<descriptionText attr1=\"" + result + "\"/>");
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("preExplosionID"))
+            {
+                foreach (string result in _preExplosionID)
+                {
+                    xmltextlines.Add("<preExplosionID attr1=\"" + result + "\"/>");
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("hangarID"))
+            {
+                foreach (string result in _hangarID)
+                {
+                    xmltextlines.Add("<hangarID attr1=\"" + result + "\"/>");
+                }
+                xmltextlines.Add("");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Integers...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("creditCost"))
+            {
+                xmltextlines.Add("<creditCost attr1=\"" + _creditCost.ToString() + "\"/>");
+            }
+            if (PropertyExists("shipHangarYOffset"))
+            {
+                xmltextlines.Add("<shipHangarYOffset attr1=\"" + _shipHangarYOffset.ToString() + "\"/>");
+            }
+            if (PropertyExists("rockSubPosition"))
+            {
+                xmltextlines.Add("<rockSubPosition attr1=\"" + _rockSubPosition.ToString() + "\"/>");
+            }
+            if (PropertyExists("missionRankRequired"))
+            {
+                xmltextlines.Add("<missionRankRequired attr1=\"" + _missionRankRequired.ToString() + "\"/>");
+            }
+            if (PropertyExists("discoveryRange"))
+            {
+                xmltextlines.Add("<discoveryRange attr1=\"" + _discoveryRange.ToString() + "\"/>");
+            }
+            if (PropertyExists("detectionRange"))
+            {
+                xmltextlines.Add("<detectionRange attr1=\"" + _detectionRange.ToString() + "\"/>");
+            }
+            if (PropertyExists("shieldHealth"))
+            {
+                xmltextlines.Add("<shieldHealth attr1=\"" + _shieldHealth.ToString() + "\"/>");
+            }
+            if (PropertyExists("captureRating"))
+            {
+                xmltextlines.Add("<captureRating attr1=\"" + _captureRating.ToString() + "\"/>");
+            }
+            if (PropertyExists("boardingCrew"))
+            {
+                xmltextlines.Add("<boardingCrew attr1=\"" + _boardingCrew.ToString() + "\"/>");
+            }
+            if (PropertyExists("aggressiveRange"))
+            {
+                xmltextlines.Add("<aggressiveRange attr1=\"" + _aggressiveRange.ToString() + "\"/>");
+            }
+            if (PropertyExists("passangerCapacity"))
+            {
+                xmltextlines.Add("<passangerCapacity attr1=\"" + _passangerCapacity.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Floats...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("cruiseSpeed"))
+            {
+                xmltextlines.Add("<cruiseSpeed attr1=\"" + _cruiseSpeed.ToString() + "\"/>");
+            }
+            if (PropertyExists("timeTillCruise"))
+            {
+                xmltextlines.Add("<timeTillCruise attr1=\"" + _timeTillCruise.ToString() + "\"/>");
+            }
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add("<yaw attr1=\"" + _yaw.ToString() + "\"/>");
+            }
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add("<pitch attr1=\"" + _pitch.ToString() + "\"/>");
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add("<roll attr1=\"" + _roll.ToString() + "\"/>");
+            }
+            if (PropertyExists("health"))
+            {
+                xmltextlines.Add("<health attr1=\"" + _health.ToString() + "\"/>");
+            }
+            if (PropertyExists("buildTime"))
+            {
+                xmltextlines.Add("<buildTime attr1=\"" + _buildTime.ToString() + "\"/>");
+            }
+            if (PropertyExists("crew"))
+            {
+                xmltextlines.Add("<crew attr1=\"" + _crew.ToString() + "\"/>");
+            }
+            if (PropertyExists("energy"))
+            {
+                xmltextlines.Add("<energy attr1=\"" + _energy.ToString() + "\"/>");
+            }
+            if (PropertyExists("ore"))
+            {
+                xmltextlines.Add("<ore attr1=\"" + _ore.ToString() + "\"/>");
+            }
+            if (PropertyExists("deathTimer"))
+            {
+                xmltextlines.Add("<deathTimer attr1=\"" + _deathTimer.ToString() + "\"/>");
+            }
+            if (PropertyExists("armor"))
+            {
+                xmltextlines.Add("<armor attr1=\"" + _armor.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Booleans...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("bCommsOverride"))
+            {
+                xmltextlines.Add("<bCommsOverride attr1=\"" + ((_bCommsOverride) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bGravityDrive"))
+            {
+                xmltextlines.Add("<bGravityDrive attr1=\"" + ((_bGravityDrive) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("isMassInfinite"))
+            {
+                xmltextlines.Add("<isMassInfinite attr1=\"" + ((_isMassInfinite) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bHideShipInCockpitAcutal"))
+            {
+                xmltextlines.Add("<bHideShipInCockpitAcutal attr1=\"" + ((_bHideShipInCockpitAcutal) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bPlayerSharedFire"))
+            {
+                xmltextlines.Add("<bPlayerSharedFire attr1=\"" + ((_bPlayerSharedFire) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bNotSoldUnlessOwnedBase"))
+            {
+                xmltextlines.Add("<bNotSoldUnlessOwnedBase attr1=\"" + ((_bNotSoldUnlessOwnedBase) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bBlackMarket"))
+            {
+                xmltextlines.Add("<bBlackMarket attr1=\"" + ((_bBlackMarket) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bUniqueShip"))
+            {
+                xmltextlines.Add("<bUniqueShip attr1=\"" + ((_bUniqueShip) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bShowInCockpitParticles"))
+            {
+                xmltextlines.Add("<bShowInCockpitParticles attr1=\"" + ((_bShowInCockpitParticles) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bRequiresKnowledge"))
+            {
+                xmltextlines.Add("<bRequiresKnowledge attr1=\"" + ((_bRequiresKnowledge) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bListedNoPurchase"))
+            {
+                xmltextlines.Add("<bListedNoPurchase attr1=\"" + ((_bListedNoPurchase) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bLargeHangarOnly"))
+            {
+                xmltextlines.Add("<bLargeHangarOnly attr1=\"" + ((_bLargeHangarOnly) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bNoTargetAimNodeOffset"))
+            {
+                xmltextlines.Add("<bNoTargetAimNodeOffset attr1=\"" + ((_bNoTargetAimNodeOffset) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bEveryShipyardOk"))
+            {
+                xmltextlines.Add("<bEveryShipyardOk attr1=\"" + ((_bEveryShipyardOk) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bShowInCockpitWeaponParticles"))
+            {
+                xmltextlines.Add("<bShowInCockpitWeaponParticles attr1=\"" + ((_bShowInCockpitWeaponParticles) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bBaseBuildOverride"))
+            {
+                xmltextlines.Add("<bBaseBuildOverride attr1=\"" + ((_bBaseBuildOverride) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bSaveFileUnlockShip"))
+            {
+                xmltextlines.Add("<bSaveFileUnlockShip attr1=\"" + ((_bSaveFileUnlockShip) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bLargeDockOnly"))
+            {
+                xmltextlines.Add("<bLargeDockOnly attr1=\"" + ((_bLargeDockOnly) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bCanPurchase"))
+            {
+                xmltextlines.Add("<bCanPurchase attr1=\"" + ((_bCanPurchase) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bNoShipyardRequirement"))
+            {
+                xmltextlines.Add("<bNoShipyardRequirement attr1=\"" + ((_bNoShipyardRequirement) ? "1" : "0") + "\"/>");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"3D Vectors...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("cockpitInitPos"))
+            {
+                xmltextlines.Add("<cockpitInitPos x=\"" + _cockpitInitPos.x.ToString() + "\" y=\"" + _cockpitInitPos.y.ToString() + "\" z=\"" + _cockpitInitPos.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("cockpitTransLimit"))
+            {
+                xmltextlines.Add("<cockpitTransLimit x=\"" + _cockpitTransLimit.x.ToString() + "\" y=\"" + _cockpitTransLimit.y.ToString() + "\" z=\"" + _cockpitTransLimit.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("chaseInitPos"))
+            {
+                xmltextlines.Add("<chaseInitPos x=\"" + _chaseInitPos.x.ToString() + "\" y=\"" + _chaseInitPos.y.ToString() + "\" z=\"" + _chaseInitPos.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("chaseTransLimit"))
+            {
+                xmltextlines.Add("<chaseTransLimit x=\"" + _chaseTransLimit.x.ToString() + "\" y=\"" + _chaseTransLimit.y.ToString() + "\" z=\"" + _chaseTransLimit.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("deathSpin"))
+            {
+                xmltextlines.Add("<deathSpin x=\"" + _deathSpin.x.ToString() + "\" y=\"" + _deathSpin.y.ToString() + "\" z=\"" + _deathSpin.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("cockpitActualPos"))
+            {
+                xmltextlines.Add("<cockpitActualPos x=\"" + _cockpitActualPos.x.ToString() + "\" y=\"" + _cockpitActualPos.y.ToString() + "\" z=\"" + _cockpitActualPos.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("shipHangarPosition"))
+            {
+                xmltextlines.Add("<shipHangarPosition x=\"" + _shipHangarPosition.x.ToString() + "\" y=\"" + _shipHangarPosition.y.ToString() + "\" z=\"" + _shipHangarPosition.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Data Structures...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("debrisInfo"))
+            {
+                xmltextlines.AddRange(_debrisInfo.AsVD2XML());
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("afterburner"))
+            {
+                xmltextlines.AddRange(_afterburner.AsVD2XML());
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("targetPriorityList"))
+            {
+                xmltextlines.AddRange(_targetPriorityList.AsVD2XML());
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("upgrades"))
+            {
+                xmltextlines.AddRange(_upgrades.AsVD2XML());
+                xmltextlines.Add("");
+            }
+
+            xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Data Structure Collections...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("propulsion"))
+            {
+                foreach (propulsionDataStructure result in _propulsion)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("weapon"))
+            {
+                foreach (weaponDataStructure result in _weapon)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("damage"))
+            {
+                foreach (damageDataStructure result in _damage)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("turret"))
+            {
+                foreach (turretDataStructure result in _turret)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("attachment"))
+            {
+                foreach (attachmentDataStructure result in _attachment)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("movingElement"))
+            {
+                foreach (movingElementDataStructure result in _movingElement)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("dock"))
+            {
+                foreach (dockDataStructure result in _dock)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("shield"))
+            {
+                foreach (shieldDataStructure result in _shield)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+            if (PropertyExists("rotatingElement"))
+            {
+                foreach (rotatingElementDataStructure result in _rotatingElement)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML());
+                }
+                xmltextlines.Add("");
+            }
+
+            File.WriteAllLines("testsavedship.xml", xmltextlines);
+        }
+
+        public override Control GetDocumentControl()
+        {
+            Control baseresult = base.GetDocumentControl();
+            if (baseresult != null)
+            {
+                if (baseresult is DataDocumentControl)
+                {
+                    DataDocumentControl result = (DataDocumentControl)baseresult;
+                    result.MainSplitter.Panel1Collapsed = false;
+                    result.MainSplitter.Panel2Collapsed = false;
+                    result.SidebarSplitter.Panel1Collapsed = false;
+                    result.SidebarSplitter.Panel2Collapsed = false;
+                    result.CollectionsTabs.TabPages.Clear();
+                    result.CollectionsTabs.TabPages.Add("descriptionText");
+                    StringCollectionSidebarEditor descriptionTextEditor = new StringCollectionSidebarEditor();
+                    descriptionTextEditor.StringCollectionText.Lines = _descriptionText.ToArray();
+                    descriptionTextEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(descriptionTextEditor);
+                    result.CollectionsTabs.TabPages.Add("preExplosionID");
+                    ObjectIDRefCollectionSidebarEditor preExplosionIDEditor = new ObjectIDRefCollectionSidebarEditor();
+                    List<string> preExplosionIDTypes = new List<string>();
+                    preExplosionIDTypes.Add("Explosion");
+                    preExplosionIDEditor.ObjectIDType = preExplosionIDTypes;
+                    preExplosionIDEditor.SelectedCollection = _preExplosionID;
+                    preExplosionIDEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(preExplosionIDEditor);
+                    result.CollectionsTabs.TabPages.Add("hangarID");
+                    ObjectIDRefCollectionSidebarEditor hangarIDEditor = new ObjectIDRefCollectionSidebarEditor();
+                    List<string> hangarIDTypes = new List<string>();
+                    hangarIDTypes.Add("Hangar");
+                    hangarIDEditor.ObjectIDType = hangarIDTypes;
+                    hangarIDEditor.SelectedCollection = _hangarID;
+                    hangarIDEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(hangarIDEditor);
+                    result.CollectionsTabs.TabPages.Add("debrisInfo");
+                    DataStructureSidebarEditor debrisInfoEditor = new DataStructureSidebarEditor();
+                    debrisInfoEditor.DataStructureEditor.Item = _debrisInfo;
+                    debrisInfoEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(debrisInfoEditor);
+                    result.CollectionsTabs.TabPages.Add("afterburner");
+                    DataStructureSidebarEditor afterburnerEditor = new DataStructureSidebarEditor();
+                    afterburnerEditor.DataStructureEditor.Item = _afterburner;
+                    afterburnerEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(afterburnerEditor);
+                    result.CollectionsTabs.TabPages.Add("targetPriorityList");
+                    DataStructureSidebarEditor targetPriorityListEditor = new DataStructureSidebarEditor();
+                    targetPriorityListEditor.DataStructureEditor.Item = _targetPriorityList;
+                    targetPriorityListEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(targetPriorityListEditor);
+                    result.CollectionsTabs.TabPages.Add("upgrades");
+                    DataStructureSidebarEditor upgradesEditor = new DataStructureSidebarEditor();
+                    upgradesEditor.DataStructureEditor.Item = _upgrades;
+                    upgradesEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(upgradesEditor);
+
+                    result.CollectionsTabs.TabPages.Add("propulsion");
+                    DataStructureCollectionsEditor propulsionEditor = new DataStructureCollectionsEditor();
+                    propulsionEditor.ElementType = typeof(propulsionDataStructure);
+                    propulsionEditor.SelectedCollection = _propulsion;
+                    propulsionEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(propulsionEditor);
+                    result.CollectionsTabs.TabPages.Add("weapon");
+                    DataStructureCollectionsEditor weaponEditor = new DataStructureCollectionsEditor();
+                    weaponEditor.ElementType = typeof(weaponDataStructure);
+                    weaponEditor.SelectedCollection = _weapon;
+                    weaponEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(weaponEditor);
+                    result.CollectionsTabs.TabPages.Add("damage");
+                    DataStructureCollectionsEditor damageEditor = new DataStructureCollectionsEditor();
+                    damageEditor.ElementType = typeof(damageDataStructure);
+                    damageEditor.SelectedCollection = _damage;
+                    damageEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(damageEditor);
+                    result.CollectionsTabs.TabPages.Add("turret");
+                    DataStructureCollectionsEditor turretEditor = new DataStructureCollectionsEditor();
+                    turretEditor.ElementType = typeof(turretDataStructure);
+                    turretEditor.SelectedCollection = _turret;
+                    turretEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(turretEditor);
+                    result.CollectionsTabs.TabPages.Add("attachment");
+                    DataStructureCollectionsEditor attachmentEditor = new DataStructureCollectionsEditor();
+                    attachmentEditor.ElementType = typeof(attachmentDataStructure);
+                    attachmentEditor.SelectedCollection = _attachment;
+                    attachmentEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(attachmentEditor);
+                    result.CollectionsTabs.TabPages.Add("movingElement");
+                    DataStructureCollectionsEditor movingElementEditor = new DataStructureCollectionsEditor();
+                    movingElementEditor.ElementType = typeof(movingElementDataStructure);
+                    movingElementEditor.SelectedCollection = _movingElement;
+                    movingElementEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(movingElementEditor);
+                    result.CollectionsTabs.TabPages.Add("dock");
+                    DataStructureCollectionsEditor dockEditor = new DataStructureCollectionsEditor();
+                    dockEditor.ElementType = typeof(dockDataStructure);
+                    dockEditor.SelectedCollection = _dock;
+                    dockEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dockEditor);
+                    result.CollectionsTabs.TabPages.Add("shield");
+                    DataStructureCollectionsEditor shieldEditor = new DataStructureCollectionsEditor();
+                    shieldEditor.ElementType = typeof(shieldDataStructure);
+                    shieldEditor.SelectedCollection = _shield;
+                    shieldEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(shieldEditor);
+                    result.CollectionsTabs.TabPages.Add("rotatingElement");
+                    DataStructureCollectionsEditor rotatingElementEditor = new DataStructureCollectionsEditor();
+                    rotatingElementEditor.ElementType = typeof(rotatingElementDataStructure);
+                    rotatingElementEditor.SelectedCollection = _rotatingElement;
+                    rotatingElementEditor.Dock = DockStyle.Fill;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(rotatingElementEditor);
+                    OgreControl modelviewer = new OgreControl();
+                    modelviewer.meshname = meshName;
+                    modelviewer.Dock = DockStyle.Fill;
+                    modelviewer.Name = Source.ShortName + objectID + "mv";
+                    result.SidebarSplitter.Panel1.Controls.Add(modelviewer);
+                    return result;
+                }
+            }
+            return baseresult;            
+        }
+
+        public override string GetDocumentIconKey()
+        {
+            switch (shipClass)
+            {
+                case "fighter_drone":
+                    return "droneicon";
+                case "fighter":
+                    return "fightericon";
+                case "gunship":
+                    return "gunshipicon";
+                case "corvette":
+                    return "corvetteicon";
+                case "frigate":
+                    return "frigateicon";
+                case "destroyer":
+                    return ("destroyericon");
+                case "cruiser":
+                    return ("cruisericon");
+                case "carrier":
+                    return ("carriericon");
+                case "dreadnaught":
+                    return ("dreadnaughticon");
+                case "transport":
+                    return ("transporticon");
+                case "mining":
+                    return ("minericon");
+                case "shuttle":
+                    return ("shuttleicon");
+                case "repair":
+                    return ("repairicon");
+                case "ship_capture":
+                    return ("shipcaptureicon");
+                case "capture":
+                    return ("basecaptureicon");
+                case "builder":
+                    return ("buildericon");
+                default:
+                    return ("genericfileicon");
             }
         }
     }

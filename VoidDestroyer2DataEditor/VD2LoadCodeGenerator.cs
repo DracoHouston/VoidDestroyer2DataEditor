@@ -2022,6 +2022,236 @@ namespace VoidDestroyer2DataEditor
             //inTextLines[inTextLines.Count - 1] += ")";
             inTextLines.Add("            return result;");
             inTextLines.Add("        }");
+            inTextLines.Add("");
+            inTextLines.Add("        public override List<string> AsVD2XML(int inIndent = 0)");
+            inTextLines.Add("        {");
+            inTextLines.Add("            List<string> xmltextlines = new List<string>();");
+            inTextLines.Add("            string indent = \"\";");
+            inTextLines.Add("            for (int i = 0; i < inIndent; i++)");
+            inTextLines.Add("            {");
+            inTextLines.Add("                indent += \" \";");
+            inTextLines.Add("            }");
+            inTextLines.Add("            xmltextlines.Add(indent + \"<" + inDataStructure.Key + ">\");");
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + " + \"\\\"/>\"); ");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (string result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + result + \"\\\"/>\"); ");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\"); ");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (int result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + result.ToString() + \"\\\"/>\"); ");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\"); ");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (float result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + result.ToString() + \"\\\"/>\"); ");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + ((_" + currentresult.Key + ") ? \"1\" : \"0\") + \"\\\"/>\");");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (bool result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + ((result) ? \"1\" : \"0\") + \"\\\"/>\");");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " x=\\\"\" + _" + currentresult.Key + ".x.ToString() + \"\\\" y=\\\"\" + _" + currentresult.Key + ".y.ToString() + \"\\\" z=\\\"\" + _" + currentresult.Key + ".z.ToString() + \"\\\"/>\");");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (Vector3D result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " x=\\\"\" + result.x.ToString() + \"\\\" y=\\\"\" + result.y.ToString() + \"\\\" z=\\\"\" + result.z.ToString() + \"\\\"/>\");");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " r=\\\"\" + _" + currentresult.Key + ".r.ToString() + \"\\\" g=\\\"\" + _" + currentresult.Key + ".g.ToString() + \"\\\" b=\\\"\" + _" + currentresult.Key + ".b.ToString() + \"\\\" a=\\\"\" + _" + currentresult.Key + ".a.ToString() + \"\\\"/>\");");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (ColorF result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.Add(indent + \"    <" + currentresult.Key + " r=\\\"\" + result.r.ToString() + \"\\\" g=\\\"\" + result.g.ToString() + \"\\\" b=\\\"\" + result.b.ToString() + \"\\\" a=\\\"\" + result.a.ToString() + \"\\\"/>\");");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                xmltextlines.AddRange(_" + currentresult.Key + ".AsVD2XML(inIndent + 4));");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                inTextLines.Add("            {");
+                inTextLines.Add("                foreach (" + currentresult.Key + "DataStructure result in _" + currentresult.Key + ")");
+                inTextLines.Add("                {");
+                inTextLines.Add("                    xmltextlines.AddRange(result.AsVD2XML(inIndent + 4));");
+                inTextLines.Add("                }");
+                inTextLines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            inTextLines.Add("            xmltextlines.Add(indent + \"</" + inDataStructure.Key + ">\");");
+            inTextLines.Add("            return xmltextlines;");
+            inTextLines.Add("        }");
             inTextLines.Add("    }");
             inTextLines.Add("");
             inTextLines.Add("    public class " + inDataStructure.Key + "DataStructureConverter : TypeConverter");
@@ -4474,6 +4704,326 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("                SetPropertyExists(\"" + currentresult.Key + "\", exists);");
             }
             reporttextlines.Add("            }");
+            reporttextlines.Add("        }");
+            reporttextlines.Add("");
+            reporttextlines.Add("        public override void SaveData()");
+            reporttextlines.Add("        {");
+            reporttextlines.Add("            List<string> xmltextlines = new List<string>();");
+            reporttextlines.Add("            xmltextlines.Add(\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\");");
+            reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Generated by Void Destroyer 2 Data Editor\\\"/>\");");
+            if (strings.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Strings...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < strings.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + " + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+
+            if (liststrings.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"String Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < liststrings.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (string result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + result + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (ints.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Integers...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < ints.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listints.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Integer Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listints.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (int result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + result.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (floats.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Floats...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < floats.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listfloats.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Float Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listfloats.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (float result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + result.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (bools.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Booleans...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < bools.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + ((_" + currentresult.Key + ") ? \"1\" : \"0\") + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listbools.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Boolean Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listbools.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (bool result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " attr1=\\\"\" + ((result) ? \"1\" : \"0\") + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (vectors.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"3D Vectors...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < vectors.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " x=\\\"\" + _" + currentresult.Key + ".x.ToString() + \"\\\" y=\\\"\" + _" + currentresult.Key + ".y.ToString() + \"\\\" z=\\\"\" + _" + currentresult.Key + ".z.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listvectors.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"3D Vector Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listvectors.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (bool result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " x=\\\"\" + result.x.ToString() + \"\\\" y=\\\"\" + result.y.ToString() + \"\\\" z=\\\"\" + result.z.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (colors.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Colors...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < colors.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.Add(\"<" + currentresult.Key + " r=\\\"\" + _" + currentresult.Key + ".r.ToString() + \"\\\" g=\\\"\" + _" + currentresult.Key + ".g.ToString() + \"\\\" b=\\\"\" + _" + currentresult.Key + ".b.ToString() + \"\\\" a=\\\"\" + _" + currentresult.Key + ".a.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listcolors.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Color Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listcolors.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (bool result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.Add(\"<" + currentresult.Key + " r=\\\"\" + result.r.ToString() + \"\\\" g=\\\"\" + result.g.ToString() + \"\\\" b=\\\"\" + result.b.ToString() + \"\\\" a=\\\"\" + result.a.ToString() + \"\\\"/>\");");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (datastructures.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Data Structures...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < datastructures.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                xmltextlines.AddRange(_" + currentresult.Key + ".AsVD2XML());");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            if (listdatastructures.Count > 0)
+            {
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+                reporttextlines.Add("            xmltextlines.Add(\"<note_to_self attr1=\\\"Data Structure Collections...\\\"/>\");");
+                reporttextlines.Add("            xmltextlines.Add(\"\");");
+            }
+            skipnewline = true;
+            for (i = 0; i < listdatastructures.Count; i++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
+                reporttextlines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
+                reporttextlines.Add("            {");
+                reporttextlines.Add("                foreach (" + currentresult.Key + "DataStructure result in _" + currentresult.Key + ")");
+                reporttextlines.Add("                {");
+                reporttextlines.Add("                    xmltextlines.AddRange(result.AsVD2XML());");
+                reporttextlines.Add("                }");
+                reporttextlines.Add("                xmltextlines.Add(\"\");");
+                reporttextlines.Add("            }");
+            }
+            if (!skipnewline)
+            {
+                reporttextlines.Add("");
+            }
+            skipnewline = true;
+            reporttextlines.Add("            File.WriteAllLines(\"testsavedship.xml\", xmltextlines);");
+            //reporttextlines.Add("            File.WriteAllLines(_FilePath, xmltextlines);");
             reporttextlines.Add("        }");
             reporttextlines.Add("    }");
             reporttextlines.Add("}");

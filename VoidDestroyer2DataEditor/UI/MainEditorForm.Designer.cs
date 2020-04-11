@@ -30,14 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainEditorForm));
-            this.DataFileProperties = new System.Windows.Forms.PropertyGrid();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.FilesTree = new System.Windows.Forms.TreeView();
             this.TreeIcons32 = new System.Windows.Forms.ImageList(this.components);
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,39 +49,38 @@
             this.CopyObjectIDItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
             this.TreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TreeIcons16 = new System.Windows.Forms.ImageList(this.components);
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.editorTabControl1 = new VoidDestroyer2DataEditor.EditorTabControl();
+            this.Files = new System.Windows.Forms.TabPage();
+            this.FilesTree = new System.Windows.Forms.TreeView();
+            this.Filters = new System.Windows.Forms.TabPage();
+            this.vD2TreeFilterDropdown1 = new VoidDestroyer2DataEditor.VD2TreeFilterDropdown();
+            this.Sources = new System.Windows.Forms.TabPage();
+            this.vD2SourceDropdown2 = new VoidDestroyer2DataEditor.VD2SourceDropdown();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.documentTabControl1 = new VoidDestroyer2DataEditor.DocumentTabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.DataFileProperties = new System.Windows.Forms.PropertyGrid();
+            this.vD2SourceDropdown1 = new VoidDestroyer2DataEditor.VD2SourceDropdown();
             this.toolStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.TreeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.TreeContextMenu.SuspendLayout();
+            this.editorTabControl1.SuspendLayout();
+            this.Files.SuspendLayout();
+            this.Filters.SuspendLayout();
+            this.Sources.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // DataFileProperties
-            // 
-            this.DataFileProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.DataFileProperties.CategoryForeColor = System.Drawing.Color.White;
-            this.DataFileProperties.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.DataFileProperties.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.DataFileProperties.CommandsForeColor = System.Drawing.SystemColors.Control;
-            this.DataFileProperties.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.DataFileProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DataFileProperties.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.DataFileProperties.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.DataFileProperties.HelpForeColor = System.Drawing.Color.White;
-            this.DataFileProperties.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.DataFileProperties.Location = new System.Drawing.Point(0, 0);
-            this.DataFileProperties.Name = "DataFileProperties";
-            this.DataFileProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.DataFileProperties.SelectedItemWithFocusForeColor = System.Drawing.Color.White;
-            this.DataFileProperties.Size = new System.Drawing.Size(530, 513);
-            this.DataFileProperties.TabIndex = 0;
-            this.DataFileProperties.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.DataFileProperties.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.DataFileProperties.ViewForeColor = System.Drawing.Color.White;
             // 
             // toolStrip1
             // 
@@ -103,38 +97,6 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 49);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.FilesTree);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.DataFileProperties);
-            this.splitContainer1.Size = new System.Drawing.Size(784, 513);
-            this.splitContainer1.SplitterDistance = 250;
-            this.splitContainer1.TabIndex = 3;
-            // 
-            // FilesTree
-            // 
-            this.FilesTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.FilesTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FilesTree.ForeColor = System.Drawing.Color.White;
-            this.FilesTree.ImageIndex = 1;
-            this.FilesTree.ImageList = this.TreeIcons32;
-            this.FilesTree.LineColor = System.Drawing.Color.White;
-            this.FilesTree.Location = new System.Drawing.Point(0, 0);
-            this.FilesTree.Name = "FilesTree";
-            this.FilesTree.SelectedImageIndex = 0;
-            this.FilesTree.Size = new System.Drawing.Size(250, 513);
-            this.FilesTree.TabIndex = 7;
-            this.FilesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.FilesTree_AfterSelect);
             // 
             // TreeIcons32
             // 
@@ -160,39 +122,6 @@
             this.TreeIcons32.Images.SetKeyName(17, "shipcaptureicon");
             this.TreeIcons32.Images.SetKeyName(18, "basecaptureicon");
             this.TreeIcons32.Images.SetKeyName(19, "buildericon");
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(12, 24);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Filters";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(93, 24);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Sources";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button1.Leave += new System.EventHandler(this.button1_Leave);
             // 
             // menuStrip1
             // 
@@ -276,6 +205,7 @@
             this.toolStripMenuItem3.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.toolStripMenuItem3.Size = new System.Drawing.Size(269, 22);
             this.toolStripMenuItem3.Text = "Save File";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -326,6 +256,7 @@
             // TreeContextMenu
             // 
             this.TreeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFileToolStripMenuItem,
             this.toolStripMenuItem3,
             this.toolStripMenuItem4,
             this.toolStripMenuItem5,
@@ -335,8 +266,15 @@
             this.toolStripMenuItem8,
             this.openFileLocationToolStripMenuItem});
             this.TreeContextMenu.Name = "TreeContextMenu";
-            this.TreeContextMenu.Size = new System.Drawing.Size(270, 164);
+            this.TreeContextMenu.Size = new System.Drawing.Size(270, 186);
             this.TreeContextMenu.Opened += new System.EventHandler(this.TreeContextMenu_Opened);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            this.openFileToolStripMenuItem.Text = "Open File";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openFileLocationToolStripMenuItem
             // 
@@ -370,14 +308,192 @@
             this.TreeIcons16.Images.SetKeyName(18, "basecaptureicon");
             this.TreeIcons16.Images.SetKeyName(19, "buildericon");
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 49);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.editorTabControl1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
+            this.splitContainer1.Size = new System.Drawing.Size(784, 513);
+            this.splitContainer1.SplitterDistance = 250;
+            this.splitContainer1.TabIndex = 3;
+            // 
+            // editorTabControl1
+            // 
+            this.editorTabControl1.Controls.Add(this.Files);
+            this.editorTabControl1.Controls.Add(this.Filters);
+            this.editorTabControl1.Controls.Add(this.Sources);
+            this.editorTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorTabControl1.Location = new System.Drawing.Point(0, 0);
+            this.editorTabControl1.Name = "editorTabControl1";
+            this.editorTabControl1.SelectedIndex = 0;
+            this.editorTabControl1.Size = new System.Drawing.Size(250, 513);
+            this.editorTabControl1.TabIndex = 8;
+            // 
+            // Files
+            // 
+            this.Files.Controls.Add(this.FilesTree);
+            this.Files.Location = new System.Drawing.Point(4, 22);
+            this.Files.Name = "Files";
+            this.Files.Padding = new System.Windows.Forms.Padding(3);
+            this.Files.Size = new System.Drawing.Size(242, 487);
+            this.Files.TabIndex = 1;
+            this.Files.Text = "Files";
+            this.Files.UseVisualStyleBackColor = true;
+            // 
+            // FilesTree
+            // 
+            this.FilesTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.FilesTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FilesTree.ForeColor = System.Drawing.Color.White;
+            this.FilesTree.ImageIndex = 1;
+            this.FilesTree.ImageList = this.TreeIcons32;
+            this.FilesTree.LineColor = System.Drawing.Color.White;
+            this.FilesTree.Location = new System.Drawing.Point(3, 3);
+            this.FilesTree.Name = "FilesTree";
+            this.FilesTree.SelectedImageIndex = 0;
+            this.FilesTree.Size = new System.Drawing.Size(236, 481);
+            this.FilesTree.TabIndex = 7;
+            this.FilesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.FilesTree_AfterSelect);
+            this.FilesTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.FilesTree_NodeMouseClick);
+            this.FilesTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.FilesTree_NodeMouseDoubleClick);
+            // 
+            // Filters
+            // 
+            this.Filters.Controls.Add(this.vD2TreeFilterDropdown1);
+            this.Filters.Location = new System.Drawing.Point(4, 22);
+            this.Filters.Name = "Filters";
+            this.Filters.Padding = new System.Windows.Forms.Padding(3);
+            this.Filters.Size = new System.Drawing.Size(242, 487);
+            this.Filters.TabIndex = 2;
+            this.Filters.Text = "Filters";
+            this.Filters.UseVisualStyleBackColor = true;
+            // 
+            // vD2TreeFilterDropdown1
+            // 
+            this.vD2TreeFilterDropdown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.vD2TreeFilterDropdown1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vD2TreeFilterDropdown1.Location = new System.Drawing.Point(3, 3);
+            this.vD2TreeFilterDropdown1.Name = "vD2TreeFilterDropdown1";
+            this.vD2TreeFilterDropdown1.Size = new System.Drawing.Size(236, 481);
+            this.vD2TreeFilterDropdown1.TabIndex = 0;
+            // 
+            // Sources
+            // 
+            this.Sources.Controls.Add(this.vD2SourceDropdown2);
+            this.Sources.Location = new System.Drawing.Point(4, 22);
+            this.Sources.Name = "Sources";
+            this.Sources.Padding = new System.Windows.Forms.Padding(3);
+            this.Sources.Size = new System.Drawing.Size(242, 487);
+            this.Sources.TabIndex = 3;
+            this.Sources.Text = "Sources";
+            this.Sources.UseVisualStyleBackColor = true;
+            // 
+            // vD2SourceDropdown2
+            // 
+            this.vD2SourceDropdown2.AutoSize = true;
+            this.vD2SourceDropdown2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.vD2SourceDropdown2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.vD2SourceDropdown2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vD2SourceDropdown2.Location = new System.Drawing.Point(3, 3);
+            this.vD2SourceDropdown2.Name = "vD2SourceDropdown2";
+            this.vD2SourceDropdown2.Size = new System.Drawing.Size(236, 481);
+            this.vD2SourceDropdown2.TabIndex = 0;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.HotTrack = true;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Multiline = true;
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(530, 513);
+            this.tabControl1.TabIndex = 1;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.documentTabControl1);
+            this.tabPage2.ForeColor = System.Drawing.Color.White;
+            this.tabPage2.Location = new System.Drawing.Point(4, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(522, 487);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            // 
+            // documentTabControl1
+            // 
+            this.documentTabControl1.CloseButtonImage = null;
+            this.documentTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentTabControl1.ImageList = this.TreeIcons16;
+            this.documentTabControl1.Location = new System.Drawing.Point(3, 3);
+            this.documentTabControl1.Name = "documentTabControl1";
+            this.documentTabControl1.SelectedIndex = 0;
+            this.documentTabControl1.Size = new System.Drawing.Size(516, 481);
+            this.documentTabControl1.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.DataFileProperties);
+            this.tabPage1.Location = new System.Drawing.Point(4, 4);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(522, 487);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // DataFileProperties
+            // 
+            this.DataFileProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.DataFileProperties.CategoryForeColor = System.Drawing.Color.White;
+            this.DataFileProperties.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.DataFileProperties.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.DataFileProperties.CommandsForeColor = System.Drawing.SystemColors.Control;
+            this.DataFileProperties.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.DataFileProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DataFileProperties.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.DataFileProperties.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.DataFileProperties.HelpForeColor = System.Drawing.Color.White;
+            this.DataFileProperties.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.DataFileProperties.Location = new System.Drawing.Point(3, 3);
+            this.DataFileProperties.Name = "DataFileProperties";
+            this.DataFileProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.DataFileProperties.SelectedItemWithFocusForeColor = System.Drawing.Color.White;
+            this.DataFileProperties.Size = new System.Drawing.Size(516, 481);
+            this.DataFileProperties.TabIndex = 0;
+            this.DataFileProperties.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.DataFileProperties.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.DataFileProperties.ViewForeColor = System.Drawing.Color.White;
+            // 
+            // vD2SourceDropdown1
+            // 
+            this.vD2SourceDropdown1.AutoSize = true;
+            this.vD2SourceDropdown1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.vD2SourceDropdown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.vD2SourceDropdown1.Location = new System.Drawing.Point(8, 8);
+            this.vD2SourceDropdown1.Name = "vD2SourceDropdown1";
+            this.vD2SourceDropdown1.Size = new System.Drawing.Size(2, 2);
+            this.vD2SourceDropdown1.TabIndex = 1;
+            // 
             // MainEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.ClientSize = new System.Drawing.Size(784, 562);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -388,13 +504,21 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.TreeContextMenu.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.TreeContextMenu.ResumeLayout(false);
+            this.editorTabControl1.ResumeLayout(false);
+            this.Files.ResumeLayout(false);
+            this.Filters.ResumeLayout(false);
+            this.Sources.ResumeLayout(false);
+            this.Sources.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -412,8 +536,6 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         public System.Windows.Forms.OpenFileDialog VD2PathFinderDialog;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         public System.Windows.Forms.TreeView FilesTree;
         private System.Windows.Forms.ImageList TreeIcons32;
         public System.Windows.Forms.ContextMenuStrip TreeContextMenu;
@@ -427,6 +549,18 @@
         private System.Windows.Forms.ToolStripMenuItem openFileLocationToolStripMenuItem;
         private System.Windows.Forms.ImageList TreeIcons16;
         public System.Windows.Forms.PropertyGrid DataFileProperties;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private DocumentTabControl documentTabControl1;
+        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
+        private EditorTabControl editorTabControl1;
+        private System.Windows.Forms.TabPage Files;
+        private System.Windows.Forms.TabPage Filters;
+        private System.Windows.Forms.TabPage Sources;
+        private VD2TreeFilterDropdown vD2TreeFilterDropdown1;
+        private VD2SourceDropdown vD2SourceDropdown1;
+        private VD2SourceDropdown vD2SourceDropdown2;
     }
 }
 

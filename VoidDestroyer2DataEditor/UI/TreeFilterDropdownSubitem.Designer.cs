@@ -1,4 +1,4 @@
-﻿namespace VoidDestroyer2DataEditor.UI
+﻿namespace VoidDestroyer2DataEditor
 {
     partial class TreeFilterDropdownSubitem
     {

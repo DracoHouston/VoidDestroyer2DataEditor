@@ -63,6 +63,16 @@ namespace VoidDestroyer2DataEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DocumentCloseButton {
+            get {
+                object obj = ResourceManager.GetObject("DocumentCloseButton", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap foldericon {
             get {
                 object obj = ResourceManager.GetObject("foldericon", resourceCulture);
@@ -76,6 +86,16 @@ namespace VoidDestroyer2DataEditor.Properties {
         internal static System.Drawing.Bitmap jcStubFemale_Nana {
             get {
                 object obj = ResourceManager.GetObject("jcStubFemale-Nana", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap splashscreenbanner {
+            get {
+                object obj = ResourceManager.GetObject("splashscreenbanner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

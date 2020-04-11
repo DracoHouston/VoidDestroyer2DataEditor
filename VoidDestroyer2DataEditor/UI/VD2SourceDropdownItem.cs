@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace VoidDestroyer2DataEditor.UI
+namespace VoidDestroyer2DataEditor
 {
     public partial class VD2SourceDropdownItem : UserControl
     {

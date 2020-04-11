@@ -12,6 +12,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +37,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,10 +52,36 @@
   <PropertyGroup>
     <ApplicationIcon>sungateicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ogre">
+      <HintPath>..\..\ogre\out\build\x64-Release\csharp\Ogre.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +93,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStructureCollectionsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataStructureCollectionsEditor.Designer.cs">
+      <DependentUpon>DataStructureCollectionsEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataStructureSidebarEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataStructureSidebarEditor.Designer.cs">
+      <DependentUpon>DataStructureSidebarEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataStructureSidebarItemView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataStructureSidebarItemView.Designer.cs">
+      <DependentUpon>DataStructureSidebarItemView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\AreaOfEffect\AreaOfEffectData.cs" />
     <Compile Include="Data\Asteroids\AsteroidData.cs" />
     <Compile Include="Data\Bases\BaseData.cs" />
@@ -76,6 +137,7 @@
     <Compile Include="Data\Stations\StationData.cs" />
     <Compile Include="Data\Suns\SunData.cs" />
     <Compile Include="Data\VD2Datastructure.cs" />
+    <Compile Include="Data\VD2PropertyChangedEventArgs.cs" />
     <Compile Include="Data\Weapons\AmmoData.cs" />
     <Compile Include="Data\Weapons\HangarData.cs" />
     <Compile Include="Data\Weapons\LauncherData.cs" />
@@ -84,13 +146,74 @@
     <Compile Include="Data\Weapons\TurretData.cs" />
     <Compile Include="Data\Weapons\WeaponData.cs" />
     <Compile Include="EditorUserSettings.cs" />
+    <Compile Include="OgreControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OgreControl.designer.cs">
+      <DependentUpon>OgreControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OgreRenderer.cs" />
     <Compile Include="ParseHelpers.cs" />
     <Compile Include="ShipDB.cs" />
+    <Compile Include="SidebarItemView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SidebarItemView.Designer.cs">
+      <DependentUpon>SidebarItemView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\SidebarCollectionsEditorItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\SidebarCollectionsEditorItem.Designer.cs">
+      <DependentUpon>SidebarCollectionsEditorItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SplashScreenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreenForm.Designer.cs">
+      <DependentUpon>SplashScreenForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentControl.Designer.cs">
+      <DependentUpon>DataDocumentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditor.Designer.cs">
+      <DependentUpon>ObjectIDRefCollectionSidebarEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditorItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditorItem.Designer.cs">
+      <DependentUpon>ObjectIDRefCollectionSidebarEditorItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\StringCollectionSidebarEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\StringCollectionSidebarEditor.Designer.cs">
+      <DependentUpon>StringCollectionSidebarEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DocumentTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\DocumentTabControl.Designer.cs">
+      <DependentUpon>DocumentTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\EditorAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\EditorAboutBox.Designer.cs">
       <DependentUpon>EditorAboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditorTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\EditorTabControl.Designer.cs">
+      <DependentUpon>EditorTabControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\EditorUI.cs" />
     <Compile Include="UI\ErrorMessageDialog.cs">
@@ -131,6 +254,13 @@
     <Compile Include="UI\TreeFilterDropdownSubitem.Designer.cs">
       <DependentUpon>TreeFilterDropdownSubitem.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IVD2DocumentInterface.cs" />
+    <Compile Include="UI\VD2DocumentViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\VD2DocumentViewer.Designer.cs">
+      <DependentUpon>VD2DocumentViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\VD2SourceDropdown.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -150,11 +280,51 @@
       <DependentUpon>VD2TreeFilterDropdown.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\VD2UITypeEditor.cs" />
+    <Compile Include="UI\WelcomeDocument.cs" />
+    <Compile Include="UI\WelcomeDocumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\WelcomeDocumentControl.Designer.cs">
+      <DependentUpon>WelcomeDocumentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="VD2Data.cs" />
     <Compile Include="VD2DB.cs" />
     <Compile Include="VD2LoadCodeGenerator.cs" />
     <Compile Include="VD2PropertyStore.cs" />
     <Compile Include="Vector3DConverter.cs" />
+    <EmbeddedResource Include="DataStructureCollectionsEditor.resx">
+      <DependentUpon>DataStructureCollectionsEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataStructureSidebarEditor.resx">
+      <DependentUpon>DataStructureSidebarEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataStructureSidebarItemView.resx">
+      <DependentUpon>DataStructureSidebarItemView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OgreControl.resx">
+      <DependentUpon>OgreControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreenForm.resx">
+      <DependentUpon>SplashScreenForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentControl.resx">
+      <DependentUpon>DataDocumentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditor.resx">
+      <DependentUpon>ObjectIDRefCollectionSidebarEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\ObjectIDRefCollectionSidebarEditorItem.resx">
+      <DependentUpon>ObjectIDRefCollectionSidebarEditorItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\SidebarCollectionsEditorItem.resx">
+      <DependentUpon>SidebarCollectionsEditorItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\StringCollectionSidebarEditor.resx">
+      <DependentUpon>StringCollectionSidebarEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DocumentTabControl.resx">
+      <DependentUpon>DocumentTabControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\EditorAboutBox.resx">
       <DependentUpon>EditorAboutBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +356,9 @@
     <EmbeddedResource Include="UI\TreeFilterDropdownSubitem.resx">
       <DependentUpon>TreeFilterDropdownSubitem.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\VD2DocumentViewer.resx">
+      <DependentUpon>VD2DocumentViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\VD2SourceDropdown.resx">
       <DependentUpon>VD2SourceDropdown.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,6 +367,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\VD2TreeFilterDropdown.resx">
       <DependentUpon>VD2TreeFilterDropdown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\WelcomeDocumentControl.resx">
+      <DependentUpon>WelcomeDocumentControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -211,12 +387,27 @@
   <ItemGroup>
     <None Include="foldericon.png" />
     <None Include="jcStubFemale-Nana.png" />
+    <None Include="Resources\DocumentCloseButton.bmp" />
+    <None Include="DocumentCloseButton.png" />
+    <None Include="splashscreenbanner.png" />
     <Content Include="sungateicon.ico" />
     <None Include="sungateicon.png" />
     <Content Include="UI\sungateicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

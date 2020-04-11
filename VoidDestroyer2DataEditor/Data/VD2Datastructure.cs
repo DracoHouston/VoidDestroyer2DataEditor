@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -16,6 +17,16 @@ namespace VoidDestroyer2DataEditor
         {
             ParentDataFile = inParentDataFile;
             DataNode = inDataNode;
+        }
+
+        public virtual List<string> AsVD2XML(int inIndent = 0)
+        {
+            return new List<string>();
+        }
+
+        public virtual Control GetSidebarEditor()
+        {
+            return new Panel();
         }
     }
 }

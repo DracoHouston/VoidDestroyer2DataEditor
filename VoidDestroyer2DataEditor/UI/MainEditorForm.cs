@@ -30,9 +30,8 @@ namespace VoidDestroyer2DataEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            EditorUserSettings.UserSettings.InitUserSettings();
             EditorUI.UI.InitUI(this);
-            
+
             //toolStripComboBox1.SelectedIndex = 0;
             SetTreeIconSize(EditorUserSettings.UserSettings.TreeIconSize);
             //FilesTree.ImageList = 
@@ -41,10 +40,15 @@ namespace VoidDestroyer2DataEditor
                 
                 InitAllTrees();
                 RepopulateAllTrees();
+                OpenVD2Document(new WelcomeDocument());
             }
+            Disposed += MainEditorForm_Disposed;
         }
 
-        
+        private void MainEditorForm_Disposed(object sender, EventArgs e)
+        {
+            OgreRenderer.Renderer.ReleaseOgre();
+        }
 
         public void SetTreeIconSize(int inSize)
         {
@@ -1324,7 +1328,7 @@ namespace VoidDestroyer2DataEditor
             }*/
         }
 
-        private void button1_Click(object sender, EventArgs e)
+       /* private void button1_Click(object sender, EventArgs e)
         {
             if (sourcedropdown == null)
             {
@@ -1349,7 +1353,7 @@ namespace VoidDestroyer2DataEditor
         {
             sourcedropdown.Dispose();
             sourcedropdown = null;
-        }
+        }*/
 
         private FilesTreeItem GetFilesTreeItemByPath(string inPath)
         {
@@ -1415,7 +1419,7 @@ namespace VoidDestroyer2DataEditor
 
         
 
-        private void button2_Click(object sender, EventArgs e)
+        /*private void button2_Click(object sender, EventArgs e)
         {
             if (treefiltersdropdown == null)
             {
@@ -1445,7 +1449,7 @@ namespace VoidDestroyer2DataEditor
         private void button1_Leave(object sender, EventArgs e)
         {
 
-        }
+        }*/
 
         private void TreeContextMenu_Opened(object sender, EventArgs e)
         {
@@ -1453,19 +1457,62 @@ namespace VoidDestroyer2DataEditor
             {
                 switch (i)
                 {
-                    case 0://save
+                    case 0:
+                        TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                        break;
+                    case 1://save
+                        TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        
+                        break;
+                    case 2://save as
                         TreeContextMenu.Items[i].Enabled = false;
                         break;
-                    case 1://save as
+                    case 3://delete
                         TreeContextMenu.Items[i].Enabled = false;
                         break;
-                    case 2://delete
+                    case 4://duplicate to mod files
                         TreeContextMenu.Items[i].Enabled = false;
                         break;
-                    case 3://duplicate to mod files
-                        TreeContextMenu.Items[i].Enabled = false;
-                        break;
-                    case 5://copy objectID
+                    case 6://copy objectID
                         TreeContextMenu.Items[i].Enabled = true;
                         /*if (TreeContextMenu.SourceControl != null)
                         {
@@ -1487,7 +1534,7 @@ namespace VoidDestroyer2DataEditor
                             
                         }*/
                         break;
-                    case 6://find refs
+                    case 7://find refs
                         TreeContextMenu.Items[i].Enabled = false;
                         break;
                 }
@@ -1573,7 +1620,138 @@ namespace VoidDestroyer2DataEditor
             }
             return result;
         }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (TreeContextMenu.SourceControl != null)
+            {
+                if (TreeContextMenu.SourceControl is TreeView)
+                {
+                    TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                    if (tree != null)
+                    {
+                        FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                        if (item != null)
+                        {
+                            if (item.DataFile != null)
+                            {
+                                //EditorUI.ExploreFile(item.DataFile.FilePath);
+                                item.DataFile.SaveData();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FilesTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Right:
+                    FilesTree.SelectedNode = e.Node;
+                    break;
+                case MouseButtons.Middle:
+                    FilesTree.SelectedNode = e.Node;
+                    documentTabControl1.TabPages.Add(GetFilesTreeItemByPath(e.Node.FullPath).DisplayName);
+                    break;
+            }
+        }
+
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            documentTabControl1.TabPages.Add(GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath).DisplayName);
+        }
+
+        private void FilesTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    FilesTree.SelectedNode = e.Node;
+                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(e.Node.FullPath);
+                    if (item != null)
+                    {
+                        if (item.DataFile != null)
+                        {
+                            OpenVD2Document(item.DataFile, true);
+
+                        }
+                    }
+                    break;
+            }
+        }
+        public void OpenVD2Document(IVD2DocumentInterface inDocument, bool inGoToNewTab = false)
+        {
+            if (inDocument != null)
+            {
+                if (!IsDocumentAlreadyOpen(inDocument))
+                {
+                    TabPage docpage = new TabPage();
+
+                    VD2DocumentViewer docview = new VD2DocumentViewer();
+                    docpage.Controls.Add(docview);
+                    docview.Dock = DockStyle.Fill;
+
+                    documentTabControl1.TabPages.Add(docpage);
+                    if (!inGoToNewTab)
+                    {
+                        documentTabControl1.SelectTab(docpage);
+                    }
+                    docview.Document = inDocument;
+                }
+                else
+                {
+                    SelectTabByDocument(inDocument);
+                }
+            }            
+        }
+
+        public bool IsDocumentAlreadyOpen(IVD2DocumentInterface inDocument)
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document == inDocument)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void SelectTabByDocument(IVD2DocumentInterface inDocument)
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document == inDocument)
+                            {
+                                documentTabControl1.SelectTab(page);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    
 
     //the order of this enum and the base nodes hard coded below must match!
     enum ShipClassIndex
@@ -1623,9 +1801,34 @@ namespace VoidDestroyer2DataEditor
         //public string Source;
         public string IconKey;
         public bool Saved;
-        public VD2Data DataFile;
+        public VD2Data _DataFile;
         public List<string> FilterTags;
         public List<FilesTreeItem> Children;
+
+        public VD2Data DataFile
+        {
+            get
+            {
+                return _DataFile;
+            }
+            set
+            {
+                if (_DataFile != null)
+                {
+                    _DataFile.VD2PropertyChanged -= OnMyFileEdited;
+                }
+                _DataFile = value;
+                if (_DataFile != null)
+                {
+                    _DataFile.VD2PropertyChanged += OnMyFileEdited;
+                }
+            }
+        }
+
+        private void OnMyFileEdited(object sender, VD2PropertyChangedEventArgs e)
+        {
+            
+        }
 
         public string ObjectID
         {
@@ -1748,7 +1951,7 @@ namespace VoidDestroyer2DataEditor
                     }
                 }
 
-                return "(" + sourcestring + rwstring + ") " + savestring + Name;
+                return "(" + sourcestring + rwstring + ") " /*+ savestring*/ + Name;
             }
         }
 

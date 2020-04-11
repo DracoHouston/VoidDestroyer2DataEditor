@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -15,6 +16,8 @@ namespace VoidDestroyer2DataEditor
         public MainEditorForm EditorForm;
 
         public EditorModes CurrentEditorMode;
+
+        public SoundPlayer WavPlayer;
 
         public VD2DB<ShipData> Ships;
         public VD2DB<PrimaryUpgradeData> PrimaryUpgrades;
@@ -61,7 +64,7 @@ namespace VoidDestroyer2DataEditor
 
         private EditorUI()
         {
-            
+            WavPlayer = new SoundPlayer();
         }
 
         public static bool ExploreFile(string filePath)
@@ -187,6 +190,191 @@ namespace VoidDestroyer2DataEditor
                 pathonly = EditorForm.VD2PathFinderDialog.FileName.Substring(0, EditorForm.VD2PathFinderDialog.FileName.Length - "Void Destroyer 2.exe".Length);                
             }
             outPath = pathonly;
+            return result;
+        }
+
+        public List<string> GetObjectIDListForType(string inTypeName)
+        {
+            List<string> result = new List<string>();
+            switch (inTypeName)
+            {
+                case "Ship":
+                    foreach (VD2Data datafile in Ships.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "PrimaryUpgrade":
+                    foreach (VD2Data datafile in PrimaryUpgrades.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "ActiveUpgrade":
+                    foreach (VD2Data datafile in ActiveUpgrades.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Weapon":
+                    foreach (VD2Data datafile in Weapons.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Turret":
+                    foreach (VD2Data datafile in Turrets.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Launcher":
+                    foreach (VD2Data datafile in Launchers.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Hangar":
+                    foreach (VD2Data datafile in Hangars.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Ammo":
+                    foreach (VD2Data datafile in Ammo.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Missile":
+                    foreach (VD2Data datafile in Missiles.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Mine":
+                    foreach (VD2Data datafile in Mines.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "AreaOfEffect":
+                    foreach (VD2Data datafile in AreaOfEffect.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Asteroid":
+                    foreach (VD2Data datafile in Asteroids.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Base":
+                    foreach (VD2Data datafile in Bases.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Character":
+                    foreach (VD2Data datafile in Characters.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Cockpit":
+                    foreach (VD2Data datafile in Cockpits.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Debris":
+                    foreach (VD2Data datafile in Debris.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Dialog":
+                    foreach (VD2Data datafile in Dialog.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "DockedMovingElement":
+                    foreach (VD2Data datafile in DockedMovingElements.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Door":
+                    foreach (VD2Data datafile in Doors.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Effect":
+                    foreach (VD2Data datafile in Effects.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Particle":
+                    foreach (VD2Data datafile in Particles.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Explosion":
+                    foreach (VD2Data datafile in Explosions.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Faction":
+                    foreach (VD2Data datafile in Factions.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Music":
+                    foreach (VD2Data datafile in Music.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Other":
+                    foreach (VD2Data datafile in OtherObjects.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Skybox":
+                    foreach (VD2Data datafile in Skyboxes.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Sound":
+                    foreach (VD2Data datafile in Sounds.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Station":
+                    foreach (VD2Data datafile in Stations.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Sun":
+                    foreach (VD2Data datafile in Suns.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                default:
+                    break;
+            }
             return result;
         }
     }

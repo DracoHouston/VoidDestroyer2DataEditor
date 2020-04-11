@@ -249,7 +249,23 @@ namespace VoidDestroyer2DataEditor
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainEditorForm());
+            //Application.Run(new MainEditorForm());
+            EditorUserSettings.UserSettings.InitUserSettings();
+            
+            OgreRenderer.Renderer.InitOgre();
+
+            SplashScreenForm splash = new SplashScreenForm();
+            splash.ShowDialog();
+
+
+            MainEditorForm mainform = new MainEditorForm();
+            mainform.Show();
+
+            
+            while ((OgreRenderer.Renderer.OgreRoot != null) && OgreRenderer.Renderer.OgreRoot.renderOneFrame())
+            {
+                Application.DoEvents();
+            }
         }
     }
 }

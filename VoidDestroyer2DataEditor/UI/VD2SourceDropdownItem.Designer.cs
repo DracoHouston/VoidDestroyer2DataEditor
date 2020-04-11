@@ -1,4 +1,4 @@
-﻿namespace VoidDestroyer2DataEditor.UI
+﻿namespace VoidDestroyer2DataEditor
 {
     partial class VD2SourceDropdownItem
     {
@@ -54,7 +54,6 @@
             this.WriteAccessCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.WriteAccessCheckBox.Enabled = false;
             this.WriteAccessCheckBox.Location = new System.Drawing.Point(3, 20);
             this.WriteAccessCheckBox.Name = "WriteAccessCheckBox";
             this.WriteAccessCheckBox.Size = new System.Drawing.Size(89, 17);

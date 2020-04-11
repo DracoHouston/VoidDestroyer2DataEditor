@@ -14,10 +14,10 @@ namespace VoidDestroyer2DataEditor
     [TypeConverter(typeof(debrisInfoDataStructureConverter))]
     public class debrisInfoDataStructure : VD2DataStructure
     {
-        ObservableCollection<debrisDataStructure> _debris;
+        ObservableCollection<VD2DataStructure> _debris;
 
         [Description("debris is a collection of datastructures"), Category("Data Structure Collection")]
-        public ObservableCollection<debrisDataStructure> debris
+        public ObservableCollection<VD2DataStructure> debris
         {
             get
             {
@@ -45,7 +45,7 @@ namespace VoidDestroyer2DataEditor
                         if (DataNode != null)
                         {
                             bool exists = false;
-                            _debris = new ObservableCollection<debrisDataStructure>(DataStructureParseHelpers.GetdebrisDataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, "debris", out exists));
+                            _debris = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdebrisDataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, "debris", out exists));
                             _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
                             SetPropertyExists("debris", exists);
                         }
@@ -65,12 +65,13 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("debris");
+            SetPropertyIsCollection("debris", true, typeof(debrisDataStructure));
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
         public debrisInfoDataStructure() : base(null, null)
         {
-            _debris = new ObservableCollection<debrisDataStructure>();
+            _debris = new ObservableCollection<VD2DataStructure>();
             _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
 
             if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
@@ -82,13 +83,13 @@ namespace VoidDestroyer2DataEditor
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
-            _debris = new ObservableCollection<debrisDataStructure>();
+            _debris = new ObservableCollection<VD2DataStructure>();
             _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
         }
 
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, List<debrisDataStructure> indebris) : base(inParentDataFile, inDataNode)
         {
-            _debris = new ObservableCollection<debrisDataStructure>(indebris);
+            _debris = new ObservableCollection<VD2DataStructure>(indebris);
         }
 
         public debrisInfoDataStructure(debrisInfoDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
@@ -109,6 +110,27 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<debrisInfo>");
+            if (PropertyExists("debris"))
+            {
+                foreach (debrisDataStructure result in _debris)
+                {
+                    xmltextlines.AddRange(result.AsVD2XML(inIndent + 4));
+                }
+            }
+
+            xmltextlines.Add(indent + "</debrisInfo>");
+            return xmltextlines;
         }
     }
 
@@ -287,6 +309,33 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _debrisAngular.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<debris>");
+            if (PropertyExists("debrisID"))
+            {
+                xmltextlines.Add(indent + "    <debrisID attr1=\"" + _debrisID + "\"/>"); 
+            }
+
+            if (PropertyExists("debrisMomentum"))
+            {
+                xmltextlines.Add(indent + "    <debrisMomentum attr1=\"" + _debrisMomentum.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("debrisAngular"))
+            {
+                xmltextlines.Add(indent + "    <debrisAngular attr1=\"" + _debrisAngular.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</debris>");
+            return xmltextlines;
         }
     }
 
@@ -530,6 +579,41 @@ namespace VoidDestroyer2DataEditor
             result += _recharge.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<afterburner>");
+            if (PropertyExists("soundID"))
+            {
+                xmltextlines.Add(indent + "    <soundID attr1=\"" + _soundID + "\"/>"); 
+            }
+            if (PropertyExists("tailSoundID"))
+            {
+                xmltextlines.Add(indent + "    <tailSoundID attr1=\"" + _tailSoundID + "\"/>"); 
+            }
+
+            if (PropertyExists("multiplier"))
+            {
+                xmltextlines.Add(indent + "    <multiplier attr1=\"" + _multiplier.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("capacity"))
+            {
+                xmltextlines.Add(indent + "    <capacity attr1=\"" + _capacity.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("recharge"))
+            {
+                xmltextlines.Add(indent + "    <recharge attr1=\"" + _recharge.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</afterburner>");
+            return xmltextlines;
+        }
     }
 
     public class afterburnerDataStructureConverter : TypeConverter
@@ -617,7 +701,7 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("targetClass");
-
+            SetPropertyIsCollection("targetClass", true, typeof(string));
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
@@ -666,6 +750,27 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<targetPriorityList>");
+            if (PropertyExists("targetClass"))
+            {
+                foreach (string result in _targetClass)
+                {
+                    xmltextlines.Add(indent + "    <targetClass attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            xmltextlines.Add(indent + "</targetPriorityList>");
+            return xmltextlines;
         }
     }
 
@@ -806,6 +911,11 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("upgradeID");
+            List<string> upgradeIDreftypes = new List<string>();
+            upgradeIDreftypes.Add("PrimaryUpgrade");
+            upgradeIDreftypes.Add("ActiveUpgrade");
+            SetPropertyIsObjectIDRef("upgradeID", true, upgradeIDreftypes);
+            SetPropertyIsCollection("upgradeID", true, typeof(string));
 
             InitProperty("primaryUpgradeCapacity");
             InitProperty("activeUpgradeCapacity");
@@ -874,6 +984,36 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _activeUpgradeCapacity.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<upgrades>");
+            if (PropertyExists("upgradeID"))
+            {
+                foreach (string result in _upgradeID)
+                {
+                    xmltextlines.Add(indent + "    <upgradeID attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            if (PropertyExists("primaryUpgradeCapacity"))
+            {
+                xmltextlines.Add(indent + "    <primaryUpgradeCapacity attr1=\"" + _primaryUpgradeCapacity.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("activeUpgradeCapacity"))
+            {
+                xmltextlines.Add(indent + "    <activeUpgradeCapacity attr1=\"" + _activeUpgradeCapacity.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</upgrades>");
+            return xmltextlines;
         }
     }
 
@@ -1163,6 +1303,47 @@ namespace VoidDestroyer2DataEditor
             result += _position.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<propulsion>");
+            if (PropertyExists("propulsionEffectID"))
+            {
+                xmltextlines.Add(indent + "    <propulsionEffectID attr1=\"" + _propulsionEffectID + "\"/>"); 
+            }
+            if (PropertyExists("direction"))
+            {
+                xmltextlines.Add(indent + "    <direction attr1=\"" + _direction + "\"/>"); 
+            }
+
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bPlayerShipOnly"))
+            {
+                xmltextlines.Add(indent + "    <bPlayerShipOnly attr1=\"" + ((_bPlayerShipOnly) ? "1" : "0") + "\"/>");
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</propulsion>");
+            return xmltextlines;
+        }
     }
 
     public class propulsionDataStructureConverter : TypeConverter
@@ -1412,7 +1593,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("pitch");
 
             InitProperty("weaponPosition");
-
+            SetPropertyIsCollection("weaponPosition", true, typeof(Vector3D));
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
@@ -1505,6 +1686,53 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<weapon>");
+            if (PropertyExists("weaponType"))
+            {
+                xmltextlines.Add(indent + "    <weaponType attr1=\"" + _weaponType + "\"/>"); 
+            }
+            if (PropertyExists("hardpointID"))
+            {
+                xmltextlines.Add(indent + "    <hardpointID attr1=\"" + _hardpointID + "\"/>"); 
+            }
+            if (PropertyExists("weaponFire"))
+            {
+                xmltextlines.Add(indent + "    <weaponFire attr1=\"" + _weaponFire + "\"/>"); 
+            }
+
+            if (PropertyExists("barrelDelay"))
+            {
+                xmltextlines.Add(indent + "    <barrelDelay attr1=\"" + _barrelDelay.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("weaponPosition"))
+            {
+                foreach (Vector3D result in _weaponPosition)
+                {
+                    xmltextlines.Add(indent + "    <weaponPosition x=\"" + result.x.ToString() + "\" y=\"" + result.y.ToString() + "\" z=\"" + result.z.ToString() + "\"/>");
+                }
+            }
+
+            xmltextlines.Add(indent + "</weapon>");
+            return xmltextlines;
         }
     }
 
@@ -1786,6 +2014,46 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _position.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<damage>");
+            if (PropertyExists("damageEffectID"))
+            {
+                xmltextlines.Add(indent + "    <damageEffectID attr1=\"" + _damageEffectID + "\"/>"); 
+            }
+
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("healthPoint"))
+            {
+                xmltextlines.Add(indent + "    <healthPoint attr1=\"" + _healthPoint.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</damage>");
+            return xmltextlines;
         }
     }
 
@@ -2163,6 +2431,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("weaponFire");
 
             InitProperty("turretRole");
+            SetPropertyIsCollection("turretRole", true, typeof(string));
 
             InitProperty("yawPermitted");
             InitProperty("weaponPositionID");
@@ -2311,6 +2580,76 @@ namespace VoidDestroyer2DataEditor
             result += _position.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<turret>");
+            if (PropertyExists("turretID"))
+            {
+                xmltextlines.Add(indent + "    <turretID attr1=\"" + _turretID + "\"/>"); 
+            }
+            if (PropertyExists("turretOrientation"))
+            {
+                xmltextlines.Add(indent + "    <turretOrientation attr1=\"" + _turretOrientation + "\"/>"); 
+            }
+            if (PropertyExists("weaponFire"))
+            {
+                xmltextlines.Add(indent + "    <weaponFire attr1=\"" + _weaponFire + "\"/>"); 
+            }
+
+            if (PropertyExists("turretRole"))
+            {
+                foreach (string result in _turretRole)
+                {
+                    xmltextlines.Add(indent + "    <turretRole attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            if (PropertyExists("yawPermitted"))
+            {
+                xmltextlines.Add(indent + "    <yawPermitted attr1=\"" + _yawPermitted.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("weaponPositionID"))
+            {
+                xmltextlines.Add(indent + "    <weaponPositionID attr1=\"" + _weaponPositionID.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("pitchLower"))
+            {
+                xmltextlines.Add(indent + "    <pitchLower attr1=\"" + _pitchLower.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bShowInCockpit"))
+            {
+                xmltextlines.Add(indent + "    <bShowInCockpit attr1=\"" + ((_bShowInCockpit) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bHideInHangar"))
+            {
+                xmltextlines.Add(indent + "    <bHideInHangar attr1=\"" + ((_bHideInHangar) ? "1" : "0") + "\"/>");
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</turret>");
+            return xmltextlines;
+        }
     }
 
     public class turretDataStructureConverter : TypeConverter
@@ -2454,6 +2793,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("attachmentOrientation");
 
             InitProperty("attachmentID");
+            SetPropertyIsCollection("attachmentID", true, typeof(string));
 
             InitProperty("attachmentPosition");
 
@@ -2525,6 +2865,37 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _attachmentPosition.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<attachment>");
+            if (PropertyExists("attachmentOrientation"))
+            {
+                xmltextlines.Add(indent + "    <attachmentOrientation attr1=\"" + _attachmentOrientation + "\"/>"); 
+            }
+
+            if (PropertyExists("attachmentID"))
+            {
+                foreach (string result in _attachmentID)
+                {
+                    xmltextlines.Add(indent + "    <attachmentID attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            if (PropertyExists("attachmentPosition"))
+            {
+                xmltextlines.Add(indent + "    <attachmentPosition x=\"" + _attachmentPosition.x.ToString() + "\" y=\"" + _attachmentPosition.y.ToString() + "\" z=\"" + _attachmentPosition.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</attachment>");
+            return xmltextlines;
         }
     }
 
@@ -2877,6 +3248,55 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _translateAmount.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<movingElement>");
+            if (PropertyExists("boneName"))
+            {
+                xmltextlines.Add(indent + "    <boneName attr1=\"" + _boneName + "\"/>"); 
+            }
+
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("speedMultiplier"))
+            {
+                xmltextlines.Add(indent + "    <speedMultiplier attr1=\"" + _speedMultiplier.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bLinkedToWeapon"))
+            {
+                xmltextlines.Add(indent + "    <bLinkedToWeapon attr1=\"" + ((_bLinkedToWeapon) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bCombat"))
+            {
+                xmltextlines.Add(indent + "    <bCombat attr1=\"" + ((_bCombat) ? "1" : "0") + "\"/>");
+            }
+
+            if (PropertyExists("translateAmount"))
+            {
+                xmltextlines.Add(indent + "    <translateAmount x=\"" + _translateAmount.x.ToString() + "\" y=\"" + _translateAmount.y.ToString() + "\" z=\"" + _translateAmount.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</movingElement>");
+            return xmltextlines;
         }
     }
 
@@ -3306,6 +3726,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("resourceOnly");
 
             InitProperty("objectID");
+            SetPropertyIsCollection("objectID", true, typeof(string));
 
             InitProperty("ejectVelocity");
             InitProperty("dockRollOffset");
@@ -3458,6 +3879,83 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _position.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<dock>");
+            if (PropertyExists("dockType"))
+            {
+                xmltextlines.Add(indent + "    <dockType attr1=\"" + _dockType + "\"/>"); 
+            }
+            if (PropertyExists("ejectOrientation"))
+            {
+                xmltextlines.Add(indent + "    <ejectOrientation attr1=\"" + _ejectOrientation + "\"/>"); 
+            }
+            if (PropertyExists("orientation"))
+            {
+                xmltextlines.Add(indent + "    <orientation attr1=\"" + _orientation + "\"/>"); 
+            }
+            if (PropertyExists("attachedID"))
+            {
+                xmltextlines.Add(indent + "    <attachedID attr1=\"" + _attachedID + "\"/>"); 
+            }
+            if (PropertyExists("boneName"))
+            {
+                xmltextlines.Add(indent + "    <boneName attr1=\"" + _boneName + "\"/>"); 
+            }
+            if (PropertyExists("dockOrientation"))
+            {
+                xmltextlines.Add(indent + "    <dockOrientation attr1=\"" + _dockOrientation + "\"/>"); 
+            }
+            if (PropertyExists("resourceOnly"))
+            {
+                xmltextlines.Add(indent + "    <resourceOnly attr1=\"" + _resourceOnly + "\"/>"); 
+            }
+
+            if (PropertyExists("objectID"))
+            {
+                foreach (string result in _objectID)
+                {
+                    xmltextlines.Add(indent + "    <objectID attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            if (PropertyExists("ejectVelocity"))
+            {
+                xmltextlines.Add(indent + "    <ejectVelocity attr1=\"" + _ejectVelocity.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("dockRollOffset"))
+            {
+                xmltextlines.Add(indent + "    <dockRollOffset attr1=\"" + _dockRollOffset.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("dockYawOffset"))
+            {
+                xmltextlines.Add(indent + "    <dockYawOffset attr1=\"" + _dockYawOffset.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bCanAcceptRawResource"))
+            {
+                xmltextlines.Add(indent + "    <bCanAcceptRawResource attr1=\"" + ((_bCanAcceptRawResource) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bInvisible"))
+            {
+                xmltextlines.Add(indent + "    <bInvisible attr1=\"" + ((_bInvisible) ? "1" : "0") + "\"/>");
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</dock>");
+            return xmltextlines;
         }
     }
 
@@ -3708,6 +4206,42 @@ namespace VoidDestroyer2DataEditor
             result += _shieldPosition.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<shield>");
+            if (PropertyExists("shieldID"))
+            {
+                xmltextlines.Add(indent + "    <shieldID attr1=\"" + _shieldID + "\"/>"); 
+            }
+            if (PropertyExists("shieldOrientation"))
+            {
+                xmltextlines.Add(indent + "    <shieldOrientation attr1=\"" + _shieldOrientation + "\"/>"); 
+            }
+
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("shieldPosition"))
+            {
+                xmltextlines.Add(indent + "    <shieldPosition x=\"" + _shieldPosition.x.ToString() + "\" y=\"" + _shieldPosition.y.ToString() + "\" z=\"" + _shieldPosition.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</shield>");
+            return xmltextlines;
+        }
     }
 
     public class shieldDataStructureConverter : TypeConverter
@@ -3892,6 +4426,34 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _bLinkedToWeapon.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<rotatingElement>");
+            if (PropertyExists("boneName"))
+            {
+                xmltextlines.Add(indent + "    <boneName attr1=\"" + _boneName + "\"/>"); 
+            }
+
+            if (PropertyExists("rollSpeed"))
+            {
+                xmltextlines.Add(indent + "    <rollSpeed attr1=\"" + _rollSpeed.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bLinkedToWeapon"))
+            {
+                xmltextlines.Add(indent + "    <bLinkedToWeapon attr1=\"" + ((_bLinkedToWeapon) ? "1" : "0") + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</rotatingElement>");
+            return xmltextlines;
         }
     }
 
@@ -4204,6 +4766,49 @@ namespace VoidDestroyer2DataEditor
             result += _recoilTime.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<recoil>");
+            if (PropertyExists("recoilBone"))
+            {
+                xmltextlines.Add(indent + "    <recoilBone attr1=\"" + _recoilBone + "\"/>"); 
+            }
+            if (PropertyExists("muzzleBoneName"))
+            {
+                xmltextlines.Add(indent + "    <muzzleBoneName attr1=\"" + _muzzleBoneName + "\"/>"); 
+            }
+            if (PropertyExists("recoilParentType"))
+            {
+                xmltextlines.Add(indent + "    <recoilParentType attr1=\"" + _recoilParentType + "\"/>"); 
+            }
+
+            if (PropertyExists("muzzleBone"))
+            {
+                foreach (string result in _muzzleBone)
+                {
+                    xmltextlines.Add(indent + "    <muzzleBone attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            if (PropertyExists("recoilZ"))
+            {
+                xmltextlines.Add(indent + "    <recoilZ attr1=\"" + _recoilZ.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("recoilTime"))
+            {
+                xmltextlines.Add(indent + "    <recoilTime attr1=\"" + _recoilTime.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</recoil>");
+            return xmltextlines;
+        }
     }
 
     public class recoilDataStructureConverter : TypeConverter
@@ -4310,6 +4915,24 @@ namespace VoidDestroyer2DataEditor
             string result = "";
             result += _rotateBone;
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<rotateBones>");
+            if (PropertyExists("rotateBone"))
+            {
+                xmltextlines.Add(indent + "    <rotateBone attr1=\"" + _rotateBone + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</rotateBones>");
+            return xmltextlines;
         }
     }
 
@@ -4720,6 +5343,62 @@ namespace VoidDestroyer2DataEditor
             result += _bAddToRangeCalculations.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<canister>");
+            if (PropertyExists("projectileID"))
+            {
+                xmltextlines.Add(indent + "    <projectileID attr1=\"" + _projectileID + "\"/>"); 
+            }
+
+            if (PropertyExists("canisterCount"))
+            {
+                xmltextlines.Add(indent + "    <canisterCount attr1=\"" + _canisterCount.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("blowBackCanisterCount"))
+            {
+                xmltextlines.Add(indent + "    <blowBackCanisterCount attr1=\"" + _blowBackCanisterCount.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yawRange"))
+            {
+                xmltextlines.Add(indent + "    <yawRange attr1=\"" + _yawRange.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("pitchRange"))
+            {
+                xmltextlines.Add(indent + "    <pitchRange attr1=\"" + _pitchRange.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("rollRange"))
+            {
+                xmltextlines.Add(indent + "    <rollRange attr1=\"" + _rollRange.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("speedAddBase"))
+            {
+                xmltextlines.Add(indent + "    <speedAddBase attr1=\"" + _speedAddBase.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("speedAddRandom"))
+            {
+                xmltextlines.Add(indent + "    <speedAddRandom attr1=\"" + _speedAddRandom.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bCanisterAimAssist"))
+            {
+                xmltextlines.Add(indent + "    <bCanisterAimAssist attr1=\"" + ((_bCanisterAimAssist) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bAddToRangeCalculations"))
+            {
+                xmltextlines.Add(indent + "    <bAddToRangeCalculations attr1=\"" + ((_bAddToRangeCalculations) ? "1" : "0") + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</canister>");
+            return xmltextlines;
+        }
     }
 
     public class canisterDataStructureConverter : TypeConverter
@@ -4962,6 +5641,41 @@ namespace VoidDestroyer2DataEditor
             result += _dockSize.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<launchTube>");
+            if (PropertyExists("direction"))
+            {
+                xmltextlines.Add(indent + "    <direction attr1=\"" + _direction + "\"/>"); 
+            }
+
+            if (PropertyExists("launchDeckBeg"))
+            {
+                xmltextlines.Add(indent + "    <launchDeckBeg x=\"" + _launchDeckBeg.x.ToString() + "\" y=\"" + _launchDeckBeg.y.ToString() + "\" z=\"" + _launchDeckBeg.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("launchDeckEnd"))
+            {
+                xmltextlines.Add(indent + "    <launchDeckEnd x=\"" + _launchDeckEnd.x.ToString() + "\" y=\"" + _launchDeckEnd.y.ToString() + "\" z=\"" + _launchDeckEnd.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("dockPosition"))
+            {
+                xmltextlines.Add(indent + "    <dockPosition x=\"" + _dockPosition.x.ToString() + "\" y=\"" + _dockPosition.y.ToString() + "\" z=\"" + _dockPosition.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("dockSize"))
+            {
+                xmltextlines.Add(indent + "    <dockSize x=\"" + _dockSize.x.ToString() + "\" y=\"" + _dockSize.y.ToString() + "\" z=\"" + _dockSize.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</launchTube>");
+            return xmltextlines;
+        }
     }
 
     public class launchTubeDataStructureConverter : TypeConverter
@@ -5146,6 +5860,34 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _bNoExplodeOnMirv.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<mirv>");
+            if (PropertyExists("mirvObjectID"))
+            {
+                xmltextlines.Add(indent + "    <mirvObjectID attr1=\"" + _mirvObjectID + "\"/>"); 
+            }
+
+            if (PropertyExists("mirvCount"))
+            {
+                xmltextlines.Add(indent + "    <mirvCount attr1=\"" + _mirvCount.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("bNoExplodeOnMirv"))
+            {
+                xmltextlines.Add(indent + "    <bNoExplodeOnMirv attr1=\"" + ((_bNoExplodeOnMirv) ? "1" : "0") + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</mirv>");
+            return xmltextlines;
         }
     }
 
@@ -5357,6 +6099,37 @@ namespace VoidDestroyer2DataEditor
             result += _roll.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<weaponDirection>");
+            if (PropertyExists("mainDirection"))
+            {
+                xmltextlines.Add(indent + "    <mainDirection attr1=\"" + _mainDirection + "\"/>"); 
+            }
+
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</weaponDirection>");
+            return xmltextlines;
+        }
     }
 
     public class weaponDirectionDataStructureConverter : TypeConverter
@@ -5503,6 +6276,29 @@ namespace VoidDestroyer2DataEditor
             result += _weaponPosition.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<turretBarrel>");
+            if (PropertyExists("boneName"))
+            {
+                xmltextlines.Add(indent + "    <boneName attr1=\"" + _boneName + "\"/>"); 
+            }
+
+            if (PropertyExists("weaponPosition"))
+            {
+                xmltextlines.Add(indent + "    <weaponPosition x=\"" + _weaponPosition.x.ToString() + "\" y=\"" + _weaponPosition.y.ToString() + "\" z=\"" + _weaponPosition.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</turretBarrel>");
+            return xmltextlines;
+        }
     }
 
     public class turretBarrelDataStructureConverter : TypeConverter
@@ -5639,6 +6435,27 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<deathSpawn>");
+            if (PropertyExists("asteroidID"))
+            {
+                foreach (string result in _asteroidID)
+                {
+                    xmltextlines.Add(indent + "    <asteroidID attr1=\"" + result + "\"/>"); 
+                }
+            }
+
+            xmltextlines.Add(indent + "</deathSpawn>");
+            return xmltextlines;
         }
     }
 
@@ -5825,6 +6642,34 @@ namespace VoidDestroyer2DataEditor
             result += _linearVelocity.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<baby>");
+            if (PropertyExists("asteroidID"))
+            {
+                xmltextlines.Add(indent + "    <asteroidID attr1=\"" + _asteroidID + "\"/>"); 
+            }
+
+            if (PropertyExists("lifeTimer"))
+            {
+                xmltextlines.Add(indent + "    <lifeTimer attr1=\"" + _lifeTimer.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("linearVelocity"))
+            {
+                xmltextlines.Add(indent + "    <linearVelocity x=\"" + _linearVelocity.x.ToString() + "\" y=\"" + _linearVelocity.y.ToString() + "\" z=\"" + _linearVelocity.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</baby>");
+            return xmltextlines;
+        }
     }
 
     public class babyDataStructureConverter : TypeConverter
@@ -6002,6 +6847,33 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _dockSize.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<largeDock>");
+            if (PropertyExists("rollRotation"))
+            {
+                xmltextlines.Add(indent + "    <rollRotation attr1=\"" + _rollRotation.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("dockPosition"))
+            {
+                xmltextlines.Add(indent + "    <dockPosition x=\"" + _dockPosition.x.ToString() + "\" y=\"" + _dockPosition.y.ToString() + "\" z=\"" + _dockPosition.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("dockSize"))
+            {
+                xmltextlines.Add(indent + "    <dockSize x=\"" + _dockSize.x.ToString() + "\" y=\"" + _dockSize.y.ToString() + "\" z=\"" + _dockSize.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</largeDock>");
+            return xmltextlines;
         }
     }
 
@@ -6245,6 +7117,41 @@ namespace VoidDestroyer2DataEditor
             result += _pitchSpeed.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<physicalRotatingElement>");
+            if (PropertyExists("meshName"))
+            {
+                xmltextlines.Add(indent + "    <meshName attr1=\"" + _meshName + "\"/>"); 
+            }
+            if (PropertyExists("collisionShape"))
+            {
+                xmltextlines.Add(indent + "    <collisionShape attr1=\"" + _collisionShape + "\"/>"); 
+            }
+
+            if (PropertyExists("rollSpeed"))
+            {
+                xmltextlines.Add(indent + "    <rollSpeed attr1=\"" + _rollSpeed.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("yawSpeed"))
+            {
+                xmltextlines.Add(indent + "    <yawSpeed attr1=\"" + _yawSpeed.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("pitchSpeed"))
+            {
+                xmltextlines.Add(indent + "    <pitchSpeed attr1=\"" + _pitchSpeed.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</physicalRotatingElement>");
+            return xmltextlines;
+        }
     }
 
     public class physicalRotatingElementDataStructureConverter : TypeConverter
@@ -6390,6 +7297,29 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _position.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<alwaysOnEffect>");
+            if (PropertyExists("effectID"))
+            {
+                xmltextlines.Add(indent + "    <effectID attr1=\"" + _effectID + "\"/>"); 
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</alwaysOnEffect>");
+            return xmltextlines;
         }
     }
 
@@ -6537,6 +7467,29 @@ namespace VoidDestroyer2DataEditor
             result += _maxAmount.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<cargoBay>");
+            if (PropertyExists("cargoBayType"))
+            {
+                xmltextlines.Add(indent + "    <cargoBayType attr1=\"" + _cargoBayType + "\"/>"); 
+            }
+
+            if (PropertyExists("maxAmount"))
+            {
+                xmltextlines.Add(indent + "    <maxAmount attr1=\"" + _maxAmount.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</cargoBay>");
+            return xmltextlines;
+        }
     }
 
     public class cargoBayDataStructureConverter : TypeConverter
@@ -6643,6 +7596,24 @@ namespace VoidDestroyer2DataEditor
             string result = "";
             result += _gateCollisionSize.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<gateCollision>");
+            if (PropertyExists("gateCollisionSize"))
+            {
+                xmltextlines.Add(indent + "    <gateCollisionSize x=\"" + _gateCollisionSize.x.ToString() + "\" y=\"" + _gateCollisionSize.y.ToString() + "\" z=\"" + _gateCollisionSize.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</gateCollision>");
+            return xmltextlines;
         }
     }
 
@@ -6821,6 +7792,33 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _refuelSize.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<refuelArea>");
+            if (PropertyExists("refuelParticleSystem"))
+            {
+                xmltextlines.Add(indent + "    <refuelParticleSystem attr1=\"" + _refuelParticleSystem + "\"/>"); 
+            }
+
+            if (PropertyExists("refuelPosition"))
+            {
+                xmltextlines.Add(indent + "    <refuelPosition x=\"" + _refuelPosition.x.ToString() + "\" y=\"" + _refuelPosition.y.ToString() + "\" z=\"" + _refuelPosition.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("refuelSize"))
+            {
+                xmltextlines.Add(indent + "    <refuelSize x=\"" + _refuelSize.x.ToString() + "\" y=\"" + _refuelSize.y.ToString() + "\" z=\"" + _refuelSize.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</refuelArea>");
+            return xmltextlines;
         }
     }
 
@@ -7064,6 +8062,41 @@ namespace VoidDestroyer2DataEditor
             result += _repairSize.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<repairArea>");
+            if (PropertyExists("repairParticleSystem"))
+            {
+                xmltextlines.Add(indent + "    <repairParticleSystem attr1=\"" + _repairParticleSystem + "\"/>"); 
+            }
+            if (PropertyExists("repairSoundID"))
+            {
+                xmltextlines.Add(indent + "    <repairSoundID attr1=\"" + _repairSoundID + "\"/>"); 
+            }
+            if (PropertyExists("maxRepairClass"))
+            {
+                xmltextlines.Add(indent + "    <maxRepairClass attr1=\"" + _maxRepairClass + "\"/>"); 
+            }
+
+            if (PropertyExists("repairPosition"))
+            {
+                xmltextlines.Add(indent + "    <repairPosition x=\"" + _repairPosition.x.ToString() + "\" y=\"" + _repairPosition.y.ToString() + "\" z=\"" + _repairPosition.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("repairSize"))
+            {
+                xmltextlines.Add(indent + "    <repairSize x=\"" + _repairSize.x.ToString() + "\" y=\"" + _repairSize.y.ToString() + "\" z=\"" + _repairSize.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</repairArea>");
+            return xmltextlines;
+        }
     }
 
     public class repairAreaDataStructureConverter : TypeConverter
@@ -7242,6 +8275,33 @@ namespace VoidDestroyer2DataEditor
             result += _linearVelocity.ToString();
             return result;
         }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<mine>");
+            if (PropertyExists("mineID"))
+            {
+                xmltextlines.Add(indent + "    <mineID attr1=\"" + _mineID + "\"/>"); 
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
+            }
+            if (PropertyExists("linearVelocity"))
+            {
+                xmltextlines.Add(indent + "    <linearVelocity x=\"" + _linearVelocity.x.ToString() + "\" y=\"" + _linearVelocity.y.ToString() + "\" z=\"" + _linearVelocity.z.ToString() + "\"/>");
+            }
+
+            xmltextlines.Add(indent + "</mine>");
+            return xmltextlines;
+        }
     }
 
     public class mineDataStructureConverter : TypeConverter
@@ -7380,6 +8440,28 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _scale.ToString();
             return result;
+        }
+
+        public override List<string> AsVD2XML(int inIndent = 0)
+        {
+            List<string> xmltextlines = new List<string>();
+            string indent = "";
+            for (int i = 0; i < inIndent; i++)
+            {
+                indent += " ";
+            }
+            xmltextlines.Add(indent + "<damageCollisionField>");
+            if (PropertyExists("damage"))
+            {
+                xmltextlines.Add(indent + "    <damage attr1=\"" + _damage.ToString() + "\"/>"); 
+            }
+            if (PropertyExists("scale"))
+            {
+                xmltextlines.Add(indent + "    <scale attr1=\"" + _scale.ToString() + "\"/>"); 
+            }
+
+            xmltextlines.Add(indent + "</damageCollisionField>");
+            return xmltextlines;
         }
     }
 

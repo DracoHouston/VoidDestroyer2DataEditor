@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Drawing;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -18,6 +19,18 @@ namespace VoidDestroyer2DataEditor
         public bool FilterIn;
     }
 
+    public class DataEditorTheme
+    {
+        public Color ContentColor;
+        public Color FrameColor;
+        public Color TextColor;
+        public Color SecondaryFrameColor;
+        public Color ButtonColor;
+        public Color ButtonHoverColor;
+        public Color ButtonDownColor;
+        public string ThemeName;
+    }
+
     public class EditorUserSettings
     {
         private static EditorUserSettings Instance = null;
@@ -25,7 +38,8 @@ namespace VoidDestroyer2DataEditor
         public string VD2Path;
         public int TreeIconSize;
         public List<VD2FileSource> Sources;
-
+        public DataEditorTheme CurrentTheme;
+        public List<DataEditorTheme> Themes;
 
         public static EditorUserSettings UserSettings
         {
@@ -43,6 +57,7 @@ namespace VoidDestroyer2DataEditor
             VD2Path = "";
             TreeIconSize = 16;
             Sources = new List<VD2FileSource>();
+            Themes = new List<DataEditorTheme>();
         }
 
         public void SaveSettings(bool RefreshData = true)
@@ -67,17 +82,28 @@ namespace VoidDestroyer2DataEditor
             currentsource.DisplayName = "Base Game";
             currentsource.ShortName = "Base";
             currentsource.Path = "";
-            currentsource.WriteAccess = false;
+            currentsource.WriteAccess = true;
             currentsource.FilterIn = true;
             Sources.Add(currentsource);
             currentsource = new VD2FileSource();
             currentsource.DisplayName = "Mod Game";
             currentsource.ShortName = "Mod";
             currentsource.Path = "Mod\\";
-            currentsource.WriteAccess = false;
+            currentsource.WriteAccess = true;
             currentsource.FilterIn = true;
             Sources.Add(currentsource);
+            DataEditorTheme theme = new DataEditorTheme();
 
+            theme.ThemeName = "DefaultDark";
+            theme.ContentColor = Color.FromArgb(15, 15, 15);
+            theme.FrameColor = Color.FromArgb(90, 90, 90);
+            theme.TextColor = Color.White;
+            theme.SecondaryFrameColor = Color.FromArgb(45, 45, 45);
+            theme.ButtonColor = Color.FromArgb(120, 120, 120);
+            theme.ButtonHoverColor = Color.FromArgb(64, 64, 64);
+            theme.ButtonDownColor = Color.Silver;
+            Themes.Add(theme);
+            CurrentTheme = theme;
             bool configfoundandvalid = false;
             if (File.Exists("EditorUserSettings.cfg"))
             {

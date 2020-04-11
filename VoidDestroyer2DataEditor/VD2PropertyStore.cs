@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -62,6 +63,7 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
+        [Browsable(false)]
         public bool Unsaved
         {
             get
@@ -156,6 +158,68 @@ namespace VoidDestroyer2DataEditor
                     result = info.IsObjectID;
                 }
             }
+            return result;
+        }
+
+        public void SetPropertyIsObjectIDRef(string inName, bool inIsObjectIDRef, List<string> inRefTypes)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.IsObjectIDRef = inIsObjectIDRef;
+                    info.ObjectIDRefTypes = inRefTypes;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyIsObjectIDRef(string inName, out List<string> outRefTypes)
+        {
+            bool result = false;
+            List<string> reftypes = new List<string>();
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.IsObjectIDRef;
+                    reftypes.AddRange(info.ObjectIDRefTypes);
+                }
+            }
+            outRefTypes = reftypes;
+            return result;
+        }
+
+        public void SetPropertyIsCollection(string inName, bool inIsCollection, Type inElementType)
+        {
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    info.IsCollection = inIsCollection;
+                    info.CollectionElementType = inElementType;
+                    UpdatePropertyInfo(inName, info);
+                }
+            }
+        }
+
+        public bool PropertyIsCollection(string inName, out Type outElementType)
+        {
+            bool result = false;
+            Type elementtype = typeof(object);
+            if (VD2PropertyInfos.ContainsKey(inName))
+            {
+                VD2PropertyInfo info = null;
+                if (VD2PropertyInfos.TryGetValue(inName, out info))
+                {
+                    result = info.IsCollection;
+                    elementtype = info.CollectionElementType;
+                }
+            }
+            outElementType = elementtype;
             return result;
         }
 
