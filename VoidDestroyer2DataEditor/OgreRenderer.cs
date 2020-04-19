@@ -22,10 +22,15 @@ namespace VoidDestroyer2DataEditor
         }
         private OgreRenderer()
         {
-
+            OgreControls = new List<OgreControl>();
         }
 
         public Root OgreRoot;
+
+        public List<OgreControl> OgreControls;
+
+        public FileCollisionResolver LoadListener;
+        public OgreFrameListener FrameListener;
 
         public bool IsReady
         {
@@ -84,6 +89,7 @@ namespace VoidDestroyer2DataEditor
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/ships", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/shields", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/stations", "FileSystem", "General");
+                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/turrets", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/cockpits", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/interiors", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/overworld", "FileSystem", "General");
@@ -97,6 +103,7 @@ namespace VoidDestroyer2DataEditor
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/ships", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/shields", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/stations", "FileSystem", "General");
+                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/turrets", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/cockpits", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/interiors", "FileSystem", "General");
                 rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/overworld", "FileSystem", "General");
@@ -107,6 +114,11 @@ namespace VoidDestroyer2DataEditor
                 rs.setConfigOption("Full Screen", "No");
                 rs.setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
                 OgreRoot.initialise(false, "Main Ogre Window");
+
+                LoadListener = new FileCollisionResolver();
+                ResourceGroupManager.getSingleton().setLoadingListener(LoadListener);
+                FrameListener = new OgreFrameListener();
+                OgreRoot.addFrameListener(FrameListener);
             }
         }
 
@@ -114,6 +126,47 @@ namespace VoidDestroyer2DataEditor
         {
             OgreRoot.Dispose();
             OgreRoot = null;
+        }
+    }
+
+    public class OgreFrameListenerEventArgs : EventArgs
+    {
+        public float DeltaTime;
+        public float TotalTime;
+    }
+
+    public class OgreFrameListener : FrameListener
+    {
+        public float DeltaTime;
+        public float TotalTime;
+
+        public event EventHandler<OgreFrameListenerEventArgs> OnFrameEnded;
+
+        public OgreFrameListener()
+        {
+            DeltaTime = 0;
+            TotalTime = 0;
+        }
+
+        public override bool frameStarted(FrameEvent evt)
+        {
+            return true;
+        }
+
+        public override bool frameEnded(FrameEvent evt)
+        {
+            DeltaTime = evt.timeSinceLastFrame;
+            TotalTime += DeltaTime;
+            OgreFrameListenerEventArgs e = new OgreFrameListenerEventArgs();
+            e.DeltaTime = DeltaTime;
+            e.TotalTime = TotalTime;
+            OnFrameEnded?.Invoke(this, e);
+            return true;
+        }
+
+        public override bool frameRenderingQueued(FrameEvent evt)
+        {
+            return true;
         }
     }
 }

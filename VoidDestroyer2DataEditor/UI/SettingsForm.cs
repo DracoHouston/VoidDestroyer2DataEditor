@@ -65,7 +65,10 @@ namespace VoidDestroyer2DataEditor
         private void button3_Click(object sender, EventArgs e)
         {
             SaveConfig();
-            button3.Enabled = false;
+            if (!HasUnsavedSettings())//if the user hit cancel on a restart request this should be true and we need to keep the apply button enabled.
+            {
+                button3.Enabled = false;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -75,7 +78,28 @@ namespace VoidDestroyer2DataEditor
 
         private void SaveConfig()
         {
-            EditorUserSettings.UserSettings.VD2Path = textBox1.Text;
+            bool restarteditor = false;
+            if (EditorUserSettings.UserSettings.VD2Path != textBox1.Text)
+            {
+                EditorRestartDialog dialog = new EditorRestartDialog();
+                DialogResult dresult = dialog.ShowDialog();
+                if (dresult == DialogResult.Yes)
+                {
+                    EditorUI.UI.EditorForm.SaveAllOpenDocuments();
+                    restarteditor = true;
+                }
+                else if (dresult == DialogResult.No)
+                {
+                    restarteditor = true;
+                }
+                else if (dresult == DialogResult.Cancel)
+                {
+                    restarteditor = false;
+                    return;//cancel out of this and don't change apply any settings changes.
+                }
+                string newvd2path = textBox1.Text.Replace("/", "\\");//the different slashes looks ugly.
+                EditorUserSettings.UserSettings.VD2Path = newvd2path;
+            }
             if ((TreeIconSize != 16) && (TreeIconSize != 32))
             {
                 TreeIconSize = 16;
@@ -83,6 +107,10 @@ namespace VoidDestroyer2DataEditor
             EditorUserSettings.UserSettings.TreeIconSize = TreeIconSize;
             
             EditorUserSettings.UserSettings.SaveSettings();
+            if (restarteditor)
+            {
+                Application.Restart();
+            }
         }
 
         private bool HasUnsavedSettings()

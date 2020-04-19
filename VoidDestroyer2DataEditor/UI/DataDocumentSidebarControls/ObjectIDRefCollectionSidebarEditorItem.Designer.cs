@@ -30,15 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ObjectIDEditor = new System.Windows.Forms.ComboBox();
+            this.ObjectIDRefContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.TypeText = new System.Windows.Forms.Label();
-            this.ObjectIDRefContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openDefinitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ObjectIDRefContextMenu.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ObjectIDEditor
@@ -53,6 +51,21 @@
             this.ObjectIDEditor.Sorted = true;
             this.ObjectIDEditor.TabIndex = 0;
             this.ObjectIDEditor.TextChanged += new System.EventHandler(this.ObjectIDEditor_TextChanged);
+            // 
+            // ObjectIDRefContextMenu
+            // 
+            this.ObjectIDRefContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeToolStripMenuItem,
+            this.duplicateToolStripMenuItem});
+            this.ObjectIDRefContextMenu.Name = "ObjectIDRefContextMenu";
+            this.ObjectIDRefContextMenu.Size = new System.Drawing.Size(181, 70);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // flowLayoutPanel1
             // 
@@ -87,39 +100,12 @@
             this.TypeText.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDraggedOver);
             this.TypeText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnClickedItem);
             // 
-            // ObjectIDRefContextMenu
+            // duplicateToolStripMenuItem
             // 
-            this.ObjectIDRefContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.removeToolStripMenuItem,
-            this.openDefinitionToolStripMenuItem});
-            this.ObjectIDRefContextMenu.Name = "ObjectIDRefContextMenu";
-            this.ObjectIDRefContextMenu.Size = new System.Drawing.Size(159, 92);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.pasteToolStripMenuItem.Text = "Paste";
-            // 
-            // removeToolStripMenuItem
-            // 
-            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.removeToolStripMenuItem.Text = "Remove";
-            // 
-            // openDefinitionToolStripMenuItem
-            // 
-            this.openDefinitionToolStripMenuItem.Name = "openDefinitionToolStripMenuItem";
-            this.openDefinitionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.openDefinitionToolStripMenuItem.Text = "Open Definition";
+            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duplicateToolStripMenuItem.Text = "Duplicate";
+            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
             // ObjectIDRefCollectionSidebarEditorItem
             // 
@@ -130,9 +116,9 @@
             this.Name = "ObjectIDRefCollectionSidebarEditorItem";
             this.Size = new System.Drawing.Size(205, 47);
             this.Load += new System.EventHandler(this.ObjectIDRefCollectionSidebarEditorItem_Load);
+            this.ObjectIDRefContextMenu.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            this.ObjectIDRefContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -142,9 +128,7 @@
         public System.Windows.Forms.Label TypeText;
         public System.Windows.Forms.ComboBox ObjectIDEditor;
         private System.Windows.Forms.ContextMenuStrip ObjectIDRefContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openDefinitionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem duplicateToolStripMenuItem;
     }
 }

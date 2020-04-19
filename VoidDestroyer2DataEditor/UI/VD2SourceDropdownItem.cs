@@ -27,5 +27,13 @@ namespace VoidDestroyer2DataEditor
                 EditorUI.UI.EditorForm.RepopulateAllTrees();
             }
         }
+
+        private void WriteAccessCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AssociatedSource != null)
+            {
+                AssociatedSource.WriteAccess = WriteAccessCheckBox.Checked;
+            }
+        }
     }
 }

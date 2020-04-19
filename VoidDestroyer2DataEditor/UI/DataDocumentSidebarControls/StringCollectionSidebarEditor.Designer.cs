@@ -43,6 +43,7 @@
             this.StringCollectionText.Name = "StringCollectionText";
             this.StringCollectionText.Size = new System.Drawing.Size(130, 130);
             this.StringCollectionText.TabIndex = 0;
+            this.StringCollectionText.TextChanged += new System.EventHandler(this.StringCollectionText_TextChanged);
             // 
             // StringCollectionSidebarEditor
             // 

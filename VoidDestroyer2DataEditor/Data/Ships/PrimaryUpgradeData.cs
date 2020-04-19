@@ -56,7 +56,7 @@ namespace VoidDestroyer2DataEditor
         bool _bGateTravelRefuel;
         bool _bRadiationRefuel;
 
-        ObservableCollection<turretDataStructure> _turret;
+        ObservableCollection<VD2DataStructure> _turret;
 
         [Description("displayName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string displayName
@@ -882,7 +882,7 @@ namespace VoidDestroyer2DataEditor
 
 
         [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<turretDataStructure> turret
+        public ObservableCollection<VD2DataStructure> turret
         {
             get
             {
@@ -905,7 +905,7 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _turret = new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                     _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
                     if (Source.ShortName == "Base")
                     {
@@ -931,7 +931,12 @@ namespace VoidDestroyer2DataEditor
             InitProperty("requiredMissionID");
 
             InitProperty("description");
+            SetPropertyIsCollection("description", true, typeof(string));
             InitProperty("skybox");
+            SetPropertyIsCollection("skybox", true, typeof(string));
+            List<string> skyboxobjectIDRefTypes = new List<string>();
+            skyboxobjectIDRefTypes.Add("Skybox");
+            SetPropertyIsObjectIDRef("skybox", true, skyboxobjectIDRefTypes);
 
             InitProperty("activeUpgradeSlotChange");
             InitProperty("primaryUpgradeSlotChange");
@@ -968,6 +973,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bRadiationRefuel");
 
             InitProperty("turret");
+            SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
         }
 
         public PrimaryUpgradeData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
@@ -1373,7 +1379,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bRadiationRefuel", exists);
 
-                _turret =  new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -1387,7 +1393,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        public override void SaveData()
+        protected override void SaveData()
         {
             List<string> xmltextlines = new List<string>();
             xmltextlines.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -1588,7 +1594,8 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines("testsavedship.xml", xmltextlines);
+            File.WriteAllLines(_FilePath, xmltextlines);
+            ResetAllPropertyEdited();
         }
     }
 }

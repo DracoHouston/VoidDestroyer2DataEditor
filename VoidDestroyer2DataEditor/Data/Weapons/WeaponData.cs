@@ -1530,7 +1530,15 @@ namespace VoidDestroyer2DataEditor
             InitProperty("minimumShipClass");
 
             InitProperty("fireSoundID");
+            List<string> fireSoundIDreftypes = new List<string>();
+            fireSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("fireSoundID", true, fireSoundIDreftypes);
+            SetPropertyIsCollection("fireSoundID", true, typeof(string));
             InitProperty("hangarID");
+            List<string> hangarIDreftypes = new List<string>();
+            hangarIDreftypes.Add("Hangar");
+            SetPropertyIsObjectIDRef("hangarID", true, hangarIDreftypes);
+            SetPropertyIsCollection("hangarID", true, typeof(string));
 
             InitProperty("distance");
             InitProperty("roundsPerShot");
@@ -1554,7 +1562,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("disableRate");
 
             InitProperty("scatterYaw");
+            SetPropertyIsCollection("scatterYaw", true, typeof(float));
             InitProperty("scatterPitch");
+            SetPropertyIsCollection("scatterPitch", true, typeof(float));
 
             InitProperty("bNoAimAssist");
             InitProperty("bAlwaysPlayFireSound");
@@ -2272,7 +2282,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        public override void SaveData()
+        protected override void SaveData()
         {
             List<string> xmltextlines = new List<string>();
             xmltextlines.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -2599,7 +2609,8 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines("testsavedship.xml", xmltextlines);
+            File.WriteAllLines(_FilePath, xmltextlines);
+            ResetAllPropertyEdited();
         }
     }
 }

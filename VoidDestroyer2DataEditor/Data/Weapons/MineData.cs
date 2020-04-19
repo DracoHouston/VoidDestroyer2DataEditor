@@ -903,7 +903,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        public override void SaveData()
+        protected override void SaveData()
         {
             List<string> xmltextlines = new List<string>();
             xmltextlines.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -1037,7 +1037,8 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines("testsavedship.xml", xmltextlines);
+            File.WriteAllLines(_FilePath, xmltextlines);
+            ResetAllPropertyEdited();
         }
     }
 }

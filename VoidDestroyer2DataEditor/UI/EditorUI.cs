@@ -377,5 +377,27 @@ namespace VoidDestroyer2DataEditor
             }
             return result;
         }
+
+        public static bool GetParentVD2DataIsReadOnly(Control inControl)
+        {
+            Control c = inControl;
+            while (c.Parent != null)
+            {
+                if (c.Parent is DataDocumentControl)
+                {
+                    DataDocumentControl datadocparent = (DataDocumentControl)c.Parent;
+                    if (datadocparent.DataFile != null)
+                    {
+                        if (datadocparent.DataFile.Source != null)
+                        {
+                            return !datadocparent.DataFile.Source.WriteAccess;
+                        }
+                    }
+                    break;
+                }
+                c = c.Parent;
+            }
+            return true;
+        }
     }
 }

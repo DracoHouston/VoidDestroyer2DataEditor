@@ -60,6 +60,7 @@
             this.WriteAccessCheckBox.TabIndex = 1;
             this.WriteAccessCheckBox.Text = "Write Access";
             this.WriteAccessCheckBox.UseVisualStyleBackColor = true;
+            this.WriteAccessCheckBox.CheckedChanged += new System.EventHandler(this.WriteAccessCheckBox_CheckedChanged);
             // 
             // FolderLabel
             // 

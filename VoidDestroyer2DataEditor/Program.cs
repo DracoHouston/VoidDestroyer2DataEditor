@@ -7,27 +7,90 @@ using System.ComponentModel;
 
 namespace VoidDestroyer2DataEditor
 {
+    public enum Vector3DElements
+    {
+        x,
+        y,
+        z
+    }
+
+    public class Vector3DElementChangedEventArgs : EventArgs
+    {
+        public Vector3DElements ChangedElement;
+        public float OldValue;
+        public float NewValue;
+    }
+
+    public enum ColorFElements
+    {
+        r,
+        g,
+        b,
+        a
+    }
+
+    public class ColorFElementChangedEventArgs : EventArgs
+    {
+        public ColorFElements ChangedElement;
+        public float OldValue;
+        public float NewValue;
+    }
 
     [TypeConverter(typeof(Vector3DConverter))]
     public class Vector3D
     {
+        public event EventHandler<Vector3DElementChangedEventArgs> OnElementChanged;
+
         float _x;
         public float x
         {
-            get => _x;
-            set => _x = value;
+            get
+            {
+                return _x;
+            }
+            set
+            {                
+                Vector3DElementChangedEventArgs e = new Vector3DElementChangedEventArgs();
+                e.ChangedElement = Vector3DElements.x;
+                e.OldValue = _x;
+                e.NewValue = value;
+                _x = value;
+                OnElementChanged?.Invoke(this, e);                
+            }
         }
         float _y;
         public float y
         {
-            get => _y;
-            set => _y = value;
+            get
+            {
+                return _y;
+            }
+            set
+            {
+                Vector3DElementChangedEventArgs e = new Vector3DElementChangedEventArgs();
+                e.ChangedElement = Vector3DElements.y;
+                e.OldValue = _y;
+                e.NewValue = value;
+                _y = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
         float _z;
         public float z
         {
-            get => _z;
-            set => _z = value;
+            get
+            {
+                return _z;
+            }
+            set
+            {
+                Vector3DElementChangedEventArgs e = new Vector3DElementChangedEventArgs();
+                e.ChangedElement = Vector3DElements.z;
+                e.OldValue = _z;
+                e.NewValue = value;
+                _z = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
 
         public Vector3D()
@@ -67,29 +130,75 @@ namespace VoidDestroyer2DataEditor
     [TypeConverter(typeof(Vector3DConverter))]
     public class ColorF
     {
+        public event EventHandler<ColorFElementChangedEventArgs> OnElementChanged;
+
         float _r;
         public float r
         {
-            get => _r;
-            set => _r = value;
+            get
+            {
+                return _r;
+            }
+            set
+            {
+                ColorFElementChangedEventArgs e = new ColorFElementChangedEventArgs();
+                e.ChangedElement = ColorFElements.r;
+                e.OldValue = _r;
+                e.NewValue = value;
+                _r = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
         float _g;
         public float g
         {
-            get => _g;
-            set => _g = value;
+            get
+            {
+                return _g;
+            }
+            set
+            {
+                ColorFElementChangedEventArgs e = new ColorFElementChangedEventArgs();
+                e.ChangedElement = ColorFElements.g;
+                e.OldValue = _g;
+                e.NewValue = value;
+                _g = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
         float _b;
         public float b
         {
-            get => _b;
-            set => _b = value;
+            get
+            {
+                return _b;
+            }
+            set
+            {
+                ColorFElementChangedEventArgs e = new ColorFElementChangedEventArgs();
+                e.ChangedElement = ColorFElements.b;
+                e.OldValue = _b;
+                e.NewValue = value;
+                _b = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
         float _a;
         public float a
         {
-            get => _a;
-            set => _a = value;
+            get
+            {
+                return _a;
+            }
+            set
+            {
+                ColorFElementChangedEventArgs e = new ColorFElementChangedEventArgs();
+                e.ChangedElement = ColorFElements.a;
+                e.OldValue = _a;
+                e.NewValue = value;
+                _a = value;
+                OnElementChanged?.Invoke(this, e);
+            }
         }
 
         public ColorF()

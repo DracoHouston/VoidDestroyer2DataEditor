@@ -28,5 +28,10 @@ namespace VoidDestroyer2DataEditor
         {
             return new Panel();
         }
+
+        public virtual void CopyFrom(VD2DataStructure inOriginal)
+        {
+
+        }
     }
 }

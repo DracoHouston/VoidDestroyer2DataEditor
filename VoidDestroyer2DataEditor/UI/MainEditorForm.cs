@@ -16,11 +16,11 @@ namespace VoidDestroyer2DataEditor
 
     public partial class MainEditorForm : Form
     {
-        
-        private VD2SourceDropdown sourcedropdown;
-        private VD2TreeFilterDropdown treefiltersdropdown;
         public List<FilesTreeItem> FilesTreeItems;
         public List<string> ActiveFilters;
+
+        WelcomeDocument StartupDocument;
+
         public MainEditorForm()
         {
             InitializeComponent();
@@ -40,7 +40,8 @@ namespace VoidDestroyer2DataEditor
                 
                 InitAllTrees();
                 RepopulateAllTrees();
-                OpenVD2Document(new WelcomeDocument());
+                StartupDocument = new WelcomeDocument();
+                OpenVD2Document(StartupDocument);
             }
             Disposed += MainEditorForm_Disposed;
         }
@@ -260,15 +261,27 @@ namespace VoidDestroyer2DataEditor
             currentitem.Name = "Suns";
             currentitem.IconKey = "foldericon";
             FilesTreeItems[0].Children.Add(currentitem);
-            PopulateSunsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);            
+            PopulateSunsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Media";
+            currentitem.IconKey = "foldericon";
+            FilesTreeItems.Add(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Models";
+            currentitem.IconKey = "foldericon";
+            FilesTreeItems[1].Children.Add(currentitem);
+            PopulateModelsTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Image Sets";
+            currentitem.IconKey = "foldericon";
+            FilesTreeItems[1].Children.Add(currentitem);
+            PopulateImageSetTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
         }
 
         public void RepopulateAllTrees()
         {
             FilesTree.Nodes.Clear();
             PopulateFilesTree(FilesTree.Nodes, FilesTreeItems);
-
-            DataFileProperties.SelectedObject = null;
         }
 
         private void PopulateFilesTree(TreeNodeCollection inNodes, List<FilesTreeItem> inItems)
@@ -281,8 +294,13 @@ namespace VoidDestroyer2DataEditor
                     inNodes[inNodes.Count - 1].ContextMenuStrip = TreeContextMenu;
                     if (inItems[i].DataFile != null)
                     {
-                        inItems[i].DataFile.FilesTreeNode = inNodes[inNodes.Count - 1];
-                        inItems[i].DataFile.TreeItem = inItems[i];
+                        if (inItems[i].DataFile is VD2Data)
+                        {
+                            VD2Data df = (VD2Data)inItems[i].DataFile;
+                            df.FilesTreeNode = inNodes[inNodes.Count - 1];
+                            df.TreeItem = inItems[i];
+                        }
+                        
                     }
                     
                     if (inItems[i].IsCategory)
@@ -292,13 +310,62 @@ namespace VoidDestroyer2DataEditor
                 }
                 else
                 {
-                    if (inItems[i].DataFile != null)
+                    if (inItems[i].DataFile is VD2Data)
                     {
-                        inItems[i].DataFile.FilesTreeNode = null;
-                        inItems[i].DataFile.TreeItem = null; 
+                        VD2Data df = (VD2Data)inItems[i].DataFile;
+                        df.FilesTreeNode = null;
+                        df.TreeItem = null;
                     }
                 }
             }
+        }
+
+        public void PopulateModelsTree(FilesTreeItem inItem)
+        {
+            FilesTreeItem currentitem;
+            List<string> folders = Directory.EnumerateDirectories(EditorUserSettings.UserSettings.VD2Path + "Media\\models").ToList();
+            foreach (string folder in folders)
+            {
+                currentitem = new FilesTreeItem();
+                currentitem.Name = Path.GetFileName(folder);
+                currentitem.IconKey = "foldericon";
+                inItem.Children.Add(currentitem);
+                List<string> files = Directory.EnumerateFiles(folder).ToList();
+                foreach (string file in files)
+                {
+                    currentitem = new FilesTreeItem();
+                    currentitem.FilterTags.Add("FileType:Mesh");
+                    currentitem.Name = Path.GetFileName(file);
+                    MeshDocument meshdoc = new MeshDocument();
+                    meshdoc.MeshName = Path.GetFileName(file);
+                    currentitem.DataFile = meshdoc;
+                    currentitem.IconKey = "genericfileicon";
+                    inItem.Children[inItem.Children.Count - 1].Children.Add(currentitem);
+                }
+            }
+            
+        }
+
+        public void PopulateImageSetTree(FilesTreeItem inItem)
+        {
+            FilesTreeItem currentitem;
+            List<string> files = Directory.EnumerateFiles(EditorUserSettings.UserSettings.VD2Path + "Media\\gui\\imagesets").ToList();
+            foreach (string file in files)
+            {
+                if (Path.GetExtension(file) == ".imageset")
+                {
+                    currentitem = new FilesTreeItem();
+                    currentitem.FilterTags.Add("FileType:ImageSet");
+                    currentitem.Name = Path.GetFileNameWithoutExtension(file);
+                    ImageSetDocument imagesetdoc = new ImageSetDocument();
+                    imagesetdoc.ImageSetName = Path.GetFileNameWithoutExtension(file);
+                    currentitem.DataFile = imagesetdoc;
+                    currentitem.IconKey = "genericfileicon";
+                    inItem.Children.Add(currentitem);
+                }
+            }
+
+
         }
 
         public void PopulateShipsTree(FilesTreeItem inItem)
@@ -1315,46 +1382,6 @@ namespace VoidDestroyer2DataEditor
             settings.Show();
         }
 
-        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            /*switch (toolStripComboBox1.SelectedIndex)
-            {
-                case (int)EditorModes.BaseReadOnly:
-                    break;
-                case (int)EditorModes.ModReadOnly:
-                    EditorUI.UI.CurrentEditorMode = EditorModes.ModReadOnly;
-                    RepopulateAllTrees();
-                    break;
-            }*/
-        }
-
-       /* private void button1_Click(object sender, EventArgs e)
-        {
-            if (sourcedropdown == null)
-            {
-                VD2SourceDropdown test = new VD2SourceDropdown();
-                Controls.Add(test);
-                sourcedropdown = test;
-                Point newloc = EditorUI.GetEditorFormLocationFromNestedLocation(button1);//new Point(button1.Parent.Parent.Parent.Parent.Location.X + button1.Parent.Parent.Parent.Location.X + button1.Parent.Parent.Location.X + button1.Parent.Location.X + button1.Location.X, button1.Parent.Parent.Parent.Parent.Location.Y + button1.Parent.Parent.Parent.Location.Y + button1.Parent.Parent.Location.Y + button1.Parent.Location.Y + button1.Location.Y + button1.Size.Height);
-                newloc.Y += button1.Size.Height;
-                test.Location = newloc;
-                test.BringToFront();
-                test.Focus();
-                test.Leave += new EventHandler(this.SourceDropdown_LostFocus);
-            }
-            else
-            {
-                sourcedropdown.Dispose();
-                sourcedropdown = null;
-            }
-        }
-
-        public void SourceDropdown_LostFocus(object sender, EventArgs e)
-        {
-            sourcedropdown.Dispose();
-            sourcedropdown = null;
-        }*/
-
         private FilesTreeItem GetFilesTreeItemByPath(string inPath)
         {
             FilesTreeItem result = null;
@@ -1389,75 +1416,47 @@ namespace VoidDestroyer2DataEditor
             return result;
         }
 
-        private void FilesTree_AfterSelect(object sender, TreeViewEventArgs e)
+        private TreeNode GetFilesTreeNodeByPath(string inPath)
         {
-            List<int> indexes = new List<int>();
-            indexes.Add(e.Node.Index);
-            TreeNode currentnode = e.Node;
-            FilesTreeItem item = GetFilesTreeItemByPath(e.Node.FullPath);
-            DataFileProperties.SelectedObject = item.DataFile;
-            /*while (currentnode.Parent != null)
+            TreeNode result = null;
+            List<string> splitpath = inPath.Split("\\".ToCharArray()).ToList();
+
+            for (int splitidx = 0; splitidx < splitpath.Count; splitidx++)
             {
-                indexes.Add(currentnode.Parent.Index);
-                currentnode = currentnode.Parent;
+                if (result != null)
+                {
+                    for (int i = 0; i < result.Nodes.Count; i++)
+                    {
+                        if (result.Nodes[i].Text == splitpath[splitidx])
+                        {
+                            result = result.Nodes[i];
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < FilesTree.Nodes.Count; i++)
+                    {
+                        if (FilesTree.Nodes[i].Text == splitpath[splitidx])
+                        {
+                            result = FilesTree.Nodes[i];
+                            break;
+                        }
+                    }
+                }
             }
-            FilesTreeItem currentitem = null;
-            if (FilesTreeItems.Count > 0)
-            {
-                currentitem = FilesTreeItems[indexes[indexes.Count - 1]];
-            }
-            
-            for (int i = indexes.Count - 2; i > -1; i--)
-            {
-                currentitem = currentitem.Children[indexes[i]];
-            }
-            if (currentitem.DisplayName == e.Node.Name)
-            {
-                DataFileProperties.SelectedObject = currentitem.DataFile;
-            }*/
+
+            return result;
         }
-
-        
-
-        /*private void button2_Click(object sender, EventArgs e)
-        {
-            if (treefiltersdropdown == null)
-            {
-                VD2TreeFilterDropdown test = new VD2TreeFilterDropdown();
-                Controls.Add(test);
-                treefiltersdropdown = test;
-                Point newloc = EditorUI.GetEditorFormLocationFromNestedLocation(button2);//new Point(button1.Parent.Parent.Parent.Parent.Location.X + button1.Parent.Parent.Parent.Location.X + button1.Parent.Parent.Location.X + button1.Parent.Location.X + button1.Location.X, button1.Parent.Parent.Parent.Parent.Location.Y + button1.Parent.Parent.Parent.Location.Y + button1.Parent.Parent.Location.Y + button1.Parent.Location.Y + button1.Location.Y + button1.Size.Height);
-                newloc.Y += button2.Size.Height;
-                test.Location = newloc;
-                test.BringToFront();
-                test.Focus();
-                test.Leave += new EventHandler(this.TreeFiltersDropdown_LostFocus);
-            }
-            else
-            {
-                treefiltersdropdown.Dispose();
-                treefiltersdropdown = null;
-            }
-        }
-
-        public void TreeFiltersDropdown_LostFocus(object sender, EventArgs e)
-        {
-            treefiltersdropdown.Dispose();
-            treefiltersdropdown = null;
-        }
-
-        private void button1_Leave(object sender, EventArgs e)
-        {
-
-        }*/
 
         private void TreeContextMenu_Opened(object sender, EventArgs e)
         {
             for (int i = 0; i < TreeContextMenu.Items.Count; i++)
             {
-                switch (i)
+                switch ((FilesTreeContextMenuItems)i)
                 {
-                    case 0:
+                    case FilesTreeContextMenuItems.Open:
                         TreeContextMenu.Items[i].Enabled = false;
                         if (TreeContextMenu.SourceControl != null)
                         {
@@ -1480,7 +1479,7 @@ namespace VoidDestroyer2DataEditor
                         }
 
                         break;
-                    case 1://save
+                    case FilesTreeContextMenuItems.OpenNewTab:
                         TreeContextMenu.Items[i].Enabled = false;
                         if (TreeContextMenu.SourceControl != null)
                         {
@@ -1500,19 +1499,95 @@ namespace VoidDestroyer2DataEditor
                                 }
                             }
 
+                        }
+
+                        break;
+                    case FilesTreeContextMenuItems.Save:
+                        TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
                         }
                         
                         break;
-                    case 2://save as
+                    case FilesTreeContextMenuItems.Override:
                         TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
-                    case 3://delete
+                    case FilesTreeContextMenuItems.Duplicate:
                         TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
-                    case 4://duplicate to mod files
+                    case FilesTreeContextMenuItems.Delete:
                         TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
-                    case 6://copy objectID
+                    case FilesTreeContextMenuItems.CopyObjectID://copy objectID
                         TreeContextMenu.Items[i].Enabled = true;
                         /*if (TreeContextMenu.SourceControl != null)
                         {
@@ -1534,8 +1609,26 @@ namespace VoidDestroyer2DataEditor
                             
                         }*/
                         break;
-                    case 7://find refs
+                    case FilesTreeContextMenuItems.OpenFileLocation://find refs
                         TreeContextMenu.Items[i].Enabled = false;
+                        if (TreeContextMenu.SourceControl != null)
+                        {
+                            if (TreeContextMenu.SourceControl is TreeView)
+                            {
+                                TreeView tree = (TreeView)TreeContextMenu.SourceControl;
+                                if (tree != null)
+                                {
+                                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(tree.SelectedNode.FullPath);
+                                    if (item != null)
+                                    {
+                                        if (item.DataFile != null)
+                                        {
+                                            TreeContextMenu.Items[i].Enabled = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -1563,7 +1656,6 @@ namespace VoidDestroyer2DataEditor
                         }
                     }
                 }
-
             }
         }
 
@@ -1581,14 +1673,16 @@ namespace VoidDestroyer2DataEditor
                         {
                             if (item.DataFile != null)
                             {
-                                EditorUI.ExploreFile(item.DataFile.FilePath);
+                                if (item.DataFile is VD2Data)
+                                {                                    
+                                    VD2Data df = (VD2Data)item.DataFile;
+                                    EditorUI.ExploreFile(df.FilePath);
+                                }                                
                             }
                         }
                     }
                 }
-
-            }
-            
+            }            
         }
 
         public List<string> GetStandardFilterTags()
@@ -1636,7 +1730,12 @@ namespace VoidDestroyer2DataEditor
                             if (item.DataFile != null)
                             {
                                 //EditorUI.ExploreFile(item.DataFile.FilePath);
-                                item.DataFile.SaveData();
+                                if (item.DataFile is VD2Data)
+                                {
+                                    VD2Data df = (VD2Data)item.DataFile;
+                                    df.TrySaveData();
+                                }
+                                
                             }
                         }
                     }
@@ -1660,7 +1759,14 @@ namespace VoidDestroyer2DataEditor
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            documentTabControl1.TabPages.Add(GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath).DisplayName);
+            FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath);
+            if (item != null)
+            {
+                if (item.DataFile != null)
+                {
+                    OpenVD2Document(item.DataFile, true);
+                }
+            }
         }
 
         private void FilesTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -1668,14 +1774,15 @@ namespace VoidDestroyer2DataEditor
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    FilesTree.SelectedNode = e.Node;
-                    FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(e.Node.FullPath);
-                    if (item != null)
+                    if (FilesTree.SelectedNode == e.Node)//if the node isnt already selected we have expanded a tree node and ended up on another item as a result
                     {
-                        if (item.DataFile != null)
+                        FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(e.Node.FullPath);
+                        if (item != null)
                         {
-                            OpenVD2Document(item.DataFile, true);
-
+                            if (item.DataFile != null)
+                            {
+                                OpenVD2Document(item.DataFile, true);
+                            }
                         }
                     }
                     break;
@@ -1684,7 +1791,7 @@ namespace VoidDestroyer2DataEditor
         public void OpenVD2Document(IVD2DocumentInterface inDocument, bool inGoToNewTab = false)
         {
             if (inDocument != null)
-            {
+            {                    
                 if (!IsDocumentAlreadyOpen(inDocument))
                 {
                     TabPage docpage = new TabPage();
@@ -1693,16 +1800,34 @@ namespace VoidDestroyer2DataEditor
                     docpage.Controls.Add(docview);
                     docview.Dock = DockStyle.Fill;
 
-                    documentTabControl1.TabPages.Add(docpage);
-                    if (!inGoToNewTab)
+                    
+                    if (inGoToNewTab)
                     {
+                        documentTabControl1.TabPages.Insert(0, docpage);
                         documentTabControl1.SelectTab(docpage);
+                    }
+                    else 
+                    {
+                        documentTabControl1.TabPages.Add(docpage);
                     }
                     docview.Document = inDocument;
                 }
                 else
                 {
-                    SelectTabByDocument(inDocument);
+                    if (inGoToNewTab)
+                    {
+                        SelectTabByDocument(inDocument);
+                    }
+                }
+                if (StartupDocument != null)
+                {
+                    if (inDocument != StartupDocument)
+                    {
+                        if (IsDocumentAlreadyOpen(StartupDocument))
+                        {
+                            CloseOpenDocument(StartupDocument);
+                        }
+                    }
                 }
             }            
         }
@@ -1729,6 +1854,28 @@ namespace VoidDestroyer2DataEditor
             return false;
         }
 
+        public void CloseOpenDocument(IVD2DocumentInterface inDocument)
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document == inDocument)
+                            {
+                                documentTabControl1.TabPages.Remove(page);
+                                page.Dispose();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public void SelectTabByDocument(IVD2DocumentInterface inDocument)
         {
             foreach (TabPage page in documentTabControl1.TabPages)
@@ -1749,9 +1896,625 @@ namespace VoidDestroyer2DataEditor
                 }
             }
         }
+
+        private void openFileInNewTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath);
+            if (item != null)
+            {
+                if (item.DataFile != null)
+                {
+                    OpenVD2Document(item.DataFile, false);
+                }
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OverrideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath);
+            if (item != null)
+            {
+                if (item.DataFile != null)
+                {
+                    if (item.DataFile is VD2Data)
+                    {
+                        VD2Data dataitem = (VD2Data)item.DataFile;
+                        if (dataitem.Source != null)
+                        {
+                            if (dataitem.Source.ShortName == "Base")//if this isn't in base files we don't even bother looking
+                            {
+                                List<string> splitpath = dataitem.FilePath.Split('\\').ToList();
+                                for (int i = splitpath.Count - 1; i >= 0; i--)
+                                {
+                                    if (splitpath[i] == "Data")
+                                    {
+                                        splitpath.Insert(i, "Mod");
+                                        break;
+                                    }
+                                }
+                                string testpath = "";
+                                for (int i = 0; i < splitpath.Count - 1; i++)
+                                {
+                                    testpath += splitpath[i] + "\\";
+                                }
+                                testpath += splitpath[splitpath.Count - 1];
+                                if (!File.Exists(testpath))
+                                {
+                                    File.Copy(dataitem.FilePath, testpath);
+                                    foreach (VD2FileSource source in EditorUserSettings.UserSettings.Sources)
+                                    {
+                                        if (source.ShortName == "Mod")
+                                        {
+                                            if (dataitem is ShipData)
+                                            {
+                                                ShipData overrideship = EditorUI.UI.Ships.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overrideship;                                                
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overrideship.FilePath);
+                                                currentitem.FilterTags.Add("FileType:Ship");
+                                                currentitem.FilterTags.Add("Faction:" + overrideship.faction);
+                                                currentitem.FilterTags.Add("Class:" + overrideship.shipClass);
+                                                if (overrideship.shipClassSize != "")
+                                                {
+                                                    currentitem.FilterTags.Add("Size:" + overrideship.shipClassSize);
+                                                }
+                                                else
+                                                {
+                                                    currentitem.FilterTags.Add("Size:Tiny");
+                                                }
+                                                if (overrideship.sizeShipClass != "")
+                                                {
+                                                    currentitem.FilterTags.Add("Hull:" + overrideship.sizeShipClass);
+                                                }
+                                                else
+                                                {
+                                                    currentitem.FilterTags.Add("Hull:" + overrideship.shipClass);
+                                                }
+                                                if (overrideship.shipClass == "fighter")
+                                                {
+                                                    currentitem.IconKey = "fightericon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "fighter_drone")
+                                                {
+                                                    currentitem.IconKey = "droneicon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Drones");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Drones");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "gunship")
+                                                {
+                                                    currentitem.IconKey = "gunshipicon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "corvette")
+                                                {
+                                                    currentitem.IconKey = "corvetteicon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "frigate")
+                                                {
+                                                    currentitem.IconKey = "frigateicon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "destroyer")
+                                                {
+                                                    currentitem.IconKey = "destroyericon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "cruiser")
+                                                {
+                                                    currentitem.IconKey = "cruisericon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "carrier")
+                                                {
+                                                    currentitem.IconKey = "carriericon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "dreadnaught")
+                                                {
+                                                    currentitem.IconKey = "dreadnaughticon";
+                                                    if (overrideship.shipClassSize == "light")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "medium")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    {
+                                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
+                                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
+                                                        categoryitem.Children.Add(currentitem);
+                                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                    }
+                                                }
+                                                else if (overrideship.shipClass == "transport")
+                                                {
+                                                    currentitem.IconKey = "transporticon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Transport");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Transport");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "mining")
+                                                {
+                                                    currentitem.IconKey = "minericon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Miner");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Miner");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "shuttle")
+                                                {
+                                                    currentitem.IconKey = "shuttleicon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Shuttle");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Shuttle");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "repair")
+                                                {
+                                                    currentitem.IconKey = "repairicon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Repair");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Repair");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "capture")
+                                                {
+                                                    currentitem.IconKey = "basecaptureicon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Base Capture");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Base Capture");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "ship_capture")
+                                                {
+                                                    currentitem.IconKey = "shipcaptureicon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Ship Capture");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Ship Capture");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+                                                else if (overrideship.shipClass == "builder")
+                                                {
+                                                    currentitem.IconKey = "buildericon";
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Builder");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Builder");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                }
+
+                                            }
+                                            else if (dataitem is PrimaryUpgradeData)
+                                            {
+                                                EditorUI.UI.PrimaryUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is ActiveUpgradeData)
+                                            {
+                                                EditorUI.UI.ActiveUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is WeaponData)
+                                            {
+                                                EditorUI.UI.Weapons.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is HangarData)
+                                            {
+                                                EditorUI.UI.Hangars.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is LauncherData)
+                                            {
+                                                EditorUI.UI.Launchers.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is TurretData)
+                                            {
+                                                TurretData overrideturret = EditorUI.UI.Turrets.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overrideturret;
+                                                currentitem.FilterTags.Add("FileType:Turret");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overrideturret.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Turrets");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Turrets");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overrideturret);
+                                            }
+                                            else if (dataitem is AmmoData)
+                                            {
+                                                EditorUI.UI.Ammo.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is MissileData)
+                                            {
+                                                EditorUI.UI.Missiles.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            else if (dataitem is MineData)
+                                            {
+                                                EditorUI.UI.Mines.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            }
+                                            /*
+                                            AreaOfEffectData 
+                                            AreaOfEffect
+                                            AsteroidData 
+                                            Asteroids
+                                            BaseData 
+                                            Bases
+                                            CharacterData
+                                            Characters
+                                            CockpitData
+                                            Cockpits
+                                            DebrisData
+                                            Debris
+                                            DialogData
+                                            Dialog
+                                            DockedMovingElementData
+                                            DockedMovingElements
+                                            DoorData
+                                            Doors
+                                            EffectData
+                                            Effects
+                                            ParticleData
+                                            Particles
+                                            ExplosionData
+                                            Explosions
+                                            FactionData
+                                            Factions
+                                            MusicData
+                                            Music
+                                            OtherObjectData
+                                            OtherObjects
+                                            ShieldData
+                                            Shields
+                                            SkyboxData
+                                            Skyboxes
+                                            SoundData
+                                            Sounds
+                                            StationData
+                                            Stations
+                                            SunData
+                                            Suns
+                                             */
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    ErrorMessageDialog errormsg = new ErrorMessageDialog();
+                                    errormsg.ErrorTitleText = "File already exists!";
+                                    errormsg.ErrorMessageText = "The file " + testpath + "already exists, no override created.";
+                                    errormsg.ShowDialog();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void createDuplicateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (documentTabControl1.SelectedTab != null)
+            {
+                foreach (Control c in documentTabControl1.SelectedTab.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document is VD2Data)
+                            {
+                                VD2Data datafile = (VD2Data)docview.Document;
+                                datafile.TrySaveData();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document is VD2Data)
+                            {
+                                VD2Data datafile = (VD2Data)docview.Document;
+                                datafile.TrySaveData();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SaveToolstripButton_Click(object sender, EventArgs e)
+        {
+            if (documentTabControl1.SelectedTab != null)
+            {
+                foreach (Control c in documentTabControl1.SelectedTab.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document is VD2Data)
+                            {
+                                VD2Data datafile = (VD2Data)docview.Document;
+                                datafile.TrySaveData();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SaveAllOpenDocuments()
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document is VD2Data)
+                            {
+                                VD2Data datafile = (VD2Data)docview.Document;
+                                datafile.TrySaveData();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SaveAllToolstripButton_Click(object sender, EventArgs e)
+        {
+            SaveAllOpenDocuments();
+        }
     }
 
-    
+
 
     //the order of this enum and the base nodes hard coded below must match!
     enum ShipClassIndex
@@ -1795,17 +2558,31 @@ namespace VoidDestroyer2DataEditor
         ModReadWrite
     }
 
+    enum FilesTreeContextMenuItems
+    {
+        New,
+        Open,
+        OpenNewTab,
+        Save,
+        Override,
+        Duplicate,        
+        Delete,
+        SeparatorOne,
+        CopyObjectID,
+        OpenFileLocation
+    }
+
     public class FilesTreeItem
     {
         public string Name;
         //public string Source;
         public string IconKey;
         public bool Saved;
-        public VD2Data _DataFile;
+        public IVD2DocumentInterface _DataFile;
         public List<string> FilterTags;
         public List<FilesTreeItem> Children;
 
-        public VD2Data DataFile
+        public IVD2DocumentInterface DataFile
         {
             get
             {
@@ -1815,12 +2592,21 @@ namespace VoidDestroyer2DataEditor
             {
                 if (_DataFile != null)
                 {
-                    _DataFile.VD2PropertyChanged -= OnMyFileEdited;
+                    if (_DataFile is VD2Data)
+                    {
+                        VD2Data df = (VD2Data)_DataFile;
+                        df.VD2PropertyChanged -= OnMyFileEdited;
+                    }
                 }
                 _DataFile = value;
                 if (_DataFile != null)
                 {
-                    _DataFile.VD2PropertyChanged += OnMyFileEdited;
+                    if (_DataFile is VD2Data)
+                    {
+                        VD2Data df = (VD2Data)_DataFile;
+                        df.VD2PropertyChanged += OnMyFileEdited;
+                    }
+                    
                 }
             }
         }
@@ -1836,7 +2622,12 @@ namespace VoidDestroyer2DataEditor
             {
                 if (DataFile != null)
                 {
-                    return DataFile.GetObjectID();
+                    if (DataFile is VD2Data)
+                    {
+                        VD2Data df = (VD2Data)DataFile;
+                        return df.GetObjectID();
+                    }
+                    
                 }
                 string result = "";
                 for (int i = 0; i < Children.Count; i++)
@@ -1906,11 +2697,16 @@ namespace VoidDestroyer2DataEditor
                 }
                 if (DataFile != null)
                 {
-                    if (DataFile.Source != null)
+                    if (DataFile is VD2Data)
                     {
-                        if (!DataFile.Source.FilterIn)
+                        VD2Data df = (VD2Data)DataFile;
+
+                        if (df.Source != null)
                         {
-                            return true;
+                            if (!df.Source.FilterIn)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -1937,16 +2733,20 @@ namespace VoidDestroyer2DataEditor
                 string sourcestring = "";
                 if (DataFile != null)
                 {
-                    if (DataFile.Source != null)
+                    if (DataFile is VD2Data)
                     {
-                        sourcestring = DataFile.Source.ShortName;
-                        if (DataFile.Source.WriteAccess)
+                        VD2Data df = (VD2Data)DataFile;
+                        if (df.Source != null)
                         {
-                            rwstring = "[RW]";
-                        }
-                        else
-                        {
-                            rwstring = "[R]";
+                            sourcestring = df.Source.ShortName;
+                            if (df.Source.WriteAccess)
+                            {
+                                rwstring = "[RW]";
+                            }
+                            else
+                            {
+                                rwstring = "[R]";
+                            }
                         }
                     }
                 }
@@ -1972,7 +2772,11 @@ namespace VoidDestroyer2DataEditor
 
                 if (DataFile != null)
                 {
-                    return DataFile.Unsaved;
+                    if (DataFile is VD2Data)
+                    {
+                        VD2Data df = (VD2Data)DataFile;
+                        return df.Unsaved;
+                    }
                 }
 
                 return false;

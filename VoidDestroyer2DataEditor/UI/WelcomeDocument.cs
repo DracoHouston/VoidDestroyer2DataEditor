@@ -24,7 +24,7 @@ namespace VoidDestroyer2DataEditor
 
         public string GetDocumentTitle()
         {
-            return "Welcome!";
+            return "Welcome!     ";
         }
     }
 }

@@ -10,10 +10,13 @@ using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
-    public partial class DataStructureSidebarItemView : SidebarItemView
+    public partial class DataStructureSidebarItemView : UserControl
     {
+        object _Item;
+        
+
         private PropertyGrid DataStructurePropertiesEditor = null;
-        public override object Item
+        public  object Item
         {
             get
             {
@@ -21,10 +24,12 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                _Item = value;
+                _Item = value;                
+
                 flowLayoutPanel1.Controls.Clear();
                 if (_Item != null)
                 {
+                    SummaryLabel.Text = _Item.ToString();
                     List<System.Reflection.PropertyInfo> props = _Item.GetType().GetProperties().ToList();
                     bool hassimpleprops = false;
                     bool hascollections = false;
@@ -81,13 +86,13 @@ namespace VoidDestroyer2DataEditor
                                         }
                                         else
                                         {
-                                            
+
                                             object o = prop.GetValue(_Item);
                                             if (o is System.Collections.ObjectModel.ObservableCollection<string>)
                                             {
                                                 StringCollectionSidebarEditor szed = new StringCollectionSidebarEditor();
                                                 System.Collections.ObjectModel.ObservableCollection<string> szcollectionprop = (System.Collections.ObjectModel.ObservableCollection<string>)o;
-                                                szed.StringCollectionText.Lines = szcollectionprop.ToArray();
+                                                szed.SelectedCollection = szcollectionprop;
                                                 collectioneditors.Add(szed);
                                             }
 
@@ -108,6 +113,39 @@ namespace VoidDestroyer2DataEditor
                                             collectioneditors.Add(dsed);
                                         }
                                     }
+                                    else if (generictypes[0] == typeof(int))
+                                    {
+                                        object o = prop.GetValue(_Item);
+                                        if (o is System.Collections.ObjectModel.ObservableCollection<int>)
+                                        {
+                                            IntegerCollectionEditor inted = new IntegerCollectionEditor();
+                                            System.Collections.ObjectModel.ObservableCollection<int> intcollectionprop = (System.Collections.ObjectModel.ObservableCollection<int>)o;
+                                            inted.SelectedCollection = intcollectionprop;
+                                            collectioneditors.Add(inted);
+                                        }
+                                    }
+                                    else if (generictypes[0] == typeof(float))
+                                    {
+                                        object o = prop.GetValue(_Item);
+                                        if (o is System.Collections.ObjectModel.ObservableCollection<float>)
+                                        {
+                                            FloatCollectionSidebarEditor floated = new FloatCollectionSidebarEditor();
+                                            System.Collections.ObjectModel.ObservableCollection<float> floatcollectionprop = (System.Collections.ObjectModel.ObservableCollection<float>)o;
+                                            floated.SelectedCollection = floatcollectionprop;
+                                            collectioneditors.Add(floated);
+                                        }
+                                    }
+                                    else if (generictypes[0] == typeof(Vector3D))
+                                    {
+                                        object o = prop.GetValue(_Item);
+                                        if (o is System.Collections.ObjectModel.ObservableCollection<Vector3D>)
+                                        {
+                                            Vector3DCollectionSidebarEditor veced = new Vector3DCollectionSidebarEditor();
+                                            System.Collections.ObjectModel.ObservableCollection<Vector3D> veccollectionprop = (System.Collections.ObjectModel.ObservableCollection<Vector3D>)o;
+                                            veced.SelectedCollection = veccollectionprop;
+                                            collectioneditors.Add(veced);
+                                        }
+                                    }
                                 }
                             }
                             //collectioneditors.Add()
@@ -115,19 +153,42 @@ namespace VoidDestroyer2DataEditor
                     }
                     if (hassimpleprops)
                     {
-                        DataStructurePropertiesEditor = new PropertyGrid();
+                        if (DataStructurePropertiesEditor == null)
+                        {
+                            DataStructurePropertiesEditor = new PropertyGrid();
+                        }
                         DataStructurePropertiesEditor.SelectedObject = _Item;
                         int h = 200;
                         if (!hascollections)
                         {
-                            Controls.Remove(flowLayoutPanel1);
-                            DataStructurePropertiesEditor.Dock = DockStyle.Fill;
-                            Controls.Add(DataStructurePropertiesEditor);
+                            if (flowLayoutPanel1.Parent != null)
+                            {
+                                if (flowLayoutPanel1.Parent == this)
+                                {
+                                    Controls.Remove(flowLayoutPanel1);
+                                }
+                            }
+                            if (DataStructurePropertiesEditor.Parent == null)
+                            {
+                                DataStructurePropertiesEditor.Dock = DockStyle.Fill;
+                                Controls.Add(DataStructurePropertiesEditor);
+                            }
+                            
                         }
                         else
                         {
                             DataStructurePropertiesEditor.Size = new Size(flowLayoutPanel1.Size.Width, h);
-                            flowLayoutPanel1.Controls.Add(DataStructurePropertiesEditor);
+                            if (DataStructurePropertiesEditor.Parent == null)
+                            {
+                                DataStructurePropertiesEditor.Dock = DockStyle.None;
+                                flowLayoutPanel1.Controls.Add(DataStructurePropertiesEditor);
+                            }
+                            else if (DataStructurePropertiesEditor.Parent != flowLayoutPanel1)
+                            {
+                                DataStructurePropertiesEditor.Parent.Controls.Remove(DataStructurePropertiesEditor);
+                                DataStructurePropertiesEditor.Dock = DockStyle.None;
+                                flowLayoutPanel1.Controls.Add(DataStructurePropertiesEditor);
+                            }
                         }
                         
                     }
@@ -176,8 +237,66 @@ namespace VoidDestroyer2DataEditor
         {
             foreach (Control c in flowLayoutPanel1.Controls)
             {
-                c.Size = new Size(flowLayoutPanel1.Size.Width, c.Height);
+                c.Size = new Size((int)((flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width) * 0.95f), c.Height);
             }
+        }
+
+        private void DataStructureSidebarItemView_Load(object sender, EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                Control c = this;
+                while (c.Parent != null)
+                {
+                    if (c.Parent is SidebarCollectionsEditorItem)
+                    {
+                        flowLayoutPanel1.Visible = false;
+                        SummaryLabel.Visible = true;
+                        c.Parent.Size = new Size(c.Parent.Size.Width, 50);
+                        break;
+                    }
+                    c = c.Parent;
+                }
+            }
+        }
+
+        public void ToggleCollectionsItemModeCollapse()
+        {
+            if (SummaryLabel.Visible == true)
+            {
+                flowLayoutPanel1.Visible = true;
+                SummaryLabel.Visible = false;
+                Control c = this;
+                while (c.Parent != null)
+                {
+                    if (c.Parent is SidebarCollectionsEditorItem)
+                    {
+                        c.Parent.Size = new Size(c.Parent.Size.Width, 350);
+                        break;
+                    }
+                    c = c.Parent;
+                }
+            }
+            else
+            {
+                flowLayoutPanel1.Visible = false;
+                SummaryLabel.Visible = true;
+                Control c = this;
+                while (c.Parent != null)
+                {
+                    if (c.Parent is SidebarCollectionsEditorItem)
+                    {
+                        c.Parent.Size = new Size(c.Parent.Size.Width, 50);
+                        break;
+                    }
+                    c = c.Parent;
+                }
+            }
+        }
+
+        private void SummaryLabel_MouseClick(object sender, MouseEventArgs e)
+        {
+            ToggleCollectionsItemModeCollapse();
         }
     }
 }

@@ -92,8 +92,20 @@ namespace VoidDestroyer2DataEditor
             btnClose.Click += OnCloseClick;
 
             DocumentButtons.Add(btnClose, tpCurrent);
-
+            
             //tpCurrent.
+        }
+
+        protected override void OnControlRemoved(ControlEventArgs e)
+        {
+            base.OnControlRemoved(e);
+            Button btn = CloseButton((TabPage)e.Control);
+            btn.Dispose();
+            Repos();
+            if (TabPages.Count == 0)
+            {
+                Visible = false;
+            }
         }
 
         protected override void OnLayout(LayoutEventArgs lea)

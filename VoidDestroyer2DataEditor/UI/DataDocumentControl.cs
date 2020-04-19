@@ -12,7 +12,18 @@ namespace VoidDestroyer2DataEditor
 {
     public partial class DataDocumentControl : UserControl
     {
-        
+        VD2Data _DataFile;
+        public VD2Data DataFile
+        {
+            get
+            {
+                return _DataFile;
+            }
+            set
+            {
+                _DataFile = value;
+            }
+        }
         public DataDocumentControl()
         {
             InitializeComponent();

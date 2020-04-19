@@ -73,11 +73,34 @@ namespace VoidDestroyer2DataEditor
 
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
-            ObjectIDEditor.Size = new Size(flowLayoutPanel1.Size.Width, ObjectIDEditor.Size.Height);
+            ObjectIDEditor.Size = new Size((int)((flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width) * 0.95f), ObjectIDEditor.Size.Height);
         }
 
         private void ObjectIDEditor_TextChanged(object sender, EventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                if (Parent != null)
+                {
+                    if (Parent.Parent != null)
+                    {
+                        if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
+                        {
+                            ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
+                            if (_SelectedIndex < editorparent.SelectedCollection.Count)
+                            {
+                                if (editorparent.SelectedCollection[_SelectedIndex] != ObjectIDEditor.Text)
+                                {
+                                    ObjectIDEditor.TextChanged -= ObjectIDEditor_TextChanged;//dont wanna stack overflow, mates. 
+                                    ObjectIDEditor.Text = editorparent.SelectedCollection[_SelectedIndex];
+                                    ObjectIDEditor.TextChanged += ObjectIDEditor_TextChanged;
+                                }
+                            }
+                        }
+                    }
+                }
+                return;
+            }
             if (Parent != null)
             {
                 if (Parent.Parent != null)
@@ -99,6 +122,11 @@ namespace VoidDestroyer2DataEditor
 
         private void OnDragDropped(object sender, DragEventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+
             if (e.Data.GetDataPresent("System.Int32"))
             {
                 object data = e.Data.GetData("System.Int32");
@@ -125,8 +153,11 @@ namespace VoidDestroyer2DataEditor
 
         private void OnDraggedOver(object sender, DragEventArgs e)
         {
-            /*int dude = 69;
-            string[] formats = e.Data.GetFormats();*/
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+
             if (e.Data.GetDataPresent("System.Int32"))
             {
                 e.Effect = DragDropEffects.Move;
@@ -137,6 +168,11 @@ namespace VoidDestroyer2DataEditor
         {
             if (e.Button == MouseButtons.Left)
             {
+                if (EditorUI.GetParentVD2DataIsReadOnly(this))
+                {
+                    return;
+                }
+
                 DoDragDrop(_SelectedIndex, DragDropEffects.Move);
             }
         }
@@ -168,6 +204,55 @@ namespace VoidDestroyer2DataEditor
                         if (_SelectedIndex < editorparent.SelectedCollection.Count)
                         {
                             ObjectIDEditor.Text = editorparent.SelectedCollection[_SelectedIndex];
+                        }
+                    }
+                }
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void duplicateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+            if (Parent != null)
+            {
+                if (Parent.Parent != null)
+                {
+                    if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
+                    {
+                        ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
+                        if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                        {
+                            editorparent.SelectedCollection.Add(editorparent.SelectedCollection[_SelectedIndex]);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+            if (Parent != null)
+            {
+                if (Parent.Parent != null)
+                {
+                    if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
+                    {
+                        ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
+                        if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                        {
+                            editorparent.SelectedCollection.RemoveAt(_SelectedIndex);
                         }
                     }
                 }

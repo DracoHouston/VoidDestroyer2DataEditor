@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.IO;
 using System.ComponentModel;
 using System.Globalization;
+using System.Xml;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -74,10 +70,10 @@ namespace VoidDestroyer2DataEditor
             _debris = new ObservableCollection<VD2DataStructure>();
             _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -95,6 +91,15 @@ namespace VoidDestroyer2DataEditor
         public debrisInfoDataStructure(debrisInfoDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _debris = inCopyFrom.debris;
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is debrisInfoDataStructure)
+            {
+                debrisInfoDataStructure inCopyFrom = (debrisInfoDataStructure)inOriginal;
+                _debris = inCopyFrom.debris;
+            }
         }
 
         public override string ToString()
@@ -266,10 +271,10 @@ namespace VoidDestroyer2DataEditor
             _debrisAngular = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -298,6 +303,18 @@ namespace VoidDestroyer2DataEditor
             _debrisMomentum = inCopyFrom.debrisMomentum;
             _debrisAngular = inCopyFrom.debrisAngular;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is debrisDataStructure)
+            {
+                debrisDataStructure inCopyFrom = (debrisDataStructure)inOriginal;
+                _debrisID = inCopyFrom.debrisID;
+
+                _debrisMomentum = inCopyFrom.debrisMomentum;
+                _debrisAngular = inCopyFrom.debrisAngular;
+            }
         }
 
         public override string ToString()
@@ -525,10 +542,10 @@ namespace VoidDestroyer2DataEditor
             _recharge = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -563,6 +580,20 @@ namespace VoidDestroyer2DataEditor
             _capacity = inCopyFrom.capacity;
             _recharge = inCopyFrom.recharge;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is afterburnerDataStructure)
+            {
+                afterburnerDataStructure inCopyFrom = (afterburnerDataStructure)inOriginal;
+                _soundID = inCopyFrom.soundID;
+                _tailSoundID = inCopyFrom.tailSoundID;
+
+                _multiplier = inCopyFrom.multiplier;
+                _capacity = inCopyFrom.capacity;
+                _recharge = inCopyFrom.recharge;
+            }
         }
 
         public override string ToString()
@@ -711,10 +742,10 @@ namespace VoidDestroyer2DataEditor
             _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -735,6 +766,15 @@ namespace VoidDestroyer2DataEditor
         {
             _targetClass = inCopyFrom.targetClass;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is targetPriorityListDataStructure)
+            {
+                targetPriorityListDataStructure inCopyFrom = (targetPriorityListDataStructure)inOriginal;
+                _targetClass = inCopyFrom.targetClass;
+            }
         }
 
         public override string ToString()
@@ -932,10 +972,10 @@ namespace VoidDestroyer2DataEditor
             _activeUpgradeCapacity = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -965,6 +1005,18 @@ namespace VoidDestroyer2DataEditor
             _primaryUpgradeCapacity = inCopyFrom.primaryUpgradeCapacity;
             _activeUpgradeCapacity = inCopyFrom.activeUpgradeCapacity;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is upgradesDataStructure)
+            {
+                upgradesDataStructure inCopyFrom = (upgradesDataStructure)inOriginal;
+                _upgradeID = inCopyFrom.upgradeID;
+
+                _primaryUpgradeCapacity = inCopyFrom.primaryUpgradeCapacity;
+                _activeUpgradeCapacity = inCopyFrom.activeUpgradeCapacity;
+            }
         }
 
         public override string ToString()
@@ -1238,10 +1290,10 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -1285,6 +1337,23 @@ namespace VoidDestroyer2DataEditor
 
             _position = inCopyFrom.position;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is propulsionDataStructure)
+            {
+                propulsionDataStructure inCopyFrom = (propulsionDataStructure)inOriginal;
+                _propulsionEffectID = inCopyFrom.propulsionEffectID;
+                _direction = inCopyFrom.direction;
+
+                _pitch = inCopyFrom.pitch;
+                _yaw = inCopyFrom.yaw;
+
+                _bPlayerShipOnly = inCopyFrom.bPlayerShipOnly;
+
+                _position = inCopyFrom.position;
+            }
         }
 
         public override string ToString()
@@ -1611,10 +1680,10 @@ namespace VoidDestroyer2DataEditor
             _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -1659,6 +1728,23 @@ namespace VoidDestroyer2DataEditor
 
             _weaponPosition = inCopyFrom.weaponPosition;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is weaponDataStructure)
+            {
+                weaponDataStructure inCopyFrom = (weaponDataStructure)inOriginal;
+                _weaponType = inCopyFrom.weaponType;
+                _hardpointID = inCopyFrom.hardpointID;
+                _weaponFire = inCopyFrom.weaponFire;
+
+                _barrelDelay = inCopyFrom.barrelDelay;
+                _yaw = inCopyFrom.yaw;
+                _pitch = inCopyFrom.pitch;
+
+                _weaponPosition = inCopyFrom.weaponPosition;
+            }
         }
 
         public override string ToString()
@@ -1953,10 +2039,10 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -1997,6 +2083,22 @@ namespace VoidDestroyer2DataEditor
 
             _position = inCopyFrom.position;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is damageDataStructure)
+            {
+                damageDataStructure inCopyFrom = (damageDataStructure)inOriginal;
+                _damageEffectID = inCopyFrom.damageEffectID;
+
+                _pitch = inCopyFrom.pitch;
+                _roll = inCopyFrom.roll;
+                _yaw = inCopyFrom.yaw;
+                _healthPoint = inCopyFrom.healthPoint;
+
+                _position = inCopyFrom.position;
+            }
         }
 
         public override string ToString()
@@ -2470,10 +2572,10 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -2542,6 +2644,31 @@ namespace VoidDestroyer2DataEditor
 
             _position = inCopyFrom.position;
 
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            if (inOriginal is turretDataStructure)
+            {
+                turretDataStructure inCopyFrom = (turretDataStructure)inOriginal;
+                _turretID = inCopyFrom.turretID;
+                _turretOrientation = inCopyFrom.turretOrientation;
+                _weaponFire = inCopyFrom.weaponFire;
+
+                _turretRole = inCopyFrom.turretRole;
+
+                _yawPermitted = inCopyFrom.yawPermitted;
+                _weaponPositionID = inCopyFrom.weaponPositionID;
+
+                _pitchLower = inCopyFrom.pitchLower;
+                _roll = inCopyFrom.roll;
+                _yaw = inCopyFrom.yaw;
+
+                _bShowInCockpit = inCopyFrom.bShowInCockpit;
+                _bHideInHangar = inCopyFrom.bHideInHangar;
+
+                _position = inCopyFrom.position;
+            }
         }
 
         public override string ToString()
@@ -2810,10 +2937,10 @@ namespace VoidDestroyer2DataEditor
             _attachmentPosition = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -3174,10 +3301,10 @@ namespace VoidDestroyer2DataEditor
             _translateAmount = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -3763,10 +3890,10 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4149,10 +4276,10 @@ namespace VoidDestroyer2DataEditor
             _shieldPosition = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4380,10 +4507,10 @@ namespace VoidDestroyer2DataEditor
             _bLinkedToWeapon = false;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4695,10 +4822,10 @@ namespace VoidDestroyer2DataEditor
             _recoilTime = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4885,10 +5012,10 @@ namespace VoidDestroyer2DataEditor
             _rotateBone = "";
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5261,10 +5388,10 @@ namespace VoidDestroyer2DataEditor
             _bAddToRangeCalculations = false;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5587,10 +5714,10 @@ namespace VoidDestroyer2DataEditor
             _dockSize = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5814,10 +5941,10 @@ namespace VoidDestroyer2DataEditor
             _bNoExplodeOnMirv = false;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6050,10 +6177,10 @@ namespace VoidDestroyer2DataEditor
             _roll = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6237,10 +6364,10 @@ namespace VoidDestroyer2DataEditor
             _weaponPosition = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6396,10 +6523,10 @@ namespace VoidDestroyer2DataEditor
             _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6595,10 +6722,10 @@ namespace VoidDestroyer2DataEditor
             _linearVelocity = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6804,10 +6931,10 @@ namespace VoidDestroyer2DataEditor
             _dockSize = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7063,10 +7190,10 @@ namespace VoidDestroyer2DataEditor
             _pitchSpeed = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7259,10 +7386,10 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7428,10 +7555,10 @@ namespace VoidDestroyer2DataEditor
             _maxAmount = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7566,10 +7693,10 @@ namespace VoidDestroyer2DataEditor
             _gateCollisionSize = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7749,10 +7876,10 @@ namespace VoidDestroyer2DataEditor
             _refuelSize = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8008,10 +8135,10 @@ namespace VoidDestroyer2DataEditor
             _repairSize = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8231,10 +8358,10 @@ namespace VoidDestroyer2DataEditor
             _linearVelocity = new Vector3D();
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8405,10 +8532,10 @@ namespace VoidDestroyer2DataEditor
             _scale = 0;
 
 
-            if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
+            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
             {
                 ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }
+            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case

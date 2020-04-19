@@ -55,31 +55,49 @@ namespace VoidDestroyer2DataEditor
 
         private void SidebarCollectionsEditorItem_DragDrop(object sender, DragEventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
             if (e.Data.GetDataPresent("System.Int32"))
             {
                 object data = e.Data.GetData("System.Int32");
                 if (data is Int32)
                 {
                     int idx = (int)data;
-                    if (Parent != null)
+                    if (_SelectedIndex != idx)
                     {
-                        if (Parent.Parent != null)
+                        if (Parent != null)
                         {
-                            if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
+                            if (Parent.Parent != null)
                             {
-                                ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
-                                if ((idx >= 0) && (idx < editorparent.SelectedCollection.Count))
+                                if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
                                 {
-                                    editorparent.SelectedCollection.Move(idx, _SelectedIndex);
+                                    ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
+                                    if ((idx >= 0) && (idx < editorparent.SelectedCollection.Count))
+                                    {
+                                        editorparent.SelectedCollection.Move(idx, _SelectedIndex);
+                                    }
+                                }
+                                else if (Parent.Parent is DataStructureCollectionsEditor)
+                                {
+                                    DataStructureCollectionsEditor editorparent = (DataStructureCollectionsEditor)Parent.Parent;
+                                    if ((idx >= 0) && (idx < editorparent.SelectedCollection.Count))
+                                    {
+                                        editorparent.SelectedCollection.Move(idx, _SelectedIndex);
+                                    }
                                 }
                             }
-                            else if (Parent.Parent is DataStructureCollectionsEditor)
+                        }
+                    }
+                    else
+                    {
+                        foreach (Control c in InnerPanel.Controls)
+                        {
+                            if (c is DataStructureSidebarItemView)
                             {
-                                DataStructureCollectionsEditor editorparent = (DataStructureCollectionsEditor)Parent.Parent;
-                                if ((idx >= 0) && (idx < editorparent.SelectedCollection.Count))
-                                {
-                                    editorparent.SelectedCollection.Move(idx, _SelectedIndex);
-                                }
+                                DataStructureSidebarItemView dsitemview = (DataStructureSidebarItemView)c;
+                                dsitemview.ToggleCollectionsItemModeCollapse();
                             }
                         }
                     }
@@ -89,14 +107,137 @@ namespace VoidDestroyer2DataEditor
 
         public virtual void UpdateContents()
         {
-
+            foreach (Control c in InnerPanel.Controls)
+            {
+                if (c is DataStructureSidebarItemView)
+                {
+                    DataStructureSidebarItemView dsitemview = (DataStructureSidebarItemView)c;
+                    if (Parent != null)
+                    {
+                        if (Parent.Parent != null)
+                        {
+                            if (Parent.Parent is ObjectIDRefCollectionSidebarEditor)
+                            {
+                                ObjectIDRefCollectionSidebarEditor editorparent = (ObjectIDRefCollectionSidebarEditor)Parent.Parent;
+                                if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                                {
+                                    //editorparent.SelectedCollection.Move(idx, _SelectedIndex);
+                                }
+                            }
+                            else if (Parent.Parent is DataStructureCollectionsEditor)
+                            {
+                                DataStructureCollectionsEditor editorparent = (DataStructureCollectionsEditor)Parent.Parent;
+                                if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                                {
+                                    dsitemview.Item = editorparent.SelectedCollection[_SelectedIndex];
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
 
         private void SidebarCollectionsEditorItem_DragEnter(object sender, DragEventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
             if (e.Data.GetDataPresent("System.Int32"))
             {
-                e.Effect = DragDropEffects.Move;
+                object data = e.Data.GetData("System.Int32");
+                if (data is Int32)
+                {
+                    int idx = (int)data;
+                    //if (_SelectedIndex != idx)
+                    //{
+                        e.Effect = DragDropEffects.Move;
+                    //}
+                }
+            }
+        }
+
+        
+
+        private void SidebarCollectionsEditorItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (EditorUI.GetParentVD2DataIsReadOnly(this))
+                {
+                    foreach (Control c in InnerPanel.Controls)
+                    {
+                        if (c is DataStructureSidebarItemView)
+                        {
+                            DataStructureSidebarItemView dsitemview = (DataStructureSidebarItemView)c;
+                            dsitemview.ToggleCollectionsItemModeCollapse();
+                        }
+                    }
+                    return;
+                }            
+                DoDragDrop(_SelectedIndex, DragDropEffects.Move);
+            }
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+            if (Parent != null)
+            {
+                if (Parent.Parent != null)
+                {
+                    if (Parent.Parent is DataStructureCollectionsEditor)
+                    {
+                        DataStructureCollectionsEditor editorparent = (DataStructureCollectionsEditor)Parent.Parent;
+                        if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                        {
+                            editorparent.SelectedCollection.RemoveAt(_SelectedIndex);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void duplicateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
+            if (Parent != null)
+            {
+                if (Parent.Parent != null)
+                {
+                    if (Parent.Parent is DataStructureCollectionsEditor)
+                    {
+                        DataStructureCollectionsEditor editorparent = (DataStructureCollectionsEditor)Parent.Parent;
+                        if ((_SelectedIndex >= 0) && (_SelectedIndex < editorparent.SelectedCollection.Count))
+                        {
+                            VD2Data parentfile = null;
+                            Control c = this;
+                            while (c.Parent != null)
+                            {
+                                if (c.Parent is VD2DocumentViewer)
+                                {
+                                    VD2DocumentViewer docview = (VD2DocumentViewer)c.Parent;
+                                    if (docview.Document is VD2Data)
+                                    {
+                                        parentfile = (VD2Data)docview.Document;
+                                    }
+                                }
+                                c = c.Parent;
+                            }
+                            VD2DataStructure ds = (VD2DataStructure)System.Activator.CreateInstance(editorparent.ElementType, parentfile, editorparent.SelectedCollection[_SelectedIndex].DataNode);
+                            ds.CopyFrom(editorparent.SelectedCollection[_SelectedIndex]);
+                            editorparent.SelectedCollection.Add(ds);
+                        }
+                    }
+                }
             }
         }
     }

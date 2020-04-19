@@ -71,7 +71,15 @@ namespace VoidDestroyer2DataEditor
                     editoritem.InnerPanel.Controls.Add(dsitemview);
                     flowLayoutPanel1.Controls.Add(editoritem);
                     editoritem.SelectedIndex = i;
-                    editoritem.Size = new Size(flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width, editoritem.Size.Height);
+                    editoritem.Size = new Size((int)((flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width) * 0.95f), editoritem.Size.Height);
+                }
+            }
+            foreach (Control c in flowLayoutPanel1.Controls)
+            {
+                if (c is SidebarCollectionsEditorItem)
+                {
+                    SidebarCollectionsEditorItem editoritem = (SidebarCollectionsEditorItem)c;
+                    editoritem.UpdateContents();
                 }
             }
         }
@@ -83,6 +91,10 @@ namespace VoidDestroyer2DataEditor
 
         private void AddToCollectionButton_Click(object sender, EventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
             if ((_SelectedCollection != null) && (_ElementType != null))
             {
                 VD2Data parentfile = null;
@@ -108,6 +120,10 @@ namespace VoidDestroyer2DataEditor
 
         private void ClearCollectionButton_Click(object sender, EventArgs e)
         {
+            if (EditorUI.GetParentVD2DataIsReadOnly(this))
+            {
+                return;
+            }
             if (_SelectedCollection != null)
             {
                 _SelectedCollection.Clear();
@@ -118,7 +134,14 @@ namespace VoidDestroyer2DataEditor
         {
             foreach (Control c in flowLayoutPanel1.Controls)
             {
-                c.Size = new Size(flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width, c.Size.Height);
+                if (c != groupBox1)
+                {
+                    c.Size = new Size((int)((flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width) * 0.95f), c.Size.Height);
+                }
+                else
+                {
+                    c.Size = new Size(flowLayoutPanel1.Size.Width - flowLayoutPanel1.Margin.Size.Width, c.Size.Height);
+                }
             }
         }
     }

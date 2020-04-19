@@ -60,19 +60,12 @@ namespace VoidDestroyer2DataEditor
             Themes = new List<DataEditorTheme>();
         }
 
-        public void SaveSettings(bool RefreshData = true)
+        public void SaveSettings()
         {
             List<string> configlines = new List<string>();
             configlines.Add("VD2Path|" + VD2Path);
             configlines.Add("TreeIconSize|" + TreeIconSize.ToString());
-            File.WriteAllLines("EditorUserSettings.cfg", configlines);
-            if (RefreshData)
-            {
-                EditorUI.UI.ReloadData();
-                EditorUI.UI.EditorForm.InitAllTrees();
-                EditorUI.UI.EditorForm.RepopulateAllTrees();
-                EditorUI.UI.EditorForm.SetTreeIconSize(TreeIconSize);
-            }
+            File.WriteAllLines("EditorUserSettings.cfg", configlines);            
         }
 
         public void InitUserSettings()
@@ -82,7 +75,7 @@ namespace VoidDestroyer2DataEditor
             currentsource.DisplayName = "Base Game";
             currentsource.ShortName = "Base";
             currentsource.Path = "";
-            currentsource.WriteAccess = true;
+            currentsource.WriteAccess = false;
             currentsource.FilterIn = true;
             Sources.Add(currentsource);
             currentsource = new VD2FileSource();

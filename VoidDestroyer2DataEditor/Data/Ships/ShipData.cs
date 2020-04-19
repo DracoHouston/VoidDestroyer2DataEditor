@@ -1586,9 +1586,43 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
                         _cockpitInitPos = value;
+                        _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
                         SetPropertyEdited("cockpitInitPos", true);
                     }
+                }
+            }
+        }
+
+        private void cockpitInitPos_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess)
+                {
+                    SetPropertyEdited("cockpitInitPos", true);
+                }
+                else
+                {
+                    switch (e.ChangedElement)
+                    {
+                        case Vector3DElements.x:
+                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                            _cockpitInitPos.x = e.OldValue;
+                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
+                            break;
+                        case Vector3DElements.y:
+                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                            _cockpitInitPos.y = e.OldValue;
+                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
+                            break;
+                        case Vector3DElements.z:
+                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                            _cockpitInitPos.z = e.OldValue;
+                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
+                            break;
+                    }                    
                 }
             }
         }
@@ -2147,8 +2181,19 @@ namespace VoidDestroyer2DataEditor
             InitProperty("baseID");
 
             InitProperty("descriptionText");
+            SetPropertyIsCollection("descriptionText", true, typeof(string));
+            
             InitProperty("preExplosionID");
+            List<string> preExplosionIDreftypes = new List<string>();
+            preExplosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("preExplosionID", true, preExplosionIDreftypes);
+            SetPropertyIsCollection("preExplosionID", true, typeof(string));
+            
             InitProperty("hangarID");
+            List<string> hangarIDreftypes = new List<string>();
+            hangarIDreftypes.Add("Hangar");
+            SetPropertyIsObjectIDRef("hangarID", true, hangarIDreftypes);
+            SetPropertyIsCollection("hangarID", true, typeof(string));
 
             InitProperty("creditCost");
             InitProperty("shipHangarYOffset");
@@ -2211,20 +2256,28 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("propulsion");
             SetPropertyIsCollection("propulsion", true, typeof(propulsionDataStructure));
+            
             InitProperty("weapon");
             SetPropertyIsCollection("weapon", true, typeof(weaponDataStructure));
+            
             InitProperty("damage");
             SetPropertyIsCollection("damage", true, typeof(damageDataStructure));
+            
             InitProperty("turret");
             SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
+            
             InitProperty("attachment");
             SetPropertyIsCollection("attachment", true, typeof(attachmentDataStructure));
+            
             InitProperty("movingElement");
             SetPropertyIsCollection("movingElement", true, typeof(movingElementDataStructure));
+            
             InitProperty("dock");
             SetPropertyIsCollection("dock", true, typeof(dockDataStructure));
+            
             InitProperty("shield");
             SetPropertyIsCollection("shield", true, typeof(shieldDataStructure));
+            
             InitProperty("rotatingElement");
             SetPropertyIsCollection("rotatingElement", true, typeof(rotatingElementDataStructure));
         }
@@ -2944,6 +2997,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bNoShipyardRequirement", exists);
 
                 _cockpitInitPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "cockpitInitPos", out exists);
+                _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("cockpitInitPos", exists);
@@ -3157,7 +3211,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        public override void SaveData()
+        protected override void SaveData()
         {
             List<string> xmltextlines = new List<string>();
             xmltextlines.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -3606,7 +3660,10 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines("testsavedship.xml", xmltextlines);
+            //File.WriteAllLines("testsavedship.xml", xmltextlines);
+            File.WriteAllLines(_FilePath, xmltextlines);
+            ResetAllPropertyEdited();
+
         }
 
         public override Control GetDocumentControl()
@@ -3621,10 +3678,10 @@ namespace VoidDestroyer2DataEditor
                     result.MainSplitter.Panel2Collapsed = false;
                     result.SidebarSplitter.Panel1Collapsed = false;
                     result.SidebarSplitter.Panel2Collapsed = false;
-                    result.CollectionsTabs.TabPages.Clear();
+                    /*result.CollectionsTabs.TabPages.Clear();
                     result.CollectionsTabs.TabPages.Add("descriptionText");
                     StringCollectionSidebarEditor descriptionTextEditor = new StringCollectionSidebarEditor();
-                    descriptionTextEditor.StringCollectionText.Lines = _descriptionText.ToArray();
+                    descriptionTextEditor.SelectedCollection = _descriptionText;
                     descriptionTextEditor.Dock = DockStyle.Fill;
                     result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(descriptionTextEditor);
                     result.CollectionsTabs.TabPages.Add("preExplosionID");
@@ -3717,11 +3774,11 @@ namespace VoidDestroyer2DataEditor
                     rotatingElementEditor.ElementType = typeof(rotatingElementDataStructure);
                     rotatingElementEditor.SelectedCollection = _rotatingElement;
                     rotatingElementEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(rotatingElementEditor);
-                    OgreControl modelviewer = new OgreControl();
-                    modelviewer.meshname = meshName;
+                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(rotatingElementEditor);*/
+                    DataOgreControl modelviewer = new DataOgreControl();
+                    modelviewer.DataFile = this;
                     modelviewer.Dock = DockStyle.Fill;
-                    modelviewer.Name = Source.ShortName + objectID + "mv";
+                    modelviewer.Name = Source.ShortName + objectID + "datamv";
                     result.SidebarSplitter.Panel1.Controls.Add(modelviewer);
                     return result;
                 }

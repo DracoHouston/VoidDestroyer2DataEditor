@@ -99,6 +99,18 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        public T LoadSingleFileFromAbsolutePath(string inPath, VD2FileSource inSource)
+        {
+            if (inPath.EndsWith(".xml"))
+            {
+                string dataname = inSource.ShortName + "\\" + Path.GetFileNameWithoutExtension(inPath);
+                T currentdata = System.Activator.CreateInstance(typeof(T), inPath, inSource) as T;
+                Data.Add(dataname, currentdata);
+                return currentdata;
+            }
+            return null;
+        }
+
         public bool DoesPropertyExistInBaseData(string inObjectID, string inPropertyName)
         {
             foreach (T currentdata in Data.Values)

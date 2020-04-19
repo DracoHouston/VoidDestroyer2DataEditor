@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,12 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
+    public class VD2DataFileOverridenArgs : EventArgs
+    {
+        public VD2Data OldFile;
+        public VD2Data NewFile;
+    }
+
     public class VD2Data : VD2PropertyStore, IVD2DocumentInterface
     {
         protected string _FilePath;
@@ -63,7 +70,7 @@ namespace VoidDestroyer2DataEditor
         public TreeNode FilesTreeNode;
         public FilesTreeItem TreeItem;
 
-        public event EventHandler<VD2PropertyChangedEventArgs> VD2PropertyChanged;
+        public event EventHandler<VD2DataFileOverridenArgs> OnThisFileOverriden;
 
         [Description("The path to the ship data file. Used internally by this editor."), Category("Misc")]
         public string FilePath
@@ -79,9 +86,25 @@ namespace VoidDestroyer2DataEditor
             Source = inSource;
         }
 
-        public virtual void SaveData()
+        protected virtual void SaveData()
         {
             
+        }
+
+        public bool TrySaveData()
+        {
+            if (Source != null)
+            {
+                if (Source.WriteAccess == true)
+                {
+                    if (Unsaved)
+                    {
+                        SaveData();
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         public virtual string GetObjectID()
@@ -104,7 +127,7 @@ namespace VoidDestroyer2DataEditor
             return "";
         }
 
-        public override void SetPropertyEdited(string inName, bool inEdited)
+        /*public override void SetPropertyEdited(string inName, bool inEdited)
         {
             base.SetPropertyEdited(inName, inEdited);
             if (VD2PropertyInfos.ContainsKey(inName))
@@ -129,10 +152,20 @@ namespace VoidDestroyer2DataEditor
             //{
             //    FilesTreeNode.Text = TreeItem.DisplayName;
             //}
+        }*/
+
+        public void NotifyFileOverriden(VD2Data inNewFile)
+        {
+            VD2DataFileOverridenArgs args = new VD2DataFileOverridenArgs();
+            args.OldFile = this;
+            args.NewFile = inNewFile;
+            OnThisFileOverriden?.Invoke(this, args);
         }
+
         public virtual Control GetDocumentControl()
         {
             DataDocumentControl result = new DataDocumentControl();
+            result.DataFile = this;
             result.MainSplitter.Panel1Collapsed = false;
             result.MainSplitter.Panel2Collapsed = true;
             result.SidebarSplitter.Panel1Collapsed = true;
@@ -146,6 +179,125 @@ namespace VoidDestroyer2DataEditor
             result.DataDocProperties.ViewBackColor = EditorUserSettings.UserSettings.CurrentTheme.ContentColor;
             result.DataDocProperties.SelectedObject = this;
             result.Dock = DockStyle.Fill;
+            result.CollectionsTabs.TabPages.Clear();
+            List<System.Reflection.PropertyInfo> props = GetType().GetProperties().ToList();
+            foreach (System.Reflection.PropertyInfo prop in props)
+            {
+                Type eletype;
+                if (PropertyIsCollection(prop.Name, out eletype))
+                {
+                    if (result.MainSplitter.Panel2Collapsed)
+                    {
+                        result.MainSplitter.Panel2Collapsed = false;
+                    }
+                    if (eletype == typeof(string))
+                    {
+                        List<string> reftypes = new List<string>();
+                        if (PropertyIsObjectIDRef(prop.Name, out reftypes))//object id ref collection
+                        {
+                            result.CollectionsTabs.TabPages.Add(prop.Name);
+                            ObjectIDRefCollectionSidebarEditor objectidrefeditor = new ObjectIDRefCollectionSidebarEditor();
+                            objectidrefeditor.ObjectIDType = reftypes;
+                            object val = prop.GetValue(this);
+                            if (val is ObservableCollection<string>)
+                            {
+                                ObservableCollection<string> castedval = (ObservableCollection<string>)val;
+                                objectidrefeditor.SelectedCollection = castedval;
+                            }
+                            objectidrefeditor.Dock = DockStyle.Fill;
+                            result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(objectidrefeditor);
+                        }
+                        else//string collection or finite option collection
+                        {
+
+                            result.CollectionsTabs.TabPages.Add(prop.Name);
+                            StringCollectionSidebarEditor stringcollectioneditor = new StringCollectionSidebarEditor();
+                            object val = prop.GetValue(this);
+                            if (val is ObservableCollection<string>)
+                            {
+                                ObservableCollection<string> castedval = (ObservableCollection<string>)val;
+                                stringcollectioneditor.SelectedCollection = castedval;
+                            }
+                            stringcollectioneditor.Dock = DockStyle.Fill;
+                            result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(stringcollectioneditor);
+                        }
+                    }
+                    else if (eletype == typeof(int)) //integer collection
+                    {
+                        result.CollectionsTabs.TabPages.Add(prop.Name);
+                        IntegerCollectionEditor inteditor = new IntegerCollectionEditor();
+                        object val = prop.GetValue(this);
+                        if (val is ObservableCollection<int>)
+                        {
+                            ObservableCollection<int> castedval = (ObservableCollection<int>)val;
+                            inteditor.SelectedCollection = castedval;
+                        }
+                        inteditor.Dock = DockStyle.Fill;
+                        result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(inteditor);
+                    }
+
+                    else if (eletype == typeof(float)) //real number collection
+                    {
+                        result.CollectionsTabs.TabPages.Add(prop.Name);
+                        FloatCollectionSidebarEditor floateditor = new FloatCollectionSidebarEditor();
+                        object val = prop.GetValue(this);
+                        if (val is ObservableCollection<float>)
+                        {
+                            ObservableCollection<float> castedval = (ObservableCollection<float>)val;
+                            floateditor.SelectedCollection = castedval;
+                        }
+                        floateditor.Dock = DockStyle.Fill;
+                        result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(floateditor);
+                    }
+                    else if (eletype == typeof(bool)) //boolean collection
+                    {
+
+                    }
+                    else if (eletype == typeof(Vector3D)) //3d vector collection
+                    {
+                        result.CollectionsTabs.TabPages.Add(prop.Name);
+                        Vector3DCollectionSidebarEditor vector3deditor = new Vector3DCollectionSidebarEditor();
+                        object val = prop.GetValue(this);
+                        if (val is ObservableCollection<Vector3D>)
+                        {
+                            ObservableCollection<Vector3D> castedval = (ObservableCollection<Vector3D>)val;
+                            vector3deditor.SelectedCollection = castedval;
+                        }
+                        vector3deditor.Dock = DockStyle.Fill;
+                        result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(vector3deditor);
+                    }
+                    else if (eletype == typeof(ColorF)) //color collection
+                    {
+
+                    }
+                    else if ((eletype.IsSubclassOf(typeof(VD2DataStructure))) || (eletype == typeof(VD2DataStructure))) //data structure collection
+                    {
+                        result.CollectionsTabs.TabPages.Add(prop.Name);
+                        DataStructureCollectionsEditor dscollectioneditor = new DataStructureCollectionsEditor();
+                        dscollectioneditor.ElementType = eletype;
+                        object val = prop.GetValue(this);
+                        if (val is ObservableCollection<VD2DataStructure>)
+                        {
+                            ObservableCollection<VD2DataStructure> castedval = (ObservableCollection<VD2DataStructure>)val;
+                            dscollectioneditor.SelectedCollection = castedval;
+                        }
+                        dscollectioneditor.Dock = DockStyle.Fill;
+                        result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dscollectioneditor);
+                    }
+                }
+                else
+                {
+                    object val = prop.GetValue(this);
+                    if (val.GetType().IsSubclassOf(typeof(VD2DataStructure)))
+                    {
+                        result.CollectionsTabs.TabPages.Add(prop.Name);
+                        DataStructureSidebarEditor dsEditor = new DataStructureSidebarEditor();
+                        dsEditor.DataStructureEditor.Item = (VD2DataStructure)val;
+                        dsEditor.Dock = DockStyle.Fill;
+                        result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dsEditor);
+                    }
+                }
+            }
             return result;
         }
 

@@ -93,22 +93,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStructureCollectionsEditor.cs">
+    <Compile Include="DataOgreControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataStructureCollectionsEditor.Designer.cs">
+    <Compile Include="DataOgreControl.Designer.cs">
+      <DependentUpon>DataOgreControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditorRestartDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorRestartDialog.Designer.cs">
+      <DependentUpon>EditorRestartDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FloatCollectionSidebarEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FloatCollectionSidebarEditor.Designer.cs">
+      <DependentUpon>FloatCollectionSidebarEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FloatCollectionSidebarEditorItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FloatCollectionSidebarEditorItem.Designer.cs">
+      <DependentUpon>FloatCollectionSidebarEditorItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IntegerCollectionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IntegerCollectionEditor.Designer.cs">
+      <DependentUpon>IntegerCollectionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IntegerCollectionSidebarEditorItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IntegerCollectionSidebarEditorItem.Designer.cs">
+      <DependentUpon>IntegerCollectionSidebarEditorItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureCollectionsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureCollectionsEditor.Designer.cs">
       <DependentUpon>DataStructureCollectionsEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataStructureSidebarEditor.cs">
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureSidebarEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataStructureSidebarEditor.Designer.cs">
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureSidebarEditor.Designer.cs">
       <DependentUpon>DataStructureSidebarEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataStructureSidebarItemView.cs">
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureSidebarItemView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataStructureSidebarItemView.Designer.cs">
+    <Compile Include="UI\DataDocumentSidebarControls\DataStructureSidebarItemView.Designer.cs">
       <DependentUpon>DataStructureSidebarItemView.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\AreaOfEffect\AreaOfEffectData.cs" />
@@ -146,6 +182,20 @@
     <Compile Include="Data\Weapons\TurretData.cs" />
     <Compile Include="Data\Weapons\WeaponData.cs" />
     <Compile Include="EditorUserSettings.cs" />
+    <Compile Include="Data\ImageSetDocument.cs" />
+    <Compile Include="UI\ImageSetDocumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ImageSetDocumentControl.Designer.cs">
+      <DependentUpon>ImageSetDocumentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ImageSetOverlayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ImageSetOverlayControl.Designer.cs">
+      <DependentUpon>ImageSetOverlayControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\MeshDocument.cs" />
     <Compile Include="OgreControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -154,7 +204,6 @@
     </Compile>
     <Compile Include="OgreRenderer.cs" />
     <Compile Include="ParseHelpers.cs" />
-    <Compile Include="ShipDB.cs" />
     <Compile Include="SidebarItemView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -291,15 +340,51 @@
     <Compile Include="VD2DB.cs" />
     <Compile Include="VD2LoadCodeGenerator.cs" />
     <Compile Include="VD2PropertyStore.cs" />
+    <Compile Include="Vector3DCollectionSidebarEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vector3DCollectionSidebarEditor.Designer.cs">
+      <DependentUpon>Vector3DCollectionSidebarEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vector3DCollectionSidebarEditorItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vector3DCollectionSidebarEditorItem.Designer.cs">
+      <DependentUpon>Vector3DCollectionSidebarEditorItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vector3DConverter.cs" />
-    <EmbeddedResource Include="DataStructureCollectionsEditor.resx">
+    <EmbeddedResource Include="DataOgreControl.resx">
+      <DependentUpon>DataOgreControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditorRestartDialog.resx">
+      <DependentUpon>EditorRestartDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FloatCollectionSidebarEditor.resx">
+      <DependentUpon>FloatCollectionSidebarEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FloatCollectionSidebarEditorItem.resx">
+      <DependentUpon>FloatCollectionSidebarEditorItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IntegerCollectionEditor.resx">
+      <DependentUpon>IntegerCollectionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IntegerCollectionSidebarEditorItem.resx">
+      <DependentUpon>IntegerCollectionSidebarEditorItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\DataStructureCollectionsEditor.resx">
       <DependentUpon>DataStructureCollectionsEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataStructureSidebarEditor.resx">
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\DataStructureSidebarEditor.resx">
       <DependentUpon>DataStructureSidebarEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataStructureSidebarItemView.resx">
+    <EmbeddedResource Include="UI\DataDocumentSidebarControls\DataStructureSidebarItemView.resx">
       <DependentUpon>DataStructureSidebarItemView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImageSetDocumentControl.resx">
+      <DependentUpon>ImageSetDocumentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImageSetOverlayControl.resx">
+      <DependentUpon>ImageSetOverlayControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OgreControl.resx">
       <DependentUpon>OgreControl.cs</DependentUpon>
@@ -371,6 +456,12 @@
     <EmbeddedResource Include="UI\WelcomeDocumentControl.resx">
       <DependentUpon>WelcomeDocumentControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Vector3DCollectionSidebarEditor.resx">
+      <DependentUpon>Vector3DCollectionSidebarEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vector3DCollectionSidebarEditorItem.resx">
+      <DependentUpon>Vector3DCollectionSidebarEditorItem.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -390,6 +481,8 @@
     <None Include="Resources\DocumentCloseButton.bmp" />
     <None Include="DocumentCloseButton.png" />
     <None Include="splashscreenbanner.png" />
+    <None Include="saveicon64.png" />
+    <None Include="saveallicon64.png" />
     <Content Include="sungateicon.ico" />
     <None Include="sungateicon.png" />
     <Content Include="UI\sungateicon.ico" />

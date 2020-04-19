@@ -21,6 +21,7 @@ namespace VoidDestroyer2DataEditor
         public RenderWindow OgreWindow;
         public CameraMan OgreCameraMan;
         public float distance;
+        public float zoomdistance;
         public float yaw;
         public float pitch;
         public string meshname;
@@ -45,7 +46,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        private void OgreControl_Load(object sender, EventArgs e)
+        protected void OgreControl_Load(object sender, EventArgs e)
         {
             if (!DesignMode)
             {
@@ -57,8 +58,9 @@ namespace VoidDestroyer2DataEditor
 
                     TextureManager.getSingleton().setDefaultNumMipmaps(5);
                     //ResourceGroupManager.getSingleton().
-                    ResourceGroupManager.getSingleton().setLoadingListener(new FileCollisionResolver());
+                    //ResourceGroupManager.getSingleton().setLoadingListener(new FileCollisionResolver());
                     ResourceGroupManager.getSingleton().initialiseAllResourceGroups();
+                    //ResourceGroupManager.getSingleton().loadResourceGroup("General");
                     OgreScene = OgreRenderer.Renderer.OgreRoot.createSceneManager();
                     //ResourceGroupManager.getSingleton().
                     //var shadergen = ShaderGenerator.getSingleton();
@@ -85,30 +87,35 @@ namespace VoidDestroyer2DataEditor
                     var vp = OgreWindow.addViewport(OgreCamera);
                     //var vp = getRenderWindow().addViewport(cam);
                     vp.setBackgroundColour(new ColourValue(.3f, .3f, .3f));
-                    if (meshname != null)
-                    {
-                        if (meshname != "")
-                        {
-                            
-                            var ent = OgreScene.createEntity(GetTrueFileName(meshname));
-                            distance = ent.getBoundingRadius() * 1.25f;
-                            OgreCameraMan.setYawPitchDist(new Radian(yaw), new Radian(pitch), distance);
-                            //ent.setMaterial()
-                            var node = OgreScene.getRootSceneNode().createChildSceneNode();
-                            node.attachObject(ent);
-                        }
-                    }
-                    
+                    SpawnEntities();
                     OgreRenderer.Renderer.OgreRoot.renderOneFrame();
                 }
             }
         }
 
-        private string GetTrueFileName(string inAllegedName)
+        protected virtual void SpawnEntities()
+        {
+            if (meshname != null)
+            {
+                if (meshname != "")
+                {
+
+                    var ent = OgreScene.createEntity(GetTrueFileName(meshname));
+                    distance = ent.getBoundingRadius() * 1.25f;
+                    zoomdistance = distance * 0.1f;
+                    OgreCameraMan.setYawPitchDist(new Radian(yaw), new Radian(pitch), distance);
+                    //ent.setMaterial()
+                    var node = OgreScene.getRootSceneNode().createChildSceneNode();
+                    node.attachObject(ent);
+                }
+            }
+        }
+
+        public static string GetTrueFileName(string inAllegedName)
         {
             if (Directory.Exists(EditorUserSettings.UserSettings.VD2Path + "Mod\\media\\models"))
             {
-                foreach (string path in Directory.EnumerateDirectories(EditorUserSettings.UserSettings.VD2Path + "media\\models"))
+                foreach (string path in Directory.EnumerateDirectories(EditorUserSettings.UserSettings.VD2Path + "Mod\\media\\models"))
                 {
                     foreach (string file in Directory.EnumerateFiles(path))
                     {
@@ -133,7 +140,7 @@ namespace VoidDestroyer2DataEditor
                 }
             }
 
-            return inAllegedName;//hmm, checks out. resuming patrol.
+            return "";//doesnt even exist.
         }
 
        /* private void OgreControl_KeyDown(object sender, KeyEventArgs e)
@@ -205,7 +212,15 @@ namespace VoidDestroyer2DataEditor
         }
         private void OgreControl_MouseWheel(object sender, MouseEventArgs e)
         {
-            distance -= e.Delta;
+            if (e.Delta > 0)
+            {
+                distance -= zoomdistance;
+            }
+            else
+            {
+                distance += zoomdistance;
+            }
+            
             OgreCameraMan.setYawPitchDist(new Radian(yaw), new Radian(pitch), distance);
         }
     }

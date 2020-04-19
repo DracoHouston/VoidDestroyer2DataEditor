@@ -43,7 +43,7 @@ namespace VoidDestroyer2DataEditor
                     break;
                 case FirstTimeSetupWizardPages.path:
                     EditorUserSettings.UserSettings.VD2Path = textBox1.Text;
-                    EditorUserSettings.UserSettings.SaveSettings(false);
+                    EditorUserSettings.UserSettings.SaveSettings();
                     Close();
                     break;
             }

@@ -11,6 +11,8 @@ namespace VoidDestroyer2DataEditor
     {
         protected Dictionary<string, VD2PropertyInfo> VD2PropertyInfos;
 
+        public event EventHandler<VD2PropertyChangedEventArgs> VD2PropertyChanged;
+
         public VD2PropertyStore()
         {
             VD2PropertyInfos = new Dictionary<string, VD2PropertyInfo>();
@@ -45,6 +47,15 @@ namespace VoidDestroyer2DataEditor
                     }
 
                     UpdatePropertyInfo(inName, info);
+                    VD2PropertyChangedEventArgs e = new VD2PropertyChangedEventArgs();
+                    e.PropertyInfo = info;
+                    e.PropertyName = inName;
+                    e.NewValue = GetType().GetProperty(inName).GetValue(this);
+                    EventHandler<VD2PropertyChangedEventArgs> handler = VD2PropertyChanged;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
                 }
             }
         }
@@ -61,6 +72,30 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return result;
+        }
+
+        public void ResetAllPropertyEdited()
+        {
+            foreach (KeyValuePair<string, VD2PropertyInfo> info in VD2PropertyInfos)
+            {
+                info.Value.EditedByUser = false;
+                System.Reflection.PropertyInfo prop = GetType().GetProperty(info.Key);
+                if (prop.PropertyType == typeof(System.Collections.ObjectModel.ObservableCollection<VD2DataStructure>))
+                {
+                    object o = prop.GetValue(this);
+                    System.Collections.ObjectModel.ObservableCollection<VD2DataStructure> val = (System.Collections.ObjectModel.ObservableCollection<VD2DataStructure>)o;
+                    foreach (VD2DataStructure ds in val)
+                    {
+                        ds.ResetAllPropertyEdited();
+                    }
+                }
+                if ((prop.PropertyType == typeof(VD2DataStructure)) || (prop.PropertyType.IsSubclassOf(typeof(VD2DataStructure))))
+                {
+                    VD2DataStructure ds = (VD2DataStructure)prop.GetValue(this);
+                    ds.ResetAllPropertyEdited();
+                }
+            }
+            
         }
 
         [Browsable(false)]

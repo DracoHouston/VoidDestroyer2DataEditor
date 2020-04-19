@@ -93,6 +93,26 @@ namespace VoidDestroyer2DataEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap saveallicon64 {
+            get {
+                object obj = ResourceManager.GetObject("saveallicon64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap saveicon64 {
+            get {
+                object obj = ResourceManager.GetObject("saveicon64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap splashscreenbanner {
             get {
                 object obj = ResourceManager.GetObject("splashscreenbanner", resourceCulture);
