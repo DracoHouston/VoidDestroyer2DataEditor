@@ -28,9 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.MainSplitter = new System.Windows.Forms.SplitContainer();
             this.DataDocProperties = new System.Windows.Forms.PropertyGrid();
             this.SidebarSplitter = new System.Windows.Forms.SplitContainer();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.unsetValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CollectionsTabs = new VoidDestroyer2DataEditor.EditorTabControl();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitter)).BeginInit();
             this.MainSplitter.Panel1.SuspendLayout();
@@ -39,6 +43,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.SidebarSplitter)).BeginInit();
             this.SidebarSplitter.Panel2.SuspendLayout();
             this.SidebarSplitter.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainSplitter
@@ -60,6 +65,7 @@
             // 
             // DataDocProperties
             // 
+            this.DataDocProperties.ContextMenuStrip = this.contextMenuStrip1;
             this.DataDocProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataDocProperties.Location = new System.Drawing.Point(0, 0);
             this.DataDocProperties.Name = "DataDocProperties";
@@ -85,6 +91,28 @@
             this.SidebarSplitter.SplitterDistance = 166;
             this.SidebarSplitter.TabIndex = 0;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.unsetValueToolStripMenuItem,
+            this.setValueToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 70);
+            // 
+            // unsetValueToolStripMenuItem
+            // 
+            this.unsetValueToolStripMenuItem.Name = "unsetValueToolStripMenuItem";
+            this.unsetValueToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.unsetValueToolStripMenuItem.Text = "Unset Selected Property";
+            this.unsetValueToolStripMenuItem.Click += new System.EventHandler(this.unsetValueToolStripMenuItem_Click);
+            // 
+            // setValueToolStripMenuItem
+            // 
+            this.setValueToolStripMenuItem.Name = "setValueToolStripMenuItem";
+            this.setValueToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.setValueToolStripMenuItem.Text = "Set Selected Property";
+            this.setValueToolStripMenuItem.Click += new System.EventHandler(this.setValueToolStripMenuItem_Click);
+            // 
             // CollectionsTabs
             // 
             this.CollectionsTabs.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -102,6 +130,8 @@
             this.Controls.Add(this.MainSplitter);
             this.Name = "DataDocumentControl";
             this.Size = new System.Drawing.Size(500, 500);
+            this.Load += new System.EventHandler(this.DataDocumentControl_Load);
+            this.ParentChanged += new System.EventHandler(this.DataDocumentControl_ParentChanged);
             this.MainSplitter.Panel1.ResumeLayout(false);
             this.MainSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitter)).EndInit();
@@ -109,6 +139,7 @@
             this.SidebarSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SidebarSplitter)).EndInit();
             this.SidebarSplitter.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -118,5 +149,8 @@
         public System.Windows.Forms.PropertyGrid DataDocProperties;
         public System.Windows.Forms.SplitContainer SidebarSplitter;
         public EditorTabControl CollectionsTabs;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem unsetValueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setValueToolStripMenuItem;
     }
 }

@@ -156,6 +156,7 @@ namespace VoidDestroyer2DataEditor
                         if (DataStructurePropertiesEditor == null)
                         {
                             DataStructurePropertiesEditor = new PropertyGrid();
+                            DataStructurePropertiesEditor.ContextMenuStrip = contextMenuStrip1;
                         }
                         DataStructurePropertiesEditor.SelectedObject = _Item;
                         int h = 200;
@@ -297,6 +298,46 @@ namespace VoidDestroyer2DataEditor
         private void SummaryLabel_MouseClick(object sender, MouseEventArgs e)
         {
             ToggleCollectionsItemModeCollapse();
+        }
+
+        private void unsetValueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Item is VD2DataStructure)
+            {
+                VD2DataStructure dsitem = (VD2DataStructure)Item;
+                if (DataStructurePropertiesEditor != null)
+                {
+                    if (DataStructurePropertiesEditor.SelectedGridItem != null)
+                    {
+                        dsitem.SetPropertyEdited(DataStructurePropertiesEditor.SelectedGridItem.Label, true);
+                        dsitem.SetPropertyExists(DataStructurePropertiesEditor.SelectedGridItem.Label, false);
+                        if (EditorUI.GetParentVD2DataFileSourceShortName(this) == "Base")
+                        {
+                            dsitem.SetPropertyExistsInBaseData(DataStructurePropertiesEditor.SelectedGridItem.Label, false);
+                        }                   
+                    }
+                }
+            }
+        }
+
+        private void setValueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Item is VD2DataStructure)
+            {
+                VD2DataStructure dsitem = (VD2DataStructure)Item;
+                if (DataStructurePropertiesEditor != null)
+                {
+                    if (DataStructurePropertiesEditor.SelectedGridItem != null)
+                    {
+                        dsitem.SetPropertyEdited(DataStructurePropertiesEditor.SelectedGridItem.Label, true);
+                        dsitem.SetPropertyExists(DataStructurePropertiesEditor.SelectedGridItem.Label, false);
+                        if (EditorUI.GetParentVD2DataFileSourceShortName(this) == "Base")
+                        {
+                            dsitem.SetPropertyExistsInBaseData(DataStructurePropertiesEditor.SelectedGridItem.Label, true);
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -31,7 +31,10 @@ namespace VoidDestroyer2DataEditor
         private void Form1_Load(object sender, EventArgs e)
         {
             EditorUI.UI.InitUI(this);
-
+            foreach (VD2FileSource source in EditorUserSettings.UserSettings.Sources)
+            {
+                source.OnWriteAccessChanged += Source_OnWriteAccessChanged;
+            }
             //toolStripComboBox1.SelectedIndex = 0;
             SetTreeIconSize(EditorUserSettings.UserSettings.TreeIconSize);
             //FilesTree.ImageList = 
@@ -44,6 +47,29 @@ namespace VoidDestroyer2DataEditor
                 OpenVD2Document(StartupDocument);
             }
             Disposed += MainEditorForm_Disposed;
+        }
+
+        private void Source_OnWriteAccessChanged(object sender, EventArgs e)
+        {
+            FilesTree.BeginUpdate();
+            foreach (FilesTreeItem item in FilesTreeItems)
+            {
+                RefreshFilesTreeNodeText(item);
+            }
+            FilesTree.EndUpdate();
+        }
+
+        //!!!!!!!ALWAYS CALL BEGINUPDATE ON FILES TREE BEFORE CALLING THIS AND END UPDATE AFTER OR THIS TAKES OVER HALF A MINUTE TO EXECUTE!!!!!!!!!
+        public void RefreshFilesTreeNodeText(FilesTreeItem inItem)
+        {
+            if (inItem.FilesTreeNode != null)
+            {
+                inItem.FilesTreeNode.Text = inItem.DisplayName;
+            }
+            foreach (FilesTreeItem item in inItem.Children)
+            {
+                RefreshFilesTreeNodeText(item);
+            }
         }
 
         private void MainEditorForm_Disposed(object sender, EventArgs e)
@@ -292,6 +318,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     inNodes.Add(inItems[i].Name, inItems[i].DisplayName, inItems[i].IconKey);
                     inNodes[inNodes.Count - 1].ContextMenuStrip = TreeContextMenu;
+                    inItems[i].FilesTreeNode = inNodes[inNodes.Count - 1];
                     if (inItems[i].DataFile != null)
                     {
                         if (inItems[i].DataFile is VD2Data)
@@ -310,6 +337,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 else
                 {
+                    inItems[i].FilesTreeNode = null;
                     if (inItems[i].DataFile is VD2Data)
                     {
                         VD2Data df = (VD2Data)inItems[i].DataFile;
@@ -1938,11 +1966,15 @@ namespace VoidDestroyer2DataEditor
                                     }
                                 }
                                 string testpath = "";
+                                //all but the last one, if theres only 1 element the next part will handle it, by adding the last one without slashes.
                                 for (int i = 0; i < splitpath.Count - 1; i++)
                                 {
                                     testpath += splitpath[i] + "\\";
                                 }
-                                testpath += splitpath[splitpath.Count - 1];
+                                if (splitpath.Count > 0)
+                                {
+                                    testpath += splitpath[splitpath.Count - 1];
+                                }
                                 if (!File.Exists(testpath))
                                 {
                                     File.Copy(dataitem.FilePath, testpath);
@@ -1952,61 +1984,61 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             if (dataitem is ShipData)
                                             {
-                                                ShipData overrideship = EditorUI.UI.Ships.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                ShipData overridefile = EditorUI.UI.Ships.LoadSingleFileFromAbsolutePath(testpath, source);
                                                 FilesTreeItem currentitem = new FilesTreeItem();
-                                                currentitem.DataFile = overrideship;                                                
-                                                currentitem.Name = Path.GetFileNameWithoutExtension(overrideship.FilePath);
+                                                currentitem.DataFile = overridefile;                                                
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 currentitem.FilterTags.Add("FileType:Ship");
-                                                currentitem.FilterTags.Add("Faction:" + overrideship.faction);
-                                                currentitem.FilterTags.Add("Class:" + overrideship.shipClass);
-                                                if (overrideship.shipClassSize != "")
+                                                currentitem.FilterTags.Add("Faction:" + overridefile.faction);
+                                                currentitem.FilterTags.Add("Class:" + overridefile.shipClass);
+                                                if (overridefile.shipClassSize != "")
                                                 {
-                                                    currentitem.FilterTags.Add("Size:" + overrideship.shipClassSize);
+                                                    currentitem.FilterTags.Add("Size:" + overridefile.shipClassSize);
                                                 }
                                                 else
                                                 {
                                                     currentitem.FilterTags.Add("Size:Tiny");
                                                 }
-                                                if (overrideship.sizeShipClass != "")
+                                                if (overridefile.sizeShipClass != "")
                                                 {
-                                                    currentitem.FilterTags.Add("Hull:" + overrideship.sizeShipClass);
+                                                    currentitem.FilterTags.Add("Hull:" + overridefile.sizeShipClass);
                                                 }
                                                 else
                                                 {
-                                                    currentitem.FilterTags.Add("Hull:" + overrideship.shipClass);
+                                                    currentitem.FilterTags.Add("Hull:" + overridefile.shipClass);
                                                 }
-                                                if (overrideship.shipClass == "fighter")
+                                                if (overridefile.shipClass == "fighter")
                                                 {
                                                     currentitem.IconKey = "fightericon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "fighter_drone")
+                                                else if (overridefile.shipClass == "fighter_drone")
                                                 {
                                                     currentitem.IconKey = "droneicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Drones");
@@ -2014,226 +2046,226 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "gunship")
+                                                else if (overridefile.shipClass == "gunship")
                                                 {
                                                     currentitem.IconKey = "gunshipicon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "corvette")
+                                                else if (overridefile.shipClass == "corvette")
                                                 {
                                                     currentitem.IconKey = "corvetteicon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "frigate")
+                                                else if (overridefile.shipClass == "frigate")
                                                 {
                                                     currentitem.IconKey = "frigateicon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "destroyer")
+                                                else if (overridefile.shipClass == "destroyer")
                                                 {
                                                     currentitem.IconKey = "destroyericon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "cruiser")
+                                                else if (overridefile.shipClass == "cruiser")
                                                 {
                                                     currentitem.IconKey = "cruisericon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "carrier")
+                                                else if (overridefile.shipClass == "carrier")
                                                 {
                                                     currentitem.IconKey = "carriericon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "dreadnaught")
+                                                else if (overridefile.shipClass == "dreadnaught")
                                                 {
                                                     currentitem.IconKey = "dreadnaughticon";
-                                                    if (overrideship.shipClassSize == "light")
+                                                    if (overridefile.shipClassSize == "light")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "medium")
+                                                    else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
-                                                    else if (overrideship.shipClassSize == "heavy")
+                                                    else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
                                                         categoryitem.Children.Add(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                        dataitem.NotifyFileOverriden(overrideship);
+                                                        dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
-                                                else if (overrideship.shipClass == "transport")
+                                                else if (overridefile.shipClass == "transport")
                                                 {
                                                     currentitem.IconKey = "transporticon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Transport");
@@ -2241,9 +2273,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "mining")
+                                                else if (overridefile.shipClass == "mining")
                                                 {
                                                     currentitem.IconKey = "minericon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Miner");
@@ -2251,9 +2283,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "shuttle")
+                                                else if (overridefile.shipClass == "shuttle")
                                                 {
                                                     currentitem.IconKey = "shuttleicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Shuttle");
@@ -2261,9 +2293,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "repair")
+                                                else if (overridefile.shipClass == "repair")
                                                 {
                                                     currentitem.IconKey = "repairicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Repair");
@@ -2271,9 +2303,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "capture")
+                                                else if (overridefile.shipClass == "capture")
                                                 {
                                                     currentitem.IconKey = "basecaptureicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Base Capture");
@@ -2281,9 +2313,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "ship_capture")
+                                                else if (overridefile.shipClass == "ship_capture")
                                                 {
                                                     currentitem.IconKey = "shipcaptureicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Ship Capture");
@@ -2291,9 +2323,9 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
-                                                else if (overrideship.shipClass == "builder")
+                                                else if (overridefile.shipClass == "builder")
                                                 {
                                                     currentitem.IconKey = "buildericon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Builder");
@@ -2301,98 +2333,442 @@ namespace VoidDestroyer2DataEditor
                                                     categoryitem.Children.Add(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                    dataitem.NotifyFileOverriden(overrideship);
+                                                    dataitem.NotifyFileOverriden(overridefile);
                                                 }
 
                                             }
                                             else if (dataitem is PrimaryUpgradeData)
-                                            {
-                                                EditorUI.UI.PrimaryUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                            {                                                
+                                                PrimaryUpgradeData overridefile = EditorUI.UI.PrimaryUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:PrimaryUpgrade");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                if (overridefile.bPersistsOnShipChange)
+                                                {
+                                                    currentitem.FilterTags.Add("UpgradeType:PersistentUpgrade");
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Persistent");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Persistent");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overridefile);
+                                                }
+                                                else if (overridefile.upgradeType == "other")
+                                                {
+                                                    currentitem.FilterTags.Add("UpgradeType:OtherUpgrade");
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Other");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Other");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overridefile);
+                                                }
+                                                else
+                                                {
+                                                    currentitem.FilterTags.Add("UpgradeType:Primary");
+                                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Primary");
+                                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Primary");
+                                                    categoryitem.Children.Add(currentitem);
+                                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    dataitem.NotifyFileOverriden(overridefile);
+                                                }
+                                                
                                             }
                                             else if (dataitem is ActiveUpgradeData)
                                             {
-                                                EditorUI.UI.ActiveUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                ActiveUpgradeData overridefile = EditorUI.UI.ActiveUpgrades.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:ActiveUpgrade");
+                                                currentitem.FilterTags.Add("UpgradeType:Active");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Active");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Active");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is WeaponData)
                                             {
-                                                EditorUI.UI.Weapons.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                WeaponData overridefile = EditorUI.UI.Weapons.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Weapon");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Weapons");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Weapons");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is HangarData)
                                             {
-                                                EditorUI.UI.Hangars.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                HangarData overridefile = EditorUI.UI.Hangars.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Hangar");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Hangars");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Hangars");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is LauncherData)
                                             {
-                                                EditorUI.UI.Launchers.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                LauncherData overridefile = EditorUI.UI.Launchers.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Launcher");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Launchers");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Launchers");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is TurretData)
                                             {
-                                                TurretData overrideturret = EditorUI.UI.Turrets.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                TurretData overridefile = EditorUI.UI.Turrets.LoadSingleFileFromAbsolutePath(testpath, source);
                                                 FilesTreeItem currentitem = new FilesTreeItem();
-                                                currentitem.DataFile = overrideturret;
+                                                currentitem.DataFile = overridefile;
                                                 currentitem.FilterTags.Add("FileType:Turret");
-                                                currentitem.Name = Path.GetFileNameWithoutExtension(overrideturret.FilePath);
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Turrets");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Turrets");
                                                 categoryitem.Children.Add(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                                dataitem.NotifyFileOverriden(overrideturret);
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is AmmoData)
                                             {
-                                                EditorUI.UI.Ammo.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                AmmoData overridefile = EditorUI.UI.Ammo.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Ammo");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ammo");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ammo");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is MissileData)
                                             {
-                                                EditorUI.UI.Missiles.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                MissileData overridefile = EditorUI.UI.Missiles.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Missile");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Missiles");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Missiles");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is MineData)
                                             {
-                                                EditorUI.UI.Mines.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                MineData overridefile = EditorUI.UI.Mines.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Mine");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Mines");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Mines");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
                                             }
-                                            /*
-                                            AreaOfEffectData 
-                                            AreaOfEffect
-                                            AsteroidData 
-                                            Asteroids
-                                            BaseData 
-                                            Bases
-                                            CharacterData
-                                            Characters
-                                            CockpitData
-                                            Cockpits
-                                            DebrisData
-                                            Debris
-                                            DialogData
-                                            Dialog
-                                            DockedMovingElementData
-                                            DockedMovingElements
-                                            DoorData
-                                            Doors
-                                            EffectData
-                                            Effects
-                                            ParticleData
-                                            Particles
-                                            ExplosionData
-                                            Explosions
-                                            FactionData
-                                            Factions
-                                            MusicData
-                                            Music
-                                            OtherObjectData
-                                            OtherObjects
-                                            ShieldData
-                                            Shields
-                                            SkyboxData
-                                            Skyboxes
-                                            SoundData
-                                            Sounds
-                                            StationData
-                                            Stations
-                                            SunData
-                                            Suns
-                                             */
+                                            else if (dataitem is AreaOfEffectData)
+                                            {
+                                                AreaOfEffectData overridefile = EditorUI.UI.AreaOfEffect.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:AreaOfEffect");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\AreaOfEffect");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\AreaOfEffect");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is AsteroidData)
+                                            {
+                                                AsteroidData overridefile = EditorUI.UI.Asteroids.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Asteroid");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Asteroids");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Asteroids");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is BaseData)
+                                            {
+                                                BaseData overridefile = EditorUI.UI.Bases.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Base");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Bases");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Bases");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is CharacterData)
+                                            {
+                                                CharacterData overridefile = EditorUI.UI.Characters.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Character");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Characters");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Characters");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is CockpitData)
+                                            {
+                                                CockpitData overridefile = EditorUI.UI.Cockpits.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Cockpit");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Cockpits");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Cockpits");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is DebrisData)
+                                            {
+                                                DebrisData overridefile = EditorUI.UI.Debris.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Debris");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Debris");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Debris");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is DialogData)
+                                            {
+                                                DialogData overridefile = EditorUI.UI.Dialog.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Dialog");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Dialog");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Dialog");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is DockedMovingElementData)
+                                            {
+                                                DockedMovingElementData overridefile = EditorUI.UI.DockedMovingElements.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:DockedMovingElement");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\DockedMovingElements");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\DockedMovingElements");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is DoorData)
+                                            {
+                                                DoorData overridefile = EditorUI.UI.Doors.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Door");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Doors");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Doors");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is EffectData)
+                                            {
+                                                EffectData overridefile = EditorUI.UI.Effects.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Effect");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Effects");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Effects");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is ParticleData)
+                                            {
+                                                ParticleData overridefile = EditorUI.UI.Particles.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Particle");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Particles");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Particles");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is ExplosionData)
+                                            {
+                                                ExplosionData overridefile = EditorUI.UI.Explosions.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Explosion");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Explosions");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Explosions");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is FactionData)
+                                            {
+                                                FactionData overridefile = EditorUI.UI.Factions.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Faction");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Factions");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Factions");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is MusicData)
+                                            {
+                                                MusicData overridefile = EditorUI.UI.Music.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Music");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Music");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Music");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is OtherObjectData)
+                                            {
+                                                OtherObjectData overridefile = EditorUI.UI.OtherObjects.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Other");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Other");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Other");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is ShieldData)
+                                            {
+                                                ShieldData overridefile = EditorUI.UI.Shields.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Shield");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Shields");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Shields");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is SkyboxData)
+                                            {
+                                                SkyboxData overridefile = EditorUI.UI.Skyboxes.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Skybox");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Skyboxes");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Skyboxes");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is SoundData)
+                                            {
+                                                SoundData overridefile = EditorUI.UI.Sounds.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Sound");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Sounds");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Sounds");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is StationData)
+                                            {
+                                                StationData overridefile = EditorUI.UI.Stations.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Station");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Stations");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Stations");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }
+                                            else if (dataitem is SunData)
+                                            {
+                                                SunData overridefile = EditorUI.UI.Suns.LoadSingleFileFromAbsolutePath(testpath, source);
+                                                FilesTreeItem currentitem = new FilesTreeItem();
+                                                currentitem.DataFile = overridefile;
+                                                currentitem.FilterTags.Add("FileType:Sun");
+                                                currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                                FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Suns");
+                                                TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Suns");
+                                                categoryitem.Children.Add(currentitem);
+                                                TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                                addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                dataitem.NotifyFileOverriden(overridefile);
+                                            }                                            
                                         }
                                     }
                                 }
@@ -2412,7 +2788,1017 @@ namespace VoidDestroyer2DataEditor
 
         private void createDuplicateToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath);
+            if (item != null)
+            {
+                if (item.DataFile != null)
+                {
+                    if (item.DataFile is VD2Data)
+                    {
+                        VD2Data dataitem = (VD2Data)item.DataFile;
+                        
+                        if (dataitem.Source != null)
+                        {
+                            if (!dataitem.Source.WriteAccess)
+                            {
+                                ErrorMessageDialog errordialog = new ErrorMessageDialog();
+                                errordialog.ErrorTitleText = "Trying to duplicate in read only source";
+                                errordialog.ErrorMessageText = "You may not duplicate a file in a read only source, set write access on for this source (" + dataitem.Source.ShortName + ") if you wish to duplicate the file. Otherwise, try override in mod files command.";
+                                errordialog.ShowDialog();
+                                return;
+                            }
+                            DuplicateFileDialog duplicatefiledialog = new DuplicateFileDialog();
+                            duplicatefiledialog.DestinationFolderPath = Path.GetDirectoryName(dataitem.FilePath);
+                            duplicatefiledialog.FileName = Path.GetFileNameWithoutExtension(dataitem.FilePath);
+                            if (dataitem is ShipData)
+                            {
+                                duplicatefiledialog.FileType = "ShipData";
+                            }
+                            else if (dataitem is PrimaryUpgradeData)
+                            {
+                                duplicatefiledialog.FileType = "PrimaryUpgradeData";
+                            }
+                            else if (dataitem is ActiveUpgradeData)
+                            {
+                                duplicatefiledialog.FileType = "ActiveUpgradeData";
+                            }
+                            else if (dataitem is WeaponData)
+                            {
+                                duplicatefiledialog.FileType = "WeaponData";
+                            }
+                            else if (dataitem is HangarData)
+                            {
+                                duplicatefiledialog.FileType = "HangarData";
+                            }
+                            else if (dataitem is LauncherData)
+                            {
+                                duplicatefiledialog.FileType = "LauncherData";
+                            }
+                            else if (dataitem is TurretData)
+                            {
+                                duplicatefiledialog.FileType = "TurretData";
+                            }
+                            else if (dataitem is AmmoData)
+                            {
+                                duplicatefiledialog.FileType = "AmmoData";
+                            }
+                            else if (dataitem is MissileData)
+                            {
+                                duplicatefiledialog.FileType = "MissileData";
+                            }
+                            else if (dataitem is MineData)
+                            {
+                                duplicatefiledialog.FileType = "MineData";
+                            }
+                            else if (dataitem is AreaOfEffectData)
+                            {
+                                duplicatefiledialog.FileType = "AreaOfEffectData";
+                            }
+                            else if (dataitem is AsteroidData)
+                            {
+                                duplicatefiledialog.FileType = "AsteroidData";
+                            }
+                            else if (dataitem is BaseData)
+                            {
+                                duplicatefiledialog.FileType = "BaseData";
+                            }
+                            else if (dataitem is CharacterData)
+                            {
+                                duplicatefiledialog.FileType = "CharacterData";
+                            }
+                            else if (dataitem is CockpitData)
+                            {
+                                duplicatefiledialog.FileType = "CockpitData";
+                            }
+                            else if (dataitem is DebrisData)
+                            {
+                                duplicatefiledialog.FileType = "DebrisData";
+                            }
+                            else if (dataitem is DialogData)
+                            {
+                                duplicatefiledialog.FileType = "DialogData";
+                            }
+                            else if (dataitem is DockedMovingElementData)
+                            {
+                                duplicatefiledialog.FileType = "DockedMovingElementData";
+                            }
+                            else if (dataitem is DoorData)
+                            {
+                                duplicatefiledialog.FileType = "DoorData";
+                            }
+                            else if (dataitem is EffectData)
+                            {
+                                duplicatefiledialog.FileType = "EffectData";
+                            }
+                            else if (dataitem is ParticleData)
+                            {
+                                duplicatefiledialog.FileType = "ParticleData";
+                            }
+                            else if (dataitem is ExplosionData)
+                            {
+                                duplicatefiledialog.FileType = "ExplosionData";
+                            }
+                            else if (dataitem is FactionData)
+                            {
+                                duplicatefiledialog.FileType = "FactionData";
+                            }
+                            else if (dataitem is MusicData)
+                            {
+                                duplicatefiledialog.FileType = "MusicData";
+                            }
+                            else if (dataitem is OtherObjectData)
+                            {
+                                duplicatefiledialog.FileType = "OtherObjectData";
+                            }
+                            else if (dataitem is ShieldData)
+                            {
+                                duplicatefiledialog.FileType = "ShieldData";
+                            }
+                            else if (dataitem is SkyboxData)
+                            {
+                                duplicatefiledialog.FileType = "SkyboxData";
+                            }
+                            else if (dataitem is SoundData)
+                            {
+                                duplicatefiledialog.FileType = "SoundData";
+                            }
+                            else if (dataitem is StationData)
+                            {
+                                duplicatefiledialog.FileType = "StationData";
+                            }
+                            else if (dataitem is SunData)
+                            {
+                                duplicatefiledialog.FileType = "SunData";
+                            }
+                            duplicatefiledialog.ObjectID = dataitem.GetObjectID();
+                            DialogResult result = duplicatefiledialog.ShowDialog();
+                            if (result == DialogResult.Cancel)
+                            { 
+                                return;
+                            }
+                            string testpath = duplicatefiledialog.DestinationFolderPath + "\\" + duplicatefiledialog.FileName + ".xml";
+                            if (!File.Exists(testpath))
+                            {
+                                File.Copy(dataitem.FilePath, testpath);
+                                if (dataitem is ShipData)
+                                {
+                                    ShipData overridefile = EditorUI.UI.Ships.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    currentitem.FilterTags.Add("FileType:Ship");
+                                    currentitem.FilterTags.Add("Faction:" + overridefile.faction);
+                                    currentitem.FilterTags.Add("Class:" + overridefile.shipClass);
+                                    if (overridefile.shipClassSize != "")
+                                    {
+                                        currentitem.FilterTags.Add("Size:" + overridefile.shipClassSize);
+                                    }
+                                    else
+                                    {
+                                        currentitem.FilterTags.Add("Size:Tiny");
+                                    }
+                                    if (overridefile.sizeShipClass != "")
+                                    {
+                                        currentitem.FilterTags.Add("Hull:" + overridefile.sizeShipClass);
+                                    }
+                                    else
+                                    {
+                                        currentitem.FilterTags.Add("Hull:" + overridefile.shipClass);
+                                    }
+                                    if (overridefile.shipClass == "fighter")
+                                    {
+                                        currentitem.IconKey = "fightericon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "fighter_drone")
+                                    {
+                                        currentitem.IconKey = "droneicon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Drones");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Drones");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "gunship")
+                                    {
+                                        currentitem.IconKey = "gunshipicon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "corvette")
+                                    {
+                                        currentitem.IconKey = "corvetteicon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "frigate")
+                                    {
+                                        currentitem.IconKey = "frigateicon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "destroyer")
+                                    {
+                                        currentitem.IconKey = "destroyericon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "cruiser")
+                                    {
+                                        currentitem.IconKey = "cruisericon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "carrier")
+                                    {
+                                        currentitem.IconKey = "carriericon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "dreadnaught")
+                                    {
+                                        currentitem.IconKey = "dreadnaughticon";
+                                        if (overridefile.shipClassSize == "light")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "medium")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                        else if (overridefile.shipClassSize == "heavy")
+                                        {
+                                            FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
+                                            TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
+                                            categoryitem.Children.Add(currentitem);
+                                            TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                            addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                            dataitem.NotifyFileOverriden(overridefile);
+                                        }
+                                    }
+                                    else if (overridefile.shipClass == "transport")
+                                    {
+                                        currentitem.IconKey = "transporticon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Transport");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Transport");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "mining")
+                                    {
+                                        currentitem.IconKey = "minericon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Miner");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Miner");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "shuttle")
+                                    {
+                                        currentitem.IconKey = "shuttleicon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Shuttle");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Shuttle");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "repair")
+                                    {
+                                        currentitem.IconKey = "repairicon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Repair");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Repair");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "capture")
+                                    {
+                                        currentitem.IconKey = "basecaptureicon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Base Capture");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Base Capture");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "ship_capture")
+                                    {
+                                        currentitem.IconKey = "shipcaptureicon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Ship Capture");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Ship Capture");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.shipClass == "builder")
+                                    {
+                                        currentitem.IconKey = "buildericon";
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Builder");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Builder");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
 
+                                }
+                                else if (dataitem is PrimaryUpgradeData)
+                                {
+                                    PrimaryUpgradeData overridefile = EditorUI.UI.PrimaryUpgrades.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:PrimaryUpgrade");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    if (overridefile.bPersistsOnShipChange)
+                                    {
+                                        currentitem.FilterTags.Add("UpgradeType:PersistentUpgrade");
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Persistent");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Persistent");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else if (overridefile.upgradeType == "other")
+                                    {
+                                        currentitem.FilterTags.Add("UpgradeType:OtherUpgrade");
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Other");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Other");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+                                    else
+                                    {
+                                        currentitem.FilterTags.Add("UpgradeType:Primary");
+                                        FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Primary");
+                                        TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Primary");
+                                        categoryitem.Children.Add(currentitem);
+                                        TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                        addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                        dataitem.NotifyFileOverriden(overridefile);
+                                    }
+
+                                }
+                                else if (dataitem is ActiveUpgradeData)
+                                {
+                                    ActiveUpgradeData overridefile = EditorUI.UI.ActiveUpgrades.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:ActiveUpgrade");
+                                    currentitem.FilterTags.Add("UpgradeType:Active");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Active");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Active");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is WeaponData)
+                                {
+                                    WeaponData overridefile = EditorUI.UI.Weapons.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.weaponID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Weapon");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Weapons");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Weapons");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is HangarData)
+                                {
+                                    HangarData overridefile = EditorUI.UI.Hangars.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.hangarID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Hangar");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Hangars");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Hangars");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is LauncherData)
+                                {
+                                    LauncherData overridefile = EditorUI.UI.Launchers.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.weaponID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Launcher");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Launchers");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Launchers");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is TurretData)
+                                {
+                                    TurretData overridefile = EditorUI.UI.Turrets.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.weaponID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Turret");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Turrets");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Turrets");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is AmmoData)
+                                {
+                                    AmmoData overridefile = EditorUI.UI.Ammo.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.projectileID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Ammo");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ammo");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ammo");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is MissileData)
+                                {
+                                    MissileData overridefile = EditorUI.UI.Missiles.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Missile");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Missiles");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Missiles");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is MineData)
+                                {
+                                    MineData overridefile = EditorUI.UI.Mines.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Mine");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Mines");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Mines");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is AreaOfEffectData)
+                                {
+                                    AreaOfEffectData overridefile = EditorUI.UI.AreaOfEffect.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:AreaOfEffect");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\AreaOfEffect");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\AreaOfEffect");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is AsteroidData)
+                                {
+                                    AsteroidData overridefile = EditorUI.UI.Asteroids.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Asteroid");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Asteroids");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Asteroids");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is BaseData)
+                                {
+                                    BaseData overridefile = EditorUI.UI.Bases.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Base");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Bases");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Bases");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is CharacterData)
+                                {
+                                    CharacterData overridefile = EditorUI.UI.Characters.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.characterID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Character");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Characters");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Characters");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is CockpitData)
+                                {
+                                    CockpitData overridefile = EditorUI.UI.Cockpits.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Cockpit");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Cockpits");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Cockpits");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is DebrisData)
+                                {
+                                    DebrisData overridefile = EditorUI.UI.Debris.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Debris");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Debris");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Debris");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is DialogData)
+                                {
+                                    DialogData overridefile = EditorUI.UI.Dialog.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.dialogID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Dialog");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Dialog");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Dialog");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is DockedMovingElementData)
+                                {
+                                    DockedMovingElementData overridefile = EditorUI.UI.DockedMovingElements.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:DockedMovingElement");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\DockedMovingElements");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\DockedMovingElements");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is DoorData)
+                                {
+                                    DoorData overridefile = EditorUI.UI.Doors.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Door");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Doors");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Doors");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is EffectData)
+                                {
+                                    EffectData overridefile = EditorUI.UI.Effects.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Effect");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Effects");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Effects");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is ParticleData)
+                                {
+                                    ParticleData overridefile = EditorUI.UI.Particles.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Particle");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Particles");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Particles");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is ExplosionData)
+                                {
+                                    ExplosionData overridefile = EditorUI.UI.Explosions.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Explosion");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Explosions");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Explosions");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is FactionData)
+                                {
+                                    FactionData overridefile = EditorUI.UI.Factions.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.factionID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Faction");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Factions");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Factions");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is MusicData)
+                                {
+                                    MusicData overridefile = EditorUI.UI.Music.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Music");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Music");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Music");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is OtherObjectData)
+                                {
+                                    OtherObjectData overridefile = EditorUI.UI.OtherObjects.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Other");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Other");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Other");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is ShieldData)
+                                {
+                                    ShieldData overridefile = EditorUI.UI.Shields.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.shieldID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Shield");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Shields");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Shields");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is SkyboxData)
+                                {
+                                    SkyboxData overridefile = EditorUI.UI.Skyboxes.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Skybox");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Skyboxes");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Skyboxes");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is SoundData)
+                                {
+                                    SoundData overridefile = EditorUI.UI.Sounds.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Sound");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Sounds");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Sounds");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is StationData)
+                                {
+                                    StationData overridefile = EditorUI.UI.Stations.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Station");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Stations");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Stations");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                                else if (dataitem is SunData)
+                                {
+                                    SunData overridefile = EditorUI.UI.Suns.LoadSingleFileFromAbsolutePath(testpath, dataitem.Source);
+                                    overridefile.objectID = duplicatefiledialog.ObjectID;
+                                    overridefile.TrySaveData();
+                                    FilesTreeItem currentitem = new FilesTreeItem();
+                                    currentitem.DataFile = overridefile;
+                                    currentitem.FilterTags.Add("FileType:Sun");
+                                    currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
+                                    FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Suns");
+                                    TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Suns");
+                                    categoryitem.Children.Add(currentitem);
+                                    TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
+                                    addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                    dataitem.NotifyFileOverriden(overridefile);
+                                }
+                            }
+                            else
+                            {
+                                ErrorMessageDialog errormsg = new ErrorMessageDialog();
+                                errormsg.ErrorTitleText = "File already exists!";
+                                errormsg.ErrorMessageText = "The file " + testpath + "already exists, no duplicate created.";
+                                errormsg.ShowDialog();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2581,6 +3967,7 @@ namespace VoidDestroyer2DataEditor
         public IVD2DocumentInterface _DataFile;
         public List<string> FilterTags;
         public List<FilesTreeItem> Children;
+        public TreeNode FilesTreeNode;
 
         public IVD2DocumentInterface DataFile
         {
@@ -2605,15 +3992,30 @@ namespace VoidDestroyer2DataEditor
                     {
                         VD2Data df = (VD2Data)_DataFile;
                         df.VD2PropertyChanged += OnMyFileEdited;
+                        /*if (df.Source != null)
+                        {
+                            df.Source.OnWriteAccessChanged += OnFileSourceWriteAccessChanged;
+                        }*/
                     }
                     
                 }
             }
         }
 
+        private void OnFileSourceWriteAccessChanged(object sender, EventArgs e)
+        {
+            if (FilesTreeNode != null)
+            {
+                FilesTreeNode.Text = DisplayName;
+            }
+        }
+
         private void OnMyFileEdited(object sender, VD2PropertyChangedEventArgs e)
         {
-            
+            if (FilesTreeNode != null)
+            {
+                FilesTreeNode.Text = DisplayName;
+            }
         }
 
         public string ObjectID
@@ -2751,7 +4153,7 @@ namespace VoidDestroyer2DataEditor
                     }
                 }
 
-                return "(" + sourcestring + rwstring + ") " /*+ savestring*/ + Name;
+                return "(" + sourcestring + rwstring + ") " + savestring + Name;
             }
         }
 

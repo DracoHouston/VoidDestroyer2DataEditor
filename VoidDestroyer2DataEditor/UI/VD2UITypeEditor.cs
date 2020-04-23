@@ -37,9 +37,13 @@ namespace VoidDestroyer2DataEditor
                 }
                 else
                 {
-                    if (datainstance.PropertyExistsInBaseData(e.Context.PropertyDescriptor.Name))
+                    if (datainstance.PropertyEdited(e.Context.PropertyDescriptor.Name))
                     {
                         indicatorcolor = Color.Orange;
+                    }
+                    else if (datainstance.PropertyExistsInBaseData(e.Context.PropertyDescriptor.Name))
+                    {
+                        indicatorcolor = Color.Blue;
                     }
                     else
                     {

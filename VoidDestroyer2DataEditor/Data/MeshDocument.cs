@@ -10,10 +10,24 @@ namespace VoidDestroyer2DataEditor
     class MeshDocument : IVD2DocumentInterface
     {
         public string MeshName;
+        VD2FileSource _Source;
+
+        public VD2FileSource Source
+        {
+            get
+            {
+                return _Source;
+            }
+            set
+            {
+                _Source = value;
+            }
+        }
 
         public MeshDocument()
         {
             MeshName = "";
+            _Source = null;
         }
         public Control GetDocumentControl()
         {
@@ -28,8 +42,12 @@ namespace VoidDestroyer2DataEditor
             return "genericfileicon";
         }
 
-        public string GetDocumentTitle()
+        public virtual string GetDocumentTitle()
         {
+            if (Source != null)
+            {
+                return "(" + Source.ShortName + ") " + "Mesh: " + MeshName + "     ";
+            }
             return "Mesh: " + MeshName + "     ";
         }
     }

@@ -399,5 +399,27 @@ namespace VoidDestroyer2DataEditor
             }
             return true;
         }
+
+        public static string GetParentVD2DataFileSourceShortName(Control inControl)
+        {
+            Control c = inControl;
+            while (c.Parent != null)
+            {
+                if (c.Parent is DataDocumentControl)
+                {
+                    DataDocumentControl datadocparent = (DataDocumentControl)c.Parent;
+                    if (datadocparent.DataFile != null)
+                    {
+                        if (datadocparent.DataFile.Source != null)
+                        {
+                            return datadocparent.DataFile.Source.ShortName;
+                        }
+                    }
+                    break;
+                }
+                c = c.Parent;
+            }
+            return "";
+        }
     }
 }

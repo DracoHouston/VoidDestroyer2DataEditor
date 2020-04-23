@@ -12,11 +12,88 @@ namespace VoidDestroyer2DataEditor
 {
     public class VD2FileSource
     {
-        public string DisplayName;
-        public string ShortName;
-        public string Path;
-        public bool WriteAccess;
-        public bool FilterIn;
+        public event EventHandler OnWriteAccessChanged;
+
+        public string _DisplayName;
+        public string _ShortName;
+        public string _Path;
+        public bool _WriteAccess;
+        public bool _FilterIn;
+
+        public string DisplayName
+        {
+            get
+            {
+                return _DisplayName;
+            }
+            set
+            {
+                _DisplayName = value;
+            }
+        }
+        public string ShortName
+        {
+            get
+            {
+                return _ShortName;
+            }
+            set
+            {
+                _ShortName = value;
+            }
+        }
+        public string Path
+        {
+            get
+            {
+                return _Path;
+            }
+            set
+            {
+                _Path = value;
+            }
+        }
+        public bool WriteAccess
+        {
+            get
+            {
+                return _WriteAccess;
+            }
+            set
+            {
+                _WriteAccess = value;
+                OnWriteAccessChanged?.Invoke(this, new EventArgs());
+            }
+        }
+        public bool FilterIn
+        {
+            get
+            {
+                return _FilterIn;
+            }
+            set
+            {
+                _FilterIn = value;
+            }
+        }
+
+        public VD2FileSource()
+        {
+            _DisplayName = "";
+            _ShortName = "";
+            _Path = "";
+            _WriteAccess = true;
+            _FilterIn = true;
+        }
+
+        public VD2FileSource(string inDisplayName, string inShortName, string inPath, bool inWriteAccess, bool inFilterIn)
+        {
+            _DisplayName = inDisplayName;
+            _ShortName = inShortName;
+            _Path = inPath;
+            _WriteAccess = inWriteAccess;
+            _FilterIn = inFilterIn;
+        }
     }
 
     public class DataEditorTheme
@@ -71,19 +148,9 @@ namespace VoidDestroyer2DataEditor
         public void InitUserSettings()
         {
             Sources.Clear();
-            VD2FileSource currentsource = new VD2FileSource();
-            currentsource.DisplayName = "Base Game";
-            currentsource.ShortName = "Base";
-            currentsource.Path = "";
-            currentsource.WriteAccess = false;
-            currentsource.FilterIn = true;
+            VD2FileSource currentsource = new VD2FileSource("Base Game", "Base", "", false, true);
             Sources.Add(currentsource);
-            currentsource = new VD2FileSource();
-            currentsource.DisplayName = "Mod Game";
-            currentsource.ShortName = "Mod";
-            currentsource.Path = "Mod\\";
-            currentsource.WriteAccess = true;
-            currentsource.FilterIn = true;
+            currentsource = new VD2FileSource("Mod Game", "Mod", "Mod\\", true, true);
             Sources.Add(currentsource);
             DataEditorTheme theme = new DataEditorTheme();
 

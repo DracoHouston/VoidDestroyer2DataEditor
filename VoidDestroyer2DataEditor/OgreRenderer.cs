@@ -48,73 +48,104 @@ namespace VoidDestroyer2DataEditor
         {
             if (OgreRoot == null)
             {
-                OgreRoot = new Root();
+                try
+                {
+                    OgreRoot = new Root();
+                }
+                catch
+                {
+                    VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
+                    errordialog.ErrorTitleText = "Ogre (1.12.1) failed to create Ogre Root!";
+                    errordialog.ErrorMessageText = "Are you missing a dependency or runtime? Contact Draco at draco@dracohouston.net if you need help. If you have built from source please ensure you are building for x64, x86/any cpu won't work.";
+                    errordialog.ShowDialog();
+                    return;
+                }
 
                 ResourceGroupManager rgm = ResourceGroupManager.getSingleton();
 
-
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/packs/SdkTrays.zip", "Zip", "Essential");
+                try 
+                { 
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/packs/SdkTrays.zip", "Zip", "Essential");
                 
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/Media/materials/scripts", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/Media/materials/programs", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Media/materials/scripts", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Media/materials/programs", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/Media/materials/scripts", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/Media/materials/programs", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Media/materials/scripts", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Media/materials/programs", "FileSystem", "General");
 
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/gui", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/backgrounds", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/effects", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/hud", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/hud/CBA", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/wireframes", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/shipclasses", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/gui", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/backgrounds", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/effects", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/hud", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/hud/CBA", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/wireframes", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/materials/textures/shipclasses", "FileSystem", "General");
 
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/gui", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/backgrounds", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/effects", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/hud", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/hud/CBA", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/wireframes", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/shipclasses", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/gui", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/backgrounds", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/effects", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/hud", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/hud/CBA", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/wireframes", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/materials/textures/shipclasses", "FileSystem", "General");
 
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/asteroids", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/bases", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/debris", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/missiles", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/other", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/ships", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/shields", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/stations", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/turrets", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/cockpits", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/interiors", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/overworld", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/asteroids", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/bases", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/debris", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/missiles", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/other", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/ships", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/shields", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/stations", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/turrets", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/cockpits", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/interiors", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "Mod/media/models/overworld", "FileSystem", "General");
 
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/asteroids", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/bases", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/debris", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/missiles", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/other", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/ships", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/shields", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/stations", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/turrets", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/cockpits", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/interiors", "FileSystem", "General");
-                rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/overworld", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/asteroids", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/bases", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/debris", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/missiles", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/other", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/ships", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/shields", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/stations", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/turrets", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/cockpits", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/interiors", "FileSystem", "General");
+                    rgm.addResourceLocation(EditorUserSettings.UserSettings.VD2Path + "media/models/overworld", "FileSystem", "General");
+                }
+                catch
+                {
+                    VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
+                    errordialog.ErrorTitleText = "Ogre (1.12.1) failed to add resource locations!";
+                    errordialog.ErrorMessageText = "Are you missing a dependency or runtime? Contact Draco at draco@dracohouston.net if you need help.";
+                    errordialog.ShowDialog();
+                    return;
+                }
 
-                RenderSystem rs = OgreRoot.getRenderSystemByName("Direct3D9 Rendering Subsystem");
+                try
+                {
+                    RenderSystem rs = OgreRoot.getRenderSystemByName("Direct3D9 Rendering Subsystem");
 
-                OgreRoot.setRenderSystem(rs);
-                rs.setConfigOption("Full Screen", "No");
-                rs.setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
-                OgreRoot.initialise(false, "Main Ogre Window");
-
+                    OgreRoot.setRenderSystem(rs);
+                    rs.setConfigOption("Full Screen", "No");
+                    rs.setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
+                    OgreRoot.initialise(false, "Main Ogre Window");
+                }
+                catch
+                {
+                    VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
+                    errordialog.ErrorTitleText = "Ogre (1.12.1) failed to initialize render system and main window!";
+                    errordialog.ErrorMessageText = "Are you missing a dependency or runtime? Contact Draco at draco@dracohouston.net if you need help.";
+                    errordialog.ShowDialog();
+                    return;
+                }
                 LoadListener = new FileCollisionResolver();
                 ResourceGroupManager.getSingleton().setLoadingListener(LoadListener);
                 FrameListener = new OgreFrameListener();

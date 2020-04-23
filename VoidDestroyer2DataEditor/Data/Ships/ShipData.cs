@@ -1597,32 +1597,36 @@ namespace VoidDestroyer2DataEditor
 
         private void cockpitInitPos_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
         {
-            if (Source != null)
+            if (sender is Vector3D)
             {
-                if (Source.WriteAccess)
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
                 {
-                    SetPropertyEdited("cockpitInitPos", true);
-                }
-                else
-                {
-                    switch (e.ChangedElement)
+                    if (Source.WriteAccess)
                     {
-                        case Vector3DElements.x:
-                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
-                            _cockpitInitPos.x = e.OldValue;
-                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
-                            break;
-                        case Vector3DElements.y:
-                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
-                            _cockpitInitPos.y = e.OldValue;
-                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
-                            break;
-                        case Vector3DElements.z:
-                            _cockpitInitPos.OnElementChanged -= cockpitInitPos_OnElementChanged;
-                            _cockpitInitPos.z = e.OldValue;
-                            _cockpitInitPos.OnElementChanged += cockpitInitPos_OnElementChanged;
-                            break;
-                    }                    
+                        SetPropertyEdited("cockpitInitPos", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += cockpitInitPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += cockpitInitPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= cockpitInitPos_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += cockpitInitPos_OnElementChanged;
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -1640,8 +1644,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _cockpitTransLimit.OnElementChanged -= cockpitTransLimit_OnElementChanged;
                         _cockpitTransLimit = value;
+                        _cockpitTransLimit.OnElementChanged += cockpitTransLimit_OnElementChanged;
                         SetPropertyEdited("cockpitTransLimit", true);
+                    }
+                }
+            }
+        }
+
+        private void cockpitTransLimit_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("cockpitTransLimit", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= cockpitTransLimit_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += cockpitTransLimit_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= cockpitTransLimit_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += cockpitTransLimit_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= cockpitTransLimit_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += cockpitTransLimit_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1660,8 +1702,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _chaseInitPos.OnElementChanged -= chaseInitPos_OnElementChanged;
                         _chaseInitPos = value;
+                        _chaseInitPos.OnElementChanged += chaseInitPos_OnElementChanged;
                         SetPropertyEdited("chaseInitPos", true);
+                    }
+                }
+            }
+        }
+
+        private void chaseInitPos_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("chaseInitPos", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= chaseInitPos_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += chaseInitPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= chaseInitPos_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += chaseInitPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= chaseInitPos_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += chaseInitPos_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1680,8 +1760,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _chaseTransLimit.OnElementChanged -= chaseTransLimit_OnElementChanged;
                         _chaseTransLimit = value;
+                        _chaseTransLimit.OnElementChanged += chaseTransLimit_OnElementChanged;
                         SetPropertyEdited("chaseTransLimit", true);
+                    }
+                }
+            }
+        }
+
+        private void chaseTransLimit_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("chaseTransLimit", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= chaseTransLimit_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += chaseTransLimit_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= chaseTransLimit_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += chaseTransLimit_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= chaseTransLimit_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += chaseTransLimit_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1700,8 +1818,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _deathSpin.OnElementChanged -= deathSpin_OnElementChanged;
                         _deathSpin = value;
+                        _deathSpin.OnElementChanged += deathSpin_OnElementChanged;
                         SetPropertyEdited("deathSpin", true);
+                    }
+                }
+            }
+        }
+
+        private void deathSpin_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("deathSpin", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= deathSpin_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += deathSpin_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= deathSpin_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += deathSpin_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= deathSpin_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += deathSpin_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1720,8 +1876,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _cockpitActualPos.OnElementChanged -= cockpitActualPos_OnElementChanged;
                         _cockpitActualPos = value;
+                        _cockpitActualPos.OnElementChanged += cockpitActualPos_OnElementChanged;
                         SetPropertyEdited("cockpitActualPos", true);
+                    }
+                }
+            }
+        }
+
+        private void cockpitActualPos_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("cockpitActualPos", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= cockpitActualPos_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += cockpitActualPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= cockpitActualPos_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += cockpitActualPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= cockpitActualPos_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += cockpitActualPos_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1740,8 +1934,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _shipHangarPosition.OnElementChanged -= shipHangarPosition_OnElementChanged;
                         _shipHangarPosition = value;
+                        _shipHangarPosition.OnElementChanged += shipHangarPosition_OnElementChanged;
                         SetPropertyEdited("shipHangarPosition", true);
+                    }
+                }
+            }
+        }
+
+        private void shipHangarPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("shipHangarPosition", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= shipHangarPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += shipHangarPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= shipHangarPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += shipHangarPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= shipHangarPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += shipHangarPosition_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -2182,13 +2414,11 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("descriptionText");
             SetPropertyIsCollection("descriptionText", true, typeof(string));
-            
             InitProperty("preExplosionID");
             List<string> preExplosionIDreftypes = new List<string>();
             preExplosionIDreftypes.Add("Explosion");
             SetPropertyIsObjectIDRef("preExplosionID", true, preExplosionIDreftypes);
             SetPropertyIsCollection("preExplosionID", true, typeof(string));
-            
             InitProperty("hangarID");
             List<string> hangarIDreftypes = new List<string>();
             hangarIDreftypes.Add("Hangar");
@@ -2283,6 +2513,11 @@ namespace VoidDestroyer2DataEditor
         }
 
         public ShipData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+            
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -3109,7 +3344,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("upgrades", exists);
 
-                _propulsion =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _propulsion = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetpropulsionDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _propulsion.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnpropulsionChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3120,7 +3355,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("propulsion", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "propulsion"));
                 }
                 SetPropertyExists("propulsion", exists);
-                _weapon =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _weapon = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetweaponDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _weapon.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3131,7 +3366,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("weapon", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weapon"));
                 }
                 SetPropertyExists("weapon", exists);
-                _damage =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _damage = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _damage.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3142,7 +3377,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("damage", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damage"));
                 }
                 SetPropertyExists("damage", exists);
-                _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3153,7 +3388,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turret"));
                 }
                 SetPropertyExists("turret", exists);
-                _attachment =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _attachment = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _attachment.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3164,7 +3399,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("attachment", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "attachment"));
                 }
                 SetPropertyExists("attachment", exists);
-                _movingElement =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _movingElement = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmovingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _movingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmovingElementChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3175,7 +3410,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("movingElement", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "movingElement"));
                 }
                 SetPropertyExists("movingElement", exists);
-                _dock =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _dock = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdockDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _dock.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndockChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3186,7 +3421,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("dock", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "dock"));
                 }
                 SetPropertyExists("dock", exists);
-                _shield =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _shield = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetshieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _shield.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnshieldChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3197,7 +3432,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("shield", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "shield"));
                 }
                 SetPropertyExists("shield", exists);
-                _rotatingElement =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _rotatingElement = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetrotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _rotatingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnrotatingElementChanged);
                 if (Source.ShortName == "Base")
                 {
@@ -3209,8 +3444,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("rotatingElement", exists);
             }
+            base.LoadDataFromXML();
         }
-
         protected override void SaveData()
         {
             List<string> xmltextlines = new List<string>();
@@ -3662,7 +3897,7 @@ namespace VoidDestroyer2DataEditor
 
             //File.WriteAllLines("testsavedship.xml", xmltextlines);
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
+            //ResetAllPropertyEdited();
 
         }
 
@@ -3674,107 +3909,9 @@ namespace VoidDestroyer2DataEditor
                 if (baseresult is DataDocumentControl)
                 {
                     DataDocumentControl result = (DataDocumentControl)baseresult;
-                    result.MainSplitter.Panel1Collapsed = false;
                     result.MainSplitter.Panel2Collapsed = false;
                     result.SidebarSplitter.Panel1Collapsed = false;
-                    result.SidebarSplitter.Panel2Collapsed = false;
-                    /*result.CollectionsTabs.TabPages.Clear();
-                    result.CollectionsTabs.TabPages.Add("descriptionText");
-                    StringCollectionSidebarEditor descriptionTextEditor = new StringCollectionSidebarEditor();
-                    descriptionTextEditor.SelectedCollection = _descriptionText;
-                    descriptionTextEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(descriptionTextEditor);
-                    result.CollectionsTabs.TabPages.Add("preExplosionID");
-                    ObjectIDRefCollectionSidebarEditor preExplosionIDEditor = new ObjectIDRefCollectionSidebarEditor();
-                    List<string> preExplosionIDTypes = new List<string>();
-                    preExplosionIDTypes.Add("Explosion");
-                    preExplosionIDEditor.ObjectIDType = preExplosionIDTypes;
-                    preExplosionIDEditor.SelectedCollection = _preExplosionID;
-                    preExplosionIDEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(preExplosionIDEditor);
-                    result.CollectionsTabs.TabPages.Add("hangarID");
-                    ObjectIDRefCollectionSidebarEditor hangarIDEditor = new ObjectIDRefCollectionSidebarEditor();
-                    List<string> hangarIDTypes = new List<string>();
-                    hangarIDTypes.Add("Hangar");
-                    hangarIDEditor.ObjectIDType = hangarIDTypes;
-                    hangarIDEditor.SelectedCollection = _hangarID;
-                    hangarIDEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(hangarIDEditor);
-                    result.CollectionsTabs.TabPages.Add("debrisInfo");
-                    DataStructureSidebarEditor debrisInfoEditor = new DataStructureSidebarEditor();
-                    debrisInfoEditor.DataStructureEditor.Item = _debrisInfo;
-                    debrisInfoEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(debrisInfoEditor);
-                    result.CollectionsTabs.TabPages.Add("afterburner");
-                    DataStructureSidebarEditor afterburnerEditor = new DataStructureSidebarEditor();
-                    afterburnerEditor.DataStructureEditor.Item = _afterburner;
-                    afterburnerEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(afterburnerEditor);
-                    result.CollectionsTabs.TabPages.Add("targetPriorityList");
-                    DataStructureSidebarEditor targetPriorityListEditor = new DataStructureSidebarEditor();
-                    targetPriorityListEditor.DataStructureEditor.Item = _targetPriorityList;
-                    targetPriorityListEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(targetPriorityListEditor);
-                    result.CollectionsTabs.TabPages.Add("upgrades");
-                    DataStructureSidebarEditor upgradesEditor = new DataStructureSidebarEditor();
-                    upgradesEditor.DataStructureEditor.Item = _upgrades;
-                    upgradesEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(upgradesEditor);
-
-                    result.CollectionsTabs.TabPages.Add("propulsion");
-                    DataStructureCollectionsEditor propulsionEditor = new DataStructureCollectionsEditor();
-                    propulsionEditor.ElementType = typeof(propulsionDataStructure);
-                    propulsionEditor.SelectedCollection = _propulsion;
-                    propulsionEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(propulsionEditor);
-                    result.CollectionsTabs.TabPages.Add("weapon");
-                    DataStructureCollectionsEditor weaponEditor = new DataStructureCollectionsEditor();
-                    weaponEditor.ElementType = typeof(weaponDataStructure);
-                    weaponEditor.SelectedCollection = _weapon;
-                    weaponEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(weaponEditor);
-                    result.CollectionsTabs.TabPages.Add("damage");
-                    DataStructureCollectionsEditor damageEditor = new DataStructureCollectionsEditor();
-                    damageEditor.ElementType = typeof(damageDataStructure);
-                    damageEditor.SelectedCollection = _damage;
-                    damageEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(damageEditor);
-                    result.CollectionsTabs.TabPages.Add("turret");
-                    DataStructureCollectionsEditor turretEditor = new DataStructureCollectionsEditor();
-                    turretEditor.ElementType = typeof(turretDataStructure);
-                    turretEditor.SelectedCollection = _turret;
-                    turretEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(turretEditor);
-                    result.CollectionsTabs.TabPages.Add("attachment");
-                    DataStructureCollectionsEditor attachmentEditor = new DataStructureCollectionsEditor();
-                    attachmentEditor.ElementType = typeof(attachmentDataStructure);
-                    attachmentEditor.SelectedCollection = _attachment;
-                    attachmentEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(attachmentEditor);
-                    result.CollectionsTabs.TabPages.Add("movingElement");
-                    DataStructureCollectionsEditor movingElementEditor = new DataStructureCollectionsEditor();
-                    movingElementEditor.ElementType = typeof(movingElementDataStructure);
-                    movingElementEditor.SelectedCollection = _movingElement;
-                    movingElementEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(movingElementEditor);
-                    result.CollectionsTabs.TabPages.Add("dock");
-                    DataStructureCollectionsEditor dockEditor = new DataStructureCollectionsEditor();
-                    dockEditor.ElementType = typeof(dockDataStructure);
-                    dockEditor.SelectedCollection = _dock;
-                    dockEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dockEditor);
-                    result.CollectionsTabs.TabPages.Add("shield");
-                    DataStructureCollectionsEditor shieldEditor = new DataStructureCollectionsEditor();
-                    shieldEditor.ElementType = typeof(shieldDataStructure);
-                    shieldEditor.SelectedCollection = _shield;
-                    shieldEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(shieldEditor);
-                    result.CollectionsTabs.TabPages.Add("rotatingElement");
-                    DataStructureCollectionsEditor rotatingElementEditor = new DataStructureCollectionsEditor();
-                    rotatingElementEditor.ElementType = typeof(rotatingElementDataStructure);
-                    rotatingElementEditor.SelectedCollection = _rotatingElement;
-                    rotatingElementEditor.Dock = DockStyle.Fill;
-                    result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(rotatingElementEditor);*/
+                    
                     DataOgreControl modelviewer = new DataOgreControl();
                     modelviewer.DataFile = this;
                     modelviewer.Dock = DockStyle.Fill;
@@ -3825,6 +3962,11 @@ namespace VoidDestroyer2DataEditor
                 default:
                     return ("genericfileicon");
             }
+        }
+
+        public override void SetObjectID(string inObjectID)
+        {
+            _objectID = inObjectID;
         }
     }
 }

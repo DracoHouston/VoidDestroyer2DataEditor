@@ -71,6 +71,8 @@ namespace VoidDestroyer2DataEditor
         public FilesTreeItem TreeItem;
 
         public event EventHandler<VD2DataFileOverridenArgs> OnThisFileOverriden;
+        public event EventHandler OnThisFileSaved;
+        public event EventHandler OnThisFileLoaded;//called after calling LoadDataFromXML, during constructor and when a file is closed without saving.
 
         [Description("The path to the ship data file. Used internally by this editor."), Category("Misc")]
         public string FilePath
@@ -84,6 +86,13 @@ namespace VoidDestroyer2DataEditor
             _FilePath = inPath;
             DataXMLDoc = ParseHelpers.SafeLoadVD2DataXMLFile(inPath);
             Source = inSource;
+            LoadDataFromXML();
+        }
+
+        public virtual void LoadDataFromXML()
+        {
+            ResetAllPropertyEdited();
+            OnThisFileLoaded?.Invoke(this, new EventArgs());
         }
 
         protected virtual void SaveData()
@@ -100,6 +109,9 @@ namespace VoidDestroyer2DataEditor
                     if (Unsaved)
                     {
                         SaveData();
+                        ResetAllPropertyEdited();
+                        DataXMLDoc = ParseHelpers.SafeLoadVD2DataXMLFile(_FilePath);
+                        OnThisFileSaved?.Invoke(this, new EventArgs());
                     }
                     return true;
                 }
@@ -125,6 +137,12 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return "";
+        }
+
+        //Ignores read only protections, used to duplicate a file and give it a new object ID regardless of write access for source
+        public virtual void SetObjectID(string inObjectID)
+        {
+
         }
 
         /*public override void SetPropertyEdited(string inName, bool inEdited)
@@ -181,11 +199,13 @@ namespace VoidDestroyer2DataEditor
             result.Dock = DockStyle.Fill;
             result.CollectionsTabs.TabPages.Clear();
             List<System.Reflection.PropertyInfo> props = GetType().GetProperties().ToList();
+            bool hascollections = false;
             foreach (System.Reflection.PropertyInfo prop in props)
             {
                 Type eletype;
                 if (PropertyIsCollection(prop.Name, out eletype))
                 {
+                    hascollections = true;
                     if (result.MainSplitter.Panel2Collapsed)
                     {
                         result.MainSplitter.Panel2Collapsed = false;
@@ -297,6 +317,10 @@ namespace VoidDestroyer2DataEditor
                         result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dsEditor);
                     }
                 }
+            }
+            if (!hascollections)
+            {
+                result.SidebarSplitter.Panel2Collapsed = true;
             }
             return result;
         }

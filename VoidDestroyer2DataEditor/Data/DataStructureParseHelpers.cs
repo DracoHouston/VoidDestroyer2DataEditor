@@ -606,7 +606,10 @@ namespace VoidDestroyer2DataEditor
 
             result.SetPropertyExists("weaponPosition", weaponPositionexists);
             result.weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnweaponPositionChanged);
-
+            foreach (Vector3D element in result.weaponPosition)
+            {
+                element.OnElementChanged += result.weaponPosition_OnElementChanged;
+            }
             return result;
         }
 

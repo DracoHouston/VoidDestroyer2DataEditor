@@ -249,7 +249,7 @@ namespace VoidDestroyer2DataEditor
 
 
             //UNCOMMENT TO RUN THE LOAD CODE GENERATOR (most of the source files in /Data/) you can find the results alongside the exe
-            //VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
+            VD2LoadCodeGenerator.GenerateCodeFilesFromXMLFiles();
 
 
             //UNCOMMENT TO RUN TAG NAME REPORTS ON THE BASE DATA, creates human readable versions of the information the code generator goes off.
@@ -362,6 +362,11 @@ namespace VoidDestroyer2DataEditor
             EditorUserSettings.UserSettings.InitUserSettings();
             
             OgreRenderer.Renderer.InitOgre();
+
+            if (OgreRenderer.Renderer.OgreRoot == null)
+            {
+                return;
+            }
 
             SplashScreenForm splash = new SplashScreenForm();
             splash.ShowDialog();

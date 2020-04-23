@@ -19,12 +19,12 @@ namespace VoidDestroyer2DataEditor
         string _shipActiveUpgradeType;
         string _imageSet;
         string _image;
-        string _particleSystemName;
-        string _shieldObjectID;
-        string _activeSoundID;
-        string _missileID;
-        string _platformObjectID;
-        string _shipID;
+        string _particleSystemName;//Particle
+        string _shieldObjectID;//Shield
+        string _activeSoundID;//Sound
+        string _missileID;//Missile
+        string _platformObjectID;//Station
+        string _shipID;//Ship
 
         ObservableCollection<string> _description;
 

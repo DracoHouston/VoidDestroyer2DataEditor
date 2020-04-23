@@ -84,15 +84,21 @@ namespace VoidDestroyer2DataEditor
                 {
                     object o = prop.GetValue(this);
                     System.Collections.ObjectModel.ObservableCollection<VD2DataStructure> val = (System.Collections.ObjectModel.ObservableCollection<VD2DataStructure>)o;
-                    foreach (VD2DataStructure ds in val)
+                    if (val != null)
                     {
-                        ds.ResetAllPropertyEdited();
+                        foreach (VD2DataStructure ds in val)
+                        {
+                            ds.ResetAllPropertyEdited();
+                        }
                     }
                 }
                 if ((prop.PropertyType == typeof(VD2DataStructure)) || (prop.PropertyType.IsSubclassOf(typeof(VD2DataStructure))))
                 {
                     VD2DataStructure ds = (VD2DataStructure)prop.GetValue(this);
-                    ds.ResetAllPropertyEdited();
+                    if (ds != null)
+                    {
+                        ds.ResetAllPropertyEdited();
+                    }
                 }
             }
             

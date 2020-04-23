@@ -90,7 +90,13 @@ namespace VoidDestroyer2DataEditor
 
         public debrisInfoDataStructure(debrisInfoDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _debris = inCopyFrom.debris;
+            _debris = new ObservableCollection<VD2DataStructure>();
+            _debris.CollectionChanged += OndebrisChanged;
+            foreach (VD2DataStructure ds in inCopyFrom.debris)
+            {
+                VD2DataStructure dupeds = (VD2DataStructure)System.Activator.CreateInstance(ds.GetType(), ds);
+                _debris.Add(dupeds);
+            }
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
@@ -1614,7 +1620,63 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_weaponPosition != null)
+                {
+                    _weaponPosition.CollectionChanged -= OnweaponPositionChanged;
+                    foreach (Vector3D element in _weaponPosition)
+                    {
+                        element.OnElementChanged -= weaponPosition_OnElementChanged;
+                    }
+                }
                 _weaponPosition = value;
+                if (_weaponPosition != null)
+                {
+                    _weaponPosition.CollectionChanged += OnweaponPositionChanged;
+                    foreach (Vector3D element in _weaponPosition)
+                    {
+                        element.OnElementChanged += weaponPosition_OnElementChanged;
+                    }
+                }
+            }
+        }
+
+        public void weaponPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            SetPropertyEdited("weaponPosition", true);
+                            ParentDataFile.SetPropertyEdited("weapon", true);
+                        }
+                        else
+                        {
+                            switch (e.ChangedElement)
+                            {
+                                case Vector3DElements.x:
+                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                    vecsender.x = e.OldValue;
+                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                    break;
+                                case Vector3DElements.y:
+                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                    vecsender.y = e.OldValue;
+                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                    break;
+                                case Vector3DElements.z:
+                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                    vecsender.z = e.OldValue;
+                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -1743,7 +1805,8 @@ namespace VoidDestroyer2DataEditor
                 _yaw = inCopyFrom.yaw;
                 _pitch = inCopyFrom.pitch;
 
-                _weaponPosition = inCopyFrom.weaponPosition;
+                _weaponPosition = new ObservableCollection<Vector3D>(inCopyFrom.weaponPosition);
+                _weaponPosition.CollectionChanged += OnweaponPositionChanged;
             }
         }
 

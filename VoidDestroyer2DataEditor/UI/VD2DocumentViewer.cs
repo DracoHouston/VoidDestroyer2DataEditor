@@ -62,6 +62,7 @@ namespace VoidDestroyer2DataEditor
                     {
                         VD2Data datadoc = (VD2Data)_Document;
                         datadoc.VD2PropertyChanged += OnMyFileEdited;
+                        datadoc.OnThisFileSaved += OnMyFileSaved;
                     }
                         //doccontrol.Dock = DockStyle.Fill;
                         /*      }
@@ -91,6 +92,15 @@ namespace VoidDestroyer2DataEditor
         }
 
         private void OnMyFileEdited(object sender, VD2PropertyChangedEventArgs e)
+        {
+            if (_Document is VD2Data)
+            {
+                //VD2Data datadoc = (VD2Data)_Document;
+                SetTabPageTitle(_Document.GetDocumentTitle());
+            }
+        }
+
+        private void OnMyFileSaved(object sender, EventArgs e)
         {
             if (_Document is VD2Data)
             {

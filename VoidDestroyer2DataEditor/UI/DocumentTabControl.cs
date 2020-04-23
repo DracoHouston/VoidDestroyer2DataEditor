@@ -182,6 +182,11 @@ namespace VoidDestroyer2DataEditor
             return (from item in DocumentButtons where item.Value == tpCurrent select item.Key).FirstOrDefault();
         }
 
+        public TabPage TabPageByCloseButton(Button btnCurrent)
+        {
+            return (from item in DocumentButtons where item.Key == btnCurrent select item.Value).FirstOrDefault();
+        }
+
         public DocumentTabControl()
         {
             InitializeComponent();
