@@ -104,7 +104,11 @@ namespace VoidDestroyer2DataEditor
             {
                 TreeIconSize = 16;
             }
-            EditorUserSettings.UserSettings.TreeIconSize = TreeIconSize;
+            if (EditorUserSettings.UserSettings.TreeIconSize != TreeIconSize)
+            {
+                EditorUserSettings.UserSettings.TreeIconSize = TreeIconSize;
+                EditorUI.UI.EditorForm.SetTreeIconSize(TreeIconSize);
+            }
             
             EditorUserSettings.UserSettings.SaveSettings();
             if (restarteditor)

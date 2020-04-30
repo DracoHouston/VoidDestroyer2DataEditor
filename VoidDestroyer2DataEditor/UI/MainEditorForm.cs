@@ -151,142 +151,142 @@ namespace VoidDestroyer2DataEditor
             currentitem = new FilesTreeItem();
             currentitem.Name = "Ships";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateShipsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Upgrades";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateUpgradesTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Weapons";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateWeaponsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Turrets";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateTurretsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Launchers";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateLaunchersTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Hangars";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateHangarsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Ammo";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateAmmoTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Missiles";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateMissilesTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Mines";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateMinesTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "AreaOfEffect";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateAreaOfEffectTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Asteroids";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateAsteroidsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Bases";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateBasesTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Characters";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateCharactersTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Cockpits";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateCockpitsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Debris";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateDebrisTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Dialog";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateDialogTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Docked Moving Elements";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateDockedMovingElementsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Doors";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateDoorsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Effects";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateEffectsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]); 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Explosions";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateExplosionsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Factions";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateFactionsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Music";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateMusicTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Other";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateOtherTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Shields";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateShieldsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Skyboxes";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateSkyboxesTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Sounds";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateSoundsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Stations";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateStationsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Suns";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[0].Children.Add(currentitem);
+            FilesTreeItems[0].AddChild(currentitem);
             PopulateSunsTree(FilesTreeItems[0].Children[FilesTreeItems[0].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Media";
@@ -295,12 +295,12 @@ namespace VoidDestroyer2DataEditor
             currentitem = new FilesTreeItem();
             currentitem.Name = "Models";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[1].Children.Add(currentitem);
+            FilesTreeItems[1].AddChild(currentitem);
             PopulateModelsTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Image Sets";
             currentitem.IconKey = "foldericon";
-            FilesTreeItems[1].Children.Add(currentitem);
+            FilesTreeItems[1].AddChild(currentitem);
             PopulateImageSetTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
         }
 
@@ -350,14 +350,14 @@ namespace VoidDestroyer2DataEditor
 
         public void PopulateModelsTree(FilesTreeItem inItem)
         {
-            FilesTreeItem currentitem;
+            /*FilesTreeItem currentitem;
             List<string> folders = Directory.EnumerateDirectories(EditorUserSettings.UserSettings.VD2Path + "Media\\models").ToList();
             foreach (string folder in folders)
             {
                 currentitem = new FilesTreeItem();
                 currentitem.Name = Path.GetFileName(folder);
                 currentitem.IconKey = "foldericon";
-                inItem.Children.Add(currentitem);
+                inItem.AddChild(currentitem);
                 List<string> files = Directory.EnumerateFiles(folder).ToList();
                 foreach (string file in files)
                 {
@@ -368,16 +368,93 @@ namespace VoidDestroyer2DataEditor
                     meshdoc.MeshName = Path.GetFileName(file);
                     currentitem.DataFile = meshdoc;
                     currentitem.IconKey = "genericfileicon";
-                    inItem.Children[inItem.Children.Count - 1].Children.Add(currentitem);
+                    inItem.Children[inItem.Children.Count - 1].AddChild(currentitem);
+                }
+            }*/
+            FilesTreeItem currentitem = new FilesTreeItem();
+            currentitem.Name = "asteroids";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "bases";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "cockpits";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "debris";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "interiors";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "missiles";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "other";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "overworld";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "shields";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "ships";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "stations";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "turrets";
+            currentitem.IconKey = "foldericon";
+            inItem.AddChild(currentitem);
+            foreach (MeshDocument mesh in EditorUI.UI.Models.Data.Values)
+            {
+                List<string> splitpath = mesh.FilePath.Split('\\').ToList();
+                bool reachedmodelsfolder = false;
+                foreach(string split in splitpath)
+                {
+                    if (!reachedmodelsfolder)
+                    {
+                        if (split == "models")
+                        {
+                            reachedmodelsfolder = true;
+                        }
+                    }
+                    else
+                    {
+                        foreach (FilesTreeItem item in inItem.Children)
+                        {
+                            if (item.Name == split)
+                            {
+                                currentitem = new FilesTreeItem();
+                                currentitem.FilterTags.Add("FileType:Mesh");
+                                currentitem.Name = mesh.MeshName;
+                                currentitem.DataFile = mesh;
+                                currentitem.IconKey = "genericfileicon";
+                                item.AddChild(currentitem);
+                            }
+                        }
+                    }
                 }
             }
-            
         }
 
         public void PopulateImageSetTree(FilesTreeItem inItem)
         {
             FilesTreeItem currentitem;
-            List<string> files = Directory.EnumerateFiles(EditorUserSettings.UserSettings.VD2Path + "Media\\gui\\imagesets").ToList();
+            /*List<string> files = Directory.EnumerateFiles(EditorUserSettings.UserSettings.VD2Path + "Media\\gui\\imagesets").ToList();
             foreach (string file in files)
             {
                 if (Path.GetExtension(file) == ".imageset")
@@ -389,8 +466,17 @@ namespace VoidDestroyer2DataEditor
                     imagesetdoc.ImageSetName = Path.GetFileNameWithoutExtension(file);
                     currentitem.DataFile = imagesetdoc;
                     currentitem.IconKey = "genericfileicon";
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
+            }*/
+            foreach (ImageSetDocument image in EditorUI.UI.ImageSets.Data.Values)
+            {
+                currentitem = new FilesTreeItem();
+                currentitem.FilterTags.Add("FileType:ImageSet");
+                currentitem.Name = image.ImageSetName;                
+                currentitem.DataFile = image;
+                currentitem.IconKey = "genericfileicon";
+                inItem.AddChild(currentitem);
             }
 
 
@@ -401,188 +487,188 @@ namespace VoidDestroyer2DataEditor
             FilesTreeItem currentitem = new FilesTreeItem();
             currentitem.Name = "Combat";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             
             currentitem = new FilesTreeItem();
             currentitem.Name = "Drones";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             
             currentitem = new FilesTreeItem();            
             currentitem.Name = "Fighters";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[1].Children.Add(currentitem);
+            inItem.Children[0].Children[1].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[1].Children.Add(currentitem);
+            inItem.Children[0].Children[1].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[1].Children.Add(currentitem);
+            inItem.Children[0].Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "GunShips";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[2].Children.Add(currentitem);
+            inItem.Children[0].Children[2].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[2].Children.Add(currentitem);
+            inItem.Children[0].Children[2].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[2].Children.Add(currentitem);
+            inItem.Children[0].Children[2].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Corvettes";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[3].Children.Add(currentitem);
+            inItem.Children[0].Children[3].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[3].Children.Add(currentitem);
+            inItem.Children[0].Children[3].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[3].Children.Add(currentitem);
+            inItem.Children[0].Children[3].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Frigates";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[4].Children.Add(currentitem);
+            inItem.Children[0].Children[4].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[4].Children.Add(currentitem);
+            inItem.Children[0].Children[4].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[4].Children.Add(currentitem);
+            inItem.Children[0].Children[4].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Destroyers";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[5].Children.Add(currentitem);
+            inItem.Children[0].Children[5].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[5].Children.Add(currentitem);
+            inItem.Children[0].Children[5].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[5].Children.Add(currentitem);
+            inItem.Children[0].Children[5].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Cruisers";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[6].Children.Add(currentitem);
+            inItem.Children[0].Children[6].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[6].Children.Add(currentitem);
+            inItem.Children[0].Children[6].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[6].Children.Add(currentitem);
+            inItem.Children[0].Children[6].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Carriers";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[7].Children.Add(currentitem);
+            inItem.Children[0].Children[7].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[7].Children.Add(currentitem);
+            inItem.Children[0].Children[7].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[7].Children.Add(currentitem);
+            inItem.Children[0].Children[7].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Dreadnaughts";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children.Add(currentitem);
+            inItem.Children[0].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Light";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[8].Children.Add(currentitem);
+            inItem.Children[0].Children[8].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Medium";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[8].Children.Add(currentitem);
+            inItem.Children[0].Children[8].AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Heavy";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[0].Children[8].Children.Add(currentitem);
+            inItem.Children[0].Children[8].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Non Combat";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Transport";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Miner";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Shuttle";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Repair";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Ship Capture";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Base Capture";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);
+            inItem.Children[1].AddChild(currentitem);
 
             currentitem = new FilesTreeItem();
             currentitem.Name = "Builder";
             currentitem.IconKey = "categoryicon";
-            inItem.Children[1].Children.Add(currentitem);            
+            inItem.Children[1].AddChild(currentitem);            
 
             for (int i = 0; i < EditorUI.UI.Ships.Data.Keys.Count; i++)
             {
@@ -617,36 +703,36 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "fightericon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[1].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[1].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[1].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[1].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[1].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[1].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "fighter_drone")
                     {
                         currentitem.IconKey = "droneicon";
-                        inItem.Children[0].Children[0].Children.Add(currentitem);
+                        inItem.Children[0].Children[0].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "gunship")
                     {
                         currentitem.IconKey = "gunshipicon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[2].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[2].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[2].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[2].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[2].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[2].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "corvette")
@@ -654,15 +740,15 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "corvetteicon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[3].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[3].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[3].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[3].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[3].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[3].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "frigate")
@@ -670,15 +756,15 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "frigateicon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[4].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[4].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[4].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[4].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[4].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[4].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "destroyer")
@@ -686,15 +772,15 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "destroyericon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[5].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[5].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[5].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[5].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[5].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[5].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "cruiser")
@@ -702,15 +788,15 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "cruisericon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[6].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[6].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[6].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[6].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[6].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[6].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "carrier")
@@ -718,15 +804,15 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "carriericon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[7].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[7].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[7].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[7].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[7].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[7].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "dreadnaught")
@@ -734,51 +820,51 @@ namespace VoidDestroyer2DataEditor
                         currentitem.IconKey = "dreadnaughticon";
                         if (currentship.shipClassSize == "light")
                         {
-                            inItem.Children[0].Children[8].Children[0].Children.Add(currentitem);
+                            inItem.Children[0].Children[8].Children[0].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "medium")
                         {
-                            inItem.Children[0].Children[8].Children[1].Children.Add(currentitem);
+                            inItem.Children[0].Children[8].Children[1].AddChild(currentitem);
                         }
                         else if (currentship.shipClassSize == "heavy")
                         {
-                            inItem.Children[0].Children[8].Children[2].Children.Add(currentitem);
+                            inItem.Children[0].Children[8].Children[2].AddChild(currentitem);
                         }
                     }
                     else if (currentship.shipClass == "transport")
                     {
                         currentitem.IconKey = "transporticon";
-                        inItem.Children[1].Children[0].Children.Add(currentitem);
+                        inItem.Children[1].Children[0].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "mining")
                     {
                         currentitem.IconKey = "minericon";
-                        inItem.Children[1].Children[1].Children.Add(currentitem);
+                        inItem.Children[1].Children[1].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "shuttle")
                     {
                         currentitem.IconKey = "shuttleicon";
-                        inItem.Children[1].Children[2].Children.Add(currentitem);
+                        inItem.Children[1].Children[2].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "repair")
                     {
                         currentitem.IconKey = "repairicon";
-                        inItem.Children[1].Children[3].Children.Add(currentitem);
+                        inItem.Children[1].Children[3].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "capture")
                     {
                         currentitem.IconKey = "basecaptureicon";
-                        inItem.Children[1].Children[5].Children.Add(currentitem);
+                        inItem.Children[1].Children[5].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "ship_capture")
                     {
                         currentitem.IconKey = "shipcaptureicon";
-                        inItem.Children[1].Children[4].Children.Add(currentitem);
+                        inItem.Children[1].Children[4].AddChild(currentitem);
                     }
                     else if (currentship.shipClass == "builder")
                     {
                         currentitem.IconKey = "buildericon";
-                        inItem.Children[1].Children[6].Children.Add(currentitem);
+                        inItem.Children[1].Children[6].AddChild(currentitem);
                     }
                 }
             }
@@ -789,19 +875,19 @@ namespace VoidDestroyer2DataEditor
             FilesTreeItem currentitem = new FilesTreeItem();
             currentitem.Name = "Primary";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Active";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Other";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Persistent";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             for (int i = 0; i < EditorUI.UI.PrimaryUpgrades.Data.Keys.Count; i++)
             {
                 PrimaryUpgradeData currentupgrade;
@@ -814,17 +900,17 @@ namespace VoidDestroyer2DataEditor
                     if (currentupgrade.bPersistsOnShipChange)
                     {
                         currentitem.FilterTags.Add("UpgradeType:PersistentUpgrade");
-                        inItem.Children[3].Children.Add(currentitem);
+                        inItem.Children[3].AddChild(currentitem);
                     }
                     else if (currentupgrade.upgradeType == "other")
                     {
                         currentitem.FilterTags.Add("UpgradeType:OtherUpgrade");
-                        inItem.Children[2].Children.Add(currentitem);
+                        inItem.Children[2].AddChild(currentitem);
                     }
                     else 
                     {
                         currentitem.FilterTags.Add("UpgradeType:Primary");
-                        inItem.Children[0].Children.Add(currentitem);
+                        inItem.Children[0].AddChild(currentitem);
                     }
                 }
             }
@@ -838,7 +924,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.FilterTags.Add("FileType:ActiveUpgrade");
                     currentitem.DataFile = currentupgrade;
                     currentitem.FilterTags.Add("UpgradeType:Active");
-                    inItem.Children[1].Children.Add(currentitem);
+                    inItem.Children[1].AddChild(currentitem);
                 }
             }
         }
@@ -848,43 +934,43 @@ namespace VoidDestroyer2DataEditor
             FilesTreeItem currentitem = new FilesTreeItem();
             currentitem.Name = "Projectile";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Instant";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Beam";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Collision";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Shield";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Tractor Beam";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Speed";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "ECM";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Ship Shooter";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Release Attached Ship";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             int i = 0;
             for (i = 0; i < EditorUI.UI.Weapons.Data.Keys.Count; i++)
             {
@@ -899,43 +985,43 @@ namespace VoidDestroyer2DataEditor
 
                     if (currentdata.weaponType == "projectile")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.projectile].Children.Add(currentitem);                        
+                        inItem.Children[(int)WeaponTypeIndex.projectile].AddChild(currentitem);                        
                     }
                     else if (currentdata.weaponType == "instant")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.instant].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.instant].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "beam")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.beam].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.beam].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "collision")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.collision].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.collision].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "shield")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.shield].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.shield].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "tractor_beam")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.tractor_beam].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.tractor_beam].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "speed")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.speed].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.speed].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "ecm")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.ecm].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.ecm].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "ship_shooter")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.ship_shooter].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.ship_shooter].AddChild(currentitem);
                     }
                     else if (currentdata.weaponType == "release_attached_ship")
                     {
-                        inItem.Children[(int)WeaponTypeIndex.release_attached_ship].Children.Add(currentitem);
+                        inItem.Children[(int)WeaponTypeIndex.release_attached_ship].AddChild(currentitem);
                     }
                 }
             }
@@ -953,7 +1039,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -970,7 +1056,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -986,7 +1072,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1002,7 +1088,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1018,7 +1104,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1034,7 +1120,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }        
@@ -1051,7 +1137,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1068,7 +1154,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1086,7 +1172,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1103,7 +1189,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1120,7 +1206,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1137,7 +1223,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1154,7 +1240,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1171,7 +1257,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1188,7 +1274,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1198,11 +1284,11 @@ namespace VoidDestroyer2DataEditor
             FilesTreeItem currentitem = new FilesTreeItem();
             currentitem.Name = "Effects";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             currentitem = new FilesTreeItem();
             currentitem.Name = "Particles";
             currentitem.IconKey = "categoryicon";
-            inItem.Children.Add(currentitem);
+            inItem.AddChild(currentitem);
             for (int i = 0; i < EditorUI.UI.Effects.Data.Keys.Count; i++)
             {
                 EffectData currentdata;
@@ -1213,7 +1299,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children[0].Children.Add(currentitem);
+                    inItem.Children[0].AddChild(currentitem);
                 }
             }
             for (int i = 0; i < EditorUI.UI.Particles.Data.Keys.Count; i++)
@@ -1226,7 +1312,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children[1].Children.Add(currentitem);
+                    inItem.Children[1].AddChild(currentitem);
                 }
             }
         }
@@ -1244,7 +1330,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1262,7 +1348,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1280,7 +1366,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1298,7 +1384,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1316,7 +1402,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1334,7 +1420,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1352,7 +1438,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1370,7 +1456,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }
@@ -1388,7 +1474,7 @@ namespace VoidDestroyer2DataEditor
                     currentitem.DataFile = currentdata;
                     currentitem.Name = Path.GetFileNameWithoutExtension(currentdata.FilePath);
 
-                    inItem.Children.Add(currentitem);
+                    inItem.AddChild(currentitem);
                 }
             }
         }       
@@ -1705,7 +1791,17 @@ namespace VoidDestroyer2DataEditor
                                 {                                    
                                     VD2Data df = (VD2Data)item.DataFile;
                                     EditorUI.ExploreFile(df.FilePath);
-                                }                                
+                                }
+                                else if (item.DataFile is MeshDocument)
+                                {
+                                    MeshDocument df = (MeshDocument)item.DataFile;
+                                    EditorUI.ExploreFile(df.FilePath);
+                                }
+                                else if (item.DataFile is ImageSetDocument)
+                                {
+                                    ImageSetDocument df = (ImageSetDocument)item.DataFile;
+                                    EditorUI.ExploreFile(df.FilePath);
+                                }
                             }
                         }
                     }
@@ -1977,7 +2073,11 @@ namespace VoidDestroyer2DataEditor
                                 }
                                 if (!File.Exists(testpath))
                                 {
-                                    File.Copy(dataitem.FilePath, testpath);
+                                    if (!Directory.Exists(Path.GetDirectoryName(testpath)))
+                                    {
+                                        Directory.CreateDirectory(Path.GetDirectoryName(testpath));
+                                    }
+                                    File.Copy(dataitem.FilePath, testpath, true);
                                     foreach (VD2FileSource source in EditorUserSettings.UserSettings.Sources)
                                     {
                                         if (source.ShortName == "Mod")
@@ -2014,27 +2114,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2043,9 +2146,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "droneicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Drones");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Drones");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "gunship")
@@ -2055,27 +2159,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2086,27 +2193,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2117,27 +2227,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2148,27 +2261,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2179,27 +2295,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2210,27 +2329,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2241,27 +2363,30 @@ namespace VoidDestroyer2DataEditor
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "medium")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                     else if (overridefile.shipClassSize == "heavy")
                                                     {
                                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
                                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
-                                                        categoryitem.Children.Add(currentitem);
+                                                        categoryitem.AddChild(currentitem);
                                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                        currentitem.FilesTreeNode = addednode;
                                                         dataitem.NotifyFileOverriden(overridefile);
                                                     }
                                                 }
@@ -2270,9 +2395,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "transporticon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Transport");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Transport");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "mining")
@@ -2280,9 +2406,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "minericon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Miner");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Miner");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "shuttle")
@@ -2290,9 +2417,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "shuttleicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Shuttle");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Shuttle");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "repair")
@@ -2300,9 +2428,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "repairicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Repair");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Repair");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "capture")
@@ -2310,9 +2439,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "basecaptureicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Base Capture");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Base Capture");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "ship_capture")
@@ -2320,9 +2450,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "shipcaptureicon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Ship Capture");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Ship Capture");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.shipClass == "builder")
@@ -2330,9 +2461,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.IconKey = "buildericon";
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Builder");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Builder");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
 
@@ -2349,9 +2481,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.FilterTags.Add("UpgradeType:PersistentUpgrade");
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Persistent");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Persistent");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else if (overridefile.upgradeType == "other")
@@ -2359,9 +2492,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.FilterTags.Add("UpgradeType:OtherUpgrade");
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Other");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Other");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 else
@@ -2369,9 +2503,10 @@ namespace VoidDestroyer2DataEditor
                                                     currentitem.FilterTags.Add("UpgradeType:Primary");
                                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Primary");
                                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Primary");
-                                                    categoryitem.Children.Add(currentitem);
+                                                    categoryitem.AddChild(currentitem);
                                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                    currentitem.FilesTreeNode = addednode;
                                                     dataitem.NotifyFileOverriden(overridefile);
                                                 }
                                                 
@@ -2386,9 +2521,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Active");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Active");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is WeaponData)
@@ -2400,9 +2536,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Weapons");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Weapons");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is HangarData)
@@ -2414,9 +2551,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Hangars");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Hangars");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is LauncherData)
@@ -2428,9 +2566,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Launchers");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Launchers");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is TurretData)
@@ -2442,9 +2581,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Turrets");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Turrets");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is AmmoData)
@@ -2456,9 +2596,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ammo");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ammo");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is MissileData)
@@ -2470,9 +2611,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Missiles");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Missiles");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is MineData)
@@ -2484,9 +2626,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Mines");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Mines");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is AreaOfEffectData)
@@ -2498,9 +2641,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\AreaOfEffect");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\AreaOfEffect");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is AsteroidData)
@@ -2512,9 +2656,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Asteroids");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Asteroids");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is BaseData)
@@ -2526,9 +2671,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Bases");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Bases");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is CharacterData)
@@ -2540,9 +2686,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Characters");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Characters");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is CockpitData)
@@ -2554,9 +2701,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Cockpits");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Cockpits");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is DebrisData)
@@ -2568,9 +2716,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Debris");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Debris");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is DialogData)
@@ -2582,9 +2731,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Dialog");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Dialog");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is DockedMovingElementData)
@@ -2596,9 +2746,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\DockedMovingElements");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\DockedMovingElements");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is DoorData)
@@ -2610,9 +2761,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Doors");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Doors");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is EffectData)
@@ -2624,9 +2776,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Effects");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Effects");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is ParticleData)
@@ -2638,9 +2791,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Particles");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Particles");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is ExplosionData)
@@ -2652,9 +2806,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Explosions");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Explosions");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is FactionData)
@@ -2666,9 +2821,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Factions");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Factions");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is MusicData)
@@ -2680,9 +2836,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Music");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Music");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is OtherObjectData)
@@ -2694,9 +2851,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Other");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Other");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is ShieldData)
@@ -2708,9 +2866,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Shields");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Shields");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is SkyboxData)
@@ -2722,9 +2881,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Skyboxes");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Skyboxes");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is SoundData)
@@ -2736,9 +2896,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Sounds");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Sounds");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is StationData)
@@ -2750,9 +2911,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Stations");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Stations");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }
                                             else if (dataitem is SunData)
@@ -2764,9 +2926,10 @@ namespace VoidDestroyer2DataEditor
                                                 currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                                 FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Suns");
                                                 TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Suns");
-                                                categoryitem.Children.Add(currentitem);
+                                                categoryitem.AddChild(currentitem);
                                                 TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                                 addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
+                                                currentitem.FilesTreeNode = addednode;
                                                 dataitem.NotifyFileOverriden(overridefile);
                                             }                                            
                                         }
@@ -2974,28 +3137,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Fighters\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "fighter_drone")
@@ -3003,10 +3166,10 @@ namespace VoidDestroyer2DataEditor
                                         currentitem.IconKey = "droneicon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Drones");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Drones");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "gunship")
                                     {
@@ -3015,28 +3178,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\GunShips\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "corvette")
@@ -3046,28 +3209,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Corvettes\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "frigate")
@@ -3077,28 +3240,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Frigates\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "destroyer")
@@ -3108,28 +3271,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Destroyers\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "cruiser")
@@ -3139,28 +3302,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Cruisers\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "carrier")
@@ -3170,28 +3333,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Carriers\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "dreadnaught")
@@ -3201,28 +3364,28 @@ namespace VoidDestroyer2DataEditor
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Light");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "medium")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Medium");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                         else if (overridefile.shipClassSize == "heavy")
                                         {
                                             FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
                                             TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Combat\\Dreadnaughts\\Heavy");
-                                            categoryitem.Children.Add(currentitem);
+                                            categoryitem.AddChild(currentitem);
                                             TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                             addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                            dataitem.NotifyFileOverriden(overridefile);
+                                            currentitem.FilesTreeNode = addednode;
                                         }
                                     }
                                     else if (overridefile.shipClass == "transport")
@@ -3230,70 +3393,70 @@ namespace VoidDestroyer2DataEditor
                                         currentitem.IconKey = "transporticon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Transport");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Transport");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "mining")
                                     {
                                         currentitem.IconKey = "minericon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Miner");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Miner");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "shuttle")
                                     {
                                         currentitem.IconKey = "shuttleicon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Shuttle");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Shuttle");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "repair")
                                     {
                                         currentitem.IconKey = "repairicon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Repair");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Repair");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "capture")
                                     {
                                         currentitem.IconKey = "basecaptureicon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Base Capture");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Base Capture");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "ship_capture")
                                     {
                                         currentitem.IconKey = "shipcaptureicon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Ship Capture");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Ship Capture");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.shipClass == "builder")
                                     {
                                         currentitem.IconKey = "buildericon";
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ships\\Non Combat\\Builder");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ships\\Non Combat\\Builder");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
 
                                 }
@@ -3311,30 +3474,30 @@ namespace VoidDestroyer2DataEditor
                                         currentitem.FilterTags.Add("UpgradeType:PersistentUpgrade");
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Persistent");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Persistent");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else if (overridefile.upgradeType == "other")
                                     {
                                         currentitem.FilterTags.Add("UpgradeType:OtherUpgrade");
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Other");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Other");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
                                     else
                                     {
                                         currentitem.FilterTags.Add("UpgradeType:Primary");
                                         FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Primary");
                                         TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Primary");
-                                        categoryitem.Children.Add(currentitem);
+                                        categoryitem.AddChild(currentitem);
                                         TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                         addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                        dataitem.NotifyFileOverriden(overridefile);
+                                        currentitem.FilesTreeNode = addednode;
                                     }
 
                                 }
@@ -3350,10 +3513,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Upgrades\\Active");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Upgrades\\Active");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is WeaponData)
                                 {
@@ -3366,10 +3529,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Weapons");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Weapons");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is HangarData)
                                 {
@@ -3382,10 +3545,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Hangars");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Hangars");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is LauncherData)
                                 {
@@ -3398,10 +3561,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Launchers");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Launchers");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is TurretData)
                                 {
@@ -3414,10 +3577,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Turrets");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Turrets");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is AmmoData)
                                 {
@@ -3430,10 +3593,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Ammo");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Ammo");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is MissileData)
                                 {
@@ -3446,10 +3609,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Missiles");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Missiles");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is MineData)
                                 {
@@ -3462,10 +3625,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Mines");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Mines");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is AreaOfEffectData)
                                 {
@@ -3478,10 +3641,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\AreaOfEffect");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\AreaOfEffect");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is AsteroidData)
                                 {
@@ -3494,10 +3657,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Asteroids");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Asteroids");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is BaseData)
                                 {
@@ -3510,10 +3673,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Bases");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Bases");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is CharacterData)
                                 {
@@ -3526,10 +3689,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Characters");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Characters");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is CockpitData)
                                 {
@@ -3542,10 +3705,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Cockpits");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Cockpits");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is DebrisData)
                                 {
@@ -3558,10 +3721,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Debris");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Debris");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is DialogData)
                                 {
@@ -3574,10 +3737,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Dialog");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Dialog");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is DockedMovingElementData)
                                 {
@@ -3590,10 +3753,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\DockedMovingElements");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\DockedMovingElements");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is DoorData)
                                 {
@@ -3606,10 +3769,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Doors");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Doors");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is EffectData)
                                 {
@@ -3622,10 +3785,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Effects");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Effects");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is ParticleData)
                                 {
@@ -3638,10 +3801,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Effects\\Particles");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Effects\\Particles");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is ExplosionData)
                                 {
@@ -3654,10 +3817,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Explosions");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Explosions");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is FactionData)
                                 {
@@ -3670,10 +3833,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Factions");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Factions");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is MusicData)
                                 {
@@ -3686,10 +3849,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Music");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Music");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is OtherObjectData)
                                 {
@@ -3702,10 +3865,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Other");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Other");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is ShieldData)
                                 {
@@ -3718,10 +3881,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Shields");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Shields");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is SkyboxData)
                                 {
@@ -3734,10 +3897,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Skyboxes");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Skyboxes");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is SoundData)
                                 {
@@ -3750,10 +3913,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Sounds");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Sounds");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is StationData)
                                 {
@@ -3766,10 +3929,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Stations");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Stations");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                                 else if (dataitem is SunData)
                                 {
@@ -3782,10 +3945,10 @@ namespace VoidDestroyer2DataEditor
                                     currentitem.Name = Path.GetFileNameWithoutExtension(overridefile.FilePath);
                                     FilesTreeItem categoryitem = GetFilesTreeItemByPath("Data\\Suns");
                                     TreeNode categorynode = GetFilesTreeNodeByPath("Data\\Suns");
-                                    categoryitem.Children.Add(currentitem);
+                                    categoryitem.AddChild(currentitem);
                                     TreeNode addednode = categorynode.Nodes.Add(currentitem.Name, currentitem.DisplayName, currentitem.IconKey);
                                     addednode.ContextMenuStrip = categorynode.ContextMenuStrip;
-                                    dataitem.NotifyFileOverriden(overridefile);
+                                    currentitem.FilesTreeNode = addednode;
                                 }
                             }
                             else
@@ -3803,7 +3966,282 @@ namespace VoidDestroyer2DataEditor
 
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            FilesTreeItem item = EditorUI.UI.EditorForm.GetFilesTreeItemByPath(FilesTree.SelectedNode.FullPath);
+            if (item != null)
+            {
+                if (item.DataFile != null)
+                {
+                    if (item.DataFile is VD2Data)
+                    {
+                        VD2Data datafile = (VD2Data)item.DataFile;
+                        if (datafile.Source != null)
+                        {
+                            EditorDeleteFileDialog deletedialog = new EditorDeleteFileDialog();
+                            if (datafile.Source.ShortName == "Base")
+                            {
+                                deletedialog.BaseFileWarning.Visible = true;
+                                deletedialog.ModFileWarning.Visible = false;
+                            }
+                            else
+                            {
+                                deletedialog.BaseFileWarning.Visible = false;
+                                deletedialog.ModFileWarning.Visible = true;
+                            }
+                            DialogResult deletedialogresult = deletedialog.ShowDialog();
+                            if (deletedialogresult == DialogResult.No)
+                            { 
+                                return;
+                            }
+                            if (datafile.Source.WriteAccess)
+                            {
+                                if (File.Exists(datafile.FilePath))
+                                {
+                                    File.Delete(datafile.FilePath);
+                                }
+                                if (datafile is ShipData)
+                                {
+                                    EditorUI.UI.Ships.RemoveFile((ShipData)datafile);
+                                }
+                                else if (datafile is PrimaryUpgradeData)
+                                {
+                                    EditorUI.UI.PrimaryUpgrades.RemoveFile((PrimaryUpgradeData)datafile);
+                                }
+                                else if (datafile is ActiveUpgradeData)
+                                {
+                                    EditorUI.UI.ActiveUpgrades.RemoveFile((ActiveUpgradeData)datafile);
+                                }
+                                else if (datafile is WeaponData)
+                                {
+                                    EditorUI.UI.Weapons.RemoveFile((WeaponData)datafile);
+                                }
+                                else if (datafile is HangarData)
+                                {
+                                    EditorUI.UI.Hangars.RemoveFile((HangarData)datafile);
+                                }
+                                else if (datafile is LauncherData)
+                                {
+                                    EditorUI.UI.Launchers.RemoveFile((LauncherData)datafile);
+                                }
+                                else if (datafile is TurretData)
+                                {
+                                    EditorUI.UI.Turrets.RemoveFile((TurretData)datafile);
+                                }
+                                else if (datafile is AmmoData)
+                                {
+                                    EditorUI.UI.Ammo.RemoveFile((AmmoData)datafile);
+                                }
+                                else if (datafile is MissileData)
+                                {
+                                    EditorUI.UI.Missiles.RemoveFile((MissileData)datafile);
+                                }
+                                else if (datafile is MineData)
+                                {
+                                    EditorUI.UI.Mines.RemoveFile((MineData)datafile);
+                                }
+                                else if (datafile is AreaOfEffectData)
+                                {
+                                    EditorUI.UI.AreaOfEffect.RemoveFile((AreaOfEffectData)datafile);
+                                }
+                                else if (datafile is AsteroidData)
+                                {
+                                    EditorUI.UI.Asteroids.RemoveFile((AsteroidData)datafile);
+                                }
+                                else if (datafile is BaseData)
+                                {
+                                    EditorUI.UI.Bases.RemoveFile((BaseData)datafile);
+                                }
+                                else if (datafile is CharacterData)
+                                {
+                                    EditorUI.UI.Characters.RemoveFile((CharacterData)datafile);
+                                }
+                                else if (datafile is CockpitData)
+                                {
+                                    EditorUI.UI.Cockpits.RemoveFile((CockpitData)datafile);
+                                }
+                                else if (datafile is DebrisData)
+                                {
+                                    EditorUI.UI.Debris.RemoveFile((DebrisData)datafile);
+                                }
+                                else if (datafile is DialogData)
+                                {
+                                    EditorUI.UI.Dialog.RemoveFile((DialogData)datafile);
+                                }
+                                else if (datafile is DockedMovingElementData)
+                                {
+                                    EditorUI.UI.DockedMovingElements.RemoveFile((DockedMovingElementData)datafile);
+                                }
+                                else if (datafile is DoorData)
+                                {
+                                    EditorUI.UI.Doors.RemoveFile((DoorData)datafile);
+                                }
+                                else if (datafile is EffectData)
+                                {
+                                    EditorUI.UI.Effects.RemoveFile((EffectData)datafile);
+                                }
+                                else if (datafile is ParticleData)
+                                {
+                                    EditorUI.UI.Particles.RemoveFile((ParticleData)datafile);
+                                }
+                                else if (datafile is ExplosionData)
+                                {
+                                    EditorUI.UI.Explosions.RemoveFile((ExplosionData)datafile);
+                                }
+                                else if (datafile is FactionData)
+                                {
+                                    EditorUI.UI.Factions.RemoveFile((FactionData)datafile);
+                                }
+                                else if (datafile is MusicData)
+                                {
+                                    EditorUI.UI.Music.RemoveFile((MusicData)datafile);
+                                }
+                                else if (datafile is OtherObjectData)
+                                {
+                                    EditorUI.UI.OtherObjects.RemoveFile((OtherObjectData)datafile);
+                                }
+                                else if (datafile is ShieldData)
+                                {
+                                    EditorUI.UI.Shields.RemoveFile((ShieldData)datafile);
+                                }
+                                else if (datafile is SkyboxData)
+                                {
+                                    EditorUI.UI.Skyboxes.RemoveFile((SkyboxData)datafile);
+                                }
+                                else if (datafile is SoundData)
+                                {
+                                    EditorUI.UI.Sounds.RemoveFile((SoundData)datafile);
+                                }
+                                else if (datafile is StationData)
+                                {
+                                    EditorUI.UI.Stations.RemoveFile((StationData)datafile);
+                                }
+                                else if (datafile is SunData)
+                                {
+                                    EditorUI.UI.Suns.RemoveFile((SunData)datafile);
+                                }
+                                datafile.NotifyFileDeleted();
+                                CloseOpenDocument(datafile);
+                                if (item.Parent != null)
+                                {
+                                    if ((item.Parent.FilesTreeNode != null) && (item.FilesTreeNode != null))
+                                    {
+                                        item.Parent.FilesTreeNode.Nodes.Remove(item.FilesTreeNode);
+                                    }
+                                    item.Parent.Children.Remove(item);
+                                    item.Parent = null;
+                                }
+                            }
+                            else
+                            {
+                                ErrorMessageDialog dialog = new ErrorMessageDialog();
+                                dialog.ErrorTitleText = "Can't Delete From Read Only Source!";
+                                dialog.ErrorMessageText = "You tried to delete a file from a read only source (" + datafile.Source.ShortName + "). You will need to turn on write access if you wish to perform this action.";
+                                dialog.ShowDialog();
+                                return;
+                            }
+                        }
+                    }
+                    else if (item.DataFile is MeshDocument)
+                    {
+                        MeshDocument datafile = (MeshDocument)item.DataFile;
+                        if (datafile.Source != null)
+                        {
+                            EditorDeleteFileDialog deletedialog = new EditorDeleteFileDialog();
+                            if (datafile.Source.ShortName == "Base")
+                            {
+                                deletedialog.BaseFileWarning.Visible = true;
+                                deletedialog.ModFileWarning.Visible = false;
+                            }
+                            else
+                            {
+                                deletedialog.BaseFileWarning.Visible = false;
+                                deletedialog.ModFileWarning.Visible = true;
+                            }
+                            DialogResult deletedialogresult = deletedialog.ShowDialog();
+                            if (deletedialogresult == DialogResult.No)
+                            {
+                                return;
+                            }
+                            if (datafile.Source.WriteAccess)
+                            {
+                                if (File.Exists(datafile.FilePath))
+                                {
+                                    File.Delete(datafile.FilePath);
+                                }
+                                EditorUI.UI.Models.RemoveFile(datafile);
+                                datafile.NotifyFileDeleted();
+                                CloseOpenDocument(datafile);
+                                if (item.Parent != null)
+                                {
+                                    if ((item.Parent.FilesTreeNode != null) && (item.FilesTreeNode != null))
+                                    {
+                                        item.Parent.FilesTreeNode.Nodes.Remove(item.FilesTreeNode);
+                                    }
+                                    item.Parent.Children.Remove(item);
+                                    item.Parent = null;
+                                }
+                            }
+                            else
+                            {
+                                ErrorMessageDialog dialog = new ErrorMessageDialog();
+                                dialog.ErrorTitleText = "Can't Delete From Read Only Source!";
+                                dialog.ErrorMessageText = "You tried to delete a file from a read only source (" + datafile.Source.ShortName + "). You will need to turn on write access if you wish to perform this action.";
+                                dialog.ShowDialog();
+                                return;
+                            }
+                        }
+                    }
+                    else if (item.DataFile is ImageSetDocument)
+                    {
+                        ImageSetDocument datafile = (ImageSetDocument)item.DataFile;
+                        if (datafile.Source != null)
+                        {
+                            EditorDeleteFileDialog deletedialog = new EditorDeleteFileDialog();
+                            if (datafile.Source.ShortName == "Base")
+                            {
+                                deletedialog.BaseFileWarning.Visible = true;
+                                deletedialog.ModFileWarning.Visible = false;
+                            }
+                            else
+                            {
+                                deletedialog.BaseFileWarning.Visible = false;
+                                deletedialog.ModFileWarning.Visible = true;
+                            }
+                            DialogResult deletedialogresult = deletedialog.ShowDialog();
+                            if (deletedialogresult == DialogResult.No)
+                            {
+                                return;
+                            }
+                            if (datafile.Source.WriteAccess)
+                            {
+                                if (File.Exists(datafile.FilePath))
+                                {
+                                    File.Delete(datafile.FilePath);
+                                }
+                                EditorUI.UI.ImageSets.RemoveFile(datafile);
+                                datafile.NotifyFileDeleted();
+                                CloseOpenDocument(datafile);
+                                if (item.Parent != null)
+                                {
+                                    if ((item.Parent.FilesTreeNode != null) && (item.FilesTreeNode != null))
+                                    {
+                                        item.Parent.FilesTreeNode.Nodes.Remove(item.FilesTreeNode);
+                                    }
+                                    item.Parent.Children.Remove(item);
+                                    item.Parent = null;
+                                }
+                            }
+                            else
+                            {
+                                ErrorMessageDialog dialog = new ErrorMessageDialog();
+                                dialog.ErrorTitleText = "Can't Delete From Read Only Source!";
+                                dialog.ErrorMessageText = "You tried to delete a file from a read only source (" + datafile.Source.ShortName + "). You will need to turn on write access if you wish to perform this action.";
+                                dialog.ShowDialog();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -3898,6 +4336,52 @@ namespace VoidDestroyer2DataEditor
         {
             SaveAllOpenDocuments();
         }
+
+        private bool HasUnsavedDocuments()
+        {
+            foreach (TabPage page in documentTabControl1.TabPages)
+            {
+                foreach (Control c in page.Controls)
+                {
+                    if (c is VD2DocumentViewer)
+                    {
+                        VD2DocumentViewer docview = (VD2DocumentViewer)c;
+                        if (docview.Document != null)
+                        {
+                            if (docview.Document is VD2Data)
+                            {
+                                VD2Data datafile = (VD2Data)docview.Document;
+                                if (datafile.Unsaved)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void MainEditorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (HasUnsavedDocuments())
+            {
+                EditorRestartDialog dialog = new EditorRestartDialog();
+                dialog.Text = "Closing...";
+                dialog.label1.Text = "You have unsaved documents, do you wish to save them?";
+                DialogResult result = dialog.ShowDialog();
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        SaveAllOpenDocuments();
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
+        }
     }
 
 
@@ -3966,6 +4450,7 @@ namespace VoidDestroyer2DataEditor
         public bool Saved;
         public IVD2DocumentInterface _DataFile;
         public List<string> FilterTags;
+        public FilesTreeItem Parent;
         public List<FilesTreeItem> Children;
         public TreeNode FilesTreeNode;
 
@@ -3992,6 +4477,8 @@ namespace VoidDestroyer2DataEditor
                     {
                         VD2Data df = (VD2Data)_DataFile;
                         df.VD2PropertyChanged += OnMyFileEdited;
+                        df.OnThisFileLoaded += OnMyFileLoaded;
+                        df.OnThisFileSaved += OnMyFileSaved;
                         /*if (df.Source != null)
                         {
                             df.Source.OnWriteAccessChanged += OnFileSourceWriteAccessChanged;
@@ -3999,6 +4486,22 @@ namespace VoidDestroyer2DataEditor
                     }
                     
                 }
+            }
+        }
+
+        private void OnMyFileSaved(object sender, EventArgs e)
+        {
+            if (FilesTreeNode != null)
+            {
+                FilesTreeNode.Text = DisplayName;
+            }
+        }
+
+        private void OnMyFileLoaded(object sender, EventArgs e)
+        {
+            if (FilesTreeNode != null)
+            {
+                FilesTreeNode.Text = DisplayName;
             }
         }
 
@@ -4029,7 +4532,17 @@ namespace VoidDestroyer2DataEditor
                         VD2Data df = (VD2Data)DataFile;
                         return df.GetObjectID();
                     }
-                    
+                    else if (DataFile is MeshDocument)
+                    {
+                        MeshDocument df = (MeshDocument)DataFile;
+                        return df.MeshName;
+                        
+                    }
+                    else if (DataFile is ImageSetDocument)
+                    {
+                        ImageSetDocument df = (ImageSetDocument)DataFile;
+                        return df.ImageSetName;
+                    }
                 }
                 string result = "";
                 for (int i = 0; i < Children.Count; i++)
@@ -4111,6 +4624,28 @@ namespace VoidDestroyer2DataEditor
                             }
                         }
                     }
+                    else if (DataFile is MeshDocument)
+                    {
+                        MeshDocument df = (MeshDocument)DataFile;
+                        if (df.Source != null)
+                        {
+                            if (!df.Source.FilterIn)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (DataFile is ImageSetDocument)
+                    {
+                        ImageSetDocument df = (ImageSetDocument)DataFile;
+                        if (df.Source != null)
+                        {
+                            if (!df.Source.FilterIn)
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 }
                 return false;
             }
@@ -4150,10 +4685,29 @@ namespace VoidDestroyer2DataEditor
                                 rwstring = "[R]";
                             }
                         }
+                        return "(" + sourcestring + rwstring + ") " + savestring + Name;
+                    }
+                    else if (DataFile is MeshDocument)
+                    {
+                        MeshDocument df = (MeshDocument)DataFile;
+                        if (df.Source != null)
+                        {
+                            sourcestring = df.Source.ShortName;                            
+                        }
+                        return "(" + sourcestring + ") " + Name;
+                    }
+                    else if (DataFile is ImageSetDocument)
+                    {
+                        ImageSetDocument df = (ImageSetDocument)DataFile;
+                        if (df.Source != null)
+                        {
+                            sourcestring = df.Source.ShortName;
+                        }
+                        return "(" + sourcestring + ") " + Name;
                     }
                 }
 
-                return "(" + sourcestring + rwstring + ") " + savestring + Name;
+                return Name;
             }
         }
 
@@ -4194,6 +4748,12 @@ namespace VoidDestroyer2DataEditor
             Children = new List<FilesTreeItem>();
             FilterTags = new List<string>();
             IconKey = "genericfileicon";
+        }
+
+        public void AddChild(FilesTreeItem inItem)
+        {
+            Children.Add(inItem);
+            inItem.Parent = this;
         }
     }
 }

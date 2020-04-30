@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -104,7 +105,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string meshName
         {
             get
@@ -124,7 +125,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string explosionID
         {
             get
@@ -568,7 +569,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("mirv is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("mirv is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public mirvDataStructure mirv
         {
             get
@@ -589,7 +590,13 @@ namespace VoidDestroyer2DataEditor
             InitProperty("objectID");
             SetPropertyIsObjectID("objectID", true);
             InitProperty("meshName");
+            List<string> meshNamereftypes = new List<string>();
+            meshNamereftypes.Add("Mesh");
+            SetPropertyIsObjectIDRef("meshName", true, meshNamereftypes);
             InitProperty("explosionID");
+            List<string> explosionIDreftypes = new List<string>();
+            explosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("explosionID", true, explosionIDreftypes);
             InitProperty("minimumShipClass");
 
             InitProperty("detectionProximity");
@@ -620,6 +627,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public MineData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -900,6 +911,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("mirv", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -1038,7 +1050,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

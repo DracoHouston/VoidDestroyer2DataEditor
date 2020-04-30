@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -59,10 +60,10 @@ namespace VoidDestroyer2DataEditor
         alwaysOnEffectDataStructure _alwaysOnEffect;
         repairAreaDataStructure _repairArea;
 
-        ObservableCollection<attachmentDataStructure> _attachment;
-        ObservableCollection<turretDataStructure> _turret;
-        ObservableCollection<physicalRotatingElementDataStructure> _physicalRotatingElement;
-        ObservableCollection<mineDataStructure> _mine;
+        ObservableCollection<VD2DataStructure> _attachment;
+        ObservableCollection<VD2DataStructure> _turret;
+        ObservableCollection<VD2DataStructure> _physicalRotatingElement;
+        ObservableCollection<VD2DataStructure> _mine;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -365,7 +366,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> descriptionText
         {
             get
@@ -374,7 +375,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged -= OndescriptionTextChanged;
+                }
                 _descriptionText = value;
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
+                }
             }
         }
 
@@ -390,7 +399,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                    _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("descriptionText", exists);
@@ -404,7 +413,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> hangarID
         {
             get
@@ -413,7 +422,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_hangarID != null)
+                {
+                    _hangarID.CollectionChanged -= OnhangarIDChanged;
+                }
                 _hangarID = value;
+                if (_hangarID != null)
+                {
+                    _hangarID.CollectionChanged += OnhangarIDChanged;
+                }
             }
         }
 
@@ -429,7 +446,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _hangarID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "hangarID", out exists));
-                    _hangarID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnhangarIDChanged);
+                    _hangarID.CollectionChanged += OnhangarIDChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("hangarID", exists);
@@ -800,8 +817,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _dockingArms.OnElementChanged -= dockingArms_OnElementChanged;
                         _dockingArms = value;
+                        _dockingArms.OnElementChanged += dockingArms_OnElementChanged;
                         SetPropertyEdited("dockingArms", true);
+                    }
+                }
+            }
+        }
+
+        private void dockingArms_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockingArms", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockingArms_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockingArms_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockingArms_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockingArms_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockingArms_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockingArms_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -820,15 +875,53 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _dockingArmsEnd.OnElementChanged -= dockingArmsEnd_OnElementChanged;
                         _dockingArmsEnd = value;
+                        _dockingArmsEnd.OnElementChanged += dockingArmsEnd_OnElementChanged;
                         SetPropertyEdited("dockingArmsEnd", true);
                     }
                 }
             }
         }
 
+        private void dockingArmsEnd_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockingArmsEnd", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockingArmsEnd_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockingArmsEnd_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockingArmsEnd_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockingArmsEnd_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockingArmsEnd_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockingArmsEnd_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("debrisInfo is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("debrisInfo is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public debrisInfoDataStructure debrisInfo
         {
             get
@@ -841,7 +934,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("refuelArea is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("refuelArea is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public refuelAreaDataStructure refuelArea
         {
             get
@@ -854,7 +947,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("alwaysOnEffect is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("alwaysOnEffect is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public alwaysOnEffectDataStructure alwaysOnEffect
         {
             get
@@ -867,7 +960,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("repairArea is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("repairArea is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public repairAreaDataStructure repairArea
         {
             get
@@ -881,8 +974,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("attachment is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<attachmentDataStructure> attachment
+        [Browsable(false), Description("attachment is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> attachment
         {
             get
             {
@@ -890,7 +983,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_attachment != null)
+                {
+                    _attachment.CollectionChanged -= OnattachmentChanged;
+                }
                 _attachment = value;
+                if (_attachment != null)
+                {
+                    _attachment.CollectionChanged += OnattachmentChanged;
+                }
             }
         }
 
@@ -905,8 +1006,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _attachment = new ObservableCollection<attachmentDataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _attachment.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentChanged);
+                    _attachment = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _attachment.CollectionChanged += OnattachmentChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("attachment", exists);
@@ -920,8 +1021,8 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<turretDataStructure> turret
+        [Browsable(false), Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> turret
         {
             get
             {
@@ -929,7 +1030,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged -= OnturretChanged;
+                }
                 _turret = value;
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged += OnturretChanged;
+                }
             }
         }
 
@@ -944,8 +1053,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _turret = new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                    _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turret.CollectionChanged += OnturretChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("turret", exists);
@@ -959,8 +1068,8 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("physicalRotatingElement is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<physicalRotatingElementDataStructure> physicalRotatingElement
+        [Browsable(false), Description("physicalRotatingElement is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> physicalRotatingElement
         {
             get
             {
@@ -968,7 +1077,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_physicalRotatingElement != null)
+                {
+                    _physicalRotatingElement.CollectionChanged -= OnphysicalRotatingElementChanged;
+                }
                 _physicalRotatingElement = value;
+                if (_physicalRotatingElement != null)
+                {
+                    _physicalRotatingElement.CollectionChanged += OnphysicalRotatingElementChanged;
+                }
             }
         }
 
@@ -983,8 +1100,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _physicalRotatingElement = new ObservableCollection<physicalRotatingElementDataStructure>(DataStructureParseHelpers.GetphysicalRotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _physicalRotatingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnphysicalRotatingElementChanged);
+                    _physicalRotatingElement = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetphysicalRotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _physicalRotatingElement.CollectionChanged += OnphysicalRotatingElementChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("physicalRotatingElement", exists);
@@ -998,8 +1115,8 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("mine is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<mineDataStructure> mine
+        [Browsable(false), Description("mine is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> mine
         {
             get
             {
@@ -1007,7 +1124,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_mine != null)
+                {
+                    _mine.CollectionChanged -= OnmineChanged;
+                }
                 _mine = value;
+                if (_mine != null)
+                {
+                    _mine.CollectionChanged += OnmineChanged;
+                }
             }
         }
 
@@ -1022,8 +1147,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _mine = new ObservableCollection<mineDataStructure>(DataStructureParseHelpers.GetmineDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _mine.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmineChanged);
+                    _mine = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmineDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _mine.CollectionChanged += OnmineChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("mine", exists);
@@ -1057,7 +1182,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("collisionMeshName");
 
             InitProperty("descriptionText");
+            SetPropertyIsCollection("descriptionText", true, typeof(string));
             InitProperty("hangarID");
+            SetPropertyIsCollection("hangarID", true, typeof(string));
 
             InitProperty("creditCost");
             InitProperty("rockSubPosition");
@@ -1088,12 +1215,20 @@ namespace VoidDestroyer2DataEditor
             InitProperty("repairArea");
 
             InitProperty("attachment");
+            SetPropertyIsCollection("attachment", true, typeof(attachmentDataStructure));
             InitProperty("turret");
+            SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
             InitProperty("physicalRotatingElement");
+            SetPropertyIsCollection("physicalRotatingElement", true, typeof(physicalRotatingElementDataStructure));
             InitProperty("mine");
+            SetPropertyIsCollection("mine", true, typeof(mineDataStructure));
         }
 
         public StationData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -1251,7 +1386,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("collisionMeshName", exists);
 
                 _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                _descriptionText.CollectionChanged += OndescriptionTextChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("descriptionText", exists);
@@ -1262,7 +1397,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("descriptionText", exists);
                 _hangarID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "hangarID", out exists));
-                _hangarID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnhangarIDChanged);
+                _hangarID.CollectionChanged += OnhangarIDChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("hangarID", exists);
@@ -1447,6 +1582,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bAccelerator", exists);
 
                 _dockingArms = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "dockingArms", out exists);
+                _dockingArms.OnElementChanged += dockingArms_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("dockingArms", exists);
@@ -1457,6 +1593,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("dockingArms", exists);
                 _dockingArmsEnd = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "dockingArmsEnd", out exists);
+                _dockingArmsEnd.OnElementChanged += dockingArmsEnd_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("dockingArmsEnd", exists);
@@ -1508,8 +1645,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("repairArea", exists);
 
-                _attachment =  new ObservableCollection<attachmentDataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _attachment.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentChanged);
+                _attachment =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetattachmentDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _attachment.CollectionChanged += OnattachmentChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("attachment", exists);
@@ -1519,8 +1656,8 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("attachment", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "attachment"));
                 }
                 SetPropertyExists("attachment", exists);
-                _turret =  new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turret.CollectionChanged += OnturretChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("turret", exists);
@@ -1530,8 +1667,8 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turret"));
                 }
                 SetPropertyExists("turret", exists);
-                _physicalRotatingElement =  new ObservableCollection<physicalRotatingElementDataStructure>(DataStructureParseHelpers.GetphysicalRotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _physicalRotatingElement.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnphysicalRotatingElementChanged);
+                _physicalRotatingElement =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetphysicalRotatingElementDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _physicalRotatingElement.CollectionChanged += OnphysicalRotatingElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("physicalRotatingElement", exists);
@@ -1541,8 +1678,8 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("physicalRotatingElement", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "physicalRotatingElement"));
                 }
                 SetPropertyExists("physicalRotatingElement", exists);
-                _mine =  new ObservableCollection<mineDataStructure>(DataStructureParseHelpers.GetmineDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _mine.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmineChanged);
+                _mine =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetmineDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _mine.CollectionChanged += OnmineChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("mine", exists);
@@ -1552,6 +1689,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("mine", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "mine"));
                 }
                 SetPropertyExists("mine", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -1797,7 +1935,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

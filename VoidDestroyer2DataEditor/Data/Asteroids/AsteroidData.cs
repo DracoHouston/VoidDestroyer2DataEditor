@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -39,7 +40,7 @@ namespace VoidDestroyer2DataEditor
 
         deathSpawnDataStructure _deathSpawn;
 
-        ObservableCollection<babyDataStructure> _baby;
+        ObservableCollection<VD2DataStructure> _baby;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -262,7 +263,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> descriptionText
         {
             get
@@ -271,7 +272,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged -= OndescriptionTextChanged;
+                }
                 _descriptionText = value;
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
+                }
             }
         }
 
@@ -287,7 +296,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                    _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("descriptionText", exists);
@@ -301,7 +310,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("collisionShape is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("collisionShape is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> collisionShape
         {
             get
@@ -310,7 +319,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_collisionShape != null)
+                {
+                    _collisionShape.CollectionChanged -= OncollisionShapeChanged;
+                }
                 _collisionShape = value;
+                if (_collisionShape != null)
+                {
+                    _collisionShape.CollectionChanged += OncollisionShapeChanged;
+                }
             }
         }
 
@@ -326,7 +343,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _collisionShape = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "collisionShape", out exists));
-                    _collisionShape.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OncollisionShapeChanged);
+                    _collisionShape.CollectionChanged += OncollisionShapeChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("collisionShape", exists);
@@ -457,15 +474,53 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _deathLinearVelocity.OnElementChanged -= deathLinearVelocity_OnElementChanged;
                         _deathLinearVelocity = value;
+                        _deathLinearVelocity.OnElementChanged += deathLinearVelocity_OnElementChanged;
                         SetPropertyEdited("deathLinearVelocity", true);
                     }
                 }
             }
         }
 
+        private void deathLinearVelocity_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("deathLinearVelocity", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= deathLinearVelocity_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += deathLinearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= deathLinearVelocity_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += deathLinearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= deathLinearVelocity_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += deathLinearVelocity_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("deathSpawn is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("deathSpawn is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public deathSpawnDataStructure deathSpawn
         {
             get
@@ -479,8 +534,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("baby is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<babyDataStructure> baby
+        [Browsable(false), Description("baby is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> baby
         {
             get
             {
@@ -488,7 +543,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_baby != null)
+                {
+                    _baby.CollectionChanged -= OnbabyChanged;
+                }
                 _baby = value;
+                if (_baby != null)
+                {
+                    _baby.CollectionChanged += OnbabyChanged;
+                }
             }
         }
 
@@ -503,8 +566,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _baby = new ObservableCollection<babyDataStructure>(DataStructureParseHelpers.GetbabyDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _baby.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnbabyChanged);
+                    _baby = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetbabyDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _baby.CollectionChanged += OnbabyChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("baby", exists);
@@ -534,7 +597,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("asteroidType");
 
             InitProperty("descriptionText");
+            SetPropertyIsCollection("descriptionText", true, typeof(string));
             InitProperty("collisionShape");
+            SetPropertyIsCollection("collisionShape", true, typeof(string));
 
             InitProperty("babySpawnDamage");
 
@@ -549,9 +614,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("deathSpawn");
 
             InitProperty("baby");
+            SetPropertyIsCollection("baby", true, typeof(babyDataStructure));
         }
 
         public AsteroidData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -669,7 +739,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("asteroidType", exists);
 
                 _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                _descriptionText.CollectionChanged += OndescriptionTextChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("descriptionText", exists);
@@ -680,7 +750,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("descriptionText", exists);
                 _collisionShape = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "collisionShape", out exists));
-                _collisionShape.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OncollisionShapeChanged);
+                _collisionShape.CollectionChanged += OncollisionShapeChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("collisionShape", exists);
@@ -745,6 +815,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bCanAddViaBattleEditorSlider", exists);
 
                 _deathLinearVelocity = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "deathLinearVelocity", out exists);
+                _deathLinearVelocity.OnElementChanged += deathLinearVelocity_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("deathLinearVelocity", exists);
@@ -766,8 +837,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("deathSpawn", exists);
 
-                _baby =  new ObservableCollection<babyDataStructure>(DataStructureParseHelpers.GetbabyDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _baby.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnbabyChanged);
+                _baby =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetbabyDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _baby.CollectionChanged += OnbabyChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("baby", exists);
@@ -777,6 +848,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("baby", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "baby"));
                 }
                 SetPropertyExists("baby", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -915,7 +987,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

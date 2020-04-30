@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -71,8 +72,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _offsetPosition.OnElementChanged -= offsetPosition_OnElementChanged;
                         _offsetPosition = value;
+                        _offsetPosition.OnElementChanged += offsetPosition_OnElementChanged;
                         SetPropertyEdited("offsetPosition", true);
+                    }
+                }
+            }
+        }
+
+        private void offsetPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("offsetPosition", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= offsetPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += offsetPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= offsetPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += offsetPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= offsetPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += offsetPosition_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -90,6 +129,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public CockpitData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -117,6 +160,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("meshName", exists);
 
                 _offsetPosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "offsetPosition", out exists);
+                _offsetPosition.OnElementChanged += offsetPosition_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("offsetPosition", exists);
@@ -127,6 +171,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("offsetPosition", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -156,7 +201,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

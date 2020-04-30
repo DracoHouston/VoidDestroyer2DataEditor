@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -203,8 +204,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _translateVector.OnElementChanged -= translateVector_OnElementChanged;
                         _translateVector = value;
+                        _translateVector.OnElementChanged += translateVector_OnElementChanged;
                         SetPropertyEdited("translateVector", true);
+                    }
+                }
+            }
+        }
+
+        private void translateVector_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("translateVector", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= translateVector_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += translateVector_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= translateVector_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += translateVector_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= translateVector_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += translateVector_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -231,6 +270,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public DockedMovingElementData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -321,6 +364,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bOpenOnProximity", exists);
 
                 _translateVector = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "translateVector", out exists);
+                _translateVector.OnElementChanged += translateVector_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("translateVector", exists);
@@ -331,6 +375,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("translateVector", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -396,7 +441,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

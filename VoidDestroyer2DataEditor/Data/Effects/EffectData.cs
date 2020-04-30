@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -265,8 +266,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _initialColor.OnElementChanged -= initialColor_OnElementChanged;
                         _initialColor = value;
+                        _initialColor.OnElementChanged += initialColor_OnElementChanged;
                         SetPropertyEdited("initialColor", true);
+                    }
+                }
+            }
+        }
+
+        private void initialColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("initialColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= initialColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += initialColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= initialColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += initialColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= initialColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += initialColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= initialColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += initialColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -285,8 +329,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _colorChange.OnElementChanged -= colorChange_OnElementChanged;
                         _colorChange = value;
+                        _colorChange.OnElementChanged += colorChange_OnElementChanged;
                         SetPropertyEdited("colorChange", true);
+                    }
+                }
+            }
+        }
+
+        private void colorChange_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("colorChange", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= colorChange_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += colorChange_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= colorChange_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += colorChange_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= colorChange_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += colorChange_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= colorChange_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += colorChange_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -316,6 +403,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public EffectData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -435,6 +526,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("initialWidth", exists);
 
                 _initialColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "initialColor", out exists);
+                _initialColor.OnElementChanged += initialColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("initialColor", exists);
@@ -445,6 +537,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("initialColor", exists);
                 _colorChange = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "colorChange", out exists);
+                _colorChange.OnElementChanged += colorChange_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("colorChange", exists);
@@ -455,6 +548,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("colorChange", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -532,7 +626,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

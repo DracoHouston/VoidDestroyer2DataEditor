@@ -105,6 +105,12 @@
     <Compile Include="DuplicateFileDialog.Designer.cs">
       <DependentUpon>DuplicateFileDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorDeleteFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorDeleteFileDialog.Designer.cs">
+      <DependentUpon>EditorDeleteFileDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditorRestartDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,8 @@
     <Compile Include="EditorSaveDocumentDialog.Designer.cs">
       <DependentUpon>EditorSaveDocumentDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageSetDB.cs" />
+    <Compile Include="MeshDB.cs" />
     <Compile Include="UI\DataDocumentSidebarControls\FloatCollectionSidebarEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -370,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DuplicateFileDialog.resx">
       <DependentUpon>DuplicateFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditorDeleteFileDialog.resx">
+      <DependentUpon>EditorDeleteFileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditorRestartDialog.resx">
       <DependentUpon>EditorRestartDialog.cs</DependentUpon>

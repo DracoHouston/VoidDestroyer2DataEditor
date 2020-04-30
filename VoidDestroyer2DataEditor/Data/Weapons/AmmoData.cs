@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -130,7 +131,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string meshName
         {
             get
@@ -150,7 +151,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string explosionID
         {
             get
@@ -170,7 +171,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("projectileExpireExplosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("projectileExpireExplosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string projectileExpireExplosionID
         {
             get
@@ -190,7 +191,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("areaOfEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("areaOfEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string areaOfEffectID
         {
             get
@@ -270,7 +271,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("ribbonID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("ribbonID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string ribbonID
         {
             get
@@ -667,15 +668,53 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _projectileSize.OnElementChanged -= projectileSize_OnElementChanged;
                         _projectileSize = value;
+                        _projectileSize.OnElementChanged += projectileSize_OnElementChanged;
                         SetPropertyEdited("projectileSize", true);
                     }
                 }
             }
         }
 
+        private void projectileSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("projectileSize", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= projectileSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += projectileSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= projectileSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += projectileSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= projectileSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += projectileSize_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("canister is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("canister is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public canisterDataStructure canister
         {
             get
@@ -697,13 +736,28 @@ namespace VoidDestroyer2DataEditor
             InitProperty("projectileType");
             InitProperty("projectileParticleName");
             InitProperty("meshName");
+            List<string> meshNamereftypes = new List<string>();
+            meshNamereftypes.Add("Mesh");
+            SetPropertyIsObjectIDRef("meshName", true, meshNamereftypes);
             InitProperty("explosionID");
+            List<string> explosionIDreftypes = new List<string>();
+            explosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("explosionID", true, explosionIDreftypes);
             InitProperty("projectileExpireExplosionID");
+            List<string> projectileExpireExplosionIDreftypes = new List<string>();
+            projectileExpireExplosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("projectileExpireExplosionID", true, projectileExpireExplosionIDreftypes);
             InitProperty("areaOfEffectID");
+            List<string> areaOfEffectIDreftypes = new List<string>();
+            areaOfEffectIDreftypes.Add("AreaOfEffect");
+            SetPropertyIsObjectIDRef("areaOfEffectID", true, areaOfEffectIDreftypes);
             InitProperty("instantKillShipClass");
             InitProperty("materialNameHead");
             InitProperty("materialNameTail");
             InitProperty("ribbonID");
+            List<string> ribbonIDreftypes = new List<string>();
+            ribbonIDreftypes.Add("Effect");
+            SetPropertyIsObjectIDRef("ribbonID", true, ribbonIDreftypes);
             InitProperty("dPExpire");
 
             InitProperty("damageOverTime");
@@ -733,6 +787,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public AmmoData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -1043,6 +1101,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bMining", exists);
 
                 _projectileSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "projectileSize", out exists);
+                _projectileSize.OnElementChanged += projectileSize_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("projectileSize", exists);
@@ -1064,6 +1123,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("canister", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -1226,7 +1286,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

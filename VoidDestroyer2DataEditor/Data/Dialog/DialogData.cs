@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -61,7 +62,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("factionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("factionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> factionID
         {
             get
@@ -70,7 +71,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_factionID != null)
+                {
+                    _factionID.CollectionChanged -= OnfactionIDChanged;
+                }
                 _factionID = value;
+                if (_factionID != null)
+                {
+                    _factionID.CollectionChanged += OnfactionIDChanged;
+                }
             }
         }
 
@@ -86,7 +95,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _factionID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionID", out exists));
-                    _factionID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionIDChanged);
+                    _factionID.CollectionChanged += OnfactionIDChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("factionID", exists);
@@ -100,7 +109,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("dialog is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("dialog is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> dialog
         {
             get
@@ -109,7 +118,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_dialog != null)
+                {
+                    _dialog.CollectionChanged -= OndialogChanged;
+                }
                 _dialog = value;
+                if (_dialog != null)
+                {
+                    _dialog.CollectionChanged += OndialogChanged;
+                }
             }
         }
 
@@ -125,7 +142,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _dialog = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "dialog", out exists));
-                    _dialog.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndialogChanged);
+                    _dialog.CollectionChanged += OndialogChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("dialog", exists);
@@ -168,13 +185,19 @@ namespace VoidDestroyer2DataEditor
             InitProperty("dialogType");
 
             InitProperty("factionID");
+            SetPropertyIsCollection("factionID", true, typeof(string));
             InitProperty("dialog");
+            SetPropertyIsCollection("dialog", true, typeof(string));
 
             InitProperty("bGeneric");
 
         }
 
         public DialogData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -202,7 +225,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("dialogType", exists);
 
                 _factionID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionID", out exists));
-                _factionID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionIDChanged);
+                _factionID.CollectionChanged += OnfactionIDChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("factionID", exists);
@@ -213,7 +236,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("factionID", exists);
                 _dialog = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "dialog", out exists));
-                _dialog.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndialogChanged);
+                _dialog.CollectionChanged += OndialogChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("dialog", exists);
@@ -235,6 +258,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bGeneric", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -284,7 +308,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

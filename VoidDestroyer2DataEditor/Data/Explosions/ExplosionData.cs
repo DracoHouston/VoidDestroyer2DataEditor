@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -308,8 +309,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _impactSize.OnElementChanged -= impactSize_OnElementChanged;
                         _impactSize = value;
+                        _impactSize.OnElementChanged += impactSize_OnElementChanged;
                         SetPropertyEdited("impactSize", true);
+                    }
+                }
+            }
+        }
+
+        private void impactSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("impactSize", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= impactSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += impactSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= impactSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += impactSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= impactSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += impactSize_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -341,6 +380,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public ExplosionData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -481,6 +524,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bCausesShake", exists);
 
                 _impactSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "impactSize", out exists);
+                _impactSize.OnElementChanged += impactSize_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("impactSize", exists);
@@ -491,6 +535,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("impactSize", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -576,7 +621,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

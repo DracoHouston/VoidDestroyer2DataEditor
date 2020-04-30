@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -188,7 +189,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string muzzleFlashEffectID
         {
             get
@@ -248,7 +249,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string shieldID
         {
             get
@@ -268,7 +269,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string ammunitionID
         {
             get
@@ -328,7 +329,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string explosionID
         {
             get
@@ -348,7 +349,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("chargeSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("chargeSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string chargeSoundID
         {
             get
@@ -368,7 +369,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("chargedSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("chargedSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string chargedSoundID
         {
             get
@@ -408,7 +409,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string auxAmmunitionID
         {
             get
@@ -448,7 +449,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("beamShieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("beamShieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string beamShieldID
         {
             get
@@ -528,7 +529,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hitSound is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("hitSound is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string hitSound
         {
             get
@@ -609,7 +610,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("fireSoundID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("fireSoundID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> fireSoundID
         {
             get
@@ -618,7 +619,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_fireSoundID != null)
+                {
+                    _fireSoundID.CollectionChanged -= OnfireSoundIDChanged;
+                }
                 _fireSoundID = value;
+                if (_fireSoundID != null)
+                {
+                    _fireSoundID.CollectionChanged += OnfireSoundIDChanged;
+                }
             }
         }
 
@@ -634,7 +643,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _fireSoundID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "fireSoundID", out exists));
-                    _fireSoundID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfireSoundIDChanged);
+                    _fireSoundID.CollectionChanged += OnfireSoundIDChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("fireSoundID", exists);
@@ -648,7 +657,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("hangarID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> hangarID
         {
             get
@@ -657,7 +666,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_hangarID != null)
+                {
+                    _hangarID.CollectionChanged -= OnhangarIDChanged;
+                }
                 _hangarID = value;
+                if (_hangarID != null)
+                {
+                    _hangarID.CollectionChanged += OnhangarIDChanged;
+                }
             }
         }
 
@@ -673,7 +690,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _hangarID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "hangarID", out exists));
-                    _hangarID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnhangarIDChanged);
+                    _hangarID.CollectionChanged += OnhangarIDChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("hangarID", exists);
@@ -1070,7 +1087,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("scatterYaw is a collection of real numbers"), Category("Real Number Collections")]
+        [Browsable(false), Description("scatterYaw is a collection of real numbers"), Category("Real Number Collections")]
         public ObservableCollection<float> scatterYaw
         {
             get
@@ -1079,7 +1096,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_scatterYaw != null)
+                {
+                    _scatterYaw.CollectionChanged -= OnscatterYawChanged;
+                }
                 _scatterYaw = value;
+                if (_scatterYaw != null)
+                {
+                    _scatterYaw.CollectionChanged += OnscatterYawChanged;
+                }
             }
         }
 
@@ -1095,7 +1120,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _scatterYaw = new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterYaw", out exists));
-                    _scatterYaw.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnscatterYawChanged);
+                    _scatterYaw.CollectionChanged += OnscatterYawChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("scatterYaw", exists);
@@ -1109,7 +1134,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("scatterPitch is a collection of real numbers"), Category("Real Number Collections")]
+        [Browsable(false), Description("scatterPitch is a collection of real numbers"), Category("Real Number Collections")]
         public ObservableCollection<float> scatterPitch
         {
             get
@@ -1118,7 +1143,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_scatterPitch != null)
+                {
+                    _scatterPitch.CollectionChanged -= OnscatterPitchChanged;
+                }
                 _scatterPitch = value;
+                if (_scatterPitch != null)
+                {
+                    _scatterPitch.CollectionChanged += OnscatterPitchChanged;
+                }
             }
         }
 
@@ -1134,7 +1167,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _scatterPitch = new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterPitch", out exists));
-                    _scatterPitch.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnscatterPitchChanged);
+                    _scatterPitch.CollectionChanged += OnscatterPitchChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("scatterPitch", exists);
@@ -1423,8 +1456,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _size.OnElementChanged -= size_OnElementChanged;
                         _size = value;
+                        _size.OnElementChanged += size_OnElementChanged;
                         SetPropertyEdited("size", true);
+                    }
+                }
+            }
+        }
+
+        private void size_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("size", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= size_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += size_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= size_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += size_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= size_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += size_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1443,8 +1514,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _particlePosition.OnElementChanged -= particlePosition_OnElementChanged;
                         _particlePosition = value;
+                        _particlePosition.OnElementChanged += particlePosition_OnElementChanged;
                         SetPropertyEdited("particlePosition", true);
+                    }
+                }
+            }
+        }
+
+        private void particlePosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("particlePosition", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= particlePosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += particlePosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= particlePosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += particlePosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= particlePosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += particlePosition_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -1464,15 +1573,58 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _color.OnElementChanged -= color_OnElementChanged;
                         _color = value;
+                        _color.OnElementChanged += color_OnElementChanged;
                         SetPropertyEdited("color", true);
                     }
                 }
             }
         }
 
+        private void color_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("color", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= color_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += color_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= color_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += color_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= color_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += color_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= color_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += color_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("recoil is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("recoil is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public recoilDataStructure recoil
         {
             get
@@ -1485,7 +1637,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("rotateBones is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("rotateBones is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public rotateBonesDataStructure rotateBones
         {
             get
@@ -1508,23 +1660,50 @@ namespace VoidDestroyer2DataEditor
             InitProperty("materialName");
             InitProperty("hitParticleName");
             InitProperty("muzzleFlashEffectID");
+            List<string> muzzleFlashEffectIDreftypes = new List<string>();
+            muzzleFlashEffectIDreftypes.Add("Particle");
+            SetPropertyIsObjectIDRef("muzzleFlashEffectID", true, muzzleFlashEffectIDreftypes);
             InitProperty("gravityObjectType");
             InitProperty("maxShipSize");
             InitProperty("shieldID");
+            List<string> shieldIDreftypes = new List<string>();
+            shieldIDreftypes.Add("Shield");
+            SetPropertyIsObjectIDRef("shieldID", true, shieldIDreftypes);
             InitProperty("ammunitionID");
+            List<string> ammunitionIDreftypes = new List<string>();
+            ammunitionIDreftypes.Add("Ammo");
+            SetPropertyIsObjectIDRef("ammunitionID", true, ammunitionIDreftypes);
             InitProperty("projectileWeaponType");
             InitProperty("instantType");
             InitProperty("explosionID");
+            List<string> explosionIDreftypes = new List<string>();
+            explosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("explosionID", true, explosionIDreftypes);
             InitProperty("chargeSoundID");
+            List<string> chargeSoundIDreftypes = new List<string>();
+            chargeSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("chargeSoundID", true, chargeSoundIDreftypes);
             InitProperty("chargedSoundID");
+            List<string> chargedSoundIDreftypes = new List<string>();
+            chargedSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("chargedSoundID", true, chargedSoundIDreftypes);
             InitProperty("chargeParticleName");
             InitProperty("auxAmmunitionID");
+            List<string> auxAmmunitionIDreftypes = new List<string>();
+            auxAmmunitionIDreftypes.Add("Ammo");
+            SetPropertyIsObjectIDRef("auxAmmunitionID", true, auxAmmunitionIDreftypes);
             InitProperty("linkedRotatingElement");
             InitProperty("beamShieldID");
+            List<string> beamShieldIDreftypes = new List<string>();
+            beamShieldIDreftypes.Add("Shield");
+            SetPropertyIsObjectIDRef("beamShieldID", true, beamShieldIDreftypes);
             InitProperty("collisionWeaponType");
             InitProperty("particleEffectName");
             InitProperty("beamType");
             InitProperty("hitSound");
+            List<string> hitSoundreftypes = new List<string>();
+            hitSoundreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("hitSound", true, hitSoundreftypes);
             InitProperty("fireParticleName");
             InitProperty("linkedMovingElement");
             InitProperty("minimumShipClass");
@@ -1591,6 +1770,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public WeaponData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -1858,7 +2041,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("minimumShipClass", exists);
 
                 _fireSoundID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "fireSoundID", out exists));
-                _fireSoundID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfireSoundIDChanged);
+                _fireSoundID.CollectionChanged += OnfireSoundIDChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("fireSoundID", exists);
@@ -1869,7 +2052,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("fireSoundID", exists);
                 _hangarID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "hangarID", out exists));
-                _hangarID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnhangarIDChanged);
+                _hangarID.CollectionChanged += OnhangarIDChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("hangarID", exists);
@@ -2073,7 +2256,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("disableRate", exists);
 
                 _scatterYaw =  new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterYaw", out exists));
-                _scatterYaw.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnscatterYawChanged);
+                _scatterYaw.CollectionChanged += OnscatterYawChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("scatterYaw", exists);
@@ -2084,7 +2267,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("scatterYaw", exists);
                 _scatterPitch =  new ObservableCollection<float>(ParseHelpers.GetFloatListFromVD2Data(DataXMLDoc, "scatterPitch", out exists));
-                _scatterPitch.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnscatterPitchChanged);
+                _scatterPitch.CollectionChanged += OnscatterPitchChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("scatterPitch", exists);
@@ -2227,6 +2410,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bAntiCapital", exists);
 
                 _size = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "size", out exists);
+                _size.OnElementChanged += size_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("size", exists);
@@ -2237,6 +2421,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("size", exists);
                 _particlePosition = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "particlePosition", out exists);
+                _particlePosition.OnElementChanged += particlePosition_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("particlePosition", exists);
@@ -2248,6 +2433,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("particlePosition", exists);
 
                 _color = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "color", out exists);
+                _color.OnElementChanged += color_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("color", exists);
@@ -2279,6 +2465,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("rotateBones", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -2610,7 +2797,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

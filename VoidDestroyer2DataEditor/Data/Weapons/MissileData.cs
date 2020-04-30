@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -121,7 +122,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string meshName
         {
             get
@@ -141,7 +142,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("ribbonID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("ribbonID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string ribbonID
         {
             get
@@ -181,7 +182,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("explosionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string explosionID
         {
             get
@@ -497,15 +498,53 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _missileSize.OnElementChanged -= missileSize_OnElementChanged;
                         _missileSize = value;
+                        _missileSize.OnElementChanged += missileSize_OnElementChanged;
                         SetPropertyEdited("missileSize", true);
                     }
                 }
             }
         }
 
+        private void missileSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("missileSize", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= missileSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += missileSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= missileSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += missileSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= missileSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += missileSize_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("mirv is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("mirv is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public mirvDataStructure mirv
         {
             get
@@ -527,9 +566,18 @@ namespace VoidDestroyer2DataEditor
             InitProperty("name");
             InitProperty("missileType");
             InitProperty("meshName");
+            List<string> meshNamereftypes = new List<string>();
+            meshNamereftypes.Add("Mesh");
+            SetPropertyIsObjectIDRef("meshName", true, meshNamereftypes);
             InitProperty("ribbonID");
+            List<string> ribbonIDreftypes = new List<string>();
+            ribbonIDreftypes.Add("Effect");
+            SetPropertyIsObjectIDRef("ribbonID", true, ribbonIDreftypes);
             InitProperty("trailParticleName");
             InitProperty("explosionID");
+            List<string> explosionIDreftypes = new List<string>();
+            explosionIDreftypes.Add("Explosion");
+            SetPropertyIsObjectIDRef("explosionID", true, explosionIDreftypes);
             InitProperty("missileParticleName");
 
             InitProperty("cruiseSpeed");
@@ -554,6 +602,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public MissileData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -783,6 +835,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bReAcquireTarget", exists);
 
                 _missileSize = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "missileSize", out exists);
+                _missileSize.OnElementChanged += missileSize_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("missileSize", exists);
@@ -804,6 +857,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("mirv", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -930,7 +984,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

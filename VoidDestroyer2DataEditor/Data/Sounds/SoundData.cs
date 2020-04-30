@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -173,7 +174,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("soundFile is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("soundFile is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> soundFile
         {
             get
@@ -182,7 +183,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_soundFile != null)
+                {
+                    _soundFile.CollectionChanged -= OnsoundFileChanged;
+                }
                 _soundFile = value;
+                if (_soundFile != null)
+                {
+                    _soundFile.CollectionChanged += OnsoundFileChanged;
+                }
             }
         }
 
@@ -198,7 +207,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _soundFile = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "soundFile", out exists));
-                    _soundFile.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundFileChanged);
+                    _soundFile.CollectionChanged += OnsoundFileChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("soundFile", exists);
@@ -274,7 +283,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("soundPriority is a collection of integers"), Category("Integer Collections")]
+        [Browsable(false), Description("soundPriority is a collection of integers"), Category("Integer Collections")]
         public ObservableCollection<int> soundPriority
         {
             get
@@ -283,7 +292,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_soundPriority != null)
+                {
+                    _soundPriority.CollectionChanged -= OnsoundPriorityChanged;
+                }
                 _soundPriority = value;
+                if (_soundPriority != null)
+                {
+                    _soundPriority.CollectionChanged += OnsoundPriorityChanged;
+                }
             }
         }
 
@@ -299,7 +316,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _soundPriority = new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, "soundPriority", out exists));
-                    _soundPriority.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundPriorityChanged);
+                    _soundPriority.CollectionChanged += OnsoundPriorityChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("soundPriority", exists);
@@ -368,12 +385,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("soundEngineSoundType");
 
             InitProperty("soundFile");
+            SetPropertyIsCollection("soundFile", true, typeof(string));
 
             InitProperty("maxDistance");
             InitProperty("referenceDistance");
             InitProperty("maxSounds");
 
             InitProperty("soundPriority");
+            SetPropertyIsCollection("soundPriority", true, typeof(int));
 
             InitProperty("defaultVolume");
 
@@ -382,6 +401,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public SoundData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -459,7 +482,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("soundEngineSoundType", exists);
 
                 _soundFile = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "soundFile", out exists));
-                _soundFile.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundFileChanged);
+                _soundFile.CollectionChanged += OnsoundFileChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("soundFile", exists);
@@ -502,7 +525,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("maxSounds", exists);
 
                 _soundPriority =  new ObservableCollection<int>(ParseHelpers.GetInt32ListFromVD2Data(DataXMLDoc, "soundPriority", out exists));
-                _soundPriority.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnsoundPriorityChanged);
+                _soundPriority.CollectionChanged += OnsoundPriorityChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("soundPriority", exists);
@@ -535,6 +558,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bDisable3d", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -632,7 +656,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

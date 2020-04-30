@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -36,7 +37,7 @@ namespace VoidDestroyer2DataEditor
         ColorF _specularColor;
         ColorF _diffuseColor;
 
-        ObservableCollection<damageCollisionFieldDataStructure> _damageCollisionField;
+        ObservableCollection<VD2DataStructure> _damageCollisionField;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -414,8 +415,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _specularColor.OnElementChanged -= specularColor_OnElementChanged;
                         _specularColor = value;
+                        _specularColor.OnElementChanged += specularColor_OnElementChanged;
                         SetPropertyEdited("specularColor", true);
+                    }
+                }
+            }
+        }
+
+        private void specularColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("specularColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= specularColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += specularColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= specularColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += specularColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= specularColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += specularColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= specularColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += specularColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -434,16 +478,59 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _diffuseColor.OnElementChanged -= diffuseColor_OnElementChanged;
                         _diffuseColor = value;
+                        _diffuseColor.OnElementChanged += diffuseColor_OnElementChanged;
                         SetPropertyEdited("diffuseColor", true);
                     }
                 }
             }
         }
 
+        private void diffuseColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("diffuseColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= diffuseColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += diffuseColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= diffuseColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += diffuseColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= diffuseColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += diffuseColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= diffuseColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += diffuseColor_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("damageCollisionField is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<damageCollisionFieldDataStructure> damageCollisionField
+
+        [Browsable(false), Description("damageCollisionField is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> damageCollisionField
         {
             get
             {
@@ -451,7 +538,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_damageCollisionField != null)
+                {
+                    _damageCollisionField.CollectionChanged -= OndamageCollisionFieldChanged;
+                }
                 _damageCollisionField = value;
+                if (_damageCollisionField != null)
+                {
+                    _damageCollisionField.CollectionChanged += OndamageCollisionFieldChanged;
+                }
             }
         }
 
@@ -466,8 +561,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _damageCollisionField = new ObservableCollection<damageCollisionFieldDataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _damageCollisionField.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageCollisionFieldChanged);
+                    _damageCollisionField = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _damageCollisionField.CollectionChanged += OndamageCollisionFieldChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("damageCollisionField", exists);
@@ -509,9 +604,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("diffuseColor");
 
             InitProperty("damageCollisionField");
+            SetPropertyIsCollection("damageCollisionField", true, typeof(damageCollisionFieldDataStructure));
         }
 
         public SunData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -701,6 +801,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("isMassInfinite", exists);
 
                 _specularColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "specularColor", out exists);
+                _specularColor.OnElementChanged += specularColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("specularColor", exists);
@@ -711,6 +812,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("specularColor", exists);
                 _diffuseColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "diffuseColor", out exists);
+                _diffuseColor.OnElementChanged += diffuseColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("diffuseColor", exists);
@@ -721,8 +823,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("diffuseColor", exists);
 
-                _damageCollisionField =  new ObservableCollection<damageCollisionFieldDataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _damageCollisionField.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndamageCollisionFieldChanged);
+                _damageCollisionField =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdamageCollisionFieldDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _damageCollisionField.CollectionChanged += OndamageCollisionFieldChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("damageCollisionField", exists);
@@ -732,6 +834,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("damageCollisionField", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "damageCollisionField"));
                 }
                 SetPropertyExists("damageCollisionField", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -849,7 +952,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

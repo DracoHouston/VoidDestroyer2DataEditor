@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -201,8 +202,46 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _translateMax.OnElementChanged -= translateMax_OnElementChanged;
                         _translateMax = value;
+                        _translateMax.OnElementChanged += translateMax_OnElementChanged;
                         SetPropertyEdited("translateMax", true);
+                    }
+                }
+            }
+        }
+
+        private void translateMax_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("translateMax", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= translateMax_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += translateMax_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= translateMax_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += translateMax_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= translateMax_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += translateMax_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -228,6 +267,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public DoorData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -317,6 +360,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bOpenOnProximity", exists);
 
                 _translateMax = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "translateMax", out exists);
+                _translateMax.OnElementChanged += translateMax_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("translateMax", exists);
@@ -327,6 +371,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("translateMax", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -388,7 +433,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

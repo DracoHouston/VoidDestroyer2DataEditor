@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -60,7 +61,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("factionType is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("factionType is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> factionType
         {
             get
@@ -69,7 +70,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_factionType != null)
+                {
+                    _factionType.CollectionChanged -= OnfactionTypeChanged;
+                }
                 _factionType = value;
+                if (_factionType != null)
+                {
+                    _factionType.CollectionChanged += OnfactionTypeChanged;
+                }
             }
         }
 
@@ -85,7 +94,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _factionType = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionType", out exists));
-                    _factionType.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionTypeChanged);
+                    _factionType.CollectionChanged += OnfactionTypeChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("factionType", exists);
@@ -128,12 +137,17 @@ namespace VoidDestroyer2DataEditor
             InitProperty("materialName");
 
             InitProperty("factionType");
+            SetPropertyIsCollection("factionType", true, typeof(string));
 
             InitProperty("bGeneric");
 
         }
 
         public SkyboxData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -161,7 +175,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("materialName", exists);
 
                 _factionType = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "factionType", out exists));
-                _factionType.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnfactionTypeChanged);
+                _factionType.CollectionChanged += OnfactionTypeChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("factionType", exists);
@@ -183,6 +197,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bGeneric", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -224,7 +239,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

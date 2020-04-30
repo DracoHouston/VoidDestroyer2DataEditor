@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -19,12 +20,12 @@ namespace VoidDestroyer2DataEditor
         string _shipActiveUpgradeType;
         string _imageSet;
         string _image;
-        string _particleSystemName;//Particle
-        string _shieldObjectID;//Shield
-        string _activeSoundID;//Sound
-        string _missileID;//Missile
-        string _platformObjectID;//Station
-        string _shipID;//Ship
+        string _particleSystemName;
+        string _shieldObjectID;
+        string _activeSoundID;
+        string _missileID;
+        string _platformObjectID;
+        string _shipID;
 
         ObservableCollection<string> _description;
 
@@ -180,7 +181,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("particleSystemName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("particleSystemName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string particleSystemName
         {
             get
@@ -200,7 +201,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("shieldObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("shieldObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string shieldObjectID
         {
             get
@@ -220,7 +221,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("activeSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("activeSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string activeSoundID
         {
             get
@@ -240,7 +241,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("missileID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("missileID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string missileID
         {
             get
@@ -260,7 +261,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("platformObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("platformObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string platformObjectID
         {
             get
@@ -280,7 +281,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("shipID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("shipID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string shipID
         {
             get
@@ -301,7 +302,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("description is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("description is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> description
         {
             get
@@ -310,7 +311,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_description != null)
+                {
+                    _description.CollectionChanged -= OndescriptionChanged;
+                }
                 _description = value;
+                if (_description != null)
+                {
+                    _description.CollectionChanged += OndescriptionChanged;
+                }
             }
         }
 
@@ -326,7 +335,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
-                    _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                    _description.CollectionChanged += OndescriptionChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("description", exists);
@@ -535,13 +544,32 @@ namespace VoidDestroyer2DataEditor
             InitProperty("imageSet");
             InitProperty("image");
             InitProperty("particleSystemName");
+            List<string> particleSystemNamereftypes = new List<string>();
+            particleSystemNamereftypes.Add("Particle");
+            SetPropertyIsObjectIDRef("particleSystemName", true, particleSystemNamereftypes);
             InitProperty("shieldObjectID");
+            List<string> shieldObjectIDreftypes = new List<string>();
+            shieldObjectIDreftypes.Add("Shield");
+            SetPropertyIsObjectIDRef("shieldObjectID", true, shieldObjectIDreftypes);
             InitProperty("activeSoundID");
+            List<string> activeSoundIDreftypes = new List<string>();
+            activeSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("activeSoundID", true, activeSoundIDreftypes);
             InitProperty("missileID");
+            List<string> missileIDreftypes = new List<string>();
+            missileIDreftypes.Add("Missile");
+            SetPropertyIsObjectIDRef("missileID", true, missileIDreftypes);
             InitProperty("platformObjectID");
+            List<string> platformObjectIDreftypes = new List<string>();
+            platformObjectIDreftypes.Add("Station");
+            SetPropertyIsObjectIDRef("platformObjectID", true, platformObjectIDreftypes);
             InitProperty("shipID");
+            List<string> shipIDreftypes = new List<string>();
+            shipIDreftypes.Add("Ship");
+            SetPropertyIsObjectIDRef("shipID", true, shipIDreftypes);
 
             InitProperty("description");
+            SetPropertyIsCollection("description", true, typeof(string));
 
             InitProperty("cost");
             InitProperty("rechargeTime");
@@ -558,6 +586,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public ActiveUpgradeData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -695,7 +727,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("shipID", exists);
 
                 _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
-                _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                _description.CollectionChanged += OndescriptionChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("description", exists);
@@ -799,6 +831,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bAlwaysAvailableUpgrade", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -924,7 +957,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

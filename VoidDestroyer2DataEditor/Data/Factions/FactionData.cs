@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -345,7 +346,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> descriptionText
         {
             get
@@ -354,7 +355,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged -= OndescriptionTextChanged;
+                }
                 _descriptionText = value;
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
+                }
             }
         }
 
@@ -370,7 +379,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                    _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("descriptionText", exists);
@@ -384,7 +393,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("spawnShipFactionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("spawnShipFactionID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> spawnShipFactionID
         {
             get
@@ -393,7 +402,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_spawnShipFactionID != null)
+                {
+                    _spawnShipFactionID.CollectionChanged -= OnspawnShipFactionIDChanged;
+                }
                 _spawnShipFactionID = value;
+                if (_spawnShipFactionID != null)
+                {
+                    _spawnShipFactionID.CollectionChanged += OnspawnShipFactionIDChanged;
+                }
             }
         }
 
@@ -409,7 +426,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _spawnShipFactionID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "spawnShipFactionID", out exists));
-                    _spawnShipFactionID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnspawnShipFactionIDChanged);
+                    _spawnShipFactionID.CollectionChanged += OnspawnShipFactionIDChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("spawnShipFactionID", exists);
@@ -558,8 +575,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _wireframeColor.OnElementChanged -= wireframeColor_OnElementChanged;
                         _wireframeColor = value;
+                        _wireframeColor.OnElementChanged += wireframeColor_OnElementChanged;
                         SetPropertyEdited("wireframeColor", true);
+                    }
+                }
+            }
+        }
+
+        private void wireframeColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("wireframeColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= wireframeColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += wireframeColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= wireframeColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += wireframeColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= wireframeColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += wireframeColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= wireframeColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += wireframeColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -578,8 +638,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _highlightOutlineColor.OnElementChanged -= highlightOutlineColor_OnElementChanged;
                         _highlightOutlineColor = value;
+                        _highlightOutlineColor.OnElementChanged += highlightOutlineColor_OnElementChanged;
                         SetPropertyEdited("highlightOutlineColor", true);
+                    }
+                }
+            }
+        }
+
+        private void highlightOutlineColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("highlightOutlineColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= highlightOutlineColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += highlightOutlineColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= highlightOutlineColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += highlightOutlineColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= highlightOutlineColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += highlightOutlineColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= highlightOutlineColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += highlightOutlineColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -598,8 +701,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _textColor.OnElementChanged -= textColor_OnElementChanged;
                         _textColor = value;
+                        _textColor.OnElementChanged += textColor_OnElementChanged;
                         SetPropertyEdited("textColor", true);
+                    }
+                }
+            }
+        }
+
+        private void textColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("textColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= textColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += textColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= textColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += textColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= textColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += textColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= textColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += textColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -618,8 +764,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _backgroundColor.OnElementChanged -= backgroundColor_OnElementChanged;
                         _backgroundColor = value;
+                        _backgroundColor.OnElementChanged += backgroundColor_OnElementChanged;
                         SetPropertyEdited("backgroundColor", true);
+                    }
+                }
+            }
+        }
+
+        private void backgroundColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("backgroundColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= backgroundColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += backgroundColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= backgroundColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += backgroundColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= backgroundColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += backgroundColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= backgroundColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += backgroundColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -638,8 +827,51 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _cloudsColor.OnElementChanged -= cloudsColor_OnElementChanged;
                         _cloudsColor = value;
+                        _cloudsColor.OnElementChanged += cloudsColor_OnElementChanged;
                         SetPropertyEdited("cloudsColor", true);
+                    }
+                }
+            }
+        }
+
+        private void cloudsColor_OnElementChanged(object sender, ColorFElementChangedEventArgs e)
+        {
+            if (sender is ColorF)
+            {
+                ColorF colorsender = (ColorF)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("cloudsColor", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case ColorFElements.r:
+                                colorsender.OnElementChanged -= cloudsColor_OnElementChanged;
+                                colorsender.r = e.OldValue;
+                                colorsender.OnElementChanged += cloudsColor_OnElementChanged;
+                                break;
+                            case ColorFElements.g:
+                                colorsender.OnElementChanged -= cloudsColor_OnElementChanged;
+                                colorsender.g = e.OldValue;
+                                colorsender.OnElementChanged += cloudsColor_OnElementChanged;
+                                break;
+                            case ColorFElements.b:
+                                colorsender.OnElementChanged -= cloudsColor_OnElementChanged;
+                                colorsender.b = e.OldValue;
+                                colorsender.OnElementChanged += cloudsColor_OnElementChanged;
+                                break;
+                            case ColorFElements.a:
+                                colorsender.OnElementChanged -= cloudsColor_OnElementChanged;
+                                colorsender.a = e.OldValue;
+                                colorsender.OnElementChanged += cloudsColor_OnElementChanged;
+                                break;
+                        }
                     }
                 }
             }
@@ -666,7 +898,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("portraitFactionID");
 
             InitProperty("descriptionText");
+            SetPropertyIsCollection("descriptionText", true, typeof(string));
             InitProperty("spawnShipFactionID");
+            SetPropertyIsCollection("spawnShipFactionID", true, typeof(string));
 
             InitProperty("bFactionShipRequiredForMission");
             InitProperty("bNoShow");
@@ -684,6 +918,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public FactionData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -841,7 +1079,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("portraitFactionID", exists);
 
                 _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                _descriptionText.CollectionChanged += OndescriptionTextChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("descriptionText", exists);
@@ -852,7 +1090,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("descriptionText", exists);
                 _spawnShipFactionID = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "spawnShipFactionID", out exists));
-                _spawnShipFactionID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnspawnShipFactionIDChanged);
+                _spawnShipFactionID.CollectionChanged += OnspawnShipFactionIDChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("spawnShipFactionID", exists);
@@ -925,6 +1163,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bPirate", exists);
 
                 _wireframeColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "wireframeColor", out exists);
+                _wireframeColor.OnElementChanged += wireframeColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("wireframeColor", exists);
@@ -935,6 +1174,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("wireframeColor", exists);
                 _highlightOutlineColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "highlightOutlineColor", out exists);
+                _highlightOutlineColor.OnElementChanged += highlightOutlineColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("highlightOutlineColor", exists);
@@ -945,6 +1185,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("highlightOutlineColor", exists);
                 _textColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "textColor", out exists);
+                _textColor.OnElementChanged += textColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("textColor", exists);
@@ -955,6 +1196,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("textColor", exists);
                 _backgroundColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "backgroundColor", out exists);
+                _backgroundColor.OnElementChanged += backgroundColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("backgroundColor", exists);
@@ -965,6 +1207,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("backgroundColor", exists);
                 _cloudsColor = ParseHelpers.GetColorFromVD2Data(DataXMLDoc, "cloudsColor", out exists);
+                _cloudsColor.OnElementChanged += cloudsColor_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("cloudsColor", exists);
@@ -975,6 +1218,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("cloudsColor", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -1120,7 +1364,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

@@ -38,7 +38,6 @@
             this.TreeIcons32 = new System.Windows.Forms.ImageList(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.FileNewtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -54,7 +53,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.CopyObjectIDItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileInNewTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -170,7 +168,6 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileNewtoolStripMenuItem,
             this.saveToolStripMenuItem1,
             this.saveAllToolStripMenuItem,
             this.toolStripSeparator4,
@@ -179,16 +176,6 @@
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(37, 20);
             this.toolStripMenuItem2.Text = "File";
-            // 
-            // FileNewtoolStripMenuItem
-            // 
-            this.FileNewtoolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.FileNewtoolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.FileNewtoolStripMenuItem.Name = "FileNewtoolStripMenuItem";
-            this.FileNewtoolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.FileNewtoolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.FileNewtoolStripMenuItem.Text = "New...";
-            this.FileNewtoolStripMenuItem.ToolTipText = "New...";
             // 
             // saveToolStripMenuItem1
             // 
@@ -243,7 +230,7 @@
             this.EditorSettingsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.EditorSettingsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.EditorSettingsToolStripMenuItem.Name = "EditorSettingsToolStripMenuItem";
-            this.EditorSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.EditorSettingsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.EditorSettingsToolStripMenuItem.Text = "Editor Settings";
             this.EditorSettingsToolStripMenuItem.Click += new System.EventHandler(this.EditorSettingsToolStripMenuItem_Click);
             // 
@@ -320,7 +307,6 @@
             // TreeContextMenu
             // 
             this.TreeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.openFileInNewTabToolStripMenuItem,
             this.SaveToolStripMenuItem,
@@ -331,16 +317,8 @@
             this.CopyObjectIDItem,
             this.openFileLocationToolStripMenuItem});
             this.TreeContextMenu.Name = "TreeContextMenu";
-            this.TreeContextMenu.Size = new System.Drawing.Size(262, 208);
+            this.TreeContextMenu.Size = new System.Drawing.Size(262, 186);
             this.TreeContextMenu.Opened += new System.EventHandler(this.TreeContextMenu_Opened);
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
-            this.newToolStripMenuItem.Text = "New...";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
@@ -537,6 +515,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainEditorForm";
             this.Text = "Void Destroyer 2 Data Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainEditorForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -589,14 +568,12 @@
         private VD2SourceDropdown vD2SourceDropdown1;
         private VD2SourceDropdown vD2SourceDropdown2;
         private System.Windows.Forms.ToolStripMenuItem openFileInNewTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createDuplicateToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton SaveToolstripButton;
         private System.Windows.Forms.ToolStripButton SaveAllToolstripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem FileNewtoolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }

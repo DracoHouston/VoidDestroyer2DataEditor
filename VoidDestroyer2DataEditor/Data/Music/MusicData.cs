@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -19,6 +20,7 @@ namespace VoidDestroyer2DataEditor
 
         float _defaultVolume;
 
+        bool _bAmbient;
         bool _bLooping;
 
         [Description("effectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
@@ -123,6 +125,26 @@ namespace VoidDestroyer2DataEditor
         }
 
 
+        [Description("bAmbient is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bAmbient
+        {
+            get
+            {
+                return _bAmbient;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bAmbient = value;
+                        SetPropertyEdited("bAmbient", true);
+                    }
+                }
+            }
+        }
+
         [Description("bLooping is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bLooping
         {
@@ -154,11 +176,16 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("defaultVolume");
 
+            InitProperty("bAmbient");
             InitProperty("bLooping");
 
         }
 
         public MusicData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -216,6 +243,16 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("defaultVolume", exists);
 
+                _bAmbient = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAmbient", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bAmbient", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bAmbient", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bAmbient"));
+                }
+                SetPropertyExists("bAmbient", exists);
                 _bLooping = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLooping", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -227,6 +264,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bLooping", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -266,13 +304,16 @@ namespace VoidDestroyer2DataEditor
             xmltextlines.Add("");
             xmltextlines.Add("<note_to_self attr1=\"Booleans...\"/>");
             xmltextlines.Add("");
+            if (PropertyExists("bAmbient"))
+            {
+                xmltextlines.Add("<bAmbient attr1=\"" + ((_bAmbient) ? "1" : "0") + "\"/>");
+            }
             if (PropertyExists("bLooping"))
             {
                 xmltextlines.Add("<bLooping attr1=\"" + ((_bLooping) ? "1" : "0") + "\"/>");
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

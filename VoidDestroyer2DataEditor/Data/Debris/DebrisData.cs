@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -30,7 +31,7 @@ namespace VoidDestroyer2DataEditor
         bool _isMassInfinite;
         bool _bCanAddViaBattleEditorSlider;
 
-        ObservableCollection<turretDataStructure> _turret;
+        ObservableCollection<VD2DataStructure> _turret;
 
         [Description("objectType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string objectType
@@ -335,8 +336,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<turretDataStructure> turret
+        [Browsable(false), Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> turret
         {
             get
             {
@@ -344,7 +345,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged -= OnturretChanged;
+                }
                 _turret = value;
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged += OnturretChanged;
+                }
             }
         }
 
@@ -359,8 +368,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _turret = new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                    _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turret.CollectionChanged += OnturretChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("turret", exists);
@@ -396,9 +405,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bCanAddViaBattleEditorSlider");
 
             InitProperty("turret");
+            SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
         }
 
         public DebrisData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -557,8 +571,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bCanAddViaBattleEditorSlider", exists);
 
-                _turret =  new ObservableCollection<turretDataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turret.CollectionChanged += OnturretChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("turret", exists);
@@ -568,6 +582,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turret"));
                 }
                 SetPropertyExists("turret", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -661,7 +676,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -242,7 +243,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("descriptionText is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> descriptionText
         {
             get
@@ -251,7 +252,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged -= OndescriptionTextChanged;
+                }
                 _descriptionText = value;
+                if (_descriptionText != null)
+                {
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
+                }
             }
         }
 
@@ -267,7 +276,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                    _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                    _descriptionText.CollectionChanged += OndescriptionTextChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("descriptionText", exists);
@@ -485,7 +494,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("cargoBay is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("cargoBay is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public cargoBayDataStructure cargoBay
         {
             get
@@ -498,7 +507,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("gateCollision is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("gateCollision is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public gateCollisionDataStructure gateCollision
         {
             get
@@ -527,6 +536,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("gateOutParticleSystem");
 
             InitProperty("descriptionText");
+            SetPropertyIsCollection("descriptionText", true, typeof(string));
 
             InitProperty("rockSubPosition");
 
@@ -547,6 +557,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public OtherObjectData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -654,7 +668,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("gateOutParticleSystem", exists);
 
                 _descriptionText = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "descriptionText", out exists));
-                _descriptionText.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionTextChanged);
+                _descriptionText.CollectionChanged += OndescriptionTextChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("descriptionText", exists);
@@ -789,6 +803,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("gateCollision", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -920,7 +935,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

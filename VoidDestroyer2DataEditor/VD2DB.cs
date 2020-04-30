@@ -131,5 +131,17 @@ namespace VoidDestroyer2DataEditor
             }
             return false;
         }
+
+        public void RemoveFile(T inFileToRemove)
+        {
+            foreach (KeyValuePair<string, T> file in Data)
+            {
+                if (file.Value == inFileToRemove)
+                {
+                    Data.Remove(file.Key);
+                    return;
+                }
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -179,6 +180,10 @@ namespace VoidDestroyer2DataEditor
 
         public ShieldData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
         {
+        }
+
+        public override void LoadDataFromXML()
+        {
             bool exists = false;
             if (DataXMLDoc != null)
             {
@@ -255,6 +260,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bInvisible", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -300,7 +306,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -37,7 +38,7 @@ namespace VoidDestroyer2DataEditor
         weaponDirectionDataStructure _weaponDirection;
         targetPriorityListDataStructure _targetPriorityList;
 
-        ObservableCollection<turretBarrelDataStructure> _turretBarrel;
+        ObservableCollection<VD2DataStructure> _turretBarrel;
 
         [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
@@ -119,7 +120,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string hardpointID
         {
             get
@@ -159,7 +160,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("meshName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string meshName
         {
             get
@@ -179,7 +180,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("turnSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("turnSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string turnSoundID
         {
             get
@@ -376,15 +377,53 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
+                        _turretViewPos.OnElementChanged -= turretViewPos_OnElementChanged;
                         _turretViewPos = value;
+                        _turretViewPos.OnElementChanged += turretViewPos_OnElementChanged;
                         SetPropertyEdited("turretViewPos", true);
                     }
                 }
             }
         }
 
+        private void turretViewPos_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        SetPropertyEdited("turretViewPos", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= turretViewPos_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += turretViewPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= turretViewPos_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += turretViewPos_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= turretViewPos_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += turretViewPos_OnElementChanged;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        [Description("weaponDirection is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+
+        [Browsable(false), Description("weaponDirection is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public weaponDirectionDataStructure weaponDirection
         {
             get
@@ -397,7 +436,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("targetPriorityList is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("targetPriorityList is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public targetPriorityListDataStructure targetPriorityList
         {
             get
@@ -411,8 +450,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("turretBarrel is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<turretBarrelDataStructure> turretBarrel
+        [Browsable(false), Description("turretBarrel is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> turretBarrel
         {
             get
             {
@@ -420,7 +459,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_turretBarrel != null)
+                {
+                    _turretBarrel.CollectionChanged -= OnturretBarrelChanged;
+                }
                 _turretBarrel = value;
+                if (_turretBarrel != null)
+                {
+                    _turretBarrel.CollectionChanged += OnturretBarrelChanged;
+                }
             }
         }
 
@@ -435,8 +482,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _turretBarrel = new ObservableCollection<turretBarrelDataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _turretBarrel.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretBarrelChanged);
+                    _turretBarrel = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _turretBarrel.CollectionChanged += OnturretBarrelChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("turretBarrel", exists);
@@ -458,9 +505,19 @@ namespace VoidDestroyer2DataEditor
             InitProperty("name");
             InitProperty("turretWeapon");
             InitProperty("hardpointID");
+            List<string> hardpointIDreftypes = new List<string>();
+            hardpointIDreftypes.Add("Weapon");
+            hardpointIDreftypes.Add("Launcher");
+            SetPropertyIsObjectIDRef("hardpointID", true, hardpointIDreftypes);
             InitProperty("linkedMovingElement");
             InitProperty("meshName");
+            List<string> meshNamereftypes = new List<string>();
+            meshNamereftypes.Add("Mesh");
+            SetPropertyIsObjectIDRef("meshName", true, meshNamereftypes);
             InitProperty("turnSoundID");
+            List<string> turnSoundIDreftypes = new List<string>();
+            turnSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("turnSoundID", true, turnSoundIDreftypes);
 
             InitProperty("mineQuota");
 
@@ -479,9 +536,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("targetPriorityList");
 
             InitProperty("turretBarrel");
+            SetPropertyIsCollection("turretBarrel", true, typeof(turretBarrelDataStructure));
         }
 
         public TurretData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -652,6 +714,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bOssilateTargetAimNodeOffset", exists);
 
                 _turretViewPos = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "turretViewPos", out exists);
+                _turretViewPos.OnElementChanged += turretViewPos_OnElementChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("turretViewPos", exists);
@@ -683,8 +746,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("targetPriorityList", exists);
 
-                _turretBarrel =  new ObservableCollection<turretBarrelDataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _turretBarrel.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretBarrelChanged);
+                _turretBarrel =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretBarrelDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _turretBarrel.CollectionChanged += OnturretBarrelChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("turretBarrel", exists);
@@ -694,6 +757,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turretBarrel", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turretBarrel"));
                 }
                 SetPropertyExists("turretBarrel", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -817,7 +881,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

@@ -19,6 +19,8 @@ namespace VoidDestroyer2DataEditor
 
         public SoundPlayer WavPlayer;
 
+        public OpenFileDialog VD2PathFinderDialog;
+
         public VD2DB<ShipData> Ships;
         public VD2DB<PrimaryUpgradeData> PrimaryUpgrades;
         public VD2DB<ActiveUpgradeData> ActiveUpgrades;
@@ -49,6 +51,8 @@ namespace VoidDestroyer2DataEditor
         public VD2DB<SoundData> Sounds;
         public VD2DB<StationData> Stations;
         public VD2DB<SunData> Suns;
+        public MeshDB Models;
+        public ImageSetDB ImageSets;
 
         public static EditorUI UI
         {
@@ -65,6 +69,12 @@ namespace VoidDestroyer2DataEditor
         private EditorUI()
         {
             WavPlayer = new SoundPlayer();
+            VD2PathFinderDialog = new OpenFileDialog();
+            VD2PathFinderDialog.DefaultExt = "exe";
+            VD2PathFinderDialog.FileName = "Void Destroyer 2.exe";
+            VD2PathFinderDialog.Filter = "Void Destroyer 2.exe|Void Destroyer 2.exe";
+            VD2PathFinderDialog.InitialDirectory = "MyComputer";
+            VD2PathFinderDialog.Title = "Please find your \'Void Destroyer 2.exe\'";
         }
 
         public static bool ExploreFile(string filePath)
@@ -100,7 +110,7 @@ namespace VoidDestroyer2DataEditor
         {
             EditorForm = inEditorForm;
             CurrentEditorMode = EditorModes.BaseReadOnly;
-            ReloadData();
+            //ReloadData();
         }
 
         public void ReloadData()
@@ -179,15 +189,19 @@ namespace VoidDestroyer2DataEditor
             Stations.LoadData();
             Suns = new VD2DB<SunData>("Suns");
             Suns.LoadData();
+            Models = new MeshDB();
+            Models.LoadData();
+            ImageSets = new ImageSetDB();
+            ImageSets.LoadData();
         }
 
         public DialogResult GetVD2PathUsingDialog(out string outPath)
         {
-            DialogResult result = EditorForm.VD2PathFinderDialog.ShowDialog();
+            DialogResult result = VD2PathFinderDialog.ShowDialog();
             string pathonly = "";
             if (result == DialogResult.OK)
             {
-                pathonly = EditorForm.VD2PathFinderDialog.FileName.Substring(0, EditorForm.VD2PathFinderDialog.FileName.Length - "Void Destroyer 2.exe".Length);                
+                pathonly = VD2PathFinderDialog.FileName.Substring(0, VD2PathFinderDialog.FileName.Length - "Void Destroyer 2.exe".Length);                
             }
             outPath = pathonly;
             return result;
@@ -348,6 +362,12 @@ namespace VoidDestroyer2DataEditor
                         result.Add(datafile.GetObjectID());
                     }
                     break;
+                case "Shield":
+                    foreach (VD2Data datafile in Shields.Data.Values)
+                    {
+                        result.Add(datafile.GetObjectID());
+                    }
+                    break;
                 case "Skybox":
                     foreach (VD2Data datafile in Skyboxes.Data.Values)
                     {
@@ -370,6 +390,18 @@ namespace VoidDestroyer2DataEditor
                     foreach (VD2Data datafile in Suns.Data.Values)
                     {
                         result.Add(datafile.GetObjectID());
+                    }
+                    break;
+                case "Mesh":
+                    foreach (MeshDocument datafile in Models.Data.Values)
+                    {
+                        result.Add(datafile.MeshName);
+                    }
+                    break;
+                case "ImageSet":
+                    foreach (ImageSetDocument datafile in ImageSets.Data.Values)
+                    {
+                        result.Add(datafile.ImageSetName);
                     }
                     break;
                 default:

@@ -10,7 +10,10 @@ namespace VoidDestroyer2DataEditor
     class MeshDocument : IVD2DocumentInterface
     {
         public string MeshName;
+        public string FilePath;
         VD2FileSource _Source;
+
+        public event EventHandler OnThisFileDeleted;
 
         public VD2FileSource Source
         {
@@ -29,6 +32,12 @@ namespace VoidDestroyer2DataEditor
             MeshName = "";
             _Source = null;
         }
+
+        public void NotifyFileDeleted()
+        {
+            OnThisFileDeleted?.Invoke(this, new EventArgs());
+        }
+
         public Control GetDocumentControl()
         {
             OgreControl mv = new OgreControl();

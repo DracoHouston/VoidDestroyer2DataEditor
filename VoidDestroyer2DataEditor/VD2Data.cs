@@ -73,6 +73,7 @@ namespace VoidDestroyer2DataEditor
         public event EventHandler<VD2DataFileOverridenArgs> OnThisFileOverriden;
         public event EventHandler OnThisFileSaved;
         public event EventHandler OnThisFileLoaded;//called after calling LoadDataFromXML, during constructor and when a file is closed without saving.
+        public event EventHandler OnThisFileDeleted;
 
         [Description("The path to the ship data file. Used internally by this editor."), Category("Misc")]
         public string FilePath
@@ -178,6 +179,11 @@ namespace VoidDestroyer2DataEditor
             args.OldFile = this;
             args.NewFile = inNewFile;
             OnThisFileOverriden?.Invoke(this, args);
+        }
+
+        public void NotifyFileDeleted()
+        {            
+            OnThisFileDeleted?.Invoke(this, new EventArgs());
         }
 
         public virtual Control GetDocumentControl()
@@ -315,12 +321,18 @@ namespace VoidDestroyer2DataEditor
                         dsEditor.DataStructureEditor.Item = (VD2DataStructure)val;
                         dsEditor.Dock = DockStyle.Fill;
                         result.CollectionsTabs.TabPages[result.CollectionsTabs.TabPages.Count - 1].Controls.Add(dsEditor);
+                        hascollections = true;
                     }
                 }
             }
             if (!hascollections)
             {
                 result.SidebarSplitter.Panel2Collapsed = true;
+            }
+            else
+            {
+                result.SidebarSplitter.Panel2Collapsed = false;
+                result.MainSplitter.Panel2Collapsed = false;
             }
             return result;
         }
@@ -355,6 +367,40 @@ namespace VoidDestroyer2DataEditor
         public virtual string GetDocumentIconKey()
         {
             return "genericfileicon";
+        }
+    }
+
+    public class ObjectIDRefTypeConverter : TypeConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {            
+            return false;
+        }
+
+        public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            List<string> stdvals = new List<string>();
+            if (context.Instance != null)
+            {
+                if (context.Instance is VD2PropertyStore)
+                {
+                    VD2PropertyStore datainstance = (VD2PropertyStore)context.Instance;
+                    List<string> reftypes;
+                    if (datainstance.PropertyIsObjectIDRef(context.PropertyDescriptor.Name, out reftypes))
+                    {
+                        foreach (string reftype in reftypes)
+                        {
+                            stdvals.AddRange(EditorUI.UI.GetObjectIDListForType(reftype));
+                        }
+                    }                    
+                }                
+            }
+            return new StandardValuesCollection(stdvals);
         }
     }
 }

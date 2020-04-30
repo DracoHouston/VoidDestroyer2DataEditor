@@ -44,6 +44,8 @@ namespace VoidDestroyer2DataEditor
             if (DataFile != null)
             {
                 DataFile.VD2PropertyChanged += DataFile_VD2PropertyChanged;
+                DataFile.OnThisFileLoaded += DataFile_OnThisFileLoaded;
+                DataFile.OnThisFileOverriden += DataFile_OnThisFileOverriden;
                 if (DataFile is ShipData)
                 {
                     ShipData ship = (ShipData)DataFile;
@@ -85,16 +87,36 @@ namespace VoidDestroyer2DataEditor
                             turretent.SelectedIndex = i;
                             turretent.ShipNode = ShipNode;
                             turretent.TurretDec = turret;
+                            List<TurretData> turretdefhits = new List<TurretData>();
                             foreach (TurretData turretdata in EditorUI.UI.Turrets.Data.Values)
                             {
                                 if (turretdata.GetObjectID() == turret.turretID)
                                 {
                                         
-                                    turretent.TurretDef = turretdata;
-                                        
-                                    break;
+                                    //turretent.TurretDef = turretdata;
+
+                                    turretdefhits.Add(turretdata);
                                 }
                             }
+                            TurretData bestdef = null;
+                            foreach (TurretData turretdef in turretdefhits)
+                            {
+                                if (bestdef == null)
+                                {
+                                    bestdef = turretdef;
+                                }
+                                else if ((turretdef.Source != null) && (bestdef.Source != null))
+                                {
+                                    if (turretdef.Source.ShortName == "Mod")
+                                    {
+                                        if (bestdef.Source.ShortName == "Base")
+                                        {
+                                            bestdef = turretdef;
+                                        }
+                                    }
+                                }
+                            }
+                            turretent.TurretDef = bestdef;
                             turretent.Spawn();
                             OgreTurrets.Add(turretent);
                         }
@@ -110,19 +132,36 @@ namespace VoidDestroyer2DataEditor
                             attachmentent.SelectedIndex = i;
                             attachmentent.ShipNode = ShipNode;
                             attachmentent.AttachmentDec = attachment;
+                            List<OtherObjectData> attachmentdefhits = new List<OtherObjectData>();
                             foreach (OtherObjectData attachmentdata in EditorUI.UI.OtherObjects.Data.Values)
                             {
                                 if (attachment.attachmentID.Count > 0)
                                 {
                                     if (attachmentdata.GetObjectID() == attachment.attachmentID[0])
                                     {
-
-                                        attachmentent.AttachmentDef = attachmentdata;
-
-                                        break;
+                                        attachmentdefhits.Add(attachmentdata);
                                     }
                                 }
                             }
+                            OtherObjectData bestattachmentdef = null;
+                            foreach (OtherObjectData attachmentdef in attachmentdefhits)
+                            {
+                                if (bestattachmentdef == null)
+                                {
+                                    bestattachmentdef = attachmentdef;
+                                }
+                                else if ((attachmentdef.Source != null) && (bestattachmentdef.Source != null))
+                                {
+                                    if (attachmentdef.Source.ShortName == "Mod")
+                                    {
+                                        if (bestattachmentdef.Source.ShortName == "Base")
+                                        {
+                                            bestattachmentdef = attachmentdef;
+                                        }
+                                    }
+                                }
+                            }
+                            attachmentent.AttachmentDef = bestattachmentdef;
                             attachmentent.Spawn();
                             OgreAttachments.Add(attachmentent);
                         }
@@ -131,6 +170,74 @@ namespace VoidDestroyer2DataEditor
                     OgreRenderer.Renderer.FrameListener.OnFrameEnded += FrameListener_OnFrameEnded;
                 }                    
             }
+        }
+
+        private void DataFile_OnThisFileOverriden(object sender, VD2DataFileOverridenArgs e)
+        {
+            if (e.NewFile is ShipData)
+            {
+                ShipData newdef = (ShipData)e.NewFile;
+                if (e.OldFile is ShipData)
+                {
+                    ShipData testolddef = (ShipData)e.OldFile;
+                    if (DataFile != null)
+                    {
+                        if (testolddef == DataFile)
+                        {
+                            DataFile = newdef;
+                            UpdateShip();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void UpdateShip()
+        {
+            if (DataFile is ShipData)
+            {
+                ShipData ship = (ShipData)DataFile;
+                string meshname = (string)ship.meshName;
+                meshname = GetTrueFileName(meshname);
+                Entity oldshipentity = null;
+                if (ShipEntity != null)
+                {
+                    oldshipentity = ShipEntity;
+                }
+                ShipEntity = null;
+                if (meshname != "")
+                {
+                    ShipEntity = OgreScene.createEntity(meshname);
+                    distance = ShipEntity.getBoundingRadius() * 1.25f;
+                    zoomdistance = distance * 0.1f;
+                    OgreCameraMan.setYawPitchDist(new Radian(yaw), new Radian(pitch), distance);
+
+                    ShipNode.attachObject(ShipEntity);
+                    foreach (VD2DataStructure ds in ship.rotatingElement)
+                    {
+                        if (ds is rotatingElementDataStructure)
+                        {
+                            rotatingElementDataStructure rotating = (rotatingElementDataStructure)ds;
+                            var skele = ShipEntity.getSkeleton();
+                            if (skele != null)
+                            {
+                                var bone = skele.getBone(rotating.boneName);
+                                bone.setManuallyControlled(true);
+                            }
+                        }
+                    }
+
+                }
+                if (oldshipentity != null)
+                {
+                    OgreScene.destroyEntity(oldshipentity);
+                }
+            }
+        }
+
+        private void DataFile_OnThisFileLoaded(object sender, EventArgs e)
+        {
+            UpdateShip();
         }
 
         private void DataFile_VD2PropertyChanged(object sender, VD2PropertyChangedEventArgs e)
@@ -189,60 +296,80 @@ namespace VoidDestroyer2DataEditor
 
         private void Attachment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-          /*  if (DataFile != null)
+            if (DataFile != null)
             {
 
                 if (DataFile is ShipData)
                 {
                     ShipData ship = (ShipData)DataFile;
-                    if (OgreTurrets.Count > ship.turret.Count)
+                    if (OgreAttachments.Count > ship.attachment.Count)
                     {
-                        for (int i = OgreTurrets.Count - 1; i >= ship.turret.Count; i--)
+                        for (int i = OgreAttachments.Count - 1; i >= ship.attachment.Count; i--)
                         {
-                            OgreTurrets[i].DestroyTurret();
-                            OgreTurrets.RemoveAt(i);
+                            OgreAttachments[i].DestroyAttachment();
+                            OgreAttachments.RemoveAt(i);
                         }
                     }
-                    else if (OgreTurrets.Count < ship.turret.Count)
+                    else if (OgreAttachments.Count < ship.attachment.Count)
                     {
-                        for (int i = OgreTurrets.Count; i < ship.turret.Count; i++)
+                        for (int i = OgreAttachments.Count; i < ship.attachment.Count; i++)
                         {
-                            if (ship.turret[i] is turretDataStructure)
+                            if (ship.attachment[i] is attachmentDataStructure)
                             {
-                                turretDataStructure turret = (turretDataStructure)ship.turret[i];
-                                OgreTurret turretent = new OgreTurret();
-                                turretent.ParentOgreControl = this;
-                                turretent.SelectedIndex = i;
-                                turretent.ShipNode = ShipNode;
-                                turretent.TurretDec = turret;
-                                foreach (TurretData turretdata in EditorUI.UI.Turrets.Data.Values)
+                                attachmentDataStructure attachment = (attachmentDataStructure)ship.attachment[i];
+                                OgreShipAttachment attachmentent = new OgreShipAttachment();
+                                attachmentent.ParentOgreControl = this;
+                                attachmentent.SelectedIndex = i;
+                                attachmentent.ShipNode = ShipNode;
+                                attachmentent.AttachmentDec = attachment;
+                                List<OtherObjectData> attachmentdefhits = new List<OtherObjectData>();
+                                foreach (OtherObjectData attachmentdata in EditorUI.UI.OtherObjects.Data.Values)
                                 {
-                                    if (turretdata.GetObjectID() == turret.turretID)
+                                    if (attachment.attachmentID.Count > 0)
                                     {
-
-                                        turretent.TurretDef = turretdata;
-
-                                        break;
+                                        if (attachmentdata.GetObjectID() == attachment.attachmentID[0])
+                                        {
+                                            attachmentdefhits.Add(attachmentdata);
+                                        }
                                     }
                                 }
-                                turretent.Spawn();
-                                OgreTurrets.Add(turretent);
+                                OtherObjectData bestattachmentdef = null;
+                                foreach (OtherObjectData attachmentdef in attachmentdefhits)
+                                {
+                                    if (bestattachmentdef == null)
+                                    {
+                                        bestattachmentdef = attachmentdef;
+                                    }
+                                    else if ((attachmentdef.Source != null) && (bestattachmentdef.Source != null))
+                                    {
+                                        if (attachmentdef.Source.ShortName == "Mod")
+                                        {
+                                            if (bestattachmentdef.Source.ShortName == "Base")
+                                            {
+                                                bestattachmentdef = attachmentdef;
+                                            }
+                                        }
+                                    }
+                                }
+                                attachmentent.AttachmentDef = bestattachmentdef;
+                                attachmentent.Spawn();
+                                OgreAttachments.Add(attachmentent);
                             }
                         }
                     }
-                    for (int i = 0; i < OgreTurrets.Count; i++)
+                    for (int i = 0; i < OgreAttachments.Count; i++)
                     {
-                        if (i < ship.turret.Count)
+                        if (i < ship.attachment.Count)
                         {
-                            if (ship.turret[i] is turretDataStructure)
+                            if (ship.attachment[i] is attachmentDataStructure)
                             {
-                                OgreTurrets[i].TurretDec = (turretDataStructure)ship.turret[i];
+                                OgreAttachments[i].AttachmentDec = (attachmentDataStructure)ship.attachment[i];
                             }
-                            OgreTurrets[i].Update();
+                            OgreAttachments[i].Update();
                         }
                     }
                 }
-            }*/
+            }
         }
 
         private void FrameListener_OnFrameEnded(object sender, OgreFrameListenerEventArgs e)
@@ -313,16 +440,36 @@ namespace VoidDestroyer2DataEditor
                                 turretent.SelectedIndex = i;
                                 turretent.ShipNode = ShipNode;
                                 turretent.TurretDec = turret;
+                                List<TurretData> turretdefhits = new List<TurretData>();
                                 foreach (TurretData turretdata in EditorUI.UI.Turrets.Data.Values)
                                 {
                                     if (turretdata.GetObjectID() == turret.turretID)
                                     {
-                                        
-                                        turretent.TurretDef = turretdata;
-                                        
-                                        break;
+
+                                        //turretent.TurretDef = turretdata;
+
+                                        turretdefhits.Add(turretdata);
                                     }
                                 }
+                                TurretData bestdef = null;
+                                foreach (TurretData turretdef in turretdefhits)
+                                {
+                                    if (bestdef == null)
+                                    {
+                                        bestdef = turretdef;
+                                    }
+                                    else if ((turretdef.Source != null) && (bestdef.Source != null))
+                                    {
+                                        if (turretdef.Source.ShortName == "Mod")
+                                        {
+                                            if (bestdef.Source.ShortName == "Base")
+                                            {
+                                                bestdef = turretdef;
+                                            }
+                                        }
+                                    }
+                                }
+                                turretent.TurretDef = bestdef;
                                 turretent.Spawn();
                                 OgreTurrets.Add(turretent);
                             }
@@ -380,11 +527,87 @@ namespace VoidDestroyer2DataEditor
                 if (_AttachmentDef != null)
                 {
                     _AttachmentDef.VD2PropertyChanged -= AttachmentDef_VD2PropertyChanged;
+                    _AttachmentDef.OnThisFileOverriden -= AttachmentDef_OnThisFileOverriden;
+                    _AttachmentDef.OnThisFileLoaded -= AttachmentDef_OnThisFileLoaded;
+                    _AttachmentDef.OnThisFileDeleted -= AttachmentDef_OnThisFileDeleted;
                 }
                 _AttachmentDef = value;
                 if (_AttachmentDef != null)
                 {
-                    _AttachmentDef.VD2PropertyChanged += AttachmentDef_VD2PropertyChanged; ;
+                    _AttachmentDef.VD2PropertyChanged += AttachmentDef_VD2PropertyChanged;
+                    _AttachmentDef.OnThisFileOverriden += AttachmentDef_OnThisFileOverriden;
+                    _AttachmentDef.OnThisFileLoaded += AttachmentDef_OnThisFileLoaded;
+                    _AttachmentDef.OnThisFileDeleted += AttachmentDef_OnThisFileDeleted;
+                }
+            }
+        }
+
+        private void AttachmentDef_OnThisFileDeleted(object sender, EventArgs e)
+        {
+            if (AttachmentDef.Source != null)
+            {
+                if (AttachmentDef.Source.ShortName != "Base")
+                {
+                    List<OtherObjectData> attachmentdefhits = new List<OtherObjectData>();
+                    foreach (OtherObjectData attachmentdata in EditorUI.UI.OtherObjects.Data.Values)
+                    {
+                        if (AttachmentDec.attachmentID.Count > 0)
+                        {
+                            if (attachmentdata.GetObjectID() == AttachmentDec.attachmentID[0])
+                            {
+                                attachmentdefhits.Add(attachmentdata);
+                            }
+                        }
+                    }
+                    OtherObjectData bestattachmentdef = null;
+                    foreach (OtherObjectData attachmentdef in attachmentdefhits)
+                    {
+                        if (bestattachmentdef == null)
+                        {
+                            bestattachmentdef = attachmentdef;
+                        }
+                        else if ((attachmentdef.Source != null) && (bestattachmentdef.Source != null))
+                        {
+                            if (attachmentdef.Source.ShortName == "Mod")
+                            {
+                                if (bestattachmentdef.Source.ShortName == "Base")
+                                {
+                                    bestattachmentdef = attachmentdef;
+                                }
+                            }
+                        }
+                    }
+                    AttachmentDef = bestattachmentdef;
+                }
+                else
+                {
+                    AttachmentDef = null;
+                }
+            }
+            Update();
+        }
+
+        private void AttachmentDef_OnThisFileLoaded(object sender, EventArgs e)
+        {
+            Update();
+        }
+
+        private void AttachmentDef_OnThisFileOverriden(object sender, VD2DataFileOverridenArgs e)
+        {
+            if (e.NewFile is OtherObjectData)
+            {
+                OtherObjectData newdef = (OtherObjectData)e.NewFile;
+                if (e.OldFile is OtherObjectData)
+                {
+                    OtherObjectData testolddef = (OtherObjectData)e.OldFile;
+                    if (AttachmentDef != null)
+                    {
+                        if (testolddef == AttachmentDef)
+                        {
+                            AttachmentDef = newdef;
+                            Update();
+                        }
+                    }
                 }
             }
         }
@@ -473,9 +696,9 @@ namespace VoidDestroyer2DataEditor
                                 rollasdegrees = new Degree(90.0f);
                                 break;
                         }
-                        AttachmentNode.roll(new Radian(rollasdegrees));
-                        AttachmentNode.yaw(new Radian(yawasdegrees));
-                        AttachmentNode.pitch(new Radian(pitchasdegrees));
+                        AttachmentNode.roll(new Radian(rollasdegrees), Node.TransformSpace.TS_PARENT);
+                        AttachmentNode.yaw(new Radian(yawasdegrees), Node.TransformSpace.TS_PARENT);
+                        AttachmentNode.pitch(new Radian(pitchasdegrees), Node.TransformSpace.TS_PARENT);
                                                 
                     }
                     if (oldturretentity != null)
@@ -497,17 +720,36 @@ namespace VoidDestroyer2DataEditor
             {
                 if ((AttachmentDef == null) && (AttachmentDec != null))//if we have a turret declaration but no reference to the turret definition it uses, find it so we can spawn
                 {
+                    List<OtherObjectData> attachmentdefhits = new List<OtherObjectData>();
                     foreach (OtherObjectData attachmentdata in EditorUI.UI.OtherObjects.Data.Values)
                     {
                         if (AttachmentDec.attachmentID.Count > 0)
                         {
                             if (attachmentdata.GetObjectID() == AttachmentDec.attachmentID[0])
                             {
-                                AttachmentDef = attachmentdata;
+                                attachmentdefhits.Add(attachmentdata);
                             }
                         }
                     }
-
+                    OtherObjectData bestattachmentdef = null;
+                    foreach (OtherObjectData attachmentdef in attachmentdefhits)
+                    {
+                        if (bestattachmentdef == null)
+                        {
+                            bestattachmentdef = attachmentdef;
+                        }
+                        else if ((attachmentdef.Source != null) && (bestattachmentdef.Source != null))
+                        {
+                            if (attachmentdef.Source.ShortName == "Mod")
+                            {
+                                if (bestattachmentdef.Source.ShortName == "Base")
+                                {
+                                    bestattachmentdef = attachmentdef;
+                                }
+                            }
+                        }
+                    }
+                    AttachmentDef = bestattachmentdef;
                 }
                 Spawn();//see if the data can make a mesh yet, which will set it all up on current data anyway.
                 return;
@@ -534,9 +776,9 @@ namespace VoidDestroyer2DataEditor
                     break;
             }
             AttachmentNode.resetOrientation();
-            AttachmentNode.roll(new Radian(rollasdegrees));
-            AttachmentNode.yaw(new Radian(yawasdegrees));
-            AttachmentNode.pitch(new Radian(pitchasdegrees));
+            AttachmentNode.roll(new Radian(rollasdegrees), Node.TransformSpace.TS_PARENT);
+            AttachmentNode.yaw(new Radian(yawasdegrees), Node.TransformSpace.TS_PARENT);
+            AttachmentNode.pitch(new Radian(pitchasdegrees), Node.TransformSpace.TS_PARENT);
         }
 
     }
@@ -573,14 +815,65 @@ namespace VoidDestroyer2DataEditor
                 {
                     _TurretDef.VD2PropertyChanged -= TurretDef_VD2PropertyChanged;
                     _TurretDef.OnThisFileOverriden -= TurretDef_OnThisFileOverriden;
+                    _TurretDef.OnThisFileLoaded -= TurretDef_OnThisFileLoaded;
+                    _TurretDef.OnThisFileDeleted -= TurretDef_OnThisFileDeleted;
                 }
                 _TurretDef = value;
                 if (_TurretDef != null)
                 {
                     _TurretDef.VD2PropertyChanged += TurretDef_VD2PropertyChanged;
                     _TurretDef.OnThisFileOverriden += TurretDef_OnThisFileOverriden;
+                    _TurretDef.OnThisFileLoaded += TurretDef_OnThisFileLoaded;
+                    _TurretDef.OnThisFileDeleted += TurretDef_OnThisFileDeleted;
                 }
             }
+        }
+
+        private void TurretDef_OnThisFileDeleted(object sender, EventArgs e)
+        {
+            if (TurretDef.Source != null)
+            {
+                if (TurretDef.Source.ShortName != "Base")
+                {
+                    List<TurretData> turretdefhits = new List<TurretData>();
+                    foreach (TurretData turretdata in EditorUI.UI.Turrets.Data.Values)
+                    {
+                        if (turretdata.GetObjectID() == TurretDec.turretID)
+                        {
+                            turretdefhits.Add(turretdata);
+                        }
+                    }
+                    TurretData bestturretdef = null;
+                    foreach (TurretData turretdef in turretdefhits)
+                    {
+                        if (bestturretdef == null)
+                        {
+                            bestturretdef = turretdef;
+                        }
+                        else if ((turretdef.Source != null) && (bestturretdef.Source != null))
+                        {
+                            if (turretdef.Source.ShortName == "Mod")
+                            {
+                                if (bestturretdef.Source.ShortName == "Base")
+                                {
+                                    bestturretdef = turretdef;
+                                }
+                            }
+                        }
+                    }
+                    TurretDef = bestturretdef;
+                }
+                else
+                {
+                    TurretDef = null;
+                }
+            }
+            Update();
+        }
+
+        private void TurretDef_OnThisFileLoaded(object sender, EventArgs e)
+        {
+            Update();
         }
 
         private void TurretDef_OnThisFileOverriden(object sender, VD2DataFileOverridenArgs e)
@@ -600,7 +893,7 @@ namespace VoidDestroyer2DataEditor
                         }
                     }
                 }
-            }            
+            }
         }
 
         private void TurretDef_VD2PropertyChanged(object sender, VD2PropertyChangedEventArgs e)
@@ -687,9 +980,9 @@ namespace VoidDestroyer2DataEditor
                                 rollasdegrees = new Degree(TurretDec.roll - 90.0f);
                                 break;
                         }
-                        TurretNode.roll(new Radian(rollasdegrees));
-                        TurretNode.yaw(new Radian(yawasdegrees));
-                        TurretNode.pitch(new Radian(pitchasdegrees));
+                        TurretNode.roll(new Radian(rollasdegrees), Node.TransformSpace.TS_PARENT);
+                        TurretNode.yaw(new Radian(yawasdegrees), Node.TransformSpace.TS_PARENT);
+                        TurretNode.pitch(new Radian(pitchasdegrees), Node.TransformSpace.TS_PARENT);
                     }
                     if (oldturretentity != null)
                     {
@@ -711,15 +1004,33 @@ namespace VoidDestroyer2DataEditor
             {
                 if ((TurretDef == null) && (TurretDec != null))//if we have a turret declaration but no reference to the turret definition it uses, find it so we can spawn
                 {
+                    List<TurretData> turretdefhits = new List<TurretData>();
                     foreach (TurretData turretdata in EditorUI.UI.Turrets.Data.Values)
                     {
                         if (turretdata.GetObjectID() == TurretDec.turretID)
                         {
-                            TurretDef = turretdata;
-                            break;
+                            turretdefhits.Add(turretdata);
                         }
                     }
-
+                    TurretData bestturretdef = null;
+                    foreach (TurretData turretdef in turretdefhits)
+                    {
+                        if (bestturretdef == null)
+                        {
+                            bestturretdef = turretdef;
+                        }
+                        else if ((turretdef.Source != null) && (bestturretdef.Source != null))
+                        {
+                            if (turretdef.Source.ShortName == "Mod")
+                            {
+                                if (bestturretdef.Source.ShortName == "Base")
+                                {
+                                    bestturretdef = turretdef;
+                                }
+                            }
+                        }
+                    }
+                    TurretDef = bestturretdef;
                 }
                 Spawn();//see if the data can make a mesh yet, which will set it all up on current data anyway.
                 return;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -72,7 +73,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("ammunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string ammunitionID
         {
             get
@@ -112,7 +113,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("fireSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("fireSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string fireSoundID
         {
             get
@@ -132,7 +133,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("muzzleFlashEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string muzzleFlashEffectID
         {
             get
@@ -362,9 +363,19 @@ namespace VoidDestroyer2DataEditor
             InitProperty("weaponID");
             SetPropertyIsObjectID("weaponID", true);
             InitProperty("ammunitionID");
+            List<string> ammunitionIDreftypes = new List<string>();
+            ammunitionIDreftypes.Add("Missile");
+            ammunitionIDreftypes.Add("Mine");
+            SetPropertyIsObjectIDRef("ammunitionID", true, ammunitionIDreftypes);
             InitProperty("name");
             InitProperty("fireSoundID");
+            List<string> fireSoundIDreftypes = new List<string>();
+            fireSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("fireSoundID", true, fireSoundIDreftypes);
             InitProperty("muzzleFlashEffectID");
+            List<string> muzzleFlashEffectIDreftypes = new List<string>();
+            muzzleFlashEffectIDreftypes.Add("Particle");
+            SetPropertyIsObjectIDRef("muzzleFlashEffectID", true, muzzleFlashEffectIDreftypes);
 
             InitProperty("capacity");
             InitProperty("randomLaunchAngle");
@@ -382,6 +393,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public LauncherData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -551,6 +566,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bRequiresCollisionWeapon", exists);
 
+                base.LoadDataFromXML();
             }
         }
 
@@ -640,7 +656,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

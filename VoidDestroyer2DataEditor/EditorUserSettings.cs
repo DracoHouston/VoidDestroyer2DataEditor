@@ -145,7 +145,7 @@ namespace VoidDestroyer2DataEditor
             File.WriteAllLines("EditorUserSettings.cfg", configlines);            
         }
 
-        public void InitUserSettings()
+        public bool InitUserSettings()
         {
             Sources.Clear();
             VD2FileSource currentsource = new VD2FileSource("Base Game", "Base", "", false, true);
@@ -232,8 +232,12 @@ namespace VoidDestroyer2DataEditor
                 configlines.Add("VD2Path|" + VD2Path);
                 File.WriteAllLines("EditorUserSettings.cfg", configlines);*/
                 FirstTimeSetupWizard wizard = new FirstTimeSetupWizard();
-                wizard.ShowDialog();
+                if (wizard.ShowDialog() == DialogResult.Abort)
+                {
+                    return false;
+                }
             }
+            return true;
         }
 
         public bool SourceIsReadWrite(string inName)
@@ -246,6 +250,18 @@ namespace VoidDestroyer2DataEditor
                 }
             }
             return false;
+        }
+
+        public VD2FileSource GetSourceByShortName(string inShortName)
+        {
+            foreach (VD2FileSource source in Sources)
+            {
+                if (source.ShortName == inShortName)
+                {
+                    return source;
+                }
+            }
+            return null;
         }
     }
 }

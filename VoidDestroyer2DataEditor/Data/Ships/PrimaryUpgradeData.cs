@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -138,7 +139,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("projectileAmmoID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("projectileAmmoID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string projectileAmmoID
         {
             get
@@ -179,7 +180,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("description is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("description is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> description
         {
             get
@@ -188,7 +189,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_description != null)
+                {
+                    _description.CollectionChanged -= OndescriptionChanged;
+                }
                 _description = value;
+                if (_description != null)
+                {
+                    _description.CollectionChanged += OndescriptionChanged;
+                }
             }
         }
 
@@ -204,7 +213,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
-                    _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                    _description.CollectionChanged += OndescriptionChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("description", exists);
@@ -218,7 +227,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("skybox is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        [Browsable(false), Description("skybox is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
         public ObservableCollection<string> skybox
         {
             get
@@ -227,7 +236,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_skybox != null)
+                {
+                    _skybox.CollectionChanged -= OnskyboxChanged;
+                }
                 _skybox = value;
+                if (_skybox != null)
+                {
+                    _skybox.CollectionChanged += OnskyboxChanged;
+                }
             }
         }
 
@@ -243,7 +260,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _skybox = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "skybox", out exists));
-                    _skybox.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnskyboxChanged);
+                    _skybox.CollectionChanged += OnskyboxChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("skybox", exists);
@@ -881,7 +898,7 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
+        [Browsable(false), Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
         public ObservableCollection<VD2DataStructure> turret
         {
             get
@@ -890,7 +907,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged -= OnturretChanged;
+                }
                 _turret = value;
+                if (_turret != null)
+                {
+                    _turret.CollectionChanged += OnturretChanged;
+                }
             }
         }
 
@@ -906,7 +931,7 @@ namespace VoidDestroyer2DataEditor
                 {
                     bool exists = false;
                     _turret = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                    _turret.CollectionChanged += OnturretChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("turret", exists);
@@ -928,15 +953,18 @@ namespace VoidDestroyer2DataEditor
             InitProperty("upgradeCategory");
             InitProperty("upgradeType");
             InitProperty("projectileAmmoID");
+            List<string> projectileAmmoIDreftypes = new List<string>();
+            projectileAmmoIDreftypes.Add("Projectile");
+            SetPropertyIsObjectIDRef("projectileAmmoID", true, projectileAmmoIDreftypes);
             InitProperty("requiredMissionID");
 
             InitProperty("description");
             SetPropertyIsCollection("description", true, typeof(string));
             InitProperty("skybox");
+            List<string> skyboxreftypes = new List<string>();
+            skyboxreftypes.Add("Skybox");
+            SetPropertyIsObjectIDRef("skybox", true, skyboxreftypes);
             SetPropertyIsCollection("skybox", true, typeof(string));
-            List<string> skyboxobjectIDRefTypes = new List<string>();
-            skyboxobjectIDRefTypes.Add("Skybox");
-            SetPropertyIsObjectIDRef("skybox", true, skyboxobjectIDRefTypes);
 
             InitProperty("activeUpgradeSlotChange");
             InitProperty("primaryUpgradeSlotChange");
@@ -977,6 +1005,10 @@ namespace VoidDestroyer2DataEditor
         }
 
         public PrimaryUpgradeData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -1044,7 +1076,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("requiredMissionID", exists);
 
                 _description = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "description", out exists));
-                _description.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndescriptionChanged);
+                _description.CollectionChanged += OndescriptionChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("description", exists);
@@ -1055,7 +1087,7 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("description", exists);
                 _skybox = new ObservableCollection<string>(ParseHelpers.GetStringListFromVD2Data(DataXMLDoc, "skybox", out exists));
-                _skybox.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnskyboxChanged);
+                _skybox.CollectionChanged += OnskyboxChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("skybox", exists);
@@ -1380,7 +1412,7 @@ namespace VoidDestroyer2DataEditor
                 SetPropertyExists("bRadiationRefuel", exists);
 
                 _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _turret.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretChanged);
+                _turret.CollectionChanged += OnturretChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("turret", exists);
@@ -1390,6 +1422,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("turret", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "turret"));
                 }
                 SetPropertyExists("turret", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -1595,7 +1628,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

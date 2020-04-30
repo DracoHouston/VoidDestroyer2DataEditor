@@ -44,14 +44,14 @@ namespace VoidDestroyer2DataEditor
             List<KnownPropertiesInfo> result = new List<KnownPropertiesInfo>();
             switch (inClassName)
             {
-                case "ShipData":
-                    currentknownprop = new KnownPropertiesInfo();
-                    objectidreftypes = new List<string>();
-                    currentknownprop.IsObjectIDRef = true;
-                    objectidreftypes.Add("Base");
-                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
-                    currentknownprop.PropertyName = "baseID";
-                    result.Add(currentknownprop);
+                case "ShipData"://add a case to add known properties for a new data type
+                    currentknownprop = new KnownPropertiesInfo();//each declaration news into these local variables, 
+                    objectidreftypes = new List<string>();//do this each time to disentangle it from the previous one
+                    currentknownprop.IsObjectIDRef = true;//setting this to true sets up this property as an object id reference, with type converter on property grids, special collection type, etc
+                    objectidreftypes.Add("Base");//we have to tell it what sort of object it refers to, so it only lists the object ids of that type, or types (eg upgrade ids refer to both passives and actives)
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;//give this collection ref to the known property info so it can take it with it
+                    currentknownprop.PropertyName = "baseID";//we also have to tell it what property it is for, it isn't called unknown property info!
+                    result.Add(currentknownprop);//add it to the results and DONE! repeat this for each known property to bake these options into the generated classes.
 
                     currentknownprop = new KnownPropertiesInfo();
                     objectidreftypes = new List<string>();
@@ -109,13 +109,14 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.PropertyName = "cockpitID";
                     result.Add(currentknownprop);
 
-                    currentknownprop = new KnownPropertiesInfo();
+                    //we need particle universe to view the particle systems, effects/particles definitions dont get used for this property FOR SOME REASON!!!
+                    /*currentknownprop = new KnownPropertiesInfo();
                     objectidreftypes = new List<string>();
                     currentknownprop.IsObjectIDRef = true;
                     objectidreftypes.Add("Particle");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "gravityDriveParticleSystem";
-                    result.Add(currentknownprop);
+                    result.Add(currentknownprop);*/
 
                     currentknownprop = new KnownPropertiesInfo();
                     objectidreftypes = new List<string>();
@@ -139,6 +140,14 @@ namespace VoidDestroyer2DataEditor
                     objectidreftypes.Add("Hangar");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "hangarID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Mesh");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "meshName";
                     result.Add(currentknownprop);
                     break;
                 case "PrimaryUpgradeData":
@@ -207,6 +216,239 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.PropertyName = "shipID";
                     result.Add(currentknownprop);
                     break;
+                case "WeaponData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Ammo");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "ammunitionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Ammo");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "auxAmmunitionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Shield");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "beamShieldID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Shield");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "shieldID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "chargeSoundID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "chargedSoundID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "hitSound";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "fireSoundID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Hangar");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "hangarID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Particle");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "muzzleFlashEffectID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Explosion");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "explosionID";
+                    result.Add(currentknownprop); 
+                    break;
+                case "TurretData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Weapon");
+                    objectidreftypes.Add("Launcher");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "hardpointID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "turnSoundID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Mesh");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "meshName";
+                    result.Add(currentknownprop);
+                    break;
+                case "LauncherData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Missile");
+                    objectidreftypes.Add("Mine");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "ammunitionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "fireSoundID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Particle");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "muzzleFlashEffectID";
+                    result.Add(currentknownprop); 
+                    break;
+                case "HangarData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Ship");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "fighterShipID";
+                    result.Add(currentknownprop);
+                    break;
+                case "AmmoData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Mesh");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "meshName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("AreaOfEffect");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "areaOfEffectID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Explosion");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "explosionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Explosion");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "projectileExpireExplosionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Effect");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "ribbonID";
+                    result.Add(currentknownprop);
+                    break;
+                case "MissileData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Mesh");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "meshName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Explosion");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "explosionID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Effect");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "ribbonID";
+                    result.Add(currentknownprop);
+                    break;
+                case "MineData":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Mesh");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "meshName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("Explosion");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "explosionID";
+                    result.Add(currentknownprop);
+                    break;
             }
             return result;
         }
@@ -228,6 +470,136 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     result.Add(currentknownprop);
                     break;
+                case "afterburner":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "soundID";
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "tailSoundID";
+                    objectidreftypes.Add("Sound");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "upgrades":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.collection;
+                    currentknownprop.PropertyName = "upgradeID";
+                    objectidreftypes.Add("PrimaryUpgrade");
+                    objectidreftypes.Add("ActiveUpgrade");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "propulsion":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "propulsionEffectID";
+                    objectidreftypes.Add("Particle");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "weapon":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "hardpointID";
+                    objectidreftypes.Add("Weapon");
+                    objectidreftypes.Add("Launcher");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "damage":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "damageEffectID";
+                    objectidreftypes.Add("Particle");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "turret":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "turretID";
+                    objectidreftypes.Add("Turret");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "attachment":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "attachmentID";
+                    objectidreftypes.Add("Other");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "dock":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "attachedID";
+                    objectidreftypes.Add("Ship");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "objectID";
+                    objectidreftypes.Add("Ship");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "shield":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "shieldID";
+                    objectidreftypes.Add("Shield");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "canister":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "projectileID";
+                    objectidreftypes.Add("Ammo");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
+                case "mirv":
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "mirvObjectID";
+                    objectidreftypes.Add("Missile");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+                    break;
             }
             return result;
         }
@@ -237,162 +609,166 @@ namespace VoidDestroyer2DataEditor
             List<KeyValuePair<string, TagNameReportEntry>> DataStructures = new List<KeyValuePair<string, TagNameReportEntry>>();
             List<string> folderlist = new List<string>();
 
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Drones");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Fighters");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\GunShips");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Corvettes");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Frigates");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Destroyers");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Cruisers");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Carriers");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Dreads");
+            //change this to whatever your install folder is, we don't know the user's vd2 path at this point so we can't just use that instead.
+            //can even just point to a bunch of xmls in the right relative folders if you want, it doesn't care about any files but the xmls in Data
+            string vd2path = "C:\\Steam\\steamapps\\common\\Void Destroyer 2\\";
+
+            folderlist.Add(vd2path + "Data\\Ships\\Drones");
+            folderlist.Add(vd2path + "Data\\Ships\\Fighters");
+            folderlist.Add(vd2path + "Data\\Ships\\GunShips");
+            folderlist.Add(vd2path + "Data\\Ships\\Corvettes");
+            folderlist.Add(vd2path + "Data\\Ships\\Frigates");
+            folderlist.Add(vd2path + "Data\\Ships\\Destroyers");
+            folderlist.Add(vd2path + "Data\\Ships\\Cruisers");
+            folderlist.Add(vd2path + "Data\\Ships\\Carriers");
+            folderlist.Add(vd2path + "Data\\Ships\\Dreads");
 
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ShipData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ShipData"), "DataOgreControl");
 
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Upgrades");
+            folderlist.Add(vd2path + "Data\\Ships\\Upgrades");
 
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "PrimaryUpgradeData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("PrimaryUpgradeData"), "");
 
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Ships\\Upgrades\\Active");
+            folderlist.Add(vd2path + "Data\\Ships\\Upgrades\\Active");
 
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ActiveUpgradeData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ActiveUpgradeData"), "");
 
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons");
+            folderlist.Add(vd2path + "Data\\Weapons");
 
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "WeaponData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("WeaponData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Ammo");
+            folderlist.Add(vd2path + "Data\\Weapons\\Ammo");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "AmmoData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("AmmoData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Hangars");
+            folderlist.Add(vd2path + "Data\\Weapons\\Hangars");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "HangarData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("HangarData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Launchers");
+            folderlist.Add(vd2path + "Data\\Weapons\\Launchers");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "LauncherData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("LauncherData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Missiles");
+            folderlist.Add(vd2path + "Data\\Weapons\\Missiles");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "MissileData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("MissileData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Mines");
+            folderlist.Add(vd2path + "Data\\Weapons\\Mines");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "MineData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("MineData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Weapons\\Turrets");
+            folderlist.Add(vd2path + "Data\\Weapons\\Turrets");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "TurretData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("TurretData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\AreaOfEffect");
+            folderlist.Add(vd2path + "Data\\AreaOfEffect");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "AreaOfEffectData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("AreaOfEffectData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Asteroids");
+            folderlist.Add(vd2path + "Data\\Asteroids");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "AsteroidData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("AsteroidData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Bases");
+            folderlist.Add(vd2path + "Data\\Bases");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "BaseData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("BaseData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Characters");
+            folderlist.Add(vd2path + "Data\\Characters");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "CharacterData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("CharacterData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Cockpits");
+            folderlist.Add(vd2path + "Data\\Cockpits");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "CockpitData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("CockpitData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Debris");
+            folderlist.Add(vd2path + "Data\\Debris");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "DebrisData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("DebrisData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Dialog");
+            folderlist.Add(vd2path + "Data\\Dialog");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "DialogData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("DialogData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\DockedMovingElements");
+            folderlist.Add(vd2path + "Data\\DockedMovingElements");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "DockedMovingElementData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("DockedMovingElementData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Doors");
+            folderlist.Add(vd2path + "Data\\Doors");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "DoorData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("DoorData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Effects");
+            folderlist.Add(vd2path + "Data\\Effects");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "EffectData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("EffectData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Effects\\Particles");
+            folderlist.Add(vd2path + "Data\\Effects\\Particles");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ParticleData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ParticleData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Explosions");
+            folderlist.Add(vd2path + "Data\\Explosions");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ExplosionData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ExplosionData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Factions");
+            folderlist.Add(vd2path + "Data\\Factions");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "FactionData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("FactionData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Music");
+            folderlist.Add(vd2path + "Data\\Music");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "MusicData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("MusicData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Other");
+            folderlist.Add(vd2path + "Data\\Other");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "OtherObjectData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("OtherObjectData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Shields");
+            folderlist.Add(vd2path + "Data\\Shields");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ShieldData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ShieldData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Skyboxes");
+            folderlist.Add(vd2path + "Data\\Skyboxes");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "SkyboxData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("SkyboxData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Sounds");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Sounds\\Interior");
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Sounds\\UI");
+            folderlist.Add(vd2path + "Data\\Sounds");
+            folderlist.Add(vd2path + "Data\\Sounds\\Interior");
+            folderlist.Add(vd2path + "Data\\Sounds\\UI");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "SoundData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("SoundData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Stations");
+            folderlist.Add(vd2path + "Data\\Stations");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "StationData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("StationData"), "");
             
             folderlist.Clear();
-            folderlist.Add("C:\\Steam\\steamapps\\common\\Void Destroyer 2\\Data\\Suns");
+            folderlist.Add(vd2path + "Data\\Suns");
             
             VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "SunData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("SunData"), "");
 
@@ -643,6 +1019,7 @@ namespace VoidDestroyer2DataEditor
             reporttextlines.Add("using System.Xml;");
             reporttextlines.Add("using System.IO;");
             reporttextlines.Add("using System.ComponentModel;");
+            reporttextlines.Add("using System.Windows.Forms;");
             reporttextlines.Add("");
             reporttextlines.Add("namespace VoidDestroyer2DataEditor");
             reporttextlines.Add("{");
@@ -807,7 +1184,19 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(i);
-                reporttextlines.Add("        [Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
+                string decoratortext = "[Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]";
+                foreach (KnownPropertiesInfo knownprop in inKnownProperties)
+                {
+                    if (knownprop.PropertyName == currentresult.Key)
+                    {
+                        if (knownprop.IsObjectIDRef)
+                        {
+                            decoratortext = "[Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]";
+                            break;
+                        }
+                    }
+                }
+                reporttextlines.Add("        " + decoratortext);
                 reporttextlines.Add("        public string " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
@@ -1517,7 +1906,7 @@ namespace VoidDestroyer2DataEditor
             {
                 KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
                 reporttextlines.Add("        [Browsable(false), Description(\"" + currentresult.Key + " is a collection of datastructures\"), Category(\"Data Structure Collections\")]");
-                reporttextlines.Add("        public ObservableCollection<" + currentresult.Key + "DataStructure> " + currentresult.Key);
+                reporttextlines.Add("        public ObservableCollection<VD2DataStructure> " + currentresult.Key);
                 reporttextlines.Add("        {");
                 reporttextlines.Add("            get");
                 reporttextlines.Add("            {");
@@ -1548,7 +1937,7 @@ namespace VoidDestroyer2DataEditor
                 reporttextlines.Add("                else");
                 reporttextlines.Add("                {");
                 reporttextlines.Add("                    bool exists = false;");
-                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
+                reporttextlines.Add("                    _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
                 reporttextlines.Add("                    _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 reporttextlines.Add("                    if (Source.ShortName == \"Base\")");
                 reporttextlines.Add("                    {");
@@ -1798,6 +2187,7 @@ namespace VoidDestroyer2DataEditor
                                 reporttextlines.Add("            " + currentresult.Key + "reftypes.Add(\"" + reftype + "\");");
                             }
                             reporttextlines.Add("            SetPropertyIsObjectIDRef(\"" + currentresult.Key + "\", true, " + currentresult.Key + "reftypes);");
+                            break;
                         }
                     }
                 }
@@ -1824,6 +2214,7 @@ namespace VoidDestroyer2DataEditor
                                 reporttextlines.Add("            " + currentresult.Key + "reftypes.Add(\"" + reftype + "\");");
                             }
                             reporttextlines.Add("            SetPropertyIsObjectIDRef(\"" + currentresult.Key + "\", true, " + currentresult.Key + "reftypes);");
+                            break;
                         }
                     }
                 }
@@ -2281,7 +2672,7 @@ namespace VoidDestroyer2DataEditor
             for (i = 0; i < listdatastructures.Count; i++)
             {
                 KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(i);
-                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
+                reporttextlines.Add("                _" + currentresult.Key + " =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromVD2Data(this, DataXMLDoc, out exists));");
                 reporttextlines.Add("                _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 reporttextlines.Add("                if (Source.ShortName == \"Base\")");
                 reporttextlines.Add("                {");
@@ -2297,7 +2688,7 @@ namespace VoidDestroyer2DataEditor
             reporttextlines.Add("            }");
             reporttextlines.Add("        }");
             reporttextlines.Add("");
-            reporttextlines.Add("        public override void SaveData()");
+            reporttextlines.Add("        protected override void SaveData()");
             reporttextlines.Add("        {");
             reporttextlines.Add("            List<string> xmltextlines = new List<string>();");
             reporttextlines.Add("            xmltextlines.Add(\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\");");
@@ -2968,7 +3359,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("        ObservableCollection<" + currentresult.Key + "DataStructure> _" + currentresult.Key + ";");
+                inTextLines.Add("        ObservableCollection<VD2DataStructure> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
             {
@@ -2980,7 +3371,19 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
-                inTextLines.Add("        [Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
+                string decoratortext = "[Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]";
+                foreach (KnownPropertiesInfo knownprop in inKnownProperties)
+                {
+                    if (knownprop.PropertyName == currentresult.Key)
+                    {
+                        if (knownprop.IsObjectIDRef)
+                        {
+                            decoratortext = "[Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]";
+                            break;
+                        }
+                    }
+                }
+                inTextLines.Add("        " + decoratortext);
                 inTextLines.Add("        public string " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
@@ -3014,6 +3417,7 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of plaintext strings\"), Category(\"Plaintext String Collections\"), Editor(\"System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a\", typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public ObservableCollection<string> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3396,16 +3800,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
-                inTextLines.Add("        private void " + currentresult.Key + "_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)");
+                inTextLines.Add("        public void " + currentresult.Key + "_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)");
                 inTextLines.Add("        {");
                 inTextLines.Add("            if (sender is Vector3D)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                Vector3D vecsender = (Vector3D)sender;");
-                inTextLines.Add("                if (Source != null)");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
                 inTextLines.Add("                {");
-                inTextLines.Add("                    if (Source.WriteAccess)");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
                 inTextLines.Add("                    {");
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
                 inTextLines.Add("                    else");
                 inTextLines.Add("                    {");
@@ -3475,6 +3880,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                {");
                 inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
                 inTextLines.Add("                    {");
+                inTextLines.Add("                        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            foreach (object o in e.NewItems)");
+                inTextLines.Add("                            {");
+                inTextLines.Add("                                if (o is Vector3D)");
+                inTextLines.Add("                                {");
+                inTextLines.Add("                                    Vector3D vec = (Vector3D)o;");
+                inTextLines.Add("                                    vec.OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
+                inTextLines.Add("                                }");
+                inTextLines.Add("                            }");
+                inTextLines.Add("                        }");
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
                 inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
@@ -3498,16 +3914,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
-                inTextLines.Add("        private void " + currentresult.Key + "_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)");
+                inTextLines.Add("        public void " + currentresult.Key + "_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)");
                 inTextLines.Add("        {");
                 inTextLines.Add("            if (sender is Vector3D)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                Vector3D vecsender = (Vector3D)sender;");
-                inTextLines.Add("                if (Source != null)");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
                 inTextLines.Add("                {");
-                inTextLines.Add("                    if (Source.WriteAccess)");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
                 inTextLines.Add("                    {");
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
                 inTextLines.Add("                    else");
                 inTextLines.Add("                    {");
@@ -3576,16 +3993,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
-                inTextLines.Add("        private void " + currentresult.Key + "_OnElementChanged(object sender, ColorFElementChangedEventArgs e)");
+                inTextLines.Add("        public void " + currentresult.Key + "_OnElementChanged(object sender, ColorFElementChangedEventArgs e)");
                 inTextLines.Add("        {");
                 inTextLines.Add("            if (sender is ColorF)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                ColorF colorsender = (ColorF)sender;");
-                inTextLines.Add("                if (Source != null)");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
                 inTextLines.Add("                {");
-                inTextLines.Add("                    if (Source.WriteAccess)");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
                 inTextLines.Add("                    {");
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
                 inTextLines.Add("                    else");
                 inTextLines.Add("                    {");
@@ -3660,6 +4078,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                {");
                 inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
                 inTextLines.Add("                    {");
+                inTextLines.Add("                        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)");
+                inTextLines.Add("                        {");
+                inTextLines.Add("                            foreach (object o in e.NewItems)");
+                inTextLines.Add("                            {");
+                inTextLines.Add("                                if (o is ColorF)");
+                inTextLines.Add("                                {");
+                inTextLines.Add("                                    ColorF col = (Vector3D)o;");
+                inTextLines.Add("                                    col.OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
+                inTextLines.Add("                                }");
+                inTextLines.Add("                            }");
+                inTextLines.Add("                        }");
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
                 inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
@@ -3683,16 +4112,17 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            }");
                 inTextLines.Add("        }");
                 inTextLines.Add("");
-                inTextLines.Add("        private void " + currentresult.Key + "_OnElementChanged(object sender, ColorFElementChangedEventArgs e)");
+                inTextLines.Add("        public void " + currentresult.Key + "_OnElementChanged(object sender, ColorFElementChangedEventArgs e)");
                 inTextLines.Add("        {");
                 inTextLines.Add("            if (sender is ColorF)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                ColorF colorsender = (ColorF)sender;");
-                inTextLines.Add("                if (Source != null)");
+                inTextLines.Add("                if (ParentDataFile.Source != null)");
                 inTextLines.Add("                {");
-                inTextLines.Add("                    if (Source.WriteAccess)");
-                inTextLines.Add("                    {");
+                inTextLines.Add("                    if (ParentDataFile.Source.WriteAccess)");
+                inTextLines.Add("                    {");                
                 inTextLines.Add("                        SetPropertyEdited(\"" + currentresult.Key + "\", true);");
+                inTextLines.Add("                        ParentDataFile.SetPropertyEdited(\"" + inDataStructure.Key + "\", true);");
                 inTextLines.Add("                    }");
                 inTextLines.Add("                    else");
                 inTextLines.Add("                    {");
@@ -3758,7 +4188,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of datastructures\"), Category(\"Data Structure Collection\")]");
-                inTextLines.Add("        public ObservableCollection<" + currentresult.Key + "DataStructure> " + currentresult.Key);
+                inTextLines.Add("        public ObservableCollection<VD2DataStructure> " + currentresult.Key);
                 inTextLines.Add("        {");
                 inTextLines.Add("            get");
                 inTextLines.Add("            {");
@@ -3794,7 +4224,7 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                        if (DataNode != null)");
                 inTextLines.Add("                        {");
                 inTextLines.Add("                            bool exists = false;");
-                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, \"" + currentresult.Key + "\", out exists));");
+                inTextLines.Add("                            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, \"" + currentresult.Key + "\", out exists));");
                 inTextLines.Add("                            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("                            SetPropertyExists(\"" + currentresult.Key + "\", exists);");
                 inTextLines.Add("                        }");
@@ -3836,6 +4266,7 @@ namespace VoidDestroyer2DataEditor
                                 inTextLines.Add("            " + currentresult.Key + "reftypes.Add(\"" + reftype + "\");");
                             }
                             inTextLines.Add("            SetPropertyIsObjectIDRef(\"" + currentresult.Key + "\", true, " + currentresult.Key + "reftypes);");
+                            break;
                         }
                     }
                 }
@@ -3862,6 +4293,7 @@ namespace VoidDestroyer2DataEditor
                                 inTextLines.Add("            " + currentresult.Key + "reftypes.Add(\"" + reftype + "\");");
                             }
                             inTextLines.Add("            SetPropertyIsObjectIDRef(\"" + currentresult.Key + "\", true, " + currentresult.Key + "reftypes);");
+                            break;
                         }
                     }
                 }
@@ -4162,7 +4594,7 @@ namespace VoidDestroyer2DataEditor
             {
 
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
             inTextLines.Add("        }");
@@ -4268,6 +4700,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D();");
+                inTextLines.Add("            _" + currentresult.Key + ".OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
             }
             if (!skipnewline)
             {
@@ -4291,6 +4724,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF();");
+                inTextLines.Add("            _" + currentresult.Key + ".OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
             }
             if (!skipnewline)
             {
@@ -4324,7 +4758,7 @@ namespace VoidDestroyer2DataEditor
             {
                
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>();");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
 
@@ -4624,7 +5058,7 @@ namespace VoidDestroyer2DataEditor
             {
 
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<" + currentresult.Key + "DataStructure>(in" + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>(in" + currentresult.Key + ");");
             }
 
             inTextLines.Add("        }");
@@ -4638,6 +5072,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4650,6 +5085,7 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4661,6 +5097,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4673,6 +5110,7 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4684,6 +5122,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4696,6 +5135,7 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4707,6 +5147,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4719,6 +5160,7 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4730,6 +5172,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D(inCopyFrom." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4746,6 +5189,7 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(new Vector3D(vector));");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4757,6 +5201,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF(inCopyFrom." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4773,6 +5218,7 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(new ColorF(color));");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4783,7 +5229,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure(inCopyFrom." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4801,19 +5248,21 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                VD2DataStructure dupeds = (VD2DataStructure)System.Activator.CreateInstance(ds.GetType(), ds);");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(dupeds);");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
 
             inTextLines.Add("        }");
             inTextLines.Add("");
             inTextLines.Add("        public override void CopyFrom(VD2DataStructure inOriginal)");
             inTextLines.Add("        {");
-
+            inTextLines.Add("            " + inDataStructure.Key + "DataStructure original = (" + inDataStructure.Key + "DataStructure)inOriginal;");
             skipnewline = true;
             for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inOriginal." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4824,8 +5273,9 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4836,7 +5286,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inOriginal." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4847,8 +5298,9 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4859,7 +5311,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inOriginal." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4870,8 +5323,9 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4882,7 +5336,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inOriginal." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4893,8 +5348,9 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4905,7 +5361,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new Vector3D(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new Vector3D(original." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4918,10 +5375,11 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
-                inTextLines.Add("            foreach (Vector3D vector in inOriginal." + currentresult.Key + ")");
+                inTextLines.Add("            foreach (Vector3D vector in original." + currentresult.Key + ")");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(new Vector3D(vector));");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4932,7 +5390,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = new ColorF(inOriginal." + currentresult.Key + ");");
+                inTextLines.Add("            _" + currentresult.Key + " = new ColorF(original." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4945,10 +5404,11 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
-                inTextLines.Add("            foreach (ColorF color in inOriginal." + currentresult.Key + ")");
+                inTextLines.Add("            foreach (ColorF color in original." + currentresult.Key + ")");
                 inTextLines.Add("            {");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(new ColorF(color));");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4959,7 +5419,8 @@ namespace VoidDestroyer2DataEditor
             {
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
-                inTextLines.Add("            _" + currentresult.Key + " = inOriginal." + currentresult.Key + ";");
+                inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure(original." + currentresult.Key + ");");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
             if (!skipnewline)
             {
@@ -4972,11 +5433,12 @@ namespace VoidDestroyer2DataEditor
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
-                inTextLines.Add("            foreach (VD2DataStructure ds in inOriginal." + currentresult.Key + ")");
+                inTextLines.Add("            foreach (VD2DataStructure ds in original." + currentresult.Key + ")");
                 inTextLines.Add("            {");
                 inTextLines.Add("                VD2DataStructure dupeds = (VD2DataStructure)System.Activator.CreateInstance(ds.GetType(), ds);");
                 inTextLines.Add("                _" + currentresult.Key + ".Add(dupeds);");
                 inTextLines.Add("            }");
+                inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
 
             inTextLines.Add("        }");
@@ -5682,8 +6144,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
-                inTextLines.Add("            Vector3D " + currentresult.Key + " = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
-                inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged");
+                inTextLines.Add("            Vector3D " + currentresult.Key + " = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");                
             }
             if (!skipnewline)
             {
@@ -5992,7 +6453,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-                inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged");
+                inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
             }
             if (!skipnewline)
             {
@@ -6007,7 +6468,7 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (Vector3D element in result." + currentresult.Key + ")");
                 inTextLines.Add("            {");
-                inTextLines.Add("                element.OnElementChanged += result." + currentresult.Key + "_OnElementChanged");
+                inTextLines.Add("                element.OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
                 inTextLines.Add("            }");
             }
             if (!skipnewline)
@@ -6020,7 +6481,7 @@ namespace VoidDestroyer2DataEditor
                 skipnewline = false;
                 KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-                inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged");
+                inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
             }
             if (!skipnewline)
             {
@@ -6035,7 +6496,7 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (ColorF element in result." + currentresult.Key + ")");
                 inTextLines.Add("            {");
-                inTextLines.Add("                element.OnElementChanged += result." + currentresult.Key + "_OnElementChanged");
+                inTextLines.Add("                element.OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
                 inTextLines.Add("            }");
             }
             if (!skipnewline)

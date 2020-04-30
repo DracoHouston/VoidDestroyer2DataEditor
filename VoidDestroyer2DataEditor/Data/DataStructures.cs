@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using System.IO;
 using System.ComponentModel;
 using System.Globalization;
-using System.Xml;
 
 namespace VoidDestroyer2DataEditor
 {
-    [TypeConverter(typeof(debrisInfoDataStructureConverter))]
     public class debrisInfoDataStructure : VD2DataStructure
     {
         ObservableCollection<VD2DataStructure> _debris;
@@ -21,7 +24,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_debris != null)
+                {
+                    _debris.CollectionChanged -= OndebrisChanged;
+                }
                 _debris = value;
+                if (_debris != null)
+                {
+                    _debris.CollectionChanged += OndebrisChanged;
+                }
             }
         }
 
@@ -42,14 +53,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _debris = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetdebrisDataStructureListFromXMLNodeNamedChildren(ParentDataFile, DataNode, "debris", out exists));
-                            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
+                            _debris.CollectionChanged += OndebrisChanged;
                             SetPropertyExists("debris", exists);
                         }
                         else
                         {
-                            _debris.CollectionChanged -= this.OndebrisChanged;
+                            _debris.CollectionChanged -= OndebrisChanged;
                             _debris.Clear();
-                            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
+                            _debris.CollectionChanged += OndebrisChanged;
                         }
                     }
                 }
@@ -68,19 +79,14 @@ namespace VoidDestroyer2DataEditor
         public debrisInfoDataStructure() : base(null, null)
         {
             _debris = new ObservableCollection<VD2DataStructure>();
-            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
+            _debris.CollectionChanged += OndebrisChanged;
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _debris = new ObservableCollection<VD2DataStructure>();
-            _debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OndebrisChanged);
+            _debris.CollectionChanged += OndebrisChanged;
         }
 
         public debrisInfoDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, List<debrisDataStructure> indebris) : base(inParentDataFile, inDataNode)
@@ -97,15 +103,20 @@ namespace VoidDestroyer2DataEditor
                 VD2DataStructure dupeds = (VD2DataStructure)System.Activator.CreateInstance(ds.GetType(), ds);
                 _debris.Add(dupeds);
             }
+            SetPropertyExists("debris", inCopyFrom.PropertyExists("debris"));
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is debrisInfoDataStructure)
+            debrisInfoDataStructure original = (debrisInfoDataStructure)inOriginal;
+            _debris = new ObservableCollection<VD2DataStructure>();
+            _debris.CollectionChanged += OndebrisChanged;
+            foreach (VD2DataStructure ds in original.debris)
             {
-                debrisInfoDataStructure inCopyFrom = (debrisInfoDataStructure)inOriginal;
-                _debris = inCopyFrom.debris;
+                VD2DataStructure dupeds = (VD2DataStructure)System.Activator.CreateInstance(ds.GetType(), ds);
+                _debris.Add(dupeds);
             }
+            SetPropertyExists("debris", original.PropertyExists("debris"));
         }
 
         public override string ToString()
@@ -145,38 +156,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class debrisInfoDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(debrisDataStructureConverter))]
     public class debrisDataStructure : VD2DataStructure
     {
         string _debrisID;
@@ -184,7 +163,7 @@ namespace VoidDestroyer2DataEditor
         int _debrisMomentum;
         int _debrisAngular;
 
-        [Description("debrisID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("debrisID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string debrisID
         {
             get
@@ -262,6 +241,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("debrisID");
+            List<string> debrisIDreftypes = new List<string>();
+            debrisIDreftypes.Add("Debris");
+            SetPropertyIsObjectIDRef("debrisID", true, debrisIDreftypes);
 
             InitProperty("debrisMomentum");
             InitProperty("debrisAngular");
@@ -276,11 +258,6 @@ namespace VoidDestroyer2DataEditor
             _debrisMomentum = 0;
             _debrisAngular = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -305,22 +282,26 @@ namespace VoidDestroyer2DataEditor
         public debrisDataStructure(debrisDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _debrisID = inCopyFrom.debrisID;
+            SetPropertyExists("debrisID", inCopyFrom.PropertyExists("debrisID"));
 
             _debrisMomentum = inCopyFrom.debrisMomentum;
+            SetPropertyExists("debrisMomentum", inCopyFrom.PropertyExists("debrisMomentum"));
             _debrisAngular = inCopyFrom.debrisAngular;
+            SetPropertyExists("debrisAngular", inCopyFrom.PropertyExists("debrisAngular"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is debrisDataStructure)
-            {
-                debrisDataStructure inCopyFrom = (debrisDataStructure)inOriginal;
-                _debrisID = inCopyFrom.debrisID;
+            debrisDataStructure original = (debrisDataStructure)inOriginal;
+            _debrisID = original.debrisID;
+            SetPropertyExists("debrisID", original.PropertyExists("debrisID"));
 
-                _debrisMomentum = inCopyFrom.debrisMomentum;
-                _debrisAngular = inCopyFrom.debrisAngular;
-            }
+            _debrisMomentum = original.debrisMomentum;
+            SetPropertyExists("debrisMomentum", original.PropertyExists("debrisMomentum"));
+            _debrisAngular = original.debrisAngular;
+            SetPropertyExists("debrisAngular", original.PropertyExists("debrisAngular"));
+
         }
 
         public override string ToString()
@@ -362,38 +343,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class debrisDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(afterburnerDataStructureConverter))]
     public class afterburnerDataStructure : VD2DataStructure
     {
         string _soundID;
@@ -403,7 +352,7 @@ namespace VoidDestroyer2DataEditor
         float _capacity;
         float _recharge;
 
-        [Description("soundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("soundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string soundID
         {
             get
@@ -427,7 +376,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("tailSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("tailSoundID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string tailSoundID
         {
             get
@@ -529,7 +478,13 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("soundID");
+            List<string> soundIDreftypes = new List<string>();
+            soundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("soundID", true, soundIDreftypes);
             InitProperty("tailSoundID");
+            List<string> tailSoundIDreftypes = new List<string>();
+            tailSoundIDreftypes.Add("Sound");
+            SetPropertyIsObjectIDRef("tailSoundID", true, tailSoundIDreftypes);
 
             InitProperty("multiplier");
             InitProperty("capacity");
@@ -547,11 +502,6 @@ namespace VoidDestroyer2DataEditor
             _capacity = 0;
             _recharge = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -580,26 +530,34 @@ namespace VoidDestroyer2DataEditor
         public afterburnerDataStructure(afterburnerDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _soundID = inCopyFrom.soundID;
+            SetPropertyExists("soundID", inCopyFrom.PropertyExists("soundID"));
             _tailSoundID = inCopyFrom.tailSoundID;
+            SetPropertyExists("tailSoundID", inCopyFrom.PropertyExists("tailSoundID"));
 
             _multiplier = inCopyFrom.multiplier;
+            SetPropertyExists("multiplier", inCopyFrom.PropertyExists("multiplier"));
             _capacity = inCopyFrom.capacity;
+            SetPropertyExists("capacity", inCopyFrom.PropertyExists("capacity"));
             _recharge = inCopyFrom.recharge;
+            SetPropertyExists("recharge", inCopyFrom.PropertyExists("recharge"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is afterburnerDataStructure)
-            {
-                afterburnerDataStructure inCopyFrom = (afterburnerDataStructure)inOriginal;
-                _soundID = inCopyFrom.soundID;
-                _tailSoundID = inCopyFrom.tailSoundID;
+            afterburnerDataStructure original = (afterburnerDataStructure)inOriginal;
+            _soundID = original.soundID;
+            SetPropertyExists("soundID", original.PropertyExists("soundID"));
+            _tailSoundID = original.tailSoundID;
+            SetPropertyExists("tailSoundID", original.PropertyExists("tailSoundID"));
 
-                _multiplier = inCopyFrom.multiplier;
-                _capacity = inCopyFrom.capacity;
-                _recharge = inCopyFrom.recharge;
-            }
+            _multiplier = original.multiplier;
+            SetPropertyExists("multiplier", original.PropertyExists("multiplier"));
+            _capacity = original.capacity;
+            SetPropertyExists("capacity", original.PropertyExists("capacity"));
+            _recharge = original.recharge;
+            SetPropertyExists("recharge", original.PropertyExists("recharge"));
+
         }
 
         public override string ToString()
@@ -653,38 +611,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class afterburnerDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(targetPriorityListDataStructureConverter))]
     public class targetPriorityListDataStructure : VD2DataStructure
     {
         ObservableCollection<string> _targetClass;
@@ -698,7 +624,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_targetClass != null)
+                {
+                    _targetClass.CollectionChanged -= OntargetClassChanged;
+                }
                 _targetClass = value;
+                if (_targetClass != null)
+                {
+                    _targetClass.CollectionChanged += OntargetClassChanged;
+                }
             }
         }
 
@@ -719,14 +653,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _targetClass = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "targetClass", out exists));
-                            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
+                            _targetClass.CollectionChanged += OntargetClassChanged;
                             SetPropertyExists("targetClass", exists);
                         }
                         else
                         {
-                            _targetClass.CollectionChanged -= this.OntargetClassChanged;
+                            _targetClass.CollectionChanged -= OntargetClassChanged;
                             _targetClass.Clear();
-                            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
+                            _targetClass.CollectionChanged += OntargetClassChanged;
                         }
                     }
                 }
@@ -739,26 +673,22 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("targetClass");
             SetPropertyIsCollection("targetClass", true, typeof(string));
+
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
         public targetPriorityListDataStructure() : base(null, null)
         {
             _targetClass = new ObservableCollection<string>();
-            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
+            _targetClass.CollectionChanged += OntargetClassChanged;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public targetPriorityListDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _targetClass = new ObservableCollection<string>();
-            _targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OntargetClassChanged);
+            _targetClass.CollectionChanged += OntargetClassChanged;
 
         }
 
@@ -770,17 +700,19 @@ namespace VoidDestroyer2DataEditor
 
         public targetPriorityListDataStructure(targetPriorityListDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _targetClass = inCopyFrom.targetClass;
+            _targetClass = new ObservableCollection<string>(inCopyFrom.targetClass);
+            _targetClass.CollectionChanged += OntargetClassChanged;
+            SetPropertyExists("targetClass", inCopyFrom.PropertyExists("targetClass"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is targetPriorityListDataStructure)
-            {
-                targetPriorityListDataStructure inCopyFrom = (targetPriorityListDataStructure)inOriginal;
-                _targetClass = inCopyFrom.targetClass;
-            }
+            targetPriorityListDataStructure original = (targetPriorityListDataStructure)inOriginal;
+            _targetClass = new ObservableCollection<string>(original.targetClass);
+            _targetClass.CollectionChanged += OntargetClassChanged;
+            SetPropertyExists("targetClass", original.PropertyExists("targetClass"));
+
         }
 
         public override string ToString()
@@ -820,38 +752,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class targetPriorityListDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(upgradesDataStructureConverter))]
     public class upgradesDataStructure : VD2DataStructure
     {
         ObservableCollection<string> _upgradeID;
@@ -868,7 +768,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_upgradeID != null)
+                {
+                    _upgradeID.CollectionChanged -= OnupgradeIDChanged;
+                }
                 _upgradeID = value;
+                if (_upgradeID != null)
+                {
+                    _upgradeID.CollectionChanged += OnupgradeIDChanged;
+                }
             }
         }
 
@@ -889,14 +797,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _upgradeID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "upgradeID", out exists));
-                            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
+                            _upgradeID.CollectionChanged += OnupgradeIDChanged;
                             SetPropertyExists("upgradeID", exists);
                         }
                         else
                         {
-                            _upgradeID.CollectionChanged -= this.OnupgradeIDChanged;
+                            _upgradeID.CollectionChanged -= OnupgradeIDChanged;
                             _upgradeID.Clear();
-                            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
+                            _upgradeID.CollectionChanged += OnupgradeIDChanged;
                         }
                     }
                 }
@@ -972,23 +880,18 @@ namespace VoidDestroyer2DataEditor
         public upgradesDataStructure() : base(null, null)
         {
             _upgradeID = new ObservableCollection<string>();
-            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
+            _upgradeID.CollectionChanged += OnupgradeIDChanged;
 
             _primaryUpgradeCapacity = 0;
             _activeUpgradeCapacity = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public upgradesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _upgradeID = new ObservableCollection<string>();
-            _upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnupgradeIDChanged);
+            _upgradeID.CollectionChanged += OnupgradeIDChanged;
 
             _primaryUpgradeCapacity = 0;
             _activeUpgradeCapacity = 0;
@@ -1006,23 +909,29 @@ namespace VoidDestroyer2DataEditor
 
         public upgradesDataStructure(upgradesDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _upgradeID = inCopyFrom.upgradeID;
+            _upgradeID = new ObservableCollection<string>(inCopyFrom.upgradeID);
+            _upgradeID.CollectionChanged += OnupgradeIDChanged;
+            SetPropertyExists("upgradeID", inCopyFrom.PropertyExists("upgradeID"));
 
             _primaryUpgradeCapacity = inCopyFrom.primaryUpgradeCapacity;
+            SetPropertyExists("primaryUpgradeCapacity", inCopyFrom.PropertyExists("primaryUpgradeCapacity"));
             _activeUpgradeCapacity = inCopyFrom.activeUpgradeCapacity;
+            SetPropertyExists("activeUpgradeCapacity", inCopyFrom.PropertyExists("activeUpgradeCapacity"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is upgradesDataStructure)
-            {
-                upgradesDataStructure inCopyFrom = (upgradesDataStructure)inOriginal;
-                _upgradeID = inCopyFrom.upgradeID;
+            upgradesDataStructure original = (upgradesDataStructure)inOriginal;
+            _upgradeID = new ObservableCollection<string>(original.upgradeID);
+            _upgradeID.CollectionChanged += OnupgradeIDChanged;
+            SetPropertyExists("upgradeID", original.PropertyExists("upgradeID"));
 
-                _primaryUpgradeCapacity = inCopyFrom.primaryUpgradeCapacity;
-                _activeUpgradeCapacity = inCopyFrom.activeUpgradeCapacity;
-            }
+            _primaryUpgradeCapacity = original.primaryUpgradeCapacity;
+            SetPropertyExists("primaryUpgradeCapacity", original.PropertyExists("primaryUpgradeCapacity"));
+            _activeUpgradeCapacity = original.activeUpgradeCapacity;
+            SetPropertyExists("activeUpgradeCapacity", original.PropertyExists("activeUpgradeCapacity"));
+
         }
 
         public override string ToString()
@@ -1075,38 +984,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class upgradesDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(propulsionDataStructureConverter))]
     public class propulsionDataStructure : VD2DataStructure
     {
         string _propulsionEffectID;
@@ -1119,7 +996,7 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("propulsionEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("propulsionEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string propulsionEffectID
         {
             get
@@ -1257,9 +1134,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("propulsion", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("propulsion", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -1271,6 +1193,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("propulsionEffectID");
+            List<string> propulsionEffectIDreftypes = new List<string>();
+            propulsionEffectIDreftypes.Add("Particle");
+            SetPropertyIsObjectIDRef("propulsionEffectID", true, propulsionEffectIDreftypes);
             InitProperty("direction");
 
             InitProperty("pitch");
@@ -1295,11 +1220,6 @@ namespace VoidDestroyer2DataEditor
 
             _position = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -1314,6 +1234,7 @@ namespace VoidDestroyer2DataEditor
             _bPlayerShipOnly = false;
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
         }
 
@@ -1334,32 +1255,42 @@ namespace VoidDestroyer2DataEditor
         public propulsionDataStructure(propulsionDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _propulsionEffectID = inCopyFrom.propulsionEffectID;
+            SetPropertyExists("propulsionEffectID", inCopyFrom.PropertyExists("propulsionEffectID"));
             _direction = inCopyFrom.direction;
+            SetPropertyExists("direction", inCopyFrom.PropertyExists("direction"));
 
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
 
             _bPlayerShipOnly = inCopyFrom.bPlayerShipOnly;
+            SetPropertyExists("bPlayerShipOnly", inCopyFrom.PropertyExists("bPlayerShipOnly"));
 
-            _position = inCopyFrom.position;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is propulsionDataStructure)
-            {
-                propulsionDataStructure inCopyFrom = (propulsionDataStructure)inOriginal;
-                _propulsionEffectID = inCopyFrom.propulsionEffectID;
-                _direction = inCopyFrom.direction;
+            propulsionDataStructure original = (propulsionDataStructure)inOriginal;
+            _propulsionEffectID = original.propulsionEffectID;
+            SetPropertyExists("propulsionEffectID", original.PropertyExists("propulsionEffectID"));
+            _direction = original.direction;
+            SetPropertyExists("direction", original.PropertyExists("direction"));
 
-                _pitch = inCopyFrom.pitch;
-                _yaw = inCopyFrom.yaw;
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
 
-                _bPlayerShipOnly = inCopyFrom.bPlayerShipOnly;
+            _bPlayerShipOnly = original.bPlayerShipOnly;
+            SetPropertyExists("bPlayerShipOnly", original.PropertyExists("bPlayerShipOnly"));
 
-                _position = inCopyFrom.position;
-            }
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
+
         }
 
         public override string ToString()
@@ -1421,38 +1352,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class propulsionDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(weaponDataStructureConverter))]
     public class weaponDataStructure : VD2DataStructure
     {
         string _weaponType;
@@ -1489,7 +1388,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("hardpointID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string hardpointID
         {
             get
@@ -1623,59 +1522,15 @@ namespace VoidDestroyer2DataEditor
                 if (_weaponPosition != null)
                 {
                     _weaponPosition.CollectionChanged -= OnweaponPositionChanged;
-                    foreach (Vector3D element in _weaponPosition)
-                    {
-                        element.OnElementChanged -= weaponPosition_OnElementChanged;
-                    }
                 }
                 _weaponPosition = value;
                 if (_weaponPosition != null)
                 {
                     _weaponPosition.CollectionChanged += OnweaponPositionChanged;
-                    foreach (Vector3D element in _weaponPosition)
-                    {
-                        element.OnElementChanged += weaponPosition_OnElementChanged;
-                    }
                 }
-            }
-        }
-
-        public void weaponPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
-        {
-            if (sender is Vector3D)
-            {
-                Vector3D vecsender = (Vector3D)sender;
-                if (ParentDataFile != null)
+                foreach (Vector3D element in _weaponPosition)
                 {
-                    if (ParentDataFile.Source != null)
-                    {
-                        if (ParentDataFile.Source.WriteAccess)
-                        {
-                            SetPropertyEdited("weaponPosition", true);
-                            ParentDataFile.SetPropertyEdited("weapon", true);
-                        }
-                        else
-                        {
-                            switch (e.ChangedElement)
-                            {
-                                case Vector3DElements.x:
-                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
-                                    vecsender.x = e.OldValue;
-                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
-                                    break;
-                                case Vector3DElements.y:
-                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
-                                    vecsender.y = e.OldValue;
-                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
-                                    break;
-                                case Vector3DElements.z:
-                                    vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
-                                    vecsender.z = e.OldValue;
-                                    vecsender.OnElementChanged += weaponPosition_OnElementChanged;
-                                    break;
-                            }
-                        }
-                    }
+                    element.OnElementChanged += weaponPosition_OnElementChanged;
                 }
             }
         }
@@ -1688,6 +1543,17 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (ParentDataFile.Source.WriteAccess)
                     {
+                        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                        {
+                            foreach (object o in e.NewItems)
+                            {
+                                if (o is Vector3D)
+                                {
+                                    Vector3D vec = (Vector3D)o;
+                                    vec.OnElementChanged += weaponPosition_OnElementChanged;
+                                }
+                            }
+                        }
                         SetPropertyEdited("weaponPosition", true);
                         ParentDataFile.SetPropertyEdited("weapon", true);
                     }
@@ -1697,14 +1563,51 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _weaponPosition = new ObservableCollection<Vector3D>(ParseHelpers.GetVector3DListFromXMLNodeNamedChildren(DataNode, "weaponPosition", out exists));
-                            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
+                            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
                             SetPropertyExists("weaponPosition", exists);
                         }
                         else
                         {
-                            _weaponPosition.CollectionChanged -= this.OnweaponPositionChanged;
+                            _weaponPosition.CollectionChanged -= OnweaponPositionChanged;
                             _weaponPosition.Clear();
-                            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
+                            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void weaponPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("weaponPosition", true);
+                        ParentDataFile.SetPropertyEdited("weapon", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -1717,6 +1620,10 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("weaponType");
             InitProperty("hardpointID");
+            List<string> hardpointIDreftypes = new List<string>();
+            hardpointIDreftypes.Add("Weapon");
+            hardpointIDreftypes.Add("Launcher");
+            SetPropertyIsObjectIDRef("hardpointID", true, hardpointIDreftypes);
             InitProperty("weaponFire");
 
             InitProperty("barrelDelay");
@@ -1725,6 +1632,7 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("weaponPosition");
             SetPropertyIsCollection("weaponPosition", true, typeof(Vector3D));
+
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
@@ -1739,13 +1647,8 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
 
             _weaponPosition = new ObservableCollection<Vector3D>();
-            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
+            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -1760,7 +1663,7 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
 
             _weaponPosition = new ObservableCollection<Vector3D>();
-            _weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnweaponPositionChanged);
+            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
 
         }
 
@@ -1781,33 +1684,54 @@ namespace VoidDestroyer2DataEditor
         public weaponDataStructure(weaponDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _weaponType = inCopyFrom.weaponType;
+            SetPropertyExists("weaponType", inCopyFrom.PropertyExists("weaponType"));
             _hardpointID = inCopyFrom.hardpointID;
+            SetPropertyExists("hardpointID", inCopyFrom.PropertyExists("hardpointID"));
             _weaponFire = inCopyFrom.weaponFire;
+            SetPropertyExists("weaponFire", inCopyFrom.PropertyExists("weaponFire"));
 
             _barrelDelay = inCopyFrom.barrelDelay;
+            SetPropertyExists("barrelDelay", inCopyFrom.PropertyExists("barrelDelay"));
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
 
-            _weaponPosition = inCopyFrom.weaponPosition;
+            _weaponPosition = new ObservableCollection<Vector3D>();
+            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
+            foreach (Vector3D vector in inCopyFrom.weaponPosition)
+            {
+                _weaponPosition.Add(new Vector3D(vector));
+            }
+            SetPropertyExists("weaponPosition", inCopyFrom.PropertyExists("weaponPosition"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is weaponDataStructure)
+            weaponDataStructure original = (weaponDataStructure)inOriginal;
+            _weaponType = original.weaponType;
+            SetPropertyExists("weaponType", original.PropertyExists("weaponType"));
+            _hardpointID = original.hardpointID;
+            SetPropertyExists("hardpointID", original.PropertyExists("hardpointID"));
+            _weaponFire = original.weaponFire;
+            SetPropertyExists("weaponFire", original.PropertyExists("weaponFire"));
+
+            _barrelDelay = original.barrelDelay;
+            SetPropertyExists("barrelDelay", original.PropertyExists("barrelDelay"));
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+
+            _weaponPosition = new ObservableCollection<Vector3D>();
+            _weaponPosition.CollectionChanged += OnweaponPositionChanged;
+            foreach (Vector3D vector in original.weaponPosition)
             {
-                weaponDataStructure inCopyFrom = (weaponDataStructure)inOriginal;
-                _weaponType = inCopyFrom.weaponType;
-                _hardpointID = inCopyFrom.hardpointID;
-                _weaponFire = inCopyFrom.weaponFire;
-
-                _barrelDelay = inCopyFrom.barrelDelay;
-                _yaw = inCopyFrom.yaw;
-                _pitch = inCopyFrom.pitch;
-
-                _weaponPosition = new ObservableCollection<Vector3D>(inCopyFrom.weaponPosition);
-                _weaponPosition.CollectionChanged += OnweaponPositionChanged;
+                _weaponPosition.Add(new Vector3D(vector));
             }
+            SetPropertyExists("weaponPosition", original.PropertyExists("weaponPosition"));
+
         }
 
         public override string ToString()
@@ -1885,38 +1809,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class weaponDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(damageDataStructureConverter))]
     public class damageDataStructure : VD2DataStructure
     {
         string _damageEffectID;
@@ -1928,7 +1820,7 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("damageEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("damageEffectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string damageEffectID
         {
             get
@@ -2065,9 +1957,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("damage", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("damage", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -2079,6 +2016,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("damageEffectID");
+            List<string> damageEffectIDreftypes = new List<string>();
+            damageEffectIDreftypes.Add("Particle");
+            SetPropertyIsObjectIDRef("damageEffectID", true, damageEffectIDreftypes);
 
             InitProperty("pitch");
             InitProperty("roll");
@@ -2101,11 +2041,6 @@ namespace VoidDestroyer2DataEditor
 
             _position = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -2119,6 +2054,7 @@ namespace VoidDestroyer2DataEditor
             _healthPoint = 0;
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
         }
 
@@ -2138,30 +2074,40 @@ namespace VoidDestroyer2DataEditor
         public damageDataStructure(damageDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _damageEffectID = inCopyFrom.damageEffectID;
+            SetPropertyExists("damageEffectID", inCopyFrom.PropertyExists("damageEffectID"));
 
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
             _healthPoint = inCopyFrom.healthPoint;
+            SetPropertyExists("healthPoint", inCopyFrom.PropertyExists("healthPoint"));
 
-            _position = inCopyFrom.position;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is damageDataStructure)
-            {
-                damageDataStructure inCopyFrom = (damageDataStructure)inOriginal;
-                _damageEffectID = inCopyFrom.damageEffectID;
+            damageDataStructure original = (damageDataStructure)inOriginal;
+            _damageEffectID = original.damageEffectID;
+            SetPropertyExists("damageEffectID", original.PropertyExists("damageEffectID"));
 
-                _pitch = inCopyFrom.pitch;
-                _roll = inCopyFrom.roll;
-                _yaw = inCopyFrom.yaw;
-                _healthPoint = inCopyFrom.healthPoint;
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _healthPoint = original.healthPoint;
+            SetPropertyExists("healthPoint", original.PropertyExists("healthPoint"));
 
-                _position = inCopyFrom.position;
-            }
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
+
         }
 
         public override string ToString()
@@ -2222,38 +2168,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class damageDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(turretDataStructureConverter))]
     public class turretDataStructure : VD2DataStructure
     {
         string _turretID;
@@ -2274,7 +2188,7 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _position;
 
-        [Description("turretID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("turretID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string turretID
         {
             get
@@ -2356,7 +2270,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_turretRole != null)
+                {
+                    _turretRole.CollectionChanged -= OnturretRoleChanged;
+                }
                 _turretRole = value;
+                if (_turretRole != null)
+                {
+                    _turretRole.CollectionChanged += OnturretRoleChanged;
+                }
             }
         }
 
@@ -2377,14 +2299,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _turretRole = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "turretRole", out exists));
-                            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
+                            _turretRole.CollectionChanged += OnturretRoleChanged;
                             SetPropertyExists("turretRole", exists);
                         }
                         else
                         {
-                            _turretRole.CollectionChanged -= this.OnturretRoleChanged;
+                            _turretRole.CollectionChanged -= OnturretRoleChanged;
                             _turretRole.Clear();
-                            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
+                            _turretRole.CollectionChanged += OnturretRoleChanged;
                         }
                     }
                 }
@@ -2578,9 +2500,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("turret", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("turret", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -2592,6 +2559,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("turretID");
+            List<string> turretIDreftypes = new List<string>();
+            turretIDreftypes.Add("Turret");
+            SetPropertyIsObjectIDRef("turretID", true, turretIDreftypes);
             InitProperty("turretOrientation");
             InitProperty("weaponFire");
 
@@ -2620,7 +2590,7 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = "";
 
             _turretRole = new ObservableCollection<string>();
-            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
+            _turretRole.CollectionChanged += OnturretRoleChanged;
 
             _yawPermitted = 0;
             _weaponPositionID = 0;
@@ -2634,11 +2604,6 @@ namespace VoidDestroyer2DataEditor
 
             _position = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -2649,7 +2614,7 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = "";
 
             _turretRole = new ObservableCollection<string>();
-            _turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnturretRoleChanged);
+            _turretRole.CollectionChanged += OnturretRoleChanged;
 
             _yawPermitted = 0;
             _weaponPositionID = 0;
@@ -2662,6 +2627,7 @@ namespace VoidDestroyer2DataEditor
             _bHideInHangar = false;
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
         }
 
@@ -2690,48 +2656,72 @@ namespace VoidDestroyer2DataEditor
         public turretDataStructure(turretDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _turretID = inCopyFrom.turretID;
+            SetPropertyExists("turretID", inCopyFrom.PropertyExists("turretID"));
             _turretOrientation = inCopyFrom.turretOrientation;
+            SetPropertyExists("turretOrientation", inCopyFrom.PropertyExists("turretOrientation"));
             _weaponFire = inCopyFrom.weaponFire;
+            SetPropertyExists("weaponFire", inCopyFrom.PropertyExists("weaponFire"));
 
-            _turretRole = inCopyFrom.turretRole;
+            _turretRole = new ObservableCollection<string>(inCopyFrom.turretRole);
+            _turretRole.CollectionChanged += OnturretRoleChanged;
+            SetPropertyExists("turretRole", inCopyFrom.PropertyExists("turretRole"));
 
             _yawPermitted = inCopyFrom.yawPermitted;
+            SetPropertyExists("yawPermitted", inCopyFrom.PropertyExists("yawPermitted"));
             _weaponPositionID = inCopyFrom.weaponPositionID;
+            SetPropertyExists("weaponPositionID", inCopyFrom.PropertyExists("weaponPositionID"));
 
             _pitchLower = inCopyFrom.pitchLower;
+            SetPropertyExists("pitchLower", inCopyFrom.PropertyExists("pitchLower"));
             _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
 
             _bShowInCockpit = inCopyFrom.bShowInCockpit;
+            SetPropertyExists("bShowInCockpit", inCopyFrom.PropertyExists("bShowInCockpit"));
             _bHideInHangar = inCopyFrom.bHideInHangar;
+            SetPropertyExists("bHideInHangar", inCopyFrom.PropertyExists("bHideInHangar"));
 
-            _position = inCopyFrom.position;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
 
         }
 
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
-            if (inOriginal is turretDataStructure)
-            {
-                turretDataStructure inCopyFrom = (turretDataStructure)inOriginal;
-                _turretID = inCopyFrom.turretID;
-                _turretOrientation = inCopyFrom.turretOrientation;
-                _weaponFire = inCopyFrom.weaponFire;
+            turretDataStructure original = (turretDataStructure)inOriginal;
+            _turretID = original.turretID;
+            SetPropertyExists("turretID", original.PropertyExists("turretID"));
+            _turretOrientation = original.turretOrientation;
+            SetPropertyExists("turretOrientation", original.PropertyExists("turretOrientation"));
+            _weaponFire = original.weaponFire;
+            SetPropertyExists("weaponFire", original.PropertyExists("weaponFire"));
 
-                _turretRole = inCopyFrom.turretRole;
+            _turretRole = new ObservableCollection<string>(original.turretRole);
+            _turretRole.CollectionChanged += OnturretRoleChanged;
+            SetPropertyExists("turretRole", original.PropertyExists("turretRole"));
 
-                _yawPermitted = inCopyFrom.yawPermitted;
-                _weaponPositionID = inCopyFrom.weaponPositionID;
+            _yawPermitted = original.yawPermitted;
+            SetPropertyExists("yawPermitted", original.PropertyExists("yawPermitted"));
+            _weaponPositionID = original.weaponPositionID;
+            SetPropertyExists("weaponPositionID", original.PropertyExists("weaponPositionID"));
 
-                _pitchLower = inCopyFrom.pitchLower;
-                _roll = inCopyFrom.roll;
-                _yaw = inCopyFrom.yaw;
+            _pitchLower = original.pitchLower;
+            SetPropertyExists("pitchLower", original.PropertyExists("pitchLower"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
 
-                _bShowInCockpit = inCopyFrom.bShowInCockpit;
-                _bHideInHangar = inCopyFrom.bHideInHangar;
+            _bShowInCockpit = original.bShowInCockpit;
+            SetPropertyExists("bShowInCockpit", original.PropertyExists("bShowInCockpit"));
+            _bHideInHangar = original.bHideInHangar;
+            SetPropertyExists("bHideInHangar", original.PropertyExists("bHideInHangar"));
 
-                _position = inCopyFrom.position;
-            }
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
+
         }
 
         public override string ToString()
@@ -2842,38 +2832,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class turretDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(attachmentDataStructureConverter))]
     public class attachmentDataStructure : VD2DataStructure
     {
         string _attachmentOrientation;
@@ -2916,7 +2874,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_attachmentID != null)
+                {
+                    _attachmentID.CollectionChanged -= OnattachmentIDChanged;
+                }
                 _attachmentID = value;
+                if (_attachmentID != null)
+                {
+                    _attachmentID.CollectionChanged += OnattachmentIDChanged;
+                }
             }
         }
 
@@ -2937,14 +2903,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _attachmentID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "attachmentID", out exists));
-                            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
+                            _attachmentID.CollectionChanged += OnattachmentIDChanged;
                             SetPropertyExists("attachmentID", exists);
                         }
                         else
                         {
-                            _attachmentID.CollectionChanged -= this.OnattachmentIDChanged;
+                            _attachmentID.CollectionChanged -= OnattachmentIDChanged;
                             _attachmentID.Clear();
-                            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
+                            _attachmentID.CollectionChanged += OnattachmentIDChanged;
                         }
                     }
                 }
@@ -2967,9 +2933,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_attachmentPosition != null)
+                            {
+                                _attachmentPosition.OnElementChanged -= attachmentPosition_OnElementChanged;
+                            }
                             _attachmentPosition = value;
+                            if (_attachmentPosition != null)
+                            {
+                                _attachmentPosition.OnElementChanged += attachmentPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("attachmentPosition", true);
                             ParentDataFile.SetPropertyEdited("attachment", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void attachmentPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("attachmentPosition", true);
+                        ParentDataFile.SetPropertyEdited("attachment", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= attachmentPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += attachmentPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= attachmentPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += attachmentPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= attachmentPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += attachmentPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -2983,6 +2994,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("attachmentOrientation");
 
             InitProperty("attachmentID");
+            List<string> attachmentIDreftypes = new List<string>();
+            attachmentIDreftypes.Add("Other");
+            SetPropertyIsObjectIDRef("attachmentID", true, attachmentIDreftypes);
             SetPropertyIsCollection("attachmentID", true, typeof(string));
 
             InitProperty("attachmentPosition");
@@ -2995,15 +3009,10 @@ namespace VoidDestroyer2DataEditor
             _attachmentOrientation = "";
 
             _attachmentID = new ObservableCollection<string>();
-            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
+            _attachmentID.CollectionChanged += OnattachmentIDChanged;
 
             _attachmentPosition = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -3012,9 +3021,10 @@ namespace VoidDestroyer2DataEditor
             _attachmentOrientation = "";
 
             _attachmentID = new ObservableCollection<string>();
-            _attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnattachmentIDChanged);
+            _attachmentID.CollectionChanged += OnattachmentIDChanged;
 
             _attachmentPosition = new Vector3D();
+            _attachmentPosition.OnElementChanged += attachmentPosition_OnElementChanged;
 
         }
 
@@ -3031,10 +3041,29 @@ namespace VoidDestroyer2DataEditor
         public attachmentDataStructure(attachmentDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _attachmentOrientation = inCopyFrom.attachmentOrientation;
+            SetPropertyExists("attachmentOrientation", inCopyFrom.PropertyExists("attachmentOrientation"));
 
-            _attachmentID = inCopyFrom.attachmentID;
+            _attachmentID = new ObservableCollection<string>(inCopyFrom.attachmentID);
+            _attachmentID.CollectionChanged += OnattachmentIDChanged;
+            SetPropertyExists("attachmentID", inCopyFrom.PropertyExists("attachmentID"));
 
-            _attachmentPosition = inCopyFrom.attachmentPosition;
+            _attachmentPosition = new Vector3D(inCopyFrom.attachmentPosition);
+            SetPropertyExists("attachmentPosition", inCopyFrom.PropertyExists("attachmentPosition"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            attachmentDataStructure original = (attachmentDataStructure)inOriginal;
+            _attachmentOrientation = original.attachmentOrientation;
+            SetPropertyExists("attachmentOrientation", original.PropertyExists("attachmentOrientation"));
+
+            _attachmentID = new ObservableCollection<string>(original.attachmentID);
+            _attachmentID.CollectionChanged += OnattachmentIDChanged;
+            SetPropertyExists("attachmentID", original.PropertyExists("attachmentID"));
+
+            _attachmentPosition = new Vector3D(original.attachmentPosition);
+            SetPropertyExists("attachmentPosition", original.PropertyExists("attachmentPosition"));
 
         }
 
@@ -3089,38 +3118,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class attachmentDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(movingElementDataStructureConverter))]
     public class movingElementDataStructure : VD2DataStructure
     {
         string _boneName;
@@ -3321,9 +3318,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_translateAmount != null)
+                            {
+                                _translateAmount.OnElementChanged -= translateAmount_OnElementChanged;
+                            }
                             _translateAmount = value;
+                            if (_translateAmount != null)
+                            {
+                                _translateAmount.OnElementChanged += translateAmount_OnElementChanged;
+                            }
                             SetPropertyEdited("translateAmount", true);
                             ParentDataFile.SetPropertyEdited("movingElement", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void translateAmount_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("translateAmount", true);
+                        ParentDataFile.SetPropertyEdited("movingElement", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= translateAmount_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += translateAmount_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= translateAmount_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += translateAmount_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= translateAmount_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += translateAmount_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -3363,11 +3405,6 @@ namespace VoidDestroyer2DataEditor
 
             _translateAmount = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -3384,6 +3421,7 @@ namespace VoidDestroyer2DataEditor
             _bCombat = false;
 
             _translateAmount = new Vector3D();
+            _translateAmount.OnElementChanged += translateAmount_OnElementChanged;
 
         }
 
@@ -3406,16 +3444,49 @@ namespace VoidDestroyer2DataEditor
         public movingElementDataStructure(movingElementDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _boneName = inCopyFrom.boneName;
+            SetPropertyExists("boneName", inCopyFrom.PropertyExists("boneName"));
 
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
             _speedMultiplier = inCopyFrom.speedMultiplier;
+            SetPropertyExists("speedMultiplier", inCopyFrom.PropertyExists("speedMultiplier"));
 
             _bLinkedToWeapon = inCopyFrom.bLinkedToWeapon;
+            SetPropertyExists("bLinkedToWeapon", inCopyFrom.PropertyExists("bLinkedToWeapon"));
             _bCombat = inCopyFrom.bCombat;
+            SetPropertyExists("bCombat", inCopyFrom.PropertyExists("bCombat"));
 
-            _translateAmount = inCopyFrom.translateAmount;
+            _translateAmount = new Vector3D(inCopyFrom.translateAmount);
+            SetPropertyExists("translateAmount", inCopyFrom.PropertyExists("translateAmount"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            movingElementDataStructure original = (movingElementDataStructure)inOriginal;
+            _boneName = original.boneName;
+            SetPropertyExists("boneName", original.PropertyExists("boneName"));
+
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
+            _speedMultiplier = original.speedMultiplier;
+            SetPropertyExists("speedMultiplier", original.PropertyExists("speedMultiplier"));
+
+            _bLinkedToWeapon = original.bLinkedToWeapon;
+            SetPropertyExists("bLinkedToWeapon", original.PropertyExists("bLinkedToWeapon"));
+            _bCombat = original.bCombat;
+            SetPropertyExists("bCombat", original.PropertyExists("bCombat"));
+
+            _translateAmount = new Vector3D(original.translateAmount);
+            SetPropertyExists("translateAmount", original.PropertyExists("translateAmount"));
 
         }
 
@@ -3490,38 +3561,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class movingElementDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(dockDataStructureConverter))]
     public class dockDataStructure : VD2DataStructure
     {
         string _dockType;
@@ -3615,7 +3654,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("attachedID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("attachedID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string attachedID
         {
             get
@@ -3721,7 +3760,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_objectID != null)
+                {
+                    _objectID.CollectionChanged -= OnobjectIDChanged;
+                }
                 _objectID = value;
+                if (_objectID != null)
+                {
+                    _objectID.CollectionChanged += OnobjectIDChanged;
+                }
             }
         }
 
@@ -3742,14 +3789,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _objectID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "objectID", out exists));
-                            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
+                            _objectID.CollectionChanged += OnobjectIDChanged;
                             SetPropertyExists("objectID", exists);
                         }
                         else
                         {
-                            _objectID.CollectionChanged -= this.OnobjectIDChanged;
+                            _objectID.CollectionChanged -= OnobjectIDChanged;
                             _objectID.Clear();
-                            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
+                            _objectID.CollectionChanged += OnobjectIDChanged;
                         }
                     }
                 }
@@ -3894,9 +3941,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("dock", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("dock", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -3911,11 +4003,17 @@ namespace VoidDestroyer2DataEditor
             InitProperty("ejectOrientation");
             InitProperty("orientation");
             InitProperty("attachedID");
+            List<string> attachedIDreftypes = new List<string>();
+            attachedIDreftypes.Add("Ship");
+            SetPropertyIsObjectIDRef("attachedID", true, attachedIDreftypes);
             InitProperty("boneName");
             InitProperty("dockOrientation");
             InitProperty("resourceOnly");
 
             InitProperty("objectID");
+            List<string> objectIDreftypes = new List<string>();
+            objectIDreftypes.Add("Ship");
+            SetPropertyIsObjectIDRef("objectID", true, objectIDreftypes);
             SetPropertyIsCollection("objectID", true, typeof(string));
 
             InitProperty("ejectVelocity");
@@ -3941,7 +4039,7 @@ namespace VoidDestroyer2DataEditor
             _resourceOnly = "";
 
             _objectID = new ObservableCollection<string>();
-            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
+            _objectID.CollectionChanged += OnobjectIDChanged;
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -3952,11 +4050,6 @@ namespace VoidDestroyer2DataEditor
 
             _position = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -3971,7 +4064,7 @@ namespace VoidDestroyer2DataEditor
             _resourceOnly = "";
 
             _objectID = new ObservableCollection<string>();
-            _objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnobjectIDChanged);
+            _objectID.CollectionChanged += OnobjectIDChanged;
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -3981,6 +4074,7 @@ namespace VoidDestroyer2DataEditor
             _bInvisible = false;
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
         }
 
@@ -4010,23 +4104,77 @@ namespace VoidDestroyer2DataEditor
         public dockDataStructure(dockDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _dockType = inCopyFrom.dockType;
+            SetPropertyExists("dockType", inCopyFrom.PropertyExists("dockType"));
             _ejectOrientation = inCopyFrom.ejectOrientation;
+            SetPropertyExists("ejectOrientation", inCopyFrom.PropertyExists("ejectOrientation"));
             _orientation = inCopyFrom.orientation;
+            SetPropertyExists("orientation", inCopyFrom.PropertyExists("orientation"));
             _attachedID = inCopyFrom.attachedID;
+            SetPropertyExists("attachedID", inCopyFrom.PropertyExists("attachedID"));
             _boneName = inCopyFrom.boneName;
+            SetPropertyExists("boneName", inCopyFrom.PropertyExists("boneName"));
             _dockOrientation = inCopyFrom.dockOrientation;
+            SetPropertyExists("dockOrientation", inCopyFrom.PropertyExists("dockOrientation"));
             _resourceOnly = inCopyFrom.resourceOnly;
+            SetPropertyExists("resourceOnly", inCopyFrom.PropertyExists("resourceOnly"));
 
-            _objectID = inCopyFrom.objectID;
+            _objectID = new ObservableCollection<string>(inCopyFrom.objectID);
+            _objectID.CollectionChanged += OnobjectIDChanged;
+            SetPropertyExists("objectID", inCopyFrom.PropertyExists("objectID"));
 
             _ejectVelocity = inCopyFrom.ejectVelocity;
+            SetPropertyExists("ejectVelocity", inCopyFrom.PropertyExists("ejectVelocity"));
             _dockRollOffset = inCopyFrom.dockRollOffset;
+            SetPropertyExists("dockRollOffset", inCopyFrom.PropertyExists("dockRollOffset"));
             _dockYawOffset = inCopyFrom.dockYawOffset;
+            SetPropertyExists("dockYawOffset", inCopyFrom.PropertyExists("dockYawOffset"));
 
             _bCanAcceptRawResource = inCopyFrom.bCanAcceptRawResource;
+            SetPropertyExists("bCanAcceptRawResource", inCopyFrom.PropertyExists("bCanAcceptRawResource"));
             _bInvisible = inCopyFrom.bInvisible;
+            SetPropertyExists("bInvisible", inCopyFrom.PropertyExists("bInvisible"));
 
-            _position = inCopyFrom.position;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            dockDataStructure original = (dockDataStructure)inOriginal;
+            _dockType = original.dockType;
+            SetPropertyExists("dockType", original.PropertyExists("dockType"));
+            _ejectOrientation = original.ejectOrientation;
+            SetPropertyExists("ejectOrientation", original.PropertyExists("ejectOrientation"));
+            _orientation = original.orientation;
+            SetPropertyExists("orientation", original.PropertyExists("orientation"));
+            _attachedID = original.attachedID;
+            SetPropertyExists("attachedID", original.PropertyExists("attachedID"));
+            _boneName = original.boneName;
+            SetPropertyExists("boneName", original.PropertyExists("boneName"));
+            _dockOrientation = original.dockOrientation;
+            SetPropertyExists("dockOrientation", original.PropertyExists("dockOrientation"));
+            _resourceOnly = original.resourceOnly;
+            SetPropertyExists("resourceOnly", original.PropertyExists("resourceOnly"));
+
+            _objectID = new ObservableCollection<string>(original.objectID);
+            _objectID.CollectionChanged += OnobjectIDChanged;
+            SetPropertyExists("objectID", original.PropertyExists("objectID"));
+
+            _ejectVelocity = original.ejectVelocity;
+            SetPropertyExists("ejectVelocity", original.PropertyExists("ejectVelocity"));
+            _dockRollOffset = original.dockRollOffset;
+            SetPropertyExists("dockRollOffset", original.PropertyExists("dockRollOffset"));
+            _dockYawOffset = original.dockYawOffset;
+            SetPropertyExists("dockYawOffset", original.PropertyExists("dockYawOffset"));
+
+            _bCanAcceptRawResource = original.bCanAcceptRawResource;
+            SetPropertyExists("bCanAcceptRawResource", original.PropertyExists("bCanAcceptRawResource"));
+            _bInvisible = original.bInvisible;
+            SetPropertyExists("bInvisible", original.PropertyExists("bInvisible"));
+
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
 
         }
 
@@ -4149,38 +4297,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class dockDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(shieldDataStructureConverter))]
     public class shieldDataStructure : VD2DataStructure
     {
         string _shieldID;
@@ -4191,7 +4307,7 @@ namespace VoidDestroyer2DataEditor
 
         Vector3D _shieldPosition;
 
-        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("shieldID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string shieldID
         {
             get
@@ -4304,9 +4420,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_shieldPosition != null)
+                            {
+                                _shieldPosition.OnElementChanged -= shieldPosition_OnElementChanged;
+                            }
                             _shieldPosition = value;
+                            if (_shieldPosition != null)
+                            {
+                                _shieldPosition.OnElementChanged += shieldPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("shieldPosition", true);
                             ParentDataFile.SetPropertyEdited("shield", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void shieldPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("shieldPosition", true);
+                        ParentDataFile.SetPropertyEdited("shield", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= shieldPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += shieldPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= shieldPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += shieldPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= shieldPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += shieldPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -4318,6 +4479,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("shieldID");
+            List<string> shieldIDreftypes = new List<string>();
+            shieldIDreftypes.Add("Shield");
+            SetPropertyIsObjectIDRef("shieldID", true, shieldIDreftypes);
             InitProperty("shieldOrientation");
 
             InitProperty("pitch");
@@ -4338,11 +4502,6 @@ namespace VoidDestroyer2DataEditor
 
             _shieldPosition = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4355,6 +4514,7 @@ namespace VoidDestroyer2DataEditor
             _roll = 0;
 
             _shieldPosition = new Vector3D();
+            _shieldPosition.OnElementChanged += shieldPosition_OnElementChanged;
 
         }
 
@@ -4373,12 +4533,35 @@ namespace VoidDestroyer2DataEditor
         public shieldDataStructure(shieldDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _shieldID = inCopyFrom.shieldID;
+            SetPropertyExists("shieldID", inCopyFrom.PropertyExists("shieldID"));
             _shieldOrientation = inCopyFrom.shieldOrientation;
+            SetPropertyExists("shieldOrientation", inCopyFrom.PropertyExists("shieldOrientation"));
 
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
 
-            _shieldPosition = inCopyFrom.shieldPosition;
+            _shieldPosition = new Vector3D(inCopyFrom.shieldPosition);
+            SetPropertyExists("shieldPosition", inCopyFrom.PropertyExists("shieldPosition"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            shieldDataStructure original = (shieldDataStructure)inOriginal;
+            _shieldID = original.shieldID;
+            SetPropertyExists("shieldID", original.PropertyExists("shieldID"));
+            _shieldOrientation = original.shieldOrientation;
+            SetPropertyExists("shieldOrientation", original.PropertyExists("shieldOrientation"));
+
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
+
+            _shieldPosition = new Vector3D(original.shieldPosition);
+            SetPropertyExists("shieldPosition", original.PropertyExists("shieldPosition"));
 
         }
 
@@ -4434,38 +4617,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class shieldDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(rotatingElementDataStructureConverter))]
     public class rotatingElementDataStructure : VD2DataStructure
     {
         string _boneName;
@@ -4569,11 +4720,6 @@ namespace VoidDestroyer2DataEditor
 
             _bLinkedToWeapon = false;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4600,10 +4746,27 @@ namespace VoidDestroyer2DataEditor
         public rotatingElementDataStructure(rotatingElementDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _boneName = inCopyFrom.boneName;
+            SetPropertyExists("boneName", inCopyFrom.PropertyExists("boneName"));
 
             _rollSpeed = inCopyFrom.rollSpeed;
+            SetPropertyExists("rollSpeed", inCopyFrom.PropertyExists("rollSpeed"));
 
             _bLinkedToWeapon = inCopyFrom.bLinkedToWeapon;
+            SetPropertyExists("bLinkedToWeapon", inCopyFrom.PropertyExists("bLinkedToWeapon"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            rotatingElementDataStructure original = (rotatingElementDataStructure)inOriginal;
+            _boneName = original.boneName;
+            SetPropertyExists("boneName", original.PropertyExists("boneName"));
+
+            _rollSpeed = original.rollSpeed;
+            SetPropertyExists("rollSpeed", original.PropertyExists("rollSpeed"));
+
+            _bLinkedToWeapon = original.bLinkedToWeapon;
+            SetPropertyExists("bLinkedToWeapon", original.PropertyExists("bLinkedToWeapon"));
 
         }
 
@@ -4647,38 +4810,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class rotatingElementDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(recoilDataStructureConverter))]
     public class recoilDataStructure : VD2DataStructure
     {
         string _recoilBone;
@@ -4772,7 +4903,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_muzzleBone != null)
+                {
+                    _muzzleBone.CollectionChanged -= OnmuzzleBoneChanged;
+                }
                 _muzzleBone = value;
+                if (_muzzleBone != null)
+                {
+                    _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
+                }
             }
         }
 
@@ -4793,14 +4932,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _muzzleBone = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "muzzleBone", out exists));
-                            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
+                            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
                             SetPropertyExists("muzzleBone", exists);
                         }
                         else
                         {
-                            _muzzleBone.CollectionChanged -= this.OnmuzzleBoneChanged;
+                            _muzzleBone.CollectionChanged -= OnmuzzleBoneChanged;
                             _muzzleBone.Clear();
-                            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
+                            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
                         }
                     }
                 }
@@ -4865,6 +5004,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("recoilParentType");
 
             InitProperty("muzzleBone");
+            SetPropertyIsCollection("muzzleBone", true, typeof(string));
 
             InitProperty("recoilZ");
             InitProperty("recoilTime");
@@ -4879,16 +5019,11 @@ namespace VoidDestroyer2DataEditor
             _recoilParentType = "";
 
             _muzzleBone = new ObservableCollection<string>();
-            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
+            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
 
             _recoilZ = 0;
             _recoilTime = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -4899,7 +5034,7 @@ namespace VoidDestroyer2DataEditor
             _recoilParentType = "";
 
             _muzzleBone = new ObservableCollection<string>();
-            _muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnmuzzleBoneChanged);
+            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
 
             _recoilZ = 0;
             _recoilTime = 0;
@@ -4922,13 +5057,41 @@ namespace VoidDestroyer2DataEditor
         public recoilDataStructure(recoilDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _recoilBone = inCopyFrom.recoilBone;
+            SetPropertyExists("recoilBone", inCopyFrom.PropertyExists("recoilBone"));
             _muzzleBoneName = inCopyFrom.muzzleBoneName;
+            SetPropertyExists("muzzleBoneName", inCopyFrom.PropertyExists("muzzleBoneName"));
             _recoilParentType = inCopyFrom.recoilParentType;
+            SetPropertyExists("recoilParentType", inCopyFrom.PropertyExists("recoilParentType"));
 
-            _muzzleBone = inCopyFrom.muzzleBone;
+            _muzzleBone = new ObservableCollection<string>(inCopyFrom.muzzleBone);
+            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
+            SetPropertyExists("muzzleBone", inCopyFrom.PropertyExists("muzzleBone"));
 
             _recoilZ = inCopyFrom.recoilZ;
+            SetPropertyExists("recoilZ", inCopyFrom.PropertyExists("recoilZ"));
             _recoilTime = inCopyFrom.recoilTime;
+            SetPropertyExists("recoilTime", inCopyFrom.PropertyExists("recoilTime"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            recoilDataStructure original = (recoilDataStructure)inOriginal;
+            _recoilBone = original.recoilBone;
+            SetPropertyExists("recoilBone", original.PropertyExists("recoilBone"));
+            _muzzleBoneName = original.muzzleBoneName;
+            SetPropertyExists("muzzleBoneName", original.PropertyExists("muzzleBoneName"));
+            _recoilParentType = original.recoilParentType;
+            SetPropertyExists("recoilParentType", original.PropertyExists("recoilParentType"));
+
+            _muzzleBone = new ObservableCollection<string>(original.muzzleBone);
+            _muzzleBone.CollectionChanged += OnmuzzleBoneChanged;
+            SetPropertyExists("muzzleBone", original.PropertyExists("muzzleBone"));
+
+            _recoilZ = original.recoilZ;
+            SetPropertyExists("recoilZ", original.PropertyExists("recoilZ"));
+            _recoilTime = original.recoilTime;
+            SetPropertyExists("recoilTime", original.PropertyExists("recoilTime"));
 
         }
 
@@ -5001,38 +5164,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class recoilDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(rotateBonesDataStructureConverter))]
     public class rotateBonesDataStructure : VD2DataStructure
     {
         string _rotateBone;
@@ -5074,11 +5205,6 @@ namespace VoidDestroyer2DataEditor
         {
             _rotateBone = "";
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5097,6 +5223,15 @@ namespace VoidDestroyer2DataEditor
         public rotateBonesDataStructure(rotateBonesDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _rotateBone = inCopyFrom.rotateBone;
+            SetPropertyExists("rotateBone", inCopyFrom.PropertyExists("rotateBone"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            rotateBonesDataStructure original = (rotateBonesDataStructure)inOriginal;
+            _rotateBone = original.rotateBone;
+            SetPropertyExists("rotateBone", original.PropertyExists("rotateBone"));
 
         }
 
@@ -5126,38 +5261,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class rotateBonesDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(canisterDataStructureConverter))]
     public class canisterDataStructure : VD2DataStructure
     {
         string _projectileID;
@@ -5173,7 +5276,7 @@ namespace VoidDestroyer2DataEditor
         bool _bCanisterAimAssist;
         bool _bAddToRangeCalculations;
 
-        [Description("projectileID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("projectileID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string projectileID
         {
             get
@@ -5420,6 +5523,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("projectileID");
+            List<string> projectileIDreftypes = new List<string>();
+            projectileIDreftypes.Add("Ammo");
+            SetPropertyIsObjectIDRef("projectileID", true, projectileIDreftypes);
 
             InitProperty("canisterCount");
             InitProperty("blowBackCanisterCount");
@@ -5450,11 +5556,6 @@ namespace VoidDestroyer2DataEditor
             _bCanisterAimAssist = false;
             _bAddToRangeCalculations = false;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5495,17 +5596,55 @@ namespace VoidDestroyer2DataEditor
         public canisterDataStructure(canisterDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _projectileID = inCopyFrom.projectileID;
+            SetPropertyExists("projectileID", inCopyFrom.PropertyExists("projectileID"));
 
             _canisterCount = inCopyFrom.canisterCount;
+            SetPropertyExists("canisterCount", inCopyFrom.PropertyExists("canisterCount"));
             _blowBackCanisterCount = inCopyFrom.blowBackCanisterCount;
+            SetPropertyExists("blowBackCanisterCount", inCopyFrom.PropertyExists("blowBackCanisterCount"));
             _yawRange = inCopyFrom.yawRange;
+            SetPropertyExists("yawRange", inCopyFrom.PropertyExists("yawRange"));
             _pitchRange = inCopyFrom.pitchRange;
+            SetPropertyExists("pitchRange", inCopyFrom.PropertyExists("pitchRange"));
             _rollRange = inCopyFrom.rollRange;
+            SetPropertyExists("rollRange", inCopyFrom.PropertyExists("rollRange"));
             _speedAddBase = inCopyFrom.speedAddBase;
+            SetPropertyExists("speedAddBase", inCopyFrom.PropertyExists("speedAddBase"));
             _speedAddRandom = inCopyFrom.speedAddRandom;
+            SetPropertyExists("speedAddRandom", inCopyFrom.PropertyExists("speedAddRandom"));
 
             _bCanisterAimAssist = inCopyFrom.bCanisterAimAssist;
+            SetPropertyExists("bCanisterAimAssist", inCopyFrom.PropertyExists("bCanisterAimAssist"));
             _bAddToRangeCalculations = inCopyFrom.bAddToRangeCalculations;
+            SetPropertyExists("bAddToRangeCalculations", inCopyFrom.PropertyExists("bAddToRangeCalculations"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            canisterDataStructure original = (canisterDataStructure)inOriginal;
+            _projectileID = original.projectileID;
+            SetPropertyExists("projectileID", original.PropertyExists("projectileID"));
+
+            _canisterCount = original.canisterCount;
+            SetPropertyExists("canisterCount", original.PropertyExists("canisterCount"));
+            _blowBackCanisterCount = original.blowBackCanisterCount;
+            SetPropertyExists("blowBackCanisterCount", original.PropertyExists("blowBackCanisterCount"));
+            _yawRange = original.yawRange;
+            SetPropertyExists("yawRange", original.PropertyExists("yawRange"));
+            _pitchRange = original.pitchRange;
+            SetPropertyExists("pitchRange", original.PropertyExists("pitchRange"));
+            _rollRange = original.rollRange;
+            SetPropertyExists("rollRange", original.PropertyExists("rollRange"));
+            _speedAddBase = original.speedAddBase;
+            SetPropertyExists("speedAddBase", original.PropertyExists("speedAddBase"));
+            _speedAddRandom = original.speedAddRandom;
+            SetPropertyExists("speedAddRandom", original.PropertyExists("speedAddRandom"));
+
+            _bCanisterAimAssist = original.bCanisterAimAssist;
+            SetPropertyExists("bCanisterAimAssist", original.PropertyExists("bCanisterAimAssist"));
+            _bAddToRangeCalculations = original.bAddToRangeCalculations;
+            SetPropertyExists("bAddToRangeCalculations", original.PropertyExists("bAddToRangeCalculations"));
 
         }
 
@@ -5591,38 +5730,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class canisterDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(launchTubeDataStructureConverter))]
     public class launchTubeDataStructure : VD2DataStructure
     {
         string _direction;
@@ -5672,9 +5779,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_launchDeckBeg != null)
+                            {
+                                _launchDeckBeg.OnElementChanged -= launchDeckBeg_OnElementChanged;
+                            }
                             _launchDeckBeg = value;
+                            if (_launchDeckBeg != null)
+                            {
+                                _launchDeckBeg.OnElementChanged += launchDeckBeg_OnElementChanged;
+                            }
                             SetPropertyEdited("launchDeckBeg", true);
                             ParentDataFile.SetPropertyEdited("launchTube", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void launchDeckBeg_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("launchDeckBeg", true);
+                        ParentDataFile.SetPropertyEdited("launchTube", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= launchDeckBeg_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckBeg_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= launchDeckBeg_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckBeg_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= launchDeckBeg_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckBeg_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -5696,9 +5848,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_launchDeckEnd != null)
+                            {
+                                _launchDeckEnd.OnElementChanged -= launchDeckEnd_OnElementChanged;
+                            }
                             _launchDeckEnd = value;
+                            if (_launchDeckEnd != null)
+                            {
+                                _launchDeckEnd.OnElementChanged += launchDeckEnd_OnElementChanged;
+                            }
                             SetPropertyEdited("launchDeckEnd", true);
                             ParentDataFile.SetPropertyEdited("launchTube", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void launchDeckEnd_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("launchDeckEnd", true);
+                        ParentDataFile.SetPropertyEdited("launchTube", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= launchDeckEnd_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckEnd_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= launchDeckEnd_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckEnd_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= launchDeckEnd_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += launchDeckEnd_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -5720,9 +5917,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_dockPosition != null)
+                            {
+                                _dockPosition.OnElementChanged -= dockPosition_OnElementChanged;
+                            }
                             _dockPosition = value;
+                            if (_dockPosition != null)
+                            {
+                                _dockPosition.OnElementChanged += dockPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("dockPosition", true);
                             ParentDataFile.SetPropertyEdited("launchTube", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void dockPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockPosition", true);
+                        ParentDataFile.SetPropertyEdited("launchTube", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -5744,9 +5986,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_dockSize != null)
+                            {
+                                _dockSize.OnElementChanged -= dockSize_OnElementChanged;
+                            }
                             _dockSize = value;
+                            if (_dockSize != null)
+                            {
+                                _dockSize.OnElementChanged += dockSize_OnElementChanged;
+                            }
                             SetPropertyEdited("dockSize", true);
                             ParentDataFile.SetPropertyEdited("launchTube", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void dockSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockSize", true);
+                        ParentDataFile.SetPropertyEdited("launchTube", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -5776,11 +6063,6 @@ namespace VoidDestroyer2DataEditor
             _dockPosition = new Vector3D();
             _dockSize = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -5789,9 +6071,13 @@ namespace VoidDestroyer2DataEditor
             _direction = "";
 
             _launchDeckBeg = new Vector3D();
+            _launchDeckBeg.OnElementChanged += launchDeckBeg_OnElementChanged;
             _launchDeckEnd = new Vector3D();
+            _launchDeckEnd.OnElementChanged += launchDeckEnd_OnElementChanged;
             _dockPosition = new Vector3D();
+            _dockPosition.OnElementChanged += dockPosition_OnElementChanged;
             _dockSize = new Vector3D();
+            _dockSize.OnElementChanged += dockSize_OnElementChanged;
 
         }
 
@@ -5809,11 +6095,33 @@ namespace VoidDestroyer2DataEditor
         public launchTubeDataStructure(launchTubeDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _direction = inCopyFrom.direction;
+            SetPropertyExists("direction", inCopyFrom.PropertyExists("direction"));
 
-            _launchDeckBeg = inCopyFrom.launchDeckBeg;
-            _launchDeckEnd = inCopyFrom.launchDeckEnd;
-            _dockPosition = inCopyFrom.dockPosition;
-            _dockSize = inCopyFrom.dockSize;
+            _launchDeckBeg = new Vector3D(inCopyFrom.launchDeckBeg);
+            SetPropertyExists("launchDeckBeg", inCopyFrom.PropertyExists("launchDeckBeg"));
+            _launchDeckEnd = new Vector3D(inCopyFrom.launchDeckEnd);
+            SetPropertyExists("launchDeckEnd", inCopyFrom.PropertyExists("launchDeckEnd"));
+            _dockPosition = new Vector3D(inCopyFrom.dockPosition);
+            SetPropertyExists("dockPosition", inCopyFrom.PropertyExists("dockPosition"));
+            _dockSize = new Vector3D(inCopyFrom.dockSize);
+            SetPropertyExists("dockSize", inCopyFrom.PropertyExists("dockSize"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            launchTubeDataStructure original = (launchTubeDataStructure)inOriginal;
+            _direction = original.direction;
+            SetPropertyExists("direction", original.PropertyExists("direction"));
+
+            _launchDeckBeg = new Vector3D(original.launchDeckBeg);
+            SetPropertyExists("launchDeckBeg", original.PropertyExists("launchDeckBeg"));
+            _launchDeckEnd = new Vector3D(original.launchDeckEnd);
+            SetPropertyExists("launchDeckEnd", original.PropertyExists("launchDeckEnd"));
+            _dockPosition = new Vector3D(original.dockPosition);
+            SetPropertyExists("dockPosition", original.PropertyExists("dockPosition"));
+            _dockSize = new Vector3D(original.dockSize);
+            SetPropertyExists("dockSize", original.PropertyExists("dockSize"));
 
         }
 
@@ -5868,38 +6176,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class launchTubeDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(mirvDataStructureConverter))]
     public class mirvDataStructure : VD2DataStructure
     {
         string _mirvObjectID;
@@ -5908,7 +6184,7 @@ namespace VoidDestroyer2DataEditor
 
         bool _bNoExplodeOnMirv;
 
-        [Description("mirvObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("mirvObjectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string mirvObjectID
         {
             get
@@ -5987,6 +6263,9 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("mirvObjectID");
+            List<string> mirvObjectIDreftypes = new List<string>();
+            mirvObjectIDreftypes.Add("Missile");
+            SetPropertyIsObjectIDRef("mirvObjectID", true, mirvObjectIDreftypes);
 
             InitProperty("mirvCount");
 
@@ -6003,11 +6282,6 @@ namespace VoidDestroyer2DataEditor
 
             _bNoExplodeOnMirv = false;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6034,10 +6308,27 @@ namespace VoidDestroyer2DataEditor
         public mirvDataStructure(mirvDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _mirvObjectID = inCopyFrom.mirvObjectID;
+            SetPropertyExists("mirvObjectID", inCopyFrom.PropertyExists("mirvObjectID"));
 
             _mirvCount = inCopyFrom.mirvCount;
+            SetPropertyExists("mirvCount", inCopyFrom.PropertyExists("mirvCount"));
 
             _bNoExplodeOnMirv = inCopyFrom.bNoExplodeOnMirv;
+            SetPropertyExists("bNoExplodeOnMirv", inCopyFrom.PropertyExists("bNoExplodeOnMirv"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            mirvDataStructure original = (mirvDataStructure)inOriginal;
+            _mirvObjectID = original.mirvObjectID;
+            SetPropertyExists("mirvObjectID", original.PropertyExists("mirvObjectID"));
+
+            _mirvCount = original.mirvCount;
+            SetPropertyExists("mirvCount", original.PropertyExists("mirvCount"));
+
+            _bNoExplodeOnMirv = original.bNoExplodeOnMirv;
+            SetPropertyExists("bNoExplodeOnMirv", original.PropertyExists("bNoExplodeOnMirv"));
 
         }
 
@@ -6081,38 +6372,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class mirvDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(weaponDirectionDataStructureConverter))]
     public class weaponDirectionDataStructure : VD2DataStructure
     {
         string _mainDirection;
@@ -6239,11 +6498,6 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
             _roll = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6270,10 +6524,29 @@ namespace VoidDestroyer2DataEditor
         public weaponDirectionDataStructure(weaponDirectionDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _mainDirection = inCopyFrom.mainDirection;
+            SetPropertyExists("mainDirection", inCopyFrom.PropertyExists("mainDirection"));
 
             _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
             _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            weaponDirectionDataStructure original = (weaponDirectionDataStructure)inOriginal;
+            _mainDirection = original.mainDirection;
+            SetPropertyExists("mainDirection", original.PropertyExists("mainDirection"));
+
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
 
         }
 
@@ -6322,38 +6595,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class weaponDirectionDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(turretBarrelDataStructureConverter))]
     public class turretBarrelDataStructure : VD2DataStructure
     {
         string _boneName;
@@ -6400,9 +6641,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_weaponPosition != null)
+                            {
+                                _weaponPosition.OnElementChanged -= weaponPosition_OnElementChanged;
+                            }
                             _weaponPosition = value;
+                            if (_weaponPosition != null)
+                            {
+                                _weaponPosition.OnElementChanged += weaponPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("weaponPosition", true);
                             ParentDataFile.SetPropertyEdited("turretBarrel", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void weaponPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("weaponPosition", true);
+                        ParentDataFile.SetPropertyEdited("turretBarrel", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= weaponPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += weaponPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -6426,11 +6712,6 @@ namespace VoidDestroyer2DataEditor
 
             _weaponPosition = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6439,6 +6720,7 @@ namespace VoidDestroyer2DataEditor
             _boneName = "";
 
             _weaponPosition = new Vector3D();
+            _weaponPosition.OnElementChanged += weaponPosition_OnElementChanged;
 
         }
 
@@ -6453,8 +6735,21 @@ namespace VoidDestroyer2DataEditor
         public turretBarrelDataStructure(turretBarrelDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _boneName = inCopyFrom.boneName;
+            SetPropertyExists("boneName", inCopyFrom.PropertyExists("boneName"));
 
-            _weaponPosition = inCopyFrom.weaponPosition;
+            _weaponPosition = new Vector3D(inCopyFrom.weaponPosition);
+            SetPropertyExists("weaponPosition", inCopyFrom.PropertyExists("weaponPosition"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            turretBarrelDataStructure original = (turretBarrelDataStructure)inOriginal;
+            _boneName = original.boneName;
+            SetPropertyExists("boneName", original.PropertyExists("boneName"));
+
+            _weaponPosition = new Vector3D(original.weaponPosition);
+            SetPropertyExists("weaponPosition", original.PropertyExists("weaponPosition"));
 
         }
 
@@ -6491,38 +6786,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class turretBarrelDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(deathSpawnDataStructureConverter))]
     public class deathSpawnDataStructure : VD2DataStructure
     {
         ObservableCollection<string> _asteroidID;
@@ -6536,7 +6799,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_asteroidID != null)
+                {
+                    _asteroidID.CollectionChanged -= OnasteroidIDChanged;
+                }
                 _asteroidID = value;
+                if (_asteroidID != null)
+                {
+                    _asteroidID.CollectionChanged += OnasteroidIDChanged;
+                }
             }
         }
 
@@ -6557,14 +6828,14 @@ namespace VoidDestroyer2DataEditor
                         {
                             bool exists = false;
                             _asteroidID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "asteroidID", out exists));
-                            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
+                            _asteroidID.CollectionChanged += OnasteroidIDChanged;
                             SetPropertyExists("asteroidID", exists);
                         }
                         else
                         {
-                            _asteroidID.CollectionChanged -= this.OnasteroidIDChanged;
+                            _asteroidID.CollectionChanged -= OnasteroidIDChanged;
                             _asteroidID.Clear();
-                            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
+                            _asteroidID.CollectionChanged += OnasteroidIDChanged;
                         }
                     }
                 }
@@ -6576,6 +6847,7 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("asteroidID");
+            SetPropertyIsCollection("asteroidID", true, typeof(string));
 
         }
 
@@ -6583,20 +6855,15 @@ namespace VoidDestroyer2DataEditor
         public deathSpawnDataStructure() : base(null, null)
         {
             _asteroidID = new ObservableCollection<string>();
-            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
+            _asteroidID.CollectionChanged += OnasteroidIDChanged;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public deathSpawnDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _asteroidID = new ObservableCollection<string>();
-            _asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnasteroidIDChanged);
+            _asteroidID.CollectionChanged += OnasteroidIDChanged;
 
         }
 
@@ -6608,7 +6875,18 @@ namespace VoidDestroyer2DataEditor
 
         public deathSpawnDataStructure(deathSpawnDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _asteroidID = inCopyFrom.asteroidID;
+            _asteroidID = new ObservableCollection<string>(inCopyFrom.asteroidID);
+            _asteroidID.CollectionChanged += OnasteroidIDChanged;
+            SetPropertyExists("asteroidID", inCopyFrom.PropertyExists("asteroidID"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            deathSpawnDataStructure original = (deathSpawnDataStructure)inOriginal;
+            _asteroidID = new ObservableCollection<string>(original.asteroidID);
+            _asteroidID.CollectionChanged += OnasteroidIDChanged;
+            SetPropertyExists("asteroidID", original.PropertyExists("asteroidID"));
 
         }
 
@@ -6649,38 +6927,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class deathSpawnDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(babyDataStructureConverter))]
     public class babyDataStructure : VD2DataStructure
     {
         string _asteroidID;
@@ -6754,9 +7000,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_linearVelocity != null)
+                            {
+                                _linearVelocity.OnElementChanged -= linearVelocity_OnElementChanged;
+                            }
                             _linearVelocity = value;
+                            if (_linearVelocity != null)
+                            {
+                                _linearVelocity.OnElementChanged += linearVelocity_OnElementChanged;
+                            }
                             SetPropertyEdited("linearVelocity", true);
                             ParentDataFile.SetPropertyEdited("baby", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void linearVelocity_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("linearVelocity", true);
+                        ParentDataFile.SetPropertyEdited("baby", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -6784,11 +7075,6 @@ namespace VoidDestroyer2DataEditor
 
             _linearVelocity = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -6799,6 +7085,7 @@ namespace VoidDestroyer2DataEditor
             _lifeTimer = 0;
 
             _linearVelocity = new Vector3D();
+            _linearVelocity.OnElementChanged += linearVelocity_OnElementChanged;
 
         }
 
@@ -6815,10 +7102,27 @@ namespace VoidDestroyer2DataEditor
         public babyDataStructure(babyDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _asteroidID = inCopyFrom.asteroidID;
+            SetPropertyExists("asteroidID", inCopyFrom.PropertyExists("asteroidID"));
 
             _lifeTimer = inCopyFrom.lifeTimer;
+            SetPropertyExists("lifeTimer", inCopyFrom.PropertyExists("lifeTimer"));
 
-            _linearVelocity = inCopyFrom.linearVelocity;
+            _linearVelocity = new Vector3D(inCopyFrom.linearVelocity);
+            SetPropertyExists("linearVelocity", inCopyFrom.PropertyExists("linearVelocity"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            babyDataStructure original = (babyDataStructure)inOriginal;
+            _asteroidID = original.asteroidID;
+            SetPropertyExists("asteroidID", original.PropertyExists("asteroidID"));
+
+            _lifeTimer = original.lifeTimer;
+            SetPropertyExists("lifeTimer", original.PropertyExists("lifeTimer"));
+
+            _linearVelocity = new Vector3D(original.linearVelocity);
+            SetPropertyExists("linearVelocity", original.PropertyExists("linearVelocity"));
 
         }
 
@@ -6862,38 +7166,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class babyDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(largeDockDataStructureConverter))]
     public class largeDockDataStructure : VD2DataStructure
     {
         int _rollRotation;
@@ -6941,9 +7213,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_dockPosition != null)
+                            {
+                                _dockPosition.OnElementChanged -= dockPosition_OnElementChanged;
+                            }
                             _dockPosition = value;
+                            if (_dockPosition != null)
+                            {
+                                _dockPosition.OnElementChanged += dockPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("dockPosition", true);
                             ParentDataFile.SetPropertyEdited("largeDock", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void dockPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockPosition", true);
+                        ParentDataFile.SetPropertyEdited("largeDock", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -6965,9 +7282,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_dockSize != null)
+                            {
+                                _dockSize.OnElementChanged -= dockSize_OnElementChanged;
+                            }
                             _dockSize = value;
+                            if (_dockSize != null)
+                            {
+                                _dockSize.OnElementChanged += dockSize_OnElementChanged;
+                            }
                             SetPropertyEdited("dockSize", true);
                             ParentDataFile.SetPropertyEdited("largeDock", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void dockSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("dockSize", true);
+                        ParentDataFile.SetPropertyEdited("largeDock", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= dockSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += dockSize_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -6993,11 +7355,6 @@ namespace VoidDestroyer2DataEditor
             _dockPosition = new Vector3D();
             _dockSize = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7006,7 +7363,9 @@ namespace VoidDestroyer2DataEditor
             _rollRotation = 0;
 
             _dockPosition = new Vector3D();
+            _dockPosition.OnElementChanged += dockPosition_OnElementChanged;
             _dockSize = new Vector3D();
+            _dockSize.OnElementChanged += dockSize_OnElementChanged;
 
         }
 
@@ -7022,9 +7381,25 @@ namespace VoidDestroyer2DataEditor
         public largeDockDataStructure(largeDockDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _rollRotation = inCopyFrom.rollRotation;
+            SetPropertyExists("rollRotation", inCopyFrom.PropertyExists("rollRotation"));
 
-            _dockPosition = inCopyFrom.dockPosition;
-            _dockSize = inCopyFrom.dockSize;
+            _dockPosition = new Vector3D(inCopyFrom.dockPosition);
+            SetPropertyExists("dockPosition", inCopyFrom.PropertyExists("dockPosition"));
+            _dockSize = new Vector3D(inCopyFrom.dockSize);
+            SetPropertyExists("dockSize", inCopyFrom.PropertyExists("dockSize"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            largeDockDataStructure original = (largeDockDataStructure)inOriginal;
+            _rollRotation = original.rollRotation;
+            SetPropertyExists("rollRotation", original.PropertyExists("rollRotation"));
+
+            _dockPosition = new Vector3D(original.dockPosition);
+            SetPropertyExists("dockPosition", original.PropertyExists("dockPosition"));
+            _dockSize = new Vector3D(original.dockSize);
+            SetPropertyExists("dockSize", original.PropertyExists("dockSize"));
 
         }
 
@@ -7067,38 +7442,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class largeDockDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(physicalRotatingElementDataStructureConverter))]
     public class physicalRotatingElementDataStructure : VD2DataStructure
     {
         string _meshName;
@@ -7252,11 +7595,6 @@ namespace VoidDestroyer2DataEditor
             _yawSpeed = 0;
             _pitchSpeed = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7285,11 +7623,33 @@ namespace VoidDestroyer2DataEditor
         public physicalRotatingElementDataStructure(physicalRotatingElementDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _meshName = inCopyFrom.meshName;
+            SetPropertyExists("meshName", inCopyFrom.PropertyExists("meshName"));
             _collisionShape = inCopyFrom.collisionShape;
+            SetPropertyExists("collisionShape", inCopyFrom.PropertyExists("collisionShape"));
 
             _rollSpeed = inCopyFrom.rollSpeed;
+            SetPropertyExists("rollSpeed", inCopyFrom.PropertyExists("rollSpeed"));
             _yawSpeed = inCopyFrom.yawSpeed;
+            SetPropertyExists("yawSpeed", inCopyFrom.PropertyExists("yawSpeed"));
             _pitchSpeed = inCopyFrom.pitchSpeed;
+            SetPropertyExists("pitchSpeed", inCopyFrom.PropertyExists("pitchSpeed"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            physicalRotatingElementDataStructure original = (physicalRotatingElementDataStructure)inOriginal;
+            _meshName = original.meshName;
+            SetPropertyExists("meshName", original.PropertyExists("meshName"));
+            _collisionShape = original.collisionShape;
+            SetPropertyExists("collisionShape", original.PropertyExists("collisionShape"));
+
+            _rollSpeed = original.rollSpeed;
+            SetPropertyExists("rollSpeed", original.PropertyExists("rollSpeed"));
+            _yawSpeed = original.yawSpeed;
+            SetPropertyExists("yawSpeed", original.PropertyExists("yawSpeed"));
+            _pitchSpeed = original.pitchSpeed;
+            SetPropertyExists("pitchSpeed", original.PropertyExists("pitchSpeed"));
 
         }
 
@@ -7344,38 +7704,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class physicalRotatingElementDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(alwaysOnEffectDataStructureConverter))]
     public class alwaysOnEffectDataStructure : VD2DataStructure
     {
         string _effectID;
@@ -7422,9 +7750,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("alwaysOnEffect", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("alwaysOnEffect", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -7448,11 +7821,6 @@ namespace VoidDestroyer2DataEditor
 
             _position = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7461,6 +7829,7 @@ namespace VoidDestroyer2DataEditor
             _effectID = "";
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
         }
 
@@ -7475,8 +7844,21 @@ namespace VoidDestroyer2DataEditor
         public alwaysOnEffectDataStructure(alwaysOnEffectDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _effectID = inCopyFrom.effectID;
+            SetPropertyExists("effectID", inCopyFrom.PropertyExists("effectID"));
 
-            _position = inCopyFrom.position;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            alwaysOnEffectDataStructure original = (alwaysOnEffectDataStructure)inOriginal;
+            _effectID = original.effectID;
+            SetPropertyExists("effectID", original.PropertyExists("effectID"));
+
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
 
         }
 
@@ -7513,38 +7895,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class alwaysOnEffectDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(cargoBayDataStructureConverter))]
     public class cargoBayDataStructure : VD2DataStructure
     {
         string _cargoBayType;
@@ -7617,11 +7967,6 @@ namespace VoidDestroyer2DataEditor
 
             _maxAmount = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7644,8 +7989,21 @@ namespace VoidDestroyer2DataEditor
         public cargoBayDataStructure(cargoBayDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _cargoBayType = inCopyFrom.cargoBayType;
+            SetPropertyExists("cargoBayType", inCopyFrom.PropertyExists("cargoBayType"));
 
             _maxAmount = inCopyFrom.maxAmount;
+            SetPropertyExists("maxAmount", inCopyFrom.PropertyExists("maxAmount"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            cargoBayDataStructure original = (cargoBayDataStructure)inOriginal;
+            _cargoBayType = original.cargoBayType;
+            SetPropertyExists("cargoBayType", original.PropertyExists("cargoBayType"));
+
+            _maxAmount = original.maxAmount;
+            SetPropertyExists("maxAmount", original.PropertyExists("maxAmount"));
 
         }
 
@@ -7682,38 +8040,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class cargoBayDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(gateCollisionDataStructureConverter))]
     public class gateCollisionDataStructure : VD2DataStructure
     {
         Vector3D _gateCollisionSize;
@@ -7733,9 +8059,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_gateCollisionSize != null)
+                            {
+                                _gateCollisionSize.OnElementChanged -= gateCollisionSize_OnElementChanged;
+                            }
                             _gateCollisionSize = value;
+                            if (_gateCollisionSize != null)
+                            {
+                                _gateCollisionSize.OnElementChanged += gateCollisionSize_OnElementChanged;
+                            }
                             SetPropertyEdited("gateCollisionSize", true);
                             ParentDataFile.SetPropertyEdited("gateCollision", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void gateCollisionSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("gateCollisionSize", true);
+                        ParentDataFile.SetPropertyEdited("gateCollision", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= gateCollisionSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += gateCollisionSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= gateCollisionSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += gateCollisionSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= gateCollisionSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += gateCollisionSize_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -7755,17 +8126,13 @@ namespace VoidDestroyer2DataEditor
         {
             _gateCollisionSize = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public gateCollisionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
             _gateCollisionSize = new Vector3D();
+            _gateCollisionSize.OnElementChanged += gateCollisionSize_OnElementChanged;
 
         }
 
@@ -7777,7 +8144,16 @@ namespace VoidDestroyer2DataEditor
 
         public gateCollisionDataStructure(gateCollisionDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _gateCollisionSize = inCopyFrom.gateCollisionSize;
+            _gateCollisionSize = new Vector3D(inCopyFrom.gateCollisionSize);
+            SetPropertyExists("gateCollisionSize", inCopyFrom.PropertyExists("gateCollisionSize"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            gateCollisionDataStructure original = (gateCollisionDataStructure)inOriginal;
+            _gateCollisionSize = new Vector3D(original.gateCollisionSize);
+            SetPropertyExists("gateCollisionSize", original.PropertyExists("gateCollisionSize"));
 
         }
 
@@ -7807,38 +8183,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class gateCollisionDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(refuelAreaDataStructureConverter))]
     public class refuelAreaDataStructure : VD2DataStructure
     {
         string _refuelParticleSystem;
@@ -7886,9 +8230,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_refuelPosition != null)
+                            {
+                                _refuelPosition.OnElementChanged -= refuelPosition_OnElementChanged;
+                            }
                             _refuelPosition = value;
+                            if (_refuelPosition != null)
+                            {
+                                _refuelPosition.OnElementChanged += refuelPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("refuelPosition", true);
                             ParentDataFile.SetPropertyEdited("refuelArea", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void refuelPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("refuelPosition", true);
+                        ParentDataFile.SetPropertyEdited("refuelArea", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= refuelPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += refuelPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= refuelPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += refuelPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= refuelPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += refuelPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -7910,9 +8299,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_refuelSize != null)
+                            {
+                                _refuelSize.OnElementChanged -= refuelSize_OnElementChanged;
+                            }
                             _refuelSize = value;
+                            if (_refuelSize != null)
+                            {
+                                _refuelSize.OnElementChanged += refuelSize_OnElementChanged;
+                            }
                             SetPropertyEdited("refuelSize", true);
                             ParentDataFile.SetPropertyEdited("refuelArea", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void refuelSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("refuelSize", true);
+                        ParentDataFile.SetPropertyEdited("refuelArea", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= refuelSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += refuelSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= refuelSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += refuelSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= refuelSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += refuelSize_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -7938,11 +8372,6 @@ namespace VoidDestroyer2DataEditor
             _refuelPosition = new Vector3D();
             _refuelSize = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -7951,7 +8380,9 @@ namespace VoidDestroyer2DataEditor
             _refuelParticleSystem = "";
 
             _refuelPosition = new Vector3D();
+            _refuelPosition.OnElementChanged += refuelPosition_OnElementChanged;
             _refuelSize = new Vector3D();
+            _refuelSize.OnElementChanged += refuelSize_OnElementChanged;
 
         }
 
@@ -7967,9 +8398,25 @@ namespace VoidDestroyer2DataEditor
         public refuelAreaDataStructure(refuelAreaDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _refuelParticleSystem = inCopyFrom.refuelParticleSystem;
+            SetPropertyExists("refuelParticleSystem", inCopyFrom.PropertyExists("refuelParticleSystem"));
 
-            _refuelPosition = inCopyFrom.refuelPosition;
-            _refuelSize = inCopyFrom.refuelSize;
+            _refuelPosition = new Vector3D(inCopyFrom.refuelPosition);
+            SetPropertyExists("refuelPosition", inCopyFrom.PropertyExists("refuelPosition"));
+            _refuelSize = new Vector3D(inCopyFrom.refuelSize);
+            SetPropertyExists("refuelSize", inCopyFrom.PropertyExists("refuelSize"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            refuelAreaDataStructure original = (refuelAreaDataStructure)inOriginal;
+            _refuelParticleSystem = original.refuelParticleSystem;
+            SetPropertyExists("refuelParticleSystem", original.PropertyExists("refuelParticleSystem"));
+
+            _refuelPosition = new Vector3D(original.refuelPosition);
+            SetPropertyExists("refuelPosition", original.PropertyExists("refuelPosition"));
+            _refuelSize = new Vector3D(original.refuelSize);
+            SetPropertyExists("refuelSize", original.PropertyExists("refuelSize"));
 
         }
 
@@ -8012,38 +8459,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class refuelAreaDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(repairAreaDataStructureConverter))]
     public class repairAreaDataStructure : VD2DataStructure
     {
         string _repairParticleSystem;
@@ -8141,9 +8556,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_repairPosition != null)
+                            {
+                                _repairPosition.OnElementChanged -= repairPosition_OnElementChanged;
+                            }
                             _repairPosition = value;
+                            if (_repairPosition != null)
+                            {
+                                _repairPosition.OnElementChanged += repairPosition_OnElementChanged;
+                            }
                             SetPropertyEdited("repairPosition", true);
                             ParentDataFile.SetPropertyEdited("repairArea", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void repairPosition_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("repairPosition", true);
+                        ParentDataFile.SetPropertyEdited("repairArea", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= repairPosition_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += repairPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= repairPosition_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += repairPosition_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= repairPosition_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += repairPosition_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -8165,9 +8625,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_repairSize != null)
+                            {
+                                _repairSize.OnElementChanged -= repairSize_OnElementChanged;
+                            }
                             _repairSize = value;
+                            if (_repairSize != null)
+                            {
+                                _repairSize.OnElementChanged += repairSize_OnElementChanged;
+                            }
                             SetPropertyEdited("repairSize", true);
                             ParentDataFile.SetPropertyEdited("repairArea", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void repairSize_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("repairSize", true);
+                        ParentDataFile.SetPropertyEdited("repairArea", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= repairSize_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += repairSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= repairSize_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += repairSize_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= repairSize_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += repairSize_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -8197,11 +8702,6 @@ namespace VoidDestroyer2DataEditor
             _repairPosition = new Vector3D();
             _repairSize = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8212,7 +8712,9 @@ namespace VoidDestroyer2DataEditor
             _maxRepairClass = "";
 
             _repairPosition = new Vector3D();
+            _repairPosition.OnElementChanged += repairPosition_OnElementChanged;
             _repairSize = new Vector3D();
+            _repairSize.OnElementChanged += repairSize_OnElementChanged;
 
         }
 
@@ -8230,11 +8732,33 @@ namespace VoidDestroyer2DataEditor
         public repairAreaDataStructure(repairAreaDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _repairParticleSystem = inCopyFrom.repairParticleSystem;
+            SetPropertyExists("repairParticleSystem", inCopyFrom.PropertyExists("repairParticleSystem"));
             _repairSoundID = inCopyFrom.repairSoundID;
+            SetPropertyExists("repairSoundID", inCopyFrom.PropertyExists("repairSoundID"));
             _maxRepairClass = inCopyFrom.maxRepairClass;
+            SetPropertyExists("maxRepairClass", inCopyFrom.PropertyExists("maxRepairClass"));
 
-            _repairPosition = inCopyFrom.repairPosition;
-            _repairSize = inCopyFrom.repairSize;
+            _repairPosition = new Vector3D(inCopyFrom.repairPosition);
+            SetPropertyExists("repairPosition", inCopyFrom.PropertyExists("repairPosition"));
+            _repairSize = new Vector3D(inCopyFrom.repairSize);
+            SetPropertyExists("repairSize", inCopyFrom.PropertyExists("repairSize"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            repairAreaDataStructure original = (repairAreaDataStructure)inOriginal;
+            _repairParticleSystem = original.repairParticleSystem;
+            SetPropertyExists("repairParticleSystem", original.PropertyExists("repairParticleSystem"));
+            _repairSoundID = original.repairSoundID;
+            SetPropertyExists("repairSoundID", original.PropertyExists("repairSoundID"));
+            _maxRepairClass = original.maxRepairClass;
+            SetPropertyExists("maxRepairClass", original.PropertyExists("maxRepairClass"));
+
+            _repairPosition = new Vector3D(original.repairPosition);
+            SetPropertyExists("repairPosition", original.PropertyExists("repairPosition"));
+            _repairSize = new Vector3D(original.repairSize);
+            SetPropertyExists("repairSize", original.PropertyExists("repairSize"));
 
         }
 
@@ -8289,38 +8813,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class repairAreaDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(mineDataStructureConverter))]
     public class mineDataStructure : VD2DataStructure
     {
         string _mineID;
@@ -8368,9 +8860,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
                             _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
                             SetPropertyEdited("position", true);
                             ParentDataFile.SetPropertyEdited("mine", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("mine", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -8392,9 +8929,54 @@ namespace VoidDestroyer2DataEditor
                     {
                         if (ParentDataFile.Source.WriteAccess)
                         {
+                            if (_linearVelocity != null)
+                            {
+                                _linearVelocity.OnElementChanged -= linearVelocity_OnElementChanged;
+                            }
                             _linearVelocity = value;
+                            if (_linearVelocity != null)
+                            {
+                                _linearVelocity.OnElementChanged += linearVelocity_OnElementChanged;
+                            }
                             SetPropertyEdited("linearVelocity", true);
                             ParentDataFile.SetPropertyEdited("mine", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void linearVelocity_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("linearVelocity", true);
+                        ParentDataFile.SetPropertyEdited("mine", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= linearVelocity_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += linearVelocity_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -8420,11 +9002,6 @@ namespace VoidDestroyer2DataEditor
             _position = new Vector3D();
             _linearVelocity = new Vector3D();
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8433,7 +9010,9 @@ namespace VoidDestroyer2DataEditor
             _mineID = "";
 
             _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
             _linearVelocity = new Vector3D();
+            _linearVelocity.OnElementChanged += linearVelocity_OnElementChanged;
 
         }
 
@@ -8449,9 +9028,25 @@ namespace VoidDestroyer2DataEditor
         public mineDataStructure(mineDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _mineID = inCopyFrom.mineID;
+            SetPropertyExists("mineID", inCopyFrom.PropertyExists("mineID"));
 
-            _position = inCopyFrom.position;
-            _linearVelocity = inCopyFrom.linearVelocity;
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
+            _linearVelocity = new Vector3D(inCopyFrom.linearVelocity);
+            SetPropertyExists("linearVelocity", inCopyFrom.PropertyExists("linearVelocity"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            mineDataStructure original = (mineDataStructure)inOriginal;
+            _mineID = original.mineID;
+            SetPropertyExists("mineID", original.PropertyExists("mineID"));
+
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
+            _linearVelocity = new Vector3D(original.linearVelocity);
+            SetPropertyExists("linearVelocity", original.PropertyExists("linearVelocity"));
 
         }
 
@@ -8494,38 +9089,6 @@ namespace VoidDestroyer2DataEditor
         }
     }
 
-    public class mineDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
-        }
-    }
-
-    [TypeConverter(typeof(damageCollisionFieldDataStructureConverter))]
     public class damageCollisionFieldDataStructure : VD2DataStructure
     {
         int _damage;
@@ -8594,11 +9157,6 @@ namespace VoidDestroyer2DataEditor
             _damage = 0;
             _scale = 0;
 
-
-            /*if (EditorUI.UI.EditorForm.DataFileProperties.SelectedObject is VD2Data)
-            {
-                ParentDataFile = (VD2Data)EditorUI.UI.EditorForm.DataFileProperties.SelectedObject;
-            }*/
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
@@ -8619,7 +9177,19 @@ namespace VoidDestroyer2DataEditor
         public damageCollisionFieldDataStructure(damageCollisionFieldDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
             _damage = inCopyFrom.damage;
+            SetPropertyExists("damage", inCopyFrom.PropertyExists("damage"));
             _scale = inCopyFrom.scale;
+            SetPropertyExists("scale", inCopyFrom.PropertyExists("scale"));
+
+        }
+
+        public override void CopyFrom(VD2DataStructure inOriginal)
+        {
+            damageCollisionFieldDataStructure original = (damageCollisionFieldDataStructure)inOriginal;
+            _damage = original.damage;
+            SetPropertyExists("damage", original.PropertyExists("damage"));
+            _scale = original.scale;
+            SetPropertyExists("scale", original.PropertyExists("scale"));
 
         }
 
@@ -8652,37 +9222,6 @@ namespace VoidDestroyer2DataEditor
 
             xmltextlines.Add(indent + "</damageCollisionField>");
             return xmltextlines;
-        }
-    }
-
-    public class damageCollisionFieldDataStructureConverter : TypeConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return true;
-            }
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return value.ToString();
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            return TypeDescriptor.GetProperties(value);
         }
     }
 

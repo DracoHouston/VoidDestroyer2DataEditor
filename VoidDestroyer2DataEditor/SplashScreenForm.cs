@@ -37,7 +37,12 @@ namespace VoidDestroyer2DataEditor
                 Controls.Add(mv);
                 step++;
             }
-            if (step == 1)
+            else if (step == 1)
+            {
+                EditorUI.UI.ReloadData();
+                step++;
+            }
+            else if (step == 2)
             {
                 Close();
             }

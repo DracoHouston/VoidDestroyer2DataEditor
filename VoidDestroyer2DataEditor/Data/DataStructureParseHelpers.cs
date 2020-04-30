@@ -112,7 +112,7 @@ namespace VoidDestroyer2DataEditor
             debrisInfoDataStructure result = new debrisInfoDataStructure(inParentDataFile, inXMLNode, debris);
 
             result.SetPropertyExists("debris", debrisexists);
-            result.debris.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OndebrisChanged);
+            result.debris.CollectionChanged += result.OndebrisChanged;
 
             return result;
         }
@@ -297,7 +297,7 @@ namespace VoidDestroyer2DataEditor
             targetPriorityListDataStructure result = new targetPriorityListDataStructure(inParentDataFile, inXMLNode, targetClass);
 
             result.SetPropertyExists("targetClass", targetClassexists);
-            result.targetClass.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OntargetClassChanged);
+            result.targetClass.CollectionChanged += result.OntargetClassChanged;
 
             return result;
         }
@@ -388,7 +388,7 @@ namespace VoidDestroyer2DataEditor
             upgradesDataStructure result = new upgradesDataStructure(inParentDataFile, inXMLNode, upgradeID, primaryUpgradeCapacity, activeUpgradeCapacity);
 
             result.SetPropertyExists("upgradeID", upgradeIDexists);
-            result.upgradeID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnupgradeIDChanged);
+            result.upgradeID.CollectionChanged += result.OnupgradeIDChanged;
 
             result.SetPropertyExists("primaryUpgradeCapacity", primaryUpgradeCapacityexists);
             result.SetPropertyExists("activeUpgradeCapacity", activeUpgradeCapacityexists);
@@ -498,6 +498,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("bPlayerShipOnly", bPlayerShipOnlyexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             return result;
         }
@@ -605,11 +606,12 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("pitch", pitchexists);
 
             result.SetPropertyExists("weaponPosition", weaponPositionexists);
-            result.weaponPosition.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnweaponPositionChanged);
+            result.weaponPosition.CollectionChanged += result.OnweaponPositionChanged;
             foreach (Vector3D element in result.weaponPosition)
             {
                 element.OnElementChanged += result.weaponPosition_OnElementChanged;
             }
+
             return result;
         }
 
@@ -713,6 +715,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("healthPoint", healthPointexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             return result;
         }
@@ -829,7 +832,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("weaponFire", weaponFireexists);
 
             result.SetPropertyExists("turretRole", turretRoleexists);
-            result.turretRole.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnturretRoleChanged);
+            result.turretRole.CollectionChanged += result.OnturretRoleChanged;
 
             result.SetPropertyExists("yawPermitted", yawPermittedexists);
             result.SetPropertyExists("weaponPositionID", weaponPositionIDexists);
@@ -842,6 +845,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("bHideInHangar", bHideInHangarexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             return result;
         }
@@ -935,9 +939,10 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("attachmentOrientation", attachmentOrientationexists);
 
             result.SetPropertyExists("attachmentID", attachmentIDexists);
-            result.attachmentID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnattachmentIDChanged);
+            result.attachmentID.CollectionChanged += result.OnattachmentIDChanged;
 
             result.SetPropertyExists("attachmentPosition", attachmentPositionexists);
+            attachmentPosition.OnElementChanged += result.attachmentPosition_OnElementChanged;
 
             return result;
         }
@@ -1050,6 +1055,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("bCombat", bCombatexists);
 
             result.SetPropertyExists("translateAmount", translateAmountexists);
+            translateAmount.OnElementChanged += result.translateAmount_OnElementChanged;
 
             return result;
         }
@@ -1173,7 +1179,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("resourceOnly", resourceOnlyexists);
 
             result.SetPropertyExists("objectID", objectIDexists);
-            result.objectID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnobjectIDChanged);
+            result.objectID.CollectionChanged += result.OnobjectIDChanged;
 
             result.SetPropertyExists("ejectVelocity", ejectVelocityexists);
             result.SetPropertyExists("dockRollOffset", dockRollOffsetexists);
@@ -1183,6 +1189,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("bInvisible", bInvisibleexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             return result;
         }
@@ -1284,6 +1291,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("roll", rollexists);
 
             result.SetPropertyExists("shieldPosition", shieldPositionexists);
+            shieldPosition.OnElementChanged += result.shieldPosition_OnElementChanged;
 
             return result;
         }
@@ -1480,7 +1488,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("recoilParentType", recoilParentTypeexists);
 
             result.SetPropertyExists("muzzleBone", muzzleBoneexists);
-            result.muzzleBone.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnmuzzleBoneChanged);
+            result.muzzleBone.CollectionChanged += result.OnmuzzleBoneChanged;
 
             result.SetPropertyExists("recoilZ", recoilZexists);
             result.SetPropertyExists("recoilTime", recoilTimeexists);
@@ -1781,9 +1789,13 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("direction", directionexists);
 
             result.SetPropertyExists("launchDeckBeg", launchDeckBegexists);
+            launchDeckBeg.OnElementChanged += result.launchDeckBeg_OnElementChanged;
             result.SetPropertyExists("launchDeckEnd", launchDeckEndexists);
+            launchDeckEnd.OnElementChanged += result.launchDeckEnd_OnElementChanged;
             result.SetPropertyExists("dockPosition", dockPositionexists);
+            dockPosition.OnElementChanged += result.dockPosition_OnElementChanged;
             result.SetPropertyExists("dockSize", dockSizeexists);
+            dockSize.OnElementChanged += result.dockSize_OnElementChanged;
 
             return result;
         }
@@ -2065,6 +2077,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("boneName", boneNameexists);
 
             result.SetPropertyExists("weaponPosition", weaponPositionexists);
+            weaponPosition.OnElementChanged += result.weaponPosition_OnElementChanged;
 
             return result;
         }
@@ -2150,7 +2163,7 @@ namespace VoidDestroyer2DataEditor
             deathSpawnDataStructure result = new deathSpawnDataStructure(inParentDataFile, inXMLNode, asteroidID);
 
             result.SetPropertyExists("asteroidID", asteroidIDexists);
-            result.asteroidID.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(result.OnasteroidIDChanged);
+            result.asteroidID.CollectionChanged += result.OnasteroidIDChanged;
 
             return result;
         }
@@ -2246,6 +2259,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("lifeTimer", lifeTimerexists);
 
             result.SetPropertyExists("linearVelocity", linearVelocityexists);
+            linearVelocity.OnElementChanged += result.linearVelocity_OnElementChanged;
 
             return result;
         }
@@ -2338,7 +2352,9 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("rollRotation", rollRotationexists);
 
             result.SetPropertyExists("dockPosition", dockPositionexists);
+            dockPosition.OnElementChanged += result.dockPosition_OnElementChanged;
             result.SetPropertyExists("dockSize", dockSizeexists);
+            dockSize.OnElementChanged += result.dockSize_OnElementChanged;
 
             return result;
         }
@@ -2528,6 +2544,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("effectID", effectIDexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             return result;
         }
@@ -2703,6 +2720,7 @@ namespace VoidDestroyer2DataEditor
             gateCollisionDataStructure result = new gateCollisionDataStructure(inParentDataFile, inXMLNode, gateCollisionSize);
 
             result.SetPropertyExists("gateCollisionSize", gateCollisionSizeexists);
+            gateCollisionSize.OnElementChanged += result.gateCollisionSize_OnElementChanged;
 
             return result;
         }
@@ -2795,7 +2813,9 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("refuelParticleSystem", refuelParticleSystemexists);
 
             result.SetPropertyExists("refuelPosition", refuelPositionexists);
+            refuelPosition.OnElementChanged += result.refuelPosition_OnElementChanged;
             result.SetPropertyExists("refuelSize", refuelSizeexists);
+            refuelSize.OnElementChanged += result.refuelSize_OnElementChanged;
 
             return result;
         }
@@ -2894,7 +2914,9 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("maxRepairClass", maxRepairClassexists);
 
             result.SetPropertyExists("repairPosition", repairPositionexists);
+            repairPosition.OnElementChanged += result.repairPosition_OnElementChanged;
             result.SetPropertyExists("repairSize", repairSizeexists);
+            repairSize.OnElementChanged += result.repairSize_OnElementChanged;
 
             return result;
         }
@@ -2987,7 +3009,9 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("mineID", mineIDexists);
 
             result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
             result.SetPropertyExists("linearVelocity", linearVelocityexists);
+            linearVelocity.OnElementChanged += result.linearVelocity_OnElementChanged;
 
             return result;
         }

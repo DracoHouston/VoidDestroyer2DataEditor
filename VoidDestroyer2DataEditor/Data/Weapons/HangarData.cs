@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace VoidDestroyer2DataEditor
 {
@@ -28,7 +29,7 @@ namespace VoidDestroyer2DataEditor
         bool _bIndependent;
         bool _bSecondaryFire;
 
-        ObservableCollection<launchTubeDataStructure> _launchTube;
+        ObservableCollection<VD2DataStructure> _launchTube;
 
         [Description("weaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string weaponType
@@ -70,7 +71,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("fighterShipID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("fighterShipID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string fighterShipID
         {
             get
@@ -274,8 +275,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("launchTube is a collection of datastructures"), Category("Data Structure Collections")]
-        public ObservableCollection<launchTubeDataStructure> launchTube
+        [Browsable(false), Description("launchTube is a collection of datastructures"), Category("Data Structure Collections")]
+        public ObservableCollection<VD2DataStructure> launchTube
         {
             get
             {
@@ -283,7 +284,15 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
+                if (_launchTube != null)
+                {
+                    _launchTube.CollectionChanged -= OnlaunchTubeChanged;
+                }
                 _launchTube = value;
+                if (_launchTube != null)
+                {
+                    _launchTube.CollectionChanged += OnlaunchTubeChanged;
+                }
             }
         }
 
@@ -298,8 +307,8 @@ namespace VoidDestroyer2DataEditor
                 else
                 {
                     bool exists = false;
-                    _launchTube = new ObservableCollection<launchTubeDataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                    _launchTube.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnlaunchTubeChanged);
+                    _launchTube = new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                    _launchTube.CollectionChanged += OnlaunchTubeChanged;
                     if (Source.ShortName == "Base")
                     {
                         SetPropertyExistsInBaseData("launchTube", exists);
@@ -319,6 +328,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("hangarID");
             SetPropertyIsObjectID("hangarID", true);
             InitProperty("fighterShipID");
+            List<string> fighterShipIDreftypes = new List<string>();
+            fighterShipIDreftypes.Add("Ship");
+            SetPropertyIsObjectIDRef("fighterShipID", true, fighterShipIDreftypes);
             InitProperty("name");
 
             InitProperty("maxFighters");
@@ -333,9 +345,14 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bSecondaryFire");
 
             InitProperty("launchTube");
+            SetPropertyIsCollection("launchTube", true, typeof(launchTubeDataStructure));
         }
 
         public HangarData(string inPath, VD2FileSource inSource) : base(inPath, inSource)
+        {
+        }
+
+        public override void LoadDataFromXML()
         {
             bool exists = false;
             if (DataXMLDoc != null)
@@ -465,8 +482,8 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bSecondaryFire", exists);
 
-                _launchTube =  new ObservableCollection<launchTubeDataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
-                _launchTube.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(this.OnlaunchTubeChanged);
+                _launchTube =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetlaunchTubeDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
+                _launchTube.CollectionChanged += OnlaunchTubeChanged;
                 if (Source.ShortName == "Base")
                 {
                     SetPropertyExistsInBaseData("launchTube", exists);
@@ -476,6 +493,7 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("launchTube", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "launchTube"));
                 }
                 SetPropertyExists("launchTube", exists);
+                base.LoadDataFromXML();
             }
         }
 
@@ -561,7 +579,6 @@ namespace VoidDestroyer2DataEditor
             }
 
             File.WriteAllLines(_FilePath, xmltextlines);
-            ResetAllPropertyEdited();
         }
     }
 }

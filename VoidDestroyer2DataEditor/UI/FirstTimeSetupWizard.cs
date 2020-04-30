@@ -61,8 +61,10 @@ namespace VoidDestroyer2DataEditor
 
         private void QuitButton_Click(object sender, EventArgs e)
         {
-            EditorUI.UI.EditorForm.Close();
+            //EditorUI.UI.EditorForm.Close();
+            DialogResult = DialogResult.Abort;
             Close();
+            //Application.Exit();
         }
 
         private void BackButton_Click(object sender, EventArgs e)
