@@ -11,11 +11,6 @@ this program reads in all the possible properties of each type of object into
 an object that can be viewed in a property grid control. It displays all the 
 definitions that can be viewed within a tabbed tree.
 
-Latest release does not allow for writing data back to files, but the master 
-branch can, if built from source. A prebuilt release will be coming when all
-features for the v0.0.4.0 release are done, hopefully very soon.
-
-Master branch version can also display ogre meshes and use them to build a 
-preview of ships.
-
-A better readme coming soon.
+You can make changes to the properties of the object definitions and save them back 
+to XML. Ships also have a 3d WYSIWYG view that reacts to changes to rotating elements
+turrets and attachments.
