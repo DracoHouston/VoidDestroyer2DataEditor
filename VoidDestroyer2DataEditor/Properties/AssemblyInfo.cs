@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Void Destroyer 2 Data Editor")]
-[assembly: AssemblyDescription("Void Destroyer 2 Data Editor is a 3rd party modding tool for Void Destroyer 2. It is not affiliated with or supported by Iteration 11\nContact:draco@dracohouston.net")]
+[assembly: AssemblyDescription("Void Destroyer 2 Data Editor is a 3rd party modding tool for Void Destroyer 2.\r\n\r\nIt is not affiliated with or supported by Iteration 11\r\n\r\nContact:draco@dracohouston.net")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("By Draco Houston")]
 [assembly: AssemblyProduct("Void Destroyer 2 Data Editor")]
-[assembly: AssemblyCopyright("Released 04/04/20")]
+[assembly: AssemblyCopyright("Released 04/05/20")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.4.0")]
+[assembly: AssemblyVersion("0.0.4.1")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

@@ -6,7 +6,7 @@ using org.ogre;
 
 namespace VoidDestroyer2DataEditor
 {
-    public class OgreRenderer
+    public class OgreRenderer : ApplicationContextBase
     {
         private static OgreRenderer Instance = null;
         public static OgreRenderer Renderer
@@ -26,6 +26,8 @@ namespace VoidDestroyer2DataEditor
         }
 
         public Root OgreRoot;
+
+        public OverlaySystem OgreOverlaySystem;
 
         public List<OgreControl> OgreControls;
 
@@ -50,17 +52,24 @@ namespace VoidDestroyer2DataEditor
             {
                 try
                 {
-                    OgreRoot = new Root();
+                    createRoot();
+                    OgreRoot = getRoot();
                 }
-                catch
+                catch(Exception ex)
                 {
                     VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
                     errordialog.ErrorTitleText = "Ogre (1.12.1) failed to create Ogre Root!";
-                    errordialog.ErrorMessageText = "Are you missing a dependency or runtime? Contact Draco at draco@dracohouston.net if you need help. If you have built from source please ensure you are building for x64, x86/any cpu won't work.";
+                    errordialog.ErrorMessageText = "Are you missing a dependency or runtime? Contact Draco at draco@dracohouston.net if you need help. \r\nIf you have built from source please ensure you are building for x64, x86/any cpu won't work.\r\n" + ex.Message + ex.StackTrace;
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                        errordialog.ErrorMessageText += "\r\n" + ex.Message + ex.StackTrace;
+                    }
                     errordialog.ShowDialog();
                     return;
                 }
-
+                //OgreOverlaySystem = getOverlaySystem();
+                //OgreOverlaySystem.
                 ResourceGroupManager rgm = ResourceGroupManager.getSingleton();
 
                 try 

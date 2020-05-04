@@ -189,6 +189,7 @@ namespace VoidDestroyer2DataEditor
         public virtual Control GetDocumentControl()
         {
             DataDocumentControl result = new DataDocumentControl();
+            result.SuspendLayout();
             result.DataFile = this;
             result.MainSplitter.Panel1Collapsed = false;
             result.MainSplitter.Panel2Collapsed = true;
@@ -334,6 +335,7 @@ namespace VoidDestroyer2DataEditor
                 result.SidebarSplitter.Panel2Collapsed = false;
                 result.MainSplitter.Panel2Collapsed = false;
             }
+            result.ResumeLayout();
             return result;
         }
 

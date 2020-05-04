@@ -75,8 +75,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ogre">
-      <HintPath>..\..\ogre\out\build\x64-Release\csharp\Ogre.dll</HintPath>
+    <Reference Include="Ogre, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Ogre.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

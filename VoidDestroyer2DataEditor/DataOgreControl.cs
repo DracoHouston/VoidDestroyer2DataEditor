@@ -43,6 +43,7 @@ namespace VoidDestroyer2DataEditor
         {
             if (DataFile != null)
             {
+                
                 DataFile.VD2PropertyChanged += DataFile_VD2PropertyChanged;
                 DataFile.OnThisFileLoaded += DataFile_OnThisFileLoaded;
                 DataFile.OnThisFileOverriden += DataFile_OnThisFileOverriden;
@@ -170,6 +171,8 @@ namespace VoidDestroyer2DataEditor
                     OgreRenderer.Renderer.FrameListener.OnFrameEnded += FrameListener_OnFrameEnded;
                 }                    
             }
+
+            //CompositorManager.getSingleton().addCompositor(OgreCamera.getViewport(), "ToonEdge.compositor");
         }
 
         private void DataFile_OnThisFileOverriden(object sender, VD2DataFileOverridenArgs e)
@@ -374,6 +377,7 @@ namespace VoidDestroyer2DataEditor
 
         private void FrameListener_OnFrameEnded(object sender, OgreFrameListenerEventArgs e)
         {
+            
             if (DataFile != null)
             {
                 if (DataFile is ShipData)

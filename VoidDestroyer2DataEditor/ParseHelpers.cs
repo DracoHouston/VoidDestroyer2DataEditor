@@ -72,45 +72,158 @@ namespace VoidDestroyer2DataEditor
                 //Once done the text can be dumped to a file temporarily and loaded into memory as a nodegraph 'XmlDocument' object
                 //This way, we leave the game data files alone.
                 List<string> xmltextlines = File.ReadAllLines(inPath).ToList();
-                xmltextlines.Insert(1, "<docroot>");
-                xmltextlines.Add("</docroot>");
-                //There is a single weapon file that has tags that are not standards compliant, setting a value to a name instead of an attribute.
-                //We look for the 2 lines and fix them before reading, or the parser gets rather cross at us.
-                for (int i = 0; i < xmltextlines.Count; i++)
+                if (xmltextlines.Count > 0)
                 {
-                    if (xmltextlines[i].StartsWith("<minimumShipClass="))
+                    if (!xmltextlines[0].StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"))
                     {
-                        xmltextlines.Insert(i, xmltextlines[i].Substring(0, 17) + " attr1" + xmltextlines[i].Substring(17));
-                        xmltextlines.RemoveAt(i + 1);
+                        if (xmltextlines[0].StartsWith("<?xml"))
+                        {
+                            xmltextlines[0] = "<?xml version=\"1.0\" encoding=\"utf-8\"?> ";
+                        }
+                        else
+                        {
+                            xmltextlines.Insert(0, "<?xml version=\"1.0\" encoding=\"utf-8\"?> ");
+                        }                        
                     }
-                    if (xmltextlines[i].StartsWith("<disableRate="))
+                    xmltextlines.Insert(1, "<docroot>");
+                    xmltextlines.Add("</docroot>");
+                    //There is a single weapon file that has tags that are not standards compliant, setting a value to a name instead of an attribute.
+                    //We look for the 2 lines and fix them before reading, or the parser gets rather cross at us.
+                    for (int i = 0; i < xmltextlines.Count; i++)
                     {
-                        xmltextlines.Insert(i, xmltextlines[i].Substring(0, 12) + " attr1" + xmltextlines[i].Substring(12));
-                        xmltextlines.RemoveAt(i + 1);
+                        if (xmltextlines[i].StartsWith("<minimumShipClass="))
+                        {
+                            xmltextlines.Insert(i, xmltextlines[i].Substring(0, 17) + " attr1" + xmltextlines[i].Substring(17));
+                            xmltextlines.RemoveAt(i + 1);
+                        }
+                        if (xmltextlines[i].StartsWith("<disableRate="))
+                        {
+                            xmltextlines.Insert(i, xmltextlines[i].Substring(0, 12) + " attr1" + xmltextlines[i].Substring(12));
+                            xmltextlines.RemoveAt(i + 1);
+                        }
+                        if (xmltextlines[i].Contains("<_"))//comment, potential landmine for standards compliant parser. game doesnt care though.
+                        {
+                            //no attribute tag, we now try to find the end tag, if we hit an end tag and it doesnt match we change the end tag to match
+                            //we have to watch out for nested no attribute tags too.
+                            if (!xmltextlines[i].Contains("="))
+                            {
+                                List<string> ignoretags = new List<string>();                                
+                                for (int scout = i + 1; scout < xmltextlines.Count; scout++)
+                                {                                    
+                                    //possible end tag!
+                                    if ((xmltextlines[scout].Contains("</")) && (!xmltextlines[scout].StartsWith("</docroot>")))
+                                    {
+                                        int starttagreadidx = xmltextlines[i].IndexOf('<');
+                                        int endtagreadidx = xmltextlines[scout].IndexOf('<');
+                                        if (xmltextlines[i].Substring(starttagreadidx + 1).Trim() != xmltextlines[scout].Substring(endtagreadidx + 2).Trim())
+                                        {
+                                            bool ignore = false;
+                                            foreach (string ignoretag in ignoretags)
+                                            {
+                                                if (xmltextlines[scout].Substring(endtagreadidx + 2).Trim() == ignoretag)
+                                                {
+                                                    ignore = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!ignore)
+                                            {
+                                                xmltextlines[scout] = xmltextlines[i].Replace("<", "</");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else if ((xmltextlines[scout].Contains("<")) && (!xmltextlines[scout].Contains("=")))
+                                    {
+                                        //a nested no attribute tag
+                                        int endtagreadidx = xmltextlines[scout].IndexOf('<');
+                                        ignoretags.Add(xmltextlines[scout].Substring(endtagreadidx + 1).Trim());
+                                    }
+                                    else if ((xmltextlines[scout].StartsWith("</docroot>")))//the author really messed up and deserves the error coming to them.
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (xmltextlines[i].Contains("</_"))//comment, potential landmine for standards compliant parser. game doesnt care though.
+                        {
+                            //no attribute tag, we now try to find the start tag, if we hit a start tag and it doesnt match we change the start tag to match
+                            //we have to watch out for nested no attribute tags too.
+                            if (!xmltextlines[i].Contains("="))
+                            {
+                                List<string> ignoretags = new List<string>();
+                                for (int scout = i - 1; scout < xmltextlines.Count; scout--)
+                                {
+                                    
+                                    //possible start tag!
+                                    if ((xmltextlines[scout].Contains("<")) && (!xmltextlines[scout].Contains("=")) && (!xmltextlines[scout].Contains("</")) && (!xmltextlines[scout].StartsWith("<docroot>")))
+                                    {
+                                        int endtagreadidx = xmltextlines[i].IndexOf('<');
+                                        int starttagreadidx = xmltextlines[scout].IndexOf('<');
+                                        if (xmltextlines[i].Substring(endtagreadidx + 2).Trim() != xmltextlines[scout].Substring(starttagreadidx + 1).Trim())
+                                        {
+                                            bool ignore = false;
+                                            foreach (string ignoretag in ignoretags)
+                                            {
+                                                if (xmltextlines[scout].Substring(starttagreadidx + 1).Trim() == ignoretag)
+                                                {
+                                                    ignore = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!ignore)
+                                            {
+                                                xmltextlines[scout] = xmltextlines[i].Replace("</", "<");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else if ((xmltextlines[scout].Contains("</")) && (!xmltextlines[scout].Contains("=")))
+                                    {
+                                        //a nested no attribute tag
+                                        int endtagreadidx = xmltextlines[scout].IndexOf('<');
+                                        ignoretags.Add(xmltextlines[scout].Substring(endtagreadidx + 2).Trim());
+                                    }
+                                    else if ((xmltextlines[scout].StartsWith("<docroot>")))//the author really messed up and deserves the error coming to them.
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        //Here we look for literal '&', Paul makes no use of the xml reference system and all '&' he uses in the files are the character '&'
+                        //XML, however, has other ideas. If you have ever wondered why web things sometimes show you '&amp;', this is why.
+                        //An '&' is the opening for a special character, similar to the escape character ('\') system in c strings
+                        //So, to preserve the meaning of these literal '&' characters we must feed the standards compliant parser
+                        //the special character for a literal '&', which is '&amp;'. Basically, it is XMLs version of '\\'.
+                        //This process will likely need to be reversed on save, unless it turns out in testing that VD2 behaves :(
+                        xmltextlines[i] = xmltextlines[i].Replace("&", "&amp;");
                     }
 
-                    //Here we look for literal '&', Paul makes no use of the xml reference system and all '&' he uses in the files are the character '&'
-                    //XML, however, has other ideas. If you have ever wondered why web things sometimes show you '&amp;', this is why.
-                    //An '&' is the opening for a special character, similar to the escape character ('\') system in c strings
-                    //So, to preserve the meaning of these literal '&' characters we must feed the standards compliant parser
-                    //the special character for a literal '&', which is '&amp;'. Basically, it is XMLs version of '\\'.
-                    //This process will likely need to be reversed on save, unless it turns out in testing that VD2 behaves :(
-                    xmltextlines[i] = xmltextlines[i].Replace("&", "&amp;");
-                }
-
-                File.WriteAllLines("TempLoadStage.xml", xmltextlines);
-                result = new XmlDocument();
-                try 
-                {
-                    result.Load("TempLoadStage.xml");
-                }
-                catch (System.Xml.XmlException ex)
-                {
-                    VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
-                    errordialog.ErrorTitleText = "System.Xml.XmlException";
-                    errordialog.ErrorMessageText = "The following error occurred when reading " + inPath + "! This file will not be loaded! Please fix! " + ex.Message;
-                    errordialog.ShowDialog();
-                    return new XmlDocument();
+                    File.WriteAllLines("TempLoadStage.xml", xmltextlines);
+                    result = new XmlDocument();
+                    try
+                    {
+                        result.Load("TempLoadStage.xml");
+                    }
+                    catch (System.Xml.XmlException ex)
+                    {
+                        VoidDestroyer2DataEditor.UI.ErrorMessageDialog errordialog = new VoidDestroyer2DataEditor.UI.ErrorMessageDialog();
+                        errordialog.ErrorTitleText = "System.Xml.XmlException";
+                        errordialog.ErrorMessageText = "The following error occurred when reading " + inPath + "! This file will not be loaded! Please fix! " + ex.Message;
+                        errordialog.ShowDialog();
+                        return new XmlDocument();
+                    }
                 }
             }
             return result;

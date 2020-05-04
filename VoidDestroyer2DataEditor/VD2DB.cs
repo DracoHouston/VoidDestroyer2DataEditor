@@ -91,9 +91,21 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (datafiles[i].EndsWith(".xml"))
                     {
-                        string dataname = inSource.ShortName + "\\" + datafiles[i].Substring(fullpath.Length + 1, (datafiles[i].Length - fullpath.Length) - 5);
-                        T currentdata = System.Activator.CreateInstance(typeof(T), datafiles[i], inSource) as T;
-                        Data.Add(dataname, currentdata);
+                        //string dataname = inSource.ShortName + "\\" + datafiles[i].Substring(fullpath.Length + 1, (datafiles[i].Length - fullpath.Length) - 5);
+                        string dataname = inSource.ShortName + ":" + datafiles[i];
+                        if (Data.ContainsKey(dataname))
+                        {
+                            UI.ErrorMessageDialog dialog = new UI.ErrorMessageDialog();
+                            dialog.ErrorTitleText = "Duplicate File Name";
+                            dialog.ErrorMessageText = "The file " + datafiles[i] + "would result in a duplicate key error\r\n";
+                            dialog.ErrorMessageText += "The resulting key would be:\r\n" + dataname + "\r\nThe file will be skipped.";
+                            dialog.ShowDialog();
+                        }
+                        else
+                        {
+                            T currentdata = System.Activator.CreateInstance(typeof(T), datafiles[i], inSource) as T;
+                            Data.Add(dataname, currentdata);
+                        }
                     }
                 }
             }

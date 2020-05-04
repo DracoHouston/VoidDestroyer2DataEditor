@@ -32,17 +32,21 @@ namespace VoidDestroyer2DataEditor
         {
             if (step == 0)
             {
+                timer1.Stop();
                 OgreControl mv = new OgreControl();
                 mv.Size = new Size(1, 1);
                 Controls.Add(mv);
                 step++;
+                timer1.Start();
             }
             else if (step == 1)
             {
+                timer1.Stop();
                 EditorUI.UI.ReloadData();
                 step++;
+                timer1.Start();
             }
-            else if (step == 2)
+            else if (step >= 2)
             {
                 Close();
             }
