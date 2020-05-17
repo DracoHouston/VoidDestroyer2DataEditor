@@ -2,7 +2,8 @@
 # Void Destroyer 2 Data Editor
 A 3rd party data editor tool for modding the game Void Destroyer 2
 
-Uses dotnet 4.0, winforms, and Ogre 1.12.1
+The main editor program is c# dotnet 4 using winforms.
+It wraps a c++ dll using SWIG 4, the dll links to Ogre 1.12.1
 
 How it works:
 
