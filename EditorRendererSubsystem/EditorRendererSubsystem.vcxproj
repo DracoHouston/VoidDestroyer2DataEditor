@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{90769186-13D3-4485-A622-16B0E3B7F7EB}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>EditorRendererSubsystem</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>EditorRenderer</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)VoidDestroyer2DataEditor\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)VoidDestroyer2DataEditor\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(OGRE_HOME_DEBUG)\include\OGRE;$(OGRE_HOME_DEBUG)\include\OGRE\Bites;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>$(OGRE_HOME_DEBUG)\lib\OgreTerrain_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreVolume_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMeshLodGenerator_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreBites_d.lib;$(OGRE_HOME_DEBUG)\lib\OgrePaging_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreRTShaderSystem_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreOverlay_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMain_d.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OGRE\Bites</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>$(OGRE_HOME)\lib\OgreTerrain.lib;$(OGRE_HOME)\lib\OgreVolume.lib;$(OGRE_HOME)\lib\OgreMeshLodGenerator.lib;$(OGRE_HOME)\lib\OgreBites.lib;$(OGRE_HOME)\lib\OgrePaging.lib;$(OGRE_HOME)\lib\OgreRTShaderSystem.lib;$(OGRE_HOME)\lib\OgreOverlay.lib;$(OGRE_HOME)\lib\OgreMain.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="EditorActorFrameListener.h" />
+    <ClInclude Include="EditorActor.h" />
+    <ClInclude Include="EditorActorComponent.h" />
+    <ClInclude Include="EditorRendererObject.h" />
+    <ClInclude Include="EditorRendererSubsystem.h" />
+    <ClInclude Include="EditorResourceLoadingListener.h" />
+    <ClInclude Include="EditorViewport.h" />
+    <ClInclude Include="EditorWorld.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="RotateBoneAnimationComponent.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EditorActorFrameListener.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EditorActor.cpp" />
+    <ClCompile Include="EditorActorComponent.cpp" />
+    <ClCompile Include="EditorRendererObject.cpp" />
+    <ClCompile Include="EditorRendererSubsystem.cpp" />
+    <ClCompile Include="EditorRendererSubsystem_wrap.cxx">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="EditorResourceLoadingListener.cpp" />
+    <ClCompile Include="EditorViewport.cpp" />
+    <ClCompile Include="EditorWorld.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="RotateBoneAnimationComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="EditorRendererSubsystem.i">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">echo Invoking SWIG...
+echo on
+$(SWIG_HOME)\swig.exe -c++ -csharp "%(FullPath)"
+copy EditorRenderer.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRenderer.cs
+copy EditorRendererPINVOKE.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererPINVOKE.cs
+copy EditorRendererSubsystem.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererSubsystem.cs
+copy EditorViewport.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorViewport.cs
+copy EditorWorld.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorWorld.cs
+copy EditorRendererObject.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererObject.cs
+copy EditorActor.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActor.cs
+copy EditorActorComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActorComponent.cs
+copy RotateBoneAnimationComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationComponent.cs
+copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">echo Invoking SWIG...
+echo on
+$(SWIG_HOME)\swigwin-4.0.0\swig.exe -c++ -csharp "%(FullPath)"
+copy EditorRenderer.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRenderer.cs
+copy EditorRendererPINVOKE.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererPINVOKE.cs
+copy EditorRendererSubsystem.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererSubsystem.cs
+copy EditorViewport.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorViewport.cs
+copy EditorWorld.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorWorld.cs
+copy EditorRendererObject.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererObject.cs
+copy EditorActor.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActor.cs
+copy EditorActorComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActorComponent.cs
+copy RotateBoneAnimationComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationComponent.cs
+copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

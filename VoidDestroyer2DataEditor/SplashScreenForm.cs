@@ -34,6 +34,7 @@ namespace VoidDestroyer2DataEditor
             {
                 timer1.Stop();
                 OgreControl mv = new OgreControl();
+                mv.SplashLoadingWindow = true;
                 mv.Size = new Size(1, 1);
                 Controls.Add(mv);
                 step++;

@@ -75,10 +75,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ogre, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Ogre.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -106,12 +102,18 @@
     <Compile Include="DuplicateFileDialog.Designer.cs">
       <DependentUpon>DuplicateFileDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorActor.cs" />
+    <Compile Include="EditorActorComponent.cs" />
     <Compile Include="EditorDeleteFileDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditorDeleteFileDialog.Designer.cs">
       <DependentUpon>EditorDeleteFileDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorRenderer.cs" />
+    <Compile Include="EditorRendererObject.cs" />
+    <Compile Include="EditorRendererPINVOKE.cs" />
+    <Compile Include="EditorRendererSubsystem.cs" />
     <Compile Include="EditorRestartDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,8 +126,12 @@
     <Compile Include="EditorSaveDocumentDialog.Designer.cs">
       <DependentUpon>EditorSaveDocumentDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorViewport.cs" />
+    <Compile Include="EditorWorld.cs" />
     <Compile Include="ImageSetDB.cs" />
     <Compile Include="MeshDB.cs" />
+    <Compile Include="RotateBoneAnimationAxis.cs" />
+    <Compile Include="RotateBoneAnimationComponent.cs" />
     <Compile Include="UI\DataDocumentSidebarControls\FloatCollectionSidebarEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

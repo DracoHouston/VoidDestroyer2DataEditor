@@ -362,24 +362,29 @@ namespace VoidDestroyer2DataEditor
             if (!EditorUserSettings.UserSettings.InitUserSettings())
             {
                 return;
-            }            
-            
-            OgreRenderer.Renderer.InitOgre();
+            }
+
+            if  (!OgreRenderer.Renderer.InitEditorRendererSubsystem())
+            {
+                return;
+            }
+            /*OgreRenderer.Renderer.InitOgre();
 
             if (OgreRenderer.Renderer.OgreRoot == null)
             {
                 return;
-            }
+            }*/
 
             SplashScreenForm splash = new SplashScreenForm();
             splash.ShowDialog();
 
-
+            
             MainEditorForm mainform = new MainEditorForm();
+            //Application.Run(mainform);
             mainform.Show();
 
             
-            while ((OgreRenderer.Renderer.OgreRoot != null) && OgreRenderer.Renderer.OgreRoot.renderOneFrame())
+            while (OgreRenderer.Renderer.EditorRS.IsActive() && OgreRenderer.Renderer.EditorRS.Render())
             {
                 Application.DoEvents();
             }

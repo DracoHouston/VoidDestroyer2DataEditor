@@ -74,7 +74,7 @@ namespace VoidDestroyer2DataEditor
 
         private void MainEditorForm_Disposed(object sender, EventArgs e)
         {
-            OgreRenderer.Renderer.ReleaseOgre();
+            OgreRenderer.Renderer.ReleaseEditorRenderer();
         }
 
         public void SetTreeIconSize(int inSize)
