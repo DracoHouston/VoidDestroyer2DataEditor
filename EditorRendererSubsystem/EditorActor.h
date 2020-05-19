@@ -7,6 +7,7 @@
 class EditorActorComponent;
 class EditorActorFrameListener;
 class RotateBoneAnimationComponent;
+class PUSystemComponent;
 
 class EditorActor : public EditorRendererObject
 {
@@ -36,6 +37,7 @@ public:
 	void RemoveChildActorByName(std::string inName);
 	EditorActor& GetChildActorByName(std::string inName);	
 	RotateBoneAnimationComponent& CreateRotateBoneAnimationComponent(std::string inName);
+	PUSystemComponent& CreatePUSystemComponent(std::string inName, std::string inTemplate, bool inForcedLooping);
 	EditorActorComponent& GetComponent(std::string inName);
 	void RemoveComponent(EditorActorComponent& inTarget);
 	void DestroyComponent(EditorActorComponent& inTarget);

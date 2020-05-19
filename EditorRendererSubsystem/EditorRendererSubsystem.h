@@ -10,6 +10,7 @@ class EditorRendererSubsystem
 	Ogre::Root* OgreRoot;
 	std::ofstream LogFile;
 	EditorResourceLoadingListener* LoadListener;
+	std::vector<std::string> PUTemplates;
 public:	
 	std::string VD2Path;
 	void Init(std::string inVD2Path);
@@ -18,5 +19,7 @@ public:
 	bool IsActive();
 	bool Render();
 	void PrintLogLine(std::string inMessage);
+	int GetPUTemplatesCount();
+	std::string GetPUTemplatesAtIndex(int inIndex);
 };
 

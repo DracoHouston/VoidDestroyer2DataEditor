@@ -207,6 +207,12 @@ class EditorRendererPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererSubsystem_Render")]
   public static extern bool EditorRendererSubsystem_Render(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererSubsystem_GetPUTemplatesCount")]
+  public static extern int EditorRendererSubsystem_GetPUTemplatesCount(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererSubsystem_GetPUTemplatesAtIndex")]
+  public static extern string EditorRendererSubsystem_GetPUTemplatesAtIndex(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_new_EditorRendererSubsystem")]
   public static extern global::System.IntPtr new_EditorRendererSubsystem();
 
@@ -375,6 +381,9 @@ class EditorRendererPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorActor_CreateRotateBoneAnimationComponent")]
   public static extern global::System.IntPtr EditorActor_CreateRotateBoneAnimationComponent(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorActor_CreatePUSystemComponent")]
+  public static extern global::System.IntPtr EditorActor_CreatePUSystemComponent(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, string jarg3, bool jarg4);
+
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorActor_GetComponent")]
   public static extern global::System.IntPtr EditorActor_GetComponent(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
@@ -432,6 +441,33 @@ class EditorRendererPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_delete_RotateBoneAnimationComponent")]
   public static extern void delete_RotateBoneAnimationComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_Update")]
+  public static extern void PUSystemComponent_Update(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2, float jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_Destroy")]
+  public static extern void PUSystemComponent_Destroy(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_SetSystemByTemplate")]
+  public static extern void PUSystemComponent_SetSystemByTemplate(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_SetForcedLooping")]
+  public static extern void PUSystemComponent_SetForcedLooping(global::System.Runtime.InteropServices.HandleRef jarg1, bool jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_PlaySystem")]
+  public static extern void PUSystemComponent_PlaySystem(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_StopSystem")]
+  public static extern void PUSystemComponent_StopSystem(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_SetName")]
+  public static extern void PUSystemComponent_SetName(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_new_PUSystemComponent")]
+  public static extern global::System.IntPtr new_PUSystemComponent();
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_delete_PUSystemComponent")]
+  public static extern void delete_PUSystemComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorActor_SWIGUpcast")]
   public static extern global::System.IntPtr EditorActor_SWIGUpcast(global::System.IntPtr jarg1);
 
@@ -440,4 +476,7 @@ class EditorRendererPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_RotateBoneAnimationComponent_SWIGUpcast")]
   public static extern global::System.IntPtr RotateBoneAnimationComponent_SWIGUpcast(global::System.IntPtr jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_SWIGUpcast")]
+  public static extern global::System.IntPtr PUSystemComponent_SWIGUpcast(global::System.IntPtr jarg1);
 }

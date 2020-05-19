@@ -2,6 +2,7 @@
 #include "EditorRendererSubsystem.h"
 #include <iostream>
 #include "EditorViewport.h"
+#include "ParticleUniverseSystemManager.h"
 
 void EditorRendererSubsystem::Init(std::string inVD2Path)
 {
@@ -118,6 +119,17 @@ void EditorRendererSubsystem::Init(std::string inVD2Path)
         rgm->addResourceLocation(VD2Path + "media/models/interiors", "FileSystem", "General");
         PrintLogLine(VD2Path + "Media\\models\\overworld");
         rgm->addResourceLocation(VD2Path + "media/models/overworld", "FileSystem", "General");
+
+        PrintLogLine(VD2Path + "Mod\\Media\\ParticleUniverse");
+        rgm->addResourceLocation(VD2Path + "mod/media/ParticleUniverse", "FileSystem", "General");
+        PrintLogLine(VD2Path + "Mod\\Media\\ParticleUniverse\\textures");
+        rgm->addResourceLocation(VD2Path + "mod/media/ParticleUniverse/textures", "FileSystem", "General");
+
+        PrintLogLine(VD2Path + "Media\\ParticleUniverse");
+        rgm->addResourceLocation(VD2Path + "media/ParticleUniverse", "FileSystem", "General");
+        PrintLogLine(VD2Path + "Media\\ParticleUniverse\\textures");
+        rgm->addResourceLocation(VD2Path + "media/ParticleUniverse/textures", "FileSystem", "General");
+        
         
         PrintLogLine("Getting D3D9!");
         Ogre::RenderSystem* rs = OgreRoot->getRenderSystemByName("Direct3D9 Rendering Subsystem");
@@ -128,6 +140,8 @@ void EditorRendererSubsystem::Init(std::string inVD2Path)
         PrintLogLine("Initializing Root!");
         OgreRoot->initialise(false, "Main Ogre Window");
         PrintLogLine("Did we make it? Good.");
+        
+        
 	}
 }
 
@@ -167,4 +181,22 @@ void EditorRendererSubsystem::PrintLogLine(std::string inMessage)
     OutputDebugStringA("\n");
     LogFile << inMessage << std::endl;
     LogFile.flush();
+}
+
+int EditorRendererSubsystem::GetPUTemplatesCount()
+{
+    if (PUTemplates.size() == 0)
+    {
+        ParticleUniverse::ParticleSystemManager::getSingletonPtr()->particleSystemTemplateNames(PUTemplates);
+    }
+    return PUTemplates.size();
+}
+
+std::string EditorRendererSubsystem::GetPUTemplatesAtIndex(int inIndex)
+{
+    if (PUTemplates.size() > inIndex)
+    {
+        return PUTemplates[inIndex];
+    }
+    return "";
 }

@@ -302,6 +302,11 @@ namespace VoidDestroyer2DataEditor
             currentitem.IconKey = "foldericon";
             FilesTreeItems[1].AddChild(currentitem);
             PopulateImageSetTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
+            currentitem = new FilesTreeItem();
+            currentitem.Name = "Particle Universe";
+            currentitem.IconKey = "foldericon";
+            FilesTreeItems[1].AddChild(currentitem);
+            PopulateParticleUniverseTree(FilesTreeItems[1].Children[FilesTreeItems[1].Children.Count - 1]);
         }
 
         public void RepopulateAllTrees()
@@ -480,6 +485,20 @@ namespace VoidDestroyer2DataEditor
             }
 
 
+        }
+
+        public void PopulateParticleUniverseTree(FilesTreeItem inItem)
+        {
+            FilesTreeItem currentitem;
+            foreach (PUDocument PUSys in EditorUI.UI.PUSystems.Data.Values)
+            {
+                currentitem = new FilesTreeItem();
+                currentitem.FilterTags.Add("FileType:ParticleUniverse");
+                currentitem.Name = PUSys.PUTemplateName;
+                currentitem.DataFile = PUSys;
+                currentitem.IconKey = "genericfileicon";
+                inItem.AddChild(currentitem);
+            }
         }
 
         public void PopulateShipsTree(FilesTreeItem inItem)

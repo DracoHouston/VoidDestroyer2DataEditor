@@ -98,6 +98,12 @@ public class EditorActor : EditorRendererObject {
     return ret;
   }
 
+  public PUSystemComponent CreatePUSystemComponent(string inName, string inTemplate, bool inForcedLooping) {
+    PUSystemComponent ret = new PUSystemComponent(EditorRendererPINVOKE.EditorActor_CreatePUSystemComponent(swigCPtr, inName, inTemplate, inForcedLooping), false);
+    if (EditorRendererPINVOKE.SWIGPendingException.Pending) throw EditorRendererPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public EditorActorComponent GetComponent(string inName) {
     EditorActorComponent ret = new EditorActorComponent(EditorRendererPINVOKE.EditorActor_GetComponent(swigCPtr, inName), false);
     if (EditorRendererPINVOKE.SWIGPendingException.Pending) throw EditorRendererPINVOKE.SWIGPendingException.Retrieve();

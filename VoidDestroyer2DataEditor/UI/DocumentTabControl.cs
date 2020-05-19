@@ -128,7 +128,7 @@ namespace VoidDestroyer2DataEditor
                 if (!cea.Cancel)
                 {
                     TabPages.Remove(tpCurrent);
-
+                    tpCurrent.Dispose();
                     btnClose.Dispose();
                     Repos();
                     if (TabPages.Count == 0)

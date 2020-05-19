@@ -309,6 +309,7 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_EditorRenderer(SWIG_CShar
 #include "EditorActor.h"
 #include "EditorActorComponent.h"
 #include "RotateBoneAnimationComponent.h"
+#include "PUSystemComponent.h"
 
 
 #ifdef __cplusplus
@@ -381,6 +382,32 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_EditorRendererSubsystem_Render(void *
   arg1 = (EditorRendererSubsystem *)jarg1; 
   result = (bool)(arg1)->Render();
   jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_EditorRendererSubsystem_GetPUTemplatesCount(void * jarg1) {
+  int jresult ;
+  EditorRendererSubsystem *arg1 = (EditorRendererSubsystem *) 0 ;
+  int result;
+  
+  arg1 = (EditorRendererSubsystem *)jarg1; 
+  result = (int)(arg1)->GetPUTemplatesCount();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_EditorRendererSubsystem_GetPUTemplatesAtIndex(void * jarg1, int jarg2) {
+  char * jresult ;
+  EditorRendererSubsystem *arg1 = (EditorRendererSubsystem *) 0 ;
+  int arg2 ;
+  std::string result;
+  
+  arg1 = (EditorRendererSubsystem *)jarg1; 
+  arg2 = (int)jarg2; 
+  result = (arg1)->GetPUTemplatesAtIndex(arg2);
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
   return jresult;
 }
 
@@ -1063,6 +1090,32 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_EditorActor_CreateRotateBoneAnimationCompon
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_EditorActor_CreatePUSystemComponent(void * jarg1, char * jarg2, char * jarg3, unsigned int jarg4) {
+  void * jresult ;
+  EditorActor *arg1 = (EditorActor *) 0 ;
+  std::string arg2 ;
+  std::string arg3 ;
+  bool arg4 ;
+  PUSystemComponent *result = 0 ;
+  
+  arg1 = (EditorActor *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  (&arg2)->assign(jarg2); 
+  if (!jarg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  (&arg3)->assign(jarg3); 
+  arg4 = jarg4 ? true : false; 
+  result = (PUSystemComponent *) &(arg1)->CreatePUSystemComponent(arg2,arg3,arg4);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_EditorActor_GetComponent(void * jarg1, char * jarg2) {
   void * jresult ;
   EditorActor *arg1 = (EditorActor *) 0 ;
@@ -1273,6 +1326,98 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_RotateBoneAnimationComponent(void * ja
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_Update(void * jarg1, float jarg2, float jarg3) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  (arg1)->Update(arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_Destroy(void * jarg1) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  (arg1)->Destroy();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_SetSystemByTemplate(void * jarg1, char * jarg2) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->SetSystemByTemplate(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_SetForcedLooping(void * jarg1, unsigned int jarg2) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  bool arg2 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->SetForcedLooping(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_PlaySystem(void * jarg1) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  (arg1)->PlaySystem();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_StopSystem(void * jarg1) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  (arg1)->StopSystem();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_SetName(void * jarg1, char * jarg2) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->SetName(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_PUSystemComponent() {
+  void * jresult ;
+  PUSystemComponent *result = 0 ;
+  
+  result = (PUSystemComponent *)new PUSystemComponent();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_delete_PUSystemComponent(void * jarg1) {
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT EditorRendererObject * SWIGSTDCALL CSharp_EditorActor_SWIGUpcast(EditorActor *jarg1) {
     return (EditorRendererObject *)jarg1;
 }
@@ -1282,6 +1427,10 @@ SWIGEXPORT EditorRendererObject * SWIGSTDCALL CSharp_EditorActorComponent_SWIGUp
 }
 
 SWIGEXPORT EditorActorComponent * SWIGSTDCALL CSharp_RotateBoneAnimationComponent_SWIGUpcast(RotateBoneAnimationComponent *jarg1) {
+    return (EditorActorComponent *)jarg1;
+}
+
+SWIGEXPORT EditorActorComponent * SWIGSTDCALL CSharp_PUSystemComponent_SWIGUpcast(PUSystemComponent *jarg1) {
     return (EditorActorComponent *)jarg1;
 }
 

@@ -359,15 +359,7 @@ namespace VoidDestroyer2DataEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new MainEditorForm());
-            if (!EditorUserSettings.UserSettings.InitUserSettings())
-            {
-                return;
-            }
-
-            if  (!OgreRenderer.Renderer.InitEditorRendererSubsystem())
-            {
-                return;
-            }
+            
             /*OgreRenderer.Renderer.InitOgre();
 
             if (OgreRenderer.Renderer.OgreRoot == null)
@@ -376,7 +368,11 @@ namespace VoidDestroyer2DataEditor
             }*/
 
             SplashScreenForm splash = new SplashScreenForm();
-            splash.ShowDialog();
+            DialogResult initresult = splash.ShowDialog();
+            if (initresult == DialogResult.Abort)
+            {
+                return;
+            }
 
             
             MainEditorForm mainform = new MainEditorForm();

@@ -53,6 +53,7 @@ namespace VoidDestroyer2DataEditor
         public VD2DB<SunData> Suns;
         public MeshDB Models;
         public ImageSetDB ImageSets;
+        public PUSystemDB PUSystems;
 
         public static EditorUI UI
         {
@@ -193,6 +194,8 @@ namespace VoidDestroyer2DataEditor
             Models.LoadData();
             ImageSets = new ImageSetDB();
             ImageSets.LoadData();
+            PUSystems = new PUSystemDB();
+            PUSystems.LoadData();
         }
 
         public DialogResult GetVD2PathUsingDialog(out string outPath)

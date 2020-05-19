@@ -130,6 +130,15 @@
     <Compile Include="EditorWorld.cs" />
     <Compile Include="ImageSetDB.cs" />
     <Compile Include="MeshDB.cs" />
+    <Compile Include="PUDocument.cs" />
+    <Compile Include="PUOgreControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PUOgreControl.Designer.cs">
+      <DependentUpon>PUOgreControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PUSystemComponent.cs" />
+    <Compile Include="PUSystemDB.cs" />
     <Compile Include="RotateBoneAnimationAxis.cs" />
     <Compile Include="RotateBoneAnimationComponent.cs" />
     <Compile Include="UI\DataDocumentSidebarControls\FloatCollectionSidebarEditor.cs">

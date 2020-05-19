@@ -68,6 +68,16 @@ public class EditorRendererSubsystem : global::System.IDisposable {
     return ret;
   }
 
+  public int GetPUTemplatesCount() {
+    int ret = EditorRendererPINVOKE.EditorRendererSubsystem_GetPUTemplatesCount(swigCPtr);
+    return ret;
+  }
+
+  public string GetPUTemplatesAtIndex(int inIndex) {
+    string ret = EditorRendererPINVOKE.EditorRendererSubsystem_GetPUTemplatesAtIndex(swigCPtr, inIndex);
+    return ret;
+  }
+
   public EditorRendererSubsystem() : this(EditorRendererPINVOKE.new_EditorRendererSubsystem(), true) {
   }
 

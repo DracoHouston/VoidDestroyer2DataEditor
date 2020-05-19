@@ -93,13 +93,13 @@
       <PreprocessorDefinitions>_DEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(OGRE_HOME_DEBUG)\include\OGRE;$(OGRE_HOME_DEBUG)\include\OGRE\Bites;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OGRE_HOME_DEBUG)\include\OGRE;$(OGRE_HOME_DEBUG)\include\OGRE\Bites;$(PARTICLEUNIVERSE_HOME_DEBUG)\include;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\Externs;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleAffectors;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleBehaviours;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleEmitters;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleEventHandlers;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleObservers;$(PARTICLEUNIVERSE_HOME_DEBUG)\include\ParticleRenderers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(OGRE_HOME_DEBUG)\lib\OgreTerrain_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreVolume_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMeshLodGenerator_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreBites_d.lib;$(OGRE_HOME_DEBUG)\lib\OgrePaging_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreRTShaderSystem_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreOverlay_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMain_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OGRE_HOME_DEBUG)\lib\OgreTerrain_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreVolume_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMeshLodGenerator_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreBites_d.lib;$(OGRE_HOME_DEBUG)\lib\OgrePaging_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreRTShaderSystem_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreOverlay_d.lib;$(OGRE_HOME_DEBUG)\lib\OgreMain_d.lib;$(PARTICLEUNIVERSE_HOME_DEBUG)\lib\Plugin_ParticleUniverse_d.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -150,7 +150,7 @@
       <PreprocessorDefinitions>NDEBUG;EDITORRENDERERSUBSYSTEM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OGRE\Bites</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OGRE\Bites;$(PARTICLEUNIVERSE_HOME)\include;$(PARTICLEUNIVERSE_HOME)\include\Externs;$(PARTICLEUNIVERSE_HOME)\include\ParticleAffectors;$(PARTICLEUNIVERSE_HOME)\include\ParticleBehaviours;$(PARTICLEUNIVERSE_HOME)\include\ParticleEmitters;$(PARTICLEUNIVERSE_HOME)\include\ParticleEventHandlers;$(PARTICLEUNIVERSE_HOME)\include\ParticleObservers;$(PARTICLEUNIVERSE_HOME)\include\ParticleRenderers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -158,7 +158,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(OGRE_HOME)\lib\OgreTerrain.lib;$(OGRE_HOME)\lib\OgreVolume.lib;$(OGRE_HOME)\lib\OgreMeshLodGenerator.lib;$(OGRE_HOME)\lib\OgreBites.lib;$(OGRE_HOME)\lib\OgrePaging.lib;$(OGRE_HOME)\lib\OgreRTShaderSystem.lib;$(OGRE_HOME)\lib\OgreOverlay.lib;$(OGRE_HOME)\lib\OgreMain.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OGRE_HOME)\lib\OgreTerrain.lib;$(OGRE_HOME)\lib\OgreVolume.lib;$(OGRE_HOME)\lib\OgreMeshLodGenerator.lib;$(OGRE_HOME)\lib\OgreBites.lib;$(OGRE_HOME)\lib\OgrePaging.lib;$(OGRE_HOME)\lib\OgreRTShaderSystem.lib;$(OGRE_HOME)\lib\OgreOverlay.lib;$(OGRE_HOME)\lib\OgreMain.lib;$(PARTICLEUNIVERSE_HOME)\lib\Plugin_ParticleUniverse.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -176,6 +176,7 @@
     <ClInclude Include="EditorWorld.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PUSystemComponent.h" />
     <ClInclude Include="RotateBoneAnimationComponent.h" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PUSystemComponent.cpp" />
     <ClCompile Include="RotateBoneAnimationComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -215,12 +217,13 @@ copy EditorRendererObject.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRender
 copy EditorActor.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActor.cs
 copy EditorActorComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActorComponent.cs
 copy RotateBoneAnimationComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationComponent.cs
-copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs</Command>
+copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs
+copy PUSystemComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\PUSystemComponent.cs</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">echo Invoking SWIG...
 echo on
-$(SWIG_HOME)\swigwin-4.0.0\swig.exe -c++ -csharp "%(FullPath)"
+$(SWIG_HOME)\swig.exe -c++ -csharp "%(FullPath)"
 copy EditorRenderer.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRenderer.cs
 copy EditorRendererPINVOKE.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererPINVOKE.cs
 copy EditorRendererSubsystem.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRendererSubsystem.cs
@@ -230,7 +233,8 @@ copy EditorRendererObject.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorRender
 copy EditorActor.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActor.cs
 copy EditorActorComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\EditorActorComponent.cs
 copy RotateBoneAnimationComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationComponent.cs
-copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs</Command>
+copy RotateBoneAnimationAxis.cs $(SolutionDir)VoidDestroyer2DataEditor\RotateBoneAnimationAxis.cs
+copy PUSystemComponent.cs $(SolutionDir)VoidDestroyer2DataEditor\PUSystemComponent.cs</Command>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

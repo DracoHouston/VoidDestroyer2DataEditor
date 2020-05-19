@@ -33,29 +33,34 @@ namespace VoidDestroyer2DataEditor
             MouseWheel += OgreControl_MouseWheel;
         }        
 
+        protected virtual void OgreControlDisposed()
+        {
+            if (!SplashLoadingWindow)
+            {
+                if (MainActor != null)
+                {
+                    MainActor.Destroy();
+                }
+                if (VP != null)
+                {
+                    VP.Destroy();
+                    VP.Dispose();
+                    VP = null;
+                }
+                if (World != null)
+                {
+                    World.Destroy();
+                    World.Dispose();
+                    World = null;
+                }                
+            }
+        }
+
         private void OgreControl_Disposed(object sender, EventArgs e)
         {
             if (!DesignMode)
             {
-                if (!SplashLoadingWindow)
-                {
-                    if (VP != null)
-                    {
-                        VP.Destroy();
-                        VP.Dispose();
-                        VP = null;
-                    }
-                    if (World != null)
-                    {
-                        World.Destroy();
-                        World.Dispose();
-                        World = null;
-                    }
-                    if (MainActor != null)
-                    {
-                        MainActor.Destroy();
-                    }
-                }
+                OgreControlDisposed();
             }
         }
 

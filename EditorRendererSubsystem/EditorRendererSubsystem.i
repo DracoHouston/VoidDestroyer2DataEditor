@@ -9,6 +9,7 @@
 #include "EditorActor.h"
 #include "EditorActorComponent.h"
 #include "RotateBoneAnimationComponent.h"
+#include "PUSystemComponent.h"
 %}
 
 /* Let's just grab the original header file here */
@@ -24,3 +25,4 @@
 %include "EditorActor.h"
 %include "EditorActorComponent.h"
 %include "RotateBoneAnimationComponent.h"
+%include "PUSystemComponent.h"

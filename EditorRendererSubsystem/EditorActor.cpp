@@ -5,6 +5,7 @@
 #include "EditorActorComponent.h"
 #include "EditorActorFrameListener.h"
 #include "RotateBoneAnimationComponent.h"
+#include "PUSystemComponent.h"
 
 void EditorActor::SetMesh(std::string inMeshName)
 {
@@ -64,6 +65,16 @@ void EditorActor::Destroy()
 		}
 	}
 	Children.clear();
+	std::map<std::string, EditorActorComponent*>::iterator itcomp;
+
+	for (itcomp = Components.begin(); itcomp != Components.end(); itcomp = Components.begin())
+	{
+		if (itcomp->second)
+		{
+			itcomp->second->Destroy();
+		}
+	}
+	Components.clear();
 	if (Parent)
 	{
 		EditorActor* actorparent = (EditorActor*)Parent;
@@ -196,6 +207,26 @@ RotateBoneAnimationComponent& EditorActor::CreateRotateBoneAnimationComponent(st
 	result->SetParent(*this);
 	Ogre::SceneNode* actortransform = Transform->createChildSceneNode();
 	result->SetTransform(actortransform);
+	Components[inName] = result;
+	return *result;
+}
+
+PUSystemComponent& EditorActor::CreatePUSystemComponent(std::string inName, std::string inTemplate, bool inForcedLooping)
+{
+	if (Components.count(inName) > 0)
+	{
+		PUSystemComponent* result = (PUSystemComponent*)Components[inName];
+		return *result;
+	}
+	PUSystemComponent* result = new PUSystemComponent();
+	result->SetWorld(*World);
+	result->SetParent(*this);
+	Ogre::SceneNode* actortransform = Transform->createChildSceneNode();
+	result->SetTransform(actortransform);
+	result->SetName(inName);
+	result->SetSystemByTemplate(inTemplate);
+	result->SetForcedLooping(inForcedLooping);
+	
 	Components[inName] = result;
 	return *result;
 }

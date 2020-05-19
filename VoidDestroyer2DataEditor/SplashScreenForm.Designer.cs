@@ -30,12 +30,26 @@
         {
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.LoadingLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // LoadingLabel
+            // 
+            this.LoadingLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoadingLabel.BackColor = System.Drawing.Color.Transparent;
+            this.LoadingLabel.ForeColor = System.Drawing.Color.White;
+            this.LoadingLabel.Location = new System.Drawing.Point(3, 230);
+            this.LoadingLabel.Name = "LoadingLabel";
+            this.LoadingLabel.Size = new System.Drawing.Size(225, 20);
+            this.LoadingLabel.TabIndex = 0;
+            this.LoadingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // SplashScreenForm
             // 
@@ -45,6 +59,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 250);
             this.ControlBox = false;
+            this.Controls.Add(this.LoadingLabel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
@@ -61,5 +76,6 @@
         #endregion
 
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label LoadingLabel;
     }
 }

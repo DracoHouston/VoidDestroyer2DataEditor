@@ -40,6 +40,40 @@ namespace VoidDestroyer2DataEditor
             InitializeComponent();
         }
 
+        protected override void OgreControlDisposed()
+        {
+            if (!DesignMode)
+            {
+                if (!SplashLoadingWindow)
+                {
+                    foreach (OgreTurret turret in OgreTurrets)
+                    {
+                        turret.DestroyTurret();
+                    }
+                    foreach (OgreShipAttachment attachment in OgreAttachments)
+                    {
+                        attachment.DestroyAttachment();
+                    }
+                    if (ShipActor != null)
+                    {
+                        ShipActor.Destroy();
+                    }
+                    if (VP != null)
+                    {
+                        VP.Destroy();
+                        VP.Dispose();
+                        VP = null;
+                    }
+                    if (World != null)
+                    {
+                        World.Destroy();
+                        World.Dispose();
+                        World = null;
+                    }                    
+                }
+            }
+        }
+
         protected override void SpawnEntities()
         {
             if (DataFile != null)
