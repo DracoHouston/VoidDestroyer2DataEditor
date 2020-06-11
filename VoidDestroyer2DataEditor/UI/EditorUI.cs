@@ -407,6 +407,12 @@ namespace VoidDestroyer2DataEditor
                         result.Add(datafile.ImageSetName);
                     }
                     break;
+                case "ParticleUniverse":
+                    foreach (PUDocument datafile in PUSystems.Data.Values)
+                    {
+                        result.Add(datafile.PUTemplateName);
+                    }
+                    break;
                 default:
                     break;
             }

@@ -9,7 +9,7 @@ void PUSystemComponent::Update(float DeltaTime, float TotalTime)
 		{
 			if (PUSystem->getState() == ParticleUniverse::ParticleSystem::ParticleSystemState::PSS_STOPPED)
 			{
-				PUSystem->start();
+				ResetSystem(true);
 			}
 		}
 	}
@@ -23,7 +23,12 @@ void PUSystemComponent::Destroy()
 
 void PUSystemComponent::SetSystemByTemplate(std::string inName)
 {
+	if (PUSystem)
+	{
+		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(PUSystem, Transform->getCreator());
+	}
 	PUSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(Name + inName, inName, Transform->getCreator());
+	PUSystemName = inName;
 	Transform->attachObject(PUSystem);
 }
 
@@ -42,7 +47,18 @@ void PUSystemComponent::StopSystem()
 	PUSystem->stop();
 }
 
-void PUSystemComponent::SetName(std::string inName)
+void PUSystemComponent::ResetSystem(bool inAutoPlay)
 {
-	Name = inName;
+	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(PUSystem, Transform->getCreator());
+	PUSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(Name + PUSystemName, PUSystemName, Transform->getCreator());
+	Transform->attachObject(PUSystem);
+	if (inAutoPlay)
+	{
+		PlaySystem();
+	}
+}
+
+std::string PUSystemComponent::GetPUSystemName()
+{
+	return PUSystemName;
 }

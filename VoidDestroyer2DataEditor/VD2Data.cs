@@ -120,6 +120,26 @@ namespace VoidDestroyer2DataEditor
             return false;
         }
 
+        protected void SafeWriteAllLines(string inPath, List<string> inLines)
+        {
+            try
+            {
+                File.WriteAllLines(inPath, inLines);
+            }
+            catch (Exception ex)
+            {
+                UI.ErrorMessageDialog dialog = new UI.ErrorMessageDialog();
+                dialog.ErrorTitleText = "Can't write file!";
+                dialog.ErrorMessageText = "An exception occurred while attempting to write to file, this is often because of write protections on the target path.\r\nPlease use the exception below to diagnose the problem and try again.\r\n\r\n" + ex.Message + ex.StackTrace + "\r\n\r\n";
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    dialog.ErrorMessageText += ex.Message + ex.StackTrace + "\r\n\r\n";
+                }
+                dialog.ShowDialog();
+            }
+        }
+
         public virtual string GetObjectID()
         {
             for (int i = 0; i < VD2PropertyInfos.Keys.Count; i++)
@@ -402,7 +422,8 @@ namespace VoidDestroyer2DataEditor
                     }                    
                 }                
             }
-            return new StandardValuesCollection(stdvals);
+            var orderedstdvals = stdvals.OrderBy(f => f);
+            return new StandardValuesCollection(orderedstdvals.ToList());
         }
     }
 }

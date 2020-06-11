@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("By Draco Houston")]
 [assembly: AssemblyProduct("Void Destroyer 2 Data Editor")]
-[assembly: AssemblyCopyright("Released 04/05/20")]
+[assembly: AssemblyCopyright("Released 12/06/20")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.4.1")]
+[assembly: AssemblyVersion("0.0.5.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

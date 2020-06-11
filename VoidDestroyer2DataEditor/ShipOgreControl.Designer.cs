@@ -1,6 +1,6 @@
 ﻿namespace VoidDestroyer2DataEditor
 {
-    partial class DataOgreControl
+    partial class ShipOgreControl
     {
         /// <summary> 
         /// Required designer variable.

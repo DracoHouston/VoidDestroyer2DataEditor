@@ -17,9 +17,9 @@ namespace VoidDestroyer2DataEditor
             string debrisID = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "debrisID", out debrisIDexists);
 
             bool debrisMomentumexists;
-            int debrisMomentum = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "debrisMomentum", out debrisMomentumexists);
+            float debrisMomentum = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "debrisMomentum", out debrisMomentumexists);
             bool debrisAngularexists;
-            int debrisAngular = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "debrisAngular", out debrisAngularexists);
+            float debrisAngular = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "debrisAngular", out debrisAngularexists);
 
             debrisDataStructure result = new debrisDataStructure(inParentDataFile, inXMLNode, debrisID, debrisMomentum, debrisAngular);
 
@@ -480,6 +480,8 @@ namespace VoidDestroyer2DataEditor
             float pitch = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "pitch", out pitchexists);
             bool yawexists;
             float yaw = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "yaw", out yawexists);
+            bool rollexists;
+            float roll = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "roll", out rollexists);
 
             bool bPlayerShipOnlyexists;
             bool bPlayerShipOnly = ParseHelpers.GetBoolFromXMLNodeNamedChild(inXMLNode, "bPlayerShipOnly", out bPlayerShipOnlyexists);
@@ -487,13 +489,14 @@ namespace VoidDestroyer2DataEditor
             bool positionexists;
             Vector3D position = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "position", out positionexists);
 
-            propulsionDataStructure result = new propulsionDataStructure(inParentDataFile, inXMLNode, propulsionEffectID, direction, pitch, yaw, bPlayerShipOnly, position);
+            propulsionDataStructure result = new propulsionDataStructure(inParentDataFile, inXMLNode, propulsionEffectID, direction, pitch, yaw, roll, bPlayerShipOnly, position);
 
             result.SetPropertyExists("propulsionEffectID", propulsionEffectIDexists);
             result.SetPropertyExists("direction", directionexists);
 
             result.SetPropertyExists("pitch", pitchexists);
             result.SetPropertyExists("yaw", yawexists);
+            result.SetPropertyExists("roll", rollexists);
 
             result.SetPropertyExists("bPlayerShipOnly", bPlayerShipOnlyexists);
 
@@ -585,6 +588,9 @@ namespace VoidDestroyer2DataEditor
             bool weaponFireexists;
             string weaponFire = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "weaponFire", out weaponFireexists);
 
+            bool weaponPositionIDexists;
+            int weaponPositionID = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "weaponPositionID", out weaponPositionIDexists);
+
             bool barrelDelayexists;
             float barrelDelay = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "barrelDelay", out barrelDelayexists);
             bool yawexists;
@@ -592,18 +598,26 @@ namespace VoidDestroyer2DataEditor
             bool pitchexists;
             float pitch = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "pitch", out pitchexists);
 
+            bool positionexists;
+            Vector3D position = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "position", out positionexists);
+
             bool weaponPositionexists;
             List<Vector3D> weaponPosition = ParseHelpers.GetVector3DListFromXMLNodeNamedChildren(inXMLNode, "weaponPosition", out weaponPositionexists);
 
-            weaponDataStructure result = new weaponDataStructure(inParentDataFile, inXMLNode, weaponType, hardpointID, weaponFire, barrelDelay, yaw, pitch, weaponPosition);
+            weaponDataStructure result = new weaponDataStructure(inParentDataFile, inXMLNode, weaponType, hardpointID, weaponFire, weaponPositionID, barrelDelay, yaw, pitch, position, weaponPosition);
 
             result.SetPropertyExists("weaponType", weaponTypeexists);
             result.SetPropertyExists("hardpointID", hardpointIDexists);
             result.SetPropertyExists("weaponFire", weaponFireexists);
 
+            result.SetPropertyExists("weaponPositionID", weaponPositionIDexists);
+
             result.SetPropertyExists("barrelDelay", barrelDelayexists);
             result.SetPropertyExists("yaw", yawexists);
             result.SetPropertyExists("pitch", pitchexists);
+
+            result.SetPropertyExists("position", positionexists);
+            position.OnElementChanged += result.position_OnElementChanged;
 
             result.SetPropertyExists("weaponPosition", weaponPositionexists);
             result.weaponPosition.CollectionChanged += result.OnweaponPositionChanged;
@@ -816,6 +830,8 @@ namespace VoidDestroyer2DataEditor
             float roll = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "roll", out rollexists);
             bool yawexists;
             float yaw = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "yaw", out yawexists);
+            bool pitchexists;
+            float pitch = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "pitch", out pitchexists);
 
             bool bShowInCockpitexists;
             bool bShowInCockpit = ParseHelpers.GetBoolFromXMLNodeNamedChild(inXMLNode, "bShowInCockpit", out bShowInCockpitexists);
@@ -825,7 +841,7 @@ namespace VoidDestroyer2DataEditor
             bool positionexists;
             Vector3D position = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "position", out positionexists);
 
-            turretDataStructure result = new turretDataStructure(inParentDataFile, inXMLNode, turretID, turretOrientation, weaponFire, turretRole, yawPermitted, weaponPositionID, pitchLower, roll, yaw, bShowInCockpit, bHideInHangar, position);
+            turretDataStructure result = new turretDataStructure(inParentDataFile, inXMLNode, turretID, turretOrientation, weaponFire, turretRole, yawPermitted, weaponPositionID, pitchLower, roll, yaw, pitch, bShowInCockpit, bHideInHangar, position);
 
             result.SetPropertyExists("turretID", turretIDexists);
             result.SetPropertyExists("turretOrientation", turretOrientationexists);
@@ -840,6 +856,7 @@ namespace VoidDestroyer2DataEditor
             result.SetPropertyExists("pitchLower", pitchLowerexists);
             result.SetPropertyExists("roll", rollexists);
             result.SetPropertyExists("yaw", yawexists);
+            result.SetPropertyExists("pitch", pitchexists);
 
             result.SetPropertyExists("bShowInCockpit", bShowInCockpitexists);
             result.SetPropertyExists("bHideInHangar", bHideInHangarexists);
@@ -925,21 +942,18 @@ namespace VoidDestroyer2DataEditor
         //Gets the value of child nodes to get a 'attachment' data structure as a attachmentDataStructure.
         public static attachmentDataStructure GetattachmentDataStructureFromXMLNode(VD2Data inParentDataFile, XmlNode inXMLNode)
         {
+            bool attachmentIDexists;
+            string attachmentID = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "attachmentID", out attachmentIDexists);
             bool attachmentOrientationexists;
             string attachmentOrientation = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "attachmentOrientation", out attachmentOrientationexists);
-
-            bool attachmentIDexists;
-            List<string> attachmentID = ParseHelpers.GetStringListFromXMLNodeNamedChildren(inXMLNode, "attachmentID", out attachmentIDexists);
 
             bool attachmentPositionexists;
             Vector3D attachmentPosition = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "attachmentPosition", out attachmentPositionexists);
 
-            attachmentDataStructure result = new attachmentDataStructure(inParentDataFile, inXMLNode, attachmentOrientation, attachmentID, attachmentPosition);
-
-            result.SetPropertyExists("attachmentOrientation", attachmentOrientationexists);
+            attachmentDataStructure result = new attachmentDataStructure(inParentDataFile, inXMLNode, attachmentID, attachmentOrientation, attachmentPosition);
 
             result.SetPropertyExists("attachmentID", attachmentIDexists);
-            result.attachmentID.CollectionChanged += result.OnattachmentIDChanged;
+            result.SetPropertyExists("attachmentOrientation", attachmentOrientationexists);
 
             result.SetPropertyExists("attachmentPosition", attachmentPositionexists);
             attachmentPosition.OnElementChanged += result.attachmentPosition_OnElementChanged;
@@ -1139,6 +1153,8 @@ namespace VoidDestroyer2DataEditor
             string dockType = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "dockType", out dockTypeexists);
             bool ejectOrientationexists;
             string ejectOrientation = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "ejectOrientation", out ejectOrientationexists);
+            bool objectIDexists;
+            string objectID = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "objectID", out objectIDexists);
             bool orientationexists;
             string orientation = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "orientation", out orientationexists);
             bool attachedIDexists;
@@ -1149,9 +1165,6 @@ namespace VoidDestroyer2DataEditor
             string dockOrientation = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "dockOrientation", out dockOrientationexists);
             bool resourceOnlyexists;
             string resourceOnly = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "resourceOnly", out resourceOnlyexists);
-
-            bool objectIDexists;
-            List<string> objectID = ParseHelpers.GetStringListFromXMLNodeNamedChildren(inXMLNode, "objectID", out objectIDexists);
 
             bool ejectVelocityexists;
             int ejectVelocity = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "ejectVelocity", out ejectVelocityexists);
@@ -1168,18 +1181,16 @@ namespace VoidDestroyer2DataEditor
             bool positionexists;
             Vector3D position = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "position", out positionexists);
 
-            dockDataStructure result = new dockDataStructure(inParentDataFile, inXMLNode, dockType, ejectOrientation, orientation, attachedID, boneName, dockOrientation, resourceOnly, objectID, ejectVelocity, dockRollOffset, dockYawOffset, bCanAcceptRawResource, bInvisible, position);
+            dockDataStructure result = new dockDataStructure(inParentDataFile, inXMLNode, dockType, ejectOrientation, objectID, orientation, attachedID, boneName, dockOrientation, resourceOnly, ejectVelocity, dockRollOffset, dockYawOffset, bCanAcceptRawResource, bInvisible, position);
 
             result.SetPropertyExists("dockType", dockTypeexists);
             result.SetPropertyExists("ejectOrientation", ejectOrientationexists);
+            result.SetPropertyExists("objectID", objectIDexists);
             result.SetPropertyExists("orientation", orientationexists);
             result.SetPropertyExists("attachedID", attachedIDexists);
             result.SetPropertyExists("boneName", boneNameexists);
             result.SetPropertyExists("dockOrientation", dockOrientationexists);
             result.SetPropertyExists("resourceOnly", resourceOnlyexists);
-
-            result.SetPropertyExists("objectID", objectIDexists);
-            result.objectID.CollectionChanged += result.OnobjectIDChanged;
 
             result.SetPropertyExists("ejectVelocity", ejectVelocityexists);
             result.SetPropertyExists("dockRollOffset", dockRollOffsetexists);
@@ -1279,16 +1290,21 @@ namespace VoidDestroyer2DataEditor
             bool rollexists;
             int roll = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, "roll", out rollexists);
 
+            bool yawexists;
+            float yaw = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, "yaw", out yawexists);
+
             bool shieldPositionexists;
             Vector3D shieldPosition = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, "shieldPosition", out shieldPositionexists);
 
-            shieldDataStructure result = new shieldDataStructure(inParentDataFile, inXMLNode, shieldID, shieldOrientation, pitch, roll, shieldPosition);
+            shieldDataStructure result = new shieldDataStructure(inParentDataFile, inXMLNode, shieldID, shieldOrientation, pitch, roll, yaw, shieldPosition);
 
             result.SetPropertyExists("shieldID", shieldIDexists);
             result.SetPropertyExists("shieldOrientation", shieldOrientationexists);
 
             result.SetPropertyExists("pitch", pitchexists);
             result.SetPropertyExists("roll", rollexists);
+
+            result.SetPropertyExists("yaw", yawexists);
 
             result.SetPropertyExists("shieldPosition", shieldPositionexists);
             shieldPosition.OnElementChanged += result.shieldPosition_OnElementChanged;
@@ -1572,11 +1588,12 @@ namespace VoidDestroyer2DataEditor
         public static rotateBonesDataStructure GetrotateBonesDataStructureFromXMLNode(VD2Data inParentDataFile, XmlNode inXMLNode)
         {
             bool rotateBoneexists;
-            string rotateBone = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, "rotateBone", out rotateBoneexists);
+            List<string> rotateBone = ParseHelpers.GetStringListFromXMLNodeNamedChildren(inXMLNode, "rotateBone", out rotateBoneexists);
 
             rotateBonesDataStructure result = new rotateBonesDataStructure(inParentDataFile, inXMLNode, rotateBone);
 
             result.SetPropertyExists("rotateBone", rotateBoneexists);
+            result.rotateBone.CollectionChanged += result.OnrotateBoneChanged;
 
             return result;
         }

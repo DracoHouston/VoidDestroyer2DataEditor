@@ -625,7 +625,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<colorChange r=\"" + _colorChange.r.ToString() + "\" g=\"" + _colorChange.g.ToString() + "\" b=\"" + _colorChange.b.ToString() + "\" a=\"" + _colorChange.a.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

@@ -238,7 +238,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<bGeneric attr1=\"" + ((_bGeneric) ? "1" : "0") + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

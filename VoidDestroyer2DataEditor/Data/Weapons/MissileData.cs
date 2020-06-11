@@ -162,7 +162,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("trailParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("trailParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string trailParticleName
         {
             get
@@ -202,7 +202,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("missileParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("missileParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string missileParticleName
         {
             get
@@ -574,11 +574,17 @@ namespace VoidDestroyer2DataEditor
             ribbonIDreftypes.Add("Effect");
             SetPropertyIsObjectIDRef("ribbonID", true, ribbonIDreftypes);
             InitProperty("trailParticleName");
+            List<string> trailParticleNamereftypes = new List<string>();
+            trailParticleNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("trailParticleName", true, trailParticleNamereftypes);
             InitProperty("explosionID");
             List<string> explosionIDreftypes = new List<string>();
             explosionIDreftypes.Add("Explosion");
             SetPropertyIsObjectIDRef("explosionID", true, explosionIDreftypes);
             InitProperty("missileParticleName");
+            List<string> missileParticleNamereftypes = new List<string>();
+            missileParticleNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("missileParticleName", true, missileParticleNamereftypes);
 
             InitProperty("cruiseSpeed");
             InitProperty("timeTillCruise");
@@ -983,7 +989,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

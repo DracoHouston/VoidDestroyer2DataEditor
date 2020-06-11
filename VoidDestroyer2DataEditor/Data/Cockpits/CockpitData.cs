@@ -200,7 +200,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<offsetPosition x=\"" + _offsetPosition.x.ToString() + "\" y=\"" + _offsetPosition.y.ToString() + "\" z=\"" + _offsetPosition.z.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

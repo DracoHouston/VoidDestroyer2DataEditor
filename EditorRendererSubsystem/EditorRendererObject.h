@@ -6,11 +6,14 @@ class EditorWorld;
 class EditorRendererObject
 {
 protected:
+	std::string Name;
 	Ogre::SceneNode* Transform;
 	EditorWorld* World;
 	EditorRendererObject* Parent;
 public:
 	//bool Create(std::string inName);
+	void SetName(std::string inName);
+	std::string GetName();
 	void SetWorldPosition(float x, float y, float z);
 	float GetWorldPositionX();
 	float GetWorldPositionY();

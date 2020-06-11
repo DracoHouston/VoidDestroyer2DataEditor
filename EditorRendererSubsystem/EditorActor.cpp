@@ -57,7 +57,7 @@ void EditorActor::Destroy()
 {
 	std::map<std::string, EditorActor*>::iterator it;
 
-	for (it = Children.begin(); it != Children.end(); it++)
+	for (it = Children.begin(); it != Children.end(); it = Children.begin())
 	{
 		if (it->second)
 		{
@@ -132,6 +132,7 @@ EditorActor& EditorActor::CreateChildActor(std::string inName)
 	result->SetTransform(actortransform);
 	result->RegisterForUpdate();
 	result->Parent = this;
+	result->SetName(inName);
 	Children[inName] = result;
 	return *result;
 }
@@ -147,6 +148,7 @@ void EditorActor::DestroyChildActor(EditorActor& inDestroyTarget)
 			if (it->second == &inDestroyTarget)
 			{
 				it->second->Destroy();
+				Children.erase(it->first);
 				return;
 			}
 		}
@@ -158,6 +160,8 @@ void EditorActor::DestroyChildActorByName(std::string inName)
 	if (Children.count(inName) > 0)
 	{
 		Children[inName]->Destroy();
+
+		Children.erase(inName);
 	}
 }
 

@@ -305,7 +305,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<bInvisible attr1=\"" + ((_bInvisible) ? "1" : "0") + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

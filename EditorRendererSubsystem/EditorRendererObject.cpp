@@ -2,91 +2,160 @@
 #include "EditorRendererObject.h"
 #include "EditorWorld.h"
 
+void EditorRendererObject::SetName(std::string inName)
+{
+	Name = inName;
+}
+
+std::string EditorRendererObject::GetName()
+{
+	return Name;
+}
+
 void EditorRendererObject::SetWorldPosition(float x, float y, float z)
 {
-	Transform->_setDerivedPosition(Ogre::Vector3(x, y, z));
+	if (Transform)
+	{
+		Transform->_setDerivedPosition(Ogre::Vector3(x, y, z));
+	}
 }
 
 float EditorRendererObject::GetWorldPositionX()
 {
-	return Transform->convertLocalToWorldPosition(Transform->getPosition()).x;
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldPosition(Transform->getPosition()).x;
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetWorldPositionY()
 {
-	return Transform->convertLocalToWorldPosition(Transform->getPosition()).y;
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldPosition(Transform->getPosition()).y;
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetWorldPositionZ()
 {
-	return Transform->convertLocalToWorldPosition(Transform->getPosition()).z;
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldPosition(Transform->getPosition()).z;
+	}
+	return 0.0f;
 }
 
 void EditorRendererObject::SetRelativePosition(float x, float y, float z)
 {
-	Transform->setPosition(Ogre::Vector3(x, y, z));
+	if (Transform)
+	{
+		Transform->setPosition(Ogre::Vector3(x, y, z));
+	}
 }
 
 float EditorRendererObject::GetRelativePositionX()
 {
-	return Transform->getPosition().x;
+	if (Transform)
+	{
+		return Transform->getPosition().x;
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetRelativePositionY()
 {
-	return Transform->getPosition().y;
+	if (Transform)
+	{
+		return Transform->getPosition().y;
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetRelativePositionZ()
 {
-	return Transform->getPosition().z;
+	if (Transform)
+	{
+		return Transform->getPosition().z;
+	}
+	return 0.0f;
 }
 
 void EditorRendererObject::SetWorldRotation(float yaw, float pitch, float roll)
 {
-	Transform->resetOrientation();
-	Transform->yaw(Ogre::Radian(Ogre::Degree(yaw)), Ogre::Node::TransformSpace::TS_WORLD);
-	Transform->pitch(Ogre::Radian(Ogre::Degree(pitch)), Ogre::Node::TransformSpace::TS_WORLD);
-	Transform->roll(Ogre::Radian(Ogre::Degree(roll)), Ogre::Node::TransformSpace::TS_WORLD);
-	
+	if (Transform)
+	{
+		Transform->resetOrientation();
+		Transform->yaw(Ogre::Radian(Ogre::Degree(yaw)), Ogre::Node::TransformSpace::TS_WORLD);
+		Transform->pitch(Ogre::Radian(Ogre::Degree(pitch)), Ogre::Node::TransformSpace::TS_WORLD);
+		Transform->roll(Ogre::Radian(Ogre::Degree(roll)), Ogre::Node::TransformSpace::TS_WORLD);
+	}
 }
 
 float EditorRendererObject::GetWorldRotationYaw()
 {
-	return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getYaw().valueDegrees();
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getYaw().valueDegrees();
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetWorldRotationPitch()
 {
-	return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getPitch().valueDegrees();
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getPitch().valueDegrees();
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetWorldRotationRoll()
 {
-	return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getRoll().valueDegrees();
+	if (Transform)
+	{
+		return Transform->convertLocalToWorldOrientation(Transform->getOrientation()).getRoll().valueDegrees();
+	}
+	return 0.0f;
 }
 
 void EditorRendererObject::SetRelativeRotation(float yaw, float pitch, float roll)
 {
-	Transform->resetOrientation();
-	Transform->yaw(Ogre::Radian(Ogre::Degree(yaw)), Ogre::Node::TransformSpace::TS_LOCAL);
-	Transform->pitch(Ogre::Radian(Ogre::Degree(pitch)), Ogre::Node::TransformSpace::TS_LOCAL);
-	Transform->roll(Ogre::Radian(Ogre::Degree(roll)), Ogre::Node::TransformSpace::TS_LOCAL);
+	if (Transform)
+	{
+		Transform->resetOrientation();
+		Transform->yaw(Ogre::Radian(Ogre::Degree(yaw)), Ogre::Node::TransformSpace::TS_LOCAL);
+		Transform->pitch(Ogre::Radian(Ogre::Degree(pitch)), Ogre::Node::TransformSpace::TS_LOCAL);
+		Transform->roll(Ogre::Radian(Ogre::Degree(roll)), Ogre::Node::TransformSpace::TS_LOCAL);
+	}
 }
 
 float EditorRendererObject::GetRelativeRotationYaw()
 {
-	return Transform->getOrientation().getYaw().valueDegrees();
+	if (Transform)
+	{
+		return Transform->getOrientation().getYaw().valueDegrees();
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetRelativeRotationPitch()
 {
-	return Transform->getOrientation().getPitch().valueDegrees();
+	if (Transform)
+	{
+		return Transform->getOrientation().getPitch().valueDegrees();
+	}
+	return 0.0f;
 }
 
 float EditorRendererObject::GetRelativeRotationRoll()
 {
-	return Transform->getOrientation().getRoll().valueDegrees();
+	if (Transform)
+	{
+		return Transform->getOrientation().getRoll().valueDegrees();
+	}
+	return 0.0f;
 }
 
 EditorWorld& EditorRendererObject::GetWorld()
@@ -96,7 +165,7 @@ EditorWorld& EditorRendererObject::GetWorld()
 
 void EditorRendererObject::SetWorld(EditorWorld& inWorld)
 {
-	World = &inWorld;
+	World = &inWorld;	
 }
 
 void EditorRendererObject::SetTransform(Ogre::SceneNode* inTransform)
@@ -121,6 +190,9 @@ float EditorRendererObject::GetBoundingRadius()
 
 void EditorRendererObject::Destroy()
 {
-	World->GetSceneManager()->destroySceneNode(Transform);
+	if ((World) && (Transform))
+	{
+		World->GetSceneManager()->destroySceneNode(Transform);
+	}
 	Transform = nullptr;
 }

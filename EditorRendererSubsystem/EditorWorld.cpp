@@ -10,6 +10,7 @@ EditorActor& EditorWorld::CreateActor(std::string inName)
 	Ogre::SceneNode* actortransform = OgreScene->getRootSceneNode()->createChildSceneNode();
 	result->SetTransform(actortransform);
 	result->RegisterForUpdate();
+	result->SetName(inName);
 	return *result;
 }
 

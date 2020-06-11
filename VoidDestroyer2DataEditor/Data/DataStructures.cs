@@ -160,8 +160,8 @@ namespace VoidDestroyer2DataEditor
     {
         string _debrisID;
 
-        int _debrisMomentum;
-        int _debrisAngular;
+        float _debrisMomentum;
+        float _debrisAngular;
 
         [Description("debrisID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string debrisID
@@ -188,8 +188,8 @@ namespace VoidDestroyer2DataEditor
         }
 
 
-        [Description("debrisMomentum is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public int debrisMomentum
+        [Description("debrisMomentum is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float debrisMomentum
         {
             get
             {
@@ -212,8 +212,8 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("debrisAngular is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public int debrisAngular
+        [Description("debrisAngular is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float debrisAngular
         {
             get
             {
@@ -270,7 +270,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public debrisDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string indebrisID, int indebrisMomentum, int indebrisAngular) : base(inParentDataFile, inDataNode)
+        public debrisDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string indebrisID, float indebrisMomentum, float indebrisAngular) : base(inParentDataFile, inDataNode)
         {
             _debrisID = indebrisID;
 
@@ -991,6 +991,7 @@ namespace VoidDestroyer2DataEditor
 
         float _pitch;
         float _yaw;
+        float _roll;
 
         bool _bPlayerShipOnly;
 
@@ -1086,6 +1087,30 @@ namespace VoidDestroyer2DataEditor
                         {
                             _yaw = value;
                             SetPropertyEdited("yaw", true);
+                            ParentDataFile.SetPropertyEdited("propulsion", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        [Description("roll is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float roll
+        {
+            get
+            {
+                return _roll;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _roll = value;
+                            SetPropertyEdited("roll", true);
                             ParentDataFile.SetPropertyEdited("propulsion", true);
                         }
                     }
@@ -1200,6 +1225,7 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("pitch");
             InitProperty("yaw");
+            InitProperty("roll");
 
             InitProperty("bPlayerShipOnly");
 
@@ -1215,6 +1241,7 @@ namespace VoidDestroyer2DataEditor
 
             _pitch = 0;
             _yaw = 0;
+            _roll = 0;
 
             _bPlayerShipOnly = false;
 
@@ -1230,6 +1257,7 @@ namespace VoidDestroyer2DataEditor
 
             _pitch = 0;
             _yaw = 0;
+            _roll = 0;
 
             _bPlayerShipOnly = false;
 
@@ -1238,13 +1266,14 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public propulsionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inpropulsionEffectID, string indirection, float inpitch, float inyaw, bool inbPlayerShipOnly, Vector3D inposition) : base(inParentDataFile, inDataNode)
+        public propulsionDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inpropulsionEffectID, string indirection, float inpitch, float inyaw, float inroll, bool inbPlayerShipOnly, Vector3D inposition) : base(inParentDataFile, inDataNode)
         {
             _propulsionEffectID = inpropulsionEffectID;
             _direction = indirection;
 
             _pitch = inpitch;
             _yaw = inyaw;
+            _roll = inroll;
 
             _bPlayerShipOnly = inbPlayerShipOnly;
 
@@ -1263,6 +1292,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _yaw = inCopyFrom.yaw;
             SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
+            _roll = inCopyFrom.roll;
+            SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
 
             _bPlayerShipOnly = inCopyFrom.bPlayerShipOnly;
             SetPropertyExists("bPlayerShipOnly", inCopyFrom.PropertyExists("bPlayerShipOnly"));
@@ -1284,6 +1315,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("pitch", original.PropertyExists("pitch"));
             _yaw = original.yaw;
             SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _roll = original.roll;
+            SetPropertyExists("roll", original.PropertyExists("roll"));
 
             _bPlayerShipOnly = original.bPlayerShipOnly;
             SetPropertyExists("bPlayerShipOnly", original.PropertyExists("bPlayerShipOnly"));
@@ -1303,6 +1336,8 @@ namespace VoidDestroyer2DataEditor
             result += _pitch.ToString();
             result += ", ";
             result += _yaw.ToString();
+            result += ", ";
+            result += _roll.ToString();
             result += ", ";
             result += _bPlayerShipOnly.ToString();
             result += ", ";
@@ -1336,6 +1371,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
             }
+            if (PropertyExists("roll"))
+            {
+                xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
 
             if (PropertyExists("bPlayerShipOnly"))
             {
@@ -1358,9 +1397,13 @@ namespace VoidDestroyer2DataEditor
         string _hardpointID;
         string _weaponFire;
 
+        int _weaponPositionID;
+
         float _barrelDelay;
         float _yaw;
         float _pitch;
+
+        Vector3D _position;
 
         ObservableCollection<Vector3D> _weaponPosition;
 
@@ -1437,6 +1480,31 @@ namespace VoidDestroyer2DataEditor
         }
 
 
+        [Description("weaponPositionID is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int weaponPositionID
+        {
+            get
+            {
+                return _weaponPositionID;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _weaponPositionID = value;
+                            SetPropertyEdited("weaponPositionID", true);
+                            ParentDataFile.SetPropertyEdited("weapon", true);
+                        }
+                    }
+                }
+            }
+        }
+
+
         [Description("barrelDelay is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float barrelDelay
         {
@@ -1503,6 +1571,76 @@ namespace VoidDestroyer2DataEditor
                             _pitch = value;
                             SetPropertyEdited("pitch", true);
                             ParentDataFile.SetPropertyEdited("weapon", true);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        [Description("position is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public Vector3D position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged -= position_OnElementChanged;
+                            }
+                            _position = value;
+                            if (_position != null)
+                            {
+                                _position.OnElementChanged += position_OnElementChanged;
+                            }
+                            SetPropertyEdited("position", true);
+                            ParentDataFile.SetPropertyEdited("weapon", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void position_OnElementChanged(object sender, Vector3DElementChangedEventArgs e)
+        {
+            if (sender is Vector3D)
+            {
+                Vector3D vecsender = (Vector3D)sender;
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
+                    {
+                        SetPropertyEdited("position", true);
+                        ParentDataFile.SetPropertyEdited("weapon", true);
+                    }
+                    else
+                    {
+                        switch (e.ChangedElement)
+                        {
+                            case Vector3DElements.x:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.x = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.y:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.y = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
+                            case Vector3DElements.z:
+                                vecsender.OnElementChanged -= position_OnElementChanged;
+                                vecsender.z = e.OldValue;
+                                vecsender.OnElementChanged += position_OnElementChanged;
+                                break;
                         }
                     }
                 }
@@ -1626,9 +1764,13 @@ namespace VoidDestroyer2DataEditor
             SetPropertyIsObjectIDRef("hardpointID", true, hardpointIDreftypes);
             InitProperty("weaponFire");
 
+            InitProperty("weaponPositionID");
+
             InitProperty("barrelDelay");
             InitProperty("yaw");
             InitProperty("pitch");
+
+            InitProperty("position");
 
             InitProperty("weaponPosition");
             SetPropertyIsCollection("weaponPosition", true, typeof(Vector3D));
@@ -1642,9 +1784,13 @@ namespace VoidDestroyer2DataEditor
             _hardpointID = "";
             _weaponFire = "";
 
+            _weaponPositionID = 0;
+
             _barrelDelay = 0;
             _yaw = 0;
             _pitch = 0;
+
+            _position = new Vector3D();
 
             _weaponPosition = new ObservableCollection<Vector3D>();
             _weaponPosition.CollectionChanged += OnweaponPositionChanged;
@@ -1658,24 +1804,33 @@ namespace VoidDestroyer2DataEditor
             _hardpointID = "";
             _weaponFire = "";
 
+            _weaponPositionID = 0;
+
             _barrelDelay = 0;
             _yaw = 0;
             _pitch = 0;
+
+            _position = new Vector3D();
+            _position.OnElementChanged += position_OnElementChanged;
 
             _weaponPosition = new ObservableCollection<Vector3D>();
             _weaponPosition.CollectionChanged += OnweaponPositionChanged;
 
         }
 
-        public weaponDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inweaponType, string inhardpointID, string inweaponFire, float inbarrelDelay, float inyaw, float inpitch, List<Vector3D> inweaponPosition) : base(inParentDataFile, inDataNode)
+        public weaponDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inweaponType, string inhardpointID, string inweaponFire, int inweaponPositionID, float inbarrelDelay, float inyaw, float inpitch, Vector3D inposition, List<Vector3D> inweaponPosition) : base(inParentDataFile, inDataNode)
         {
             _weaponType = inweaponType;
             _hardpointID = inhardpointID;
             _weaponFire = inweaponFire;
 
+            _weaponPositionID = inweaponPositionID;
+
             _barrelDelay = inbarrelDelay;
             _yaw = inyaw;
             _pitch = inpitch;
+
+            _position = inposition;
 
             _weaponPosition = new ObservableCollection<Vector3D>(inweaponPosition);
 
@@ -1690,12 +1845,18 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = inCopyFrom.weaponFire;
             SetPropertyExists("weaponFire", inCopyFrom.PropertyExists("weaponFire"));
 
+            _weaponPositionID = inCopyFrom.weaponPositionID;
+            SetPropertyExists("weaponPositionID", inCopyFrom.PropertyExists("weaponPositionID"));
+
             _barrelDelay = inCopyFrom.barrelDelay;
             SetPropertyExists("barrelDelay", inCopyFrom.PropertyExists("barrelDelay"));
             _yaw = inCopyFrom.yaw;
             SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
             _pitch = inCopyFrom.pitch;
             SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
+
+            _position = new Vector3D(inCopyFrom.position);
+            SetPropertyExists("position", inCopyFrom.PropertyExists("position"));
 
             _weaponPosition = new ObservableCollection<Vector3D>();
             _weaponPosition.CollectionChanged += OnweaponPositionChanged;
@@ -1717,12 +1878,18 @@ namespace VoidDestroyer2DataEditor
             _weaponFire = original.weaponFire;
             SetPropertyExists("weaponFire", original.PropertyExists("weaponFire"));
 
+            _weaponPositionID = original.weaponPositionID;
+            SetPropertyExists("weaponPositionID", original.PropertyExists("weaponPositionID"));
+
             _barrelDelay = original.barrelDelay;
             SetPropertyExists("barrelDelay", original.PropertyExists("barrelDelay"));
             _yaw = original.yaw;
             SetPropertyExists("yaw", original.PropertyExists("yaw"));
             _pitch = original.pitch;
             SetPropertyExists("pitch", original.PropertyExists("pitch"));
+
+            _position = new Vector3D(original.position);
+            SetPropertyExists("position", original.PropertyExists("position"));
 
             _weaponPosition = new ObservableCollection<Vector3D>();
             _weaponPosition.CollectionChanged += OnweaponPositionChanged;
@@ -1744,11 +1911,15 @@ namespace VoidDestroyer2DataEditor
             result += ", ";
             result += _weaponFire;
             result += ", ";
+            result += _weaponPositionID.ToString();
+            result += ", ";
             result += _barrelDelay.ToString();
             result += ", ";
             result += _yaw.ToString();
             result += ", ";
             result += _pitch.ToString();
+            result += ", ";
+            result += _position.ToString();
             result += ", ";
             for (i = 0; i < _weaponPosition.Count; i++)
             {
@@ -1783,6 +1954,11 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add(indent + "    <weaponFire attr1=\"" + _weaponFire + "\"/>"); 
             }
 
+            if (PropertyExists("weaponPositionID"))
+            {
+                xmltextlines.Add(indent + "    <weaponPositionID attr1=\"" + _weaponPositionID.ToString() + "\"/>"); 
+            }
+
             if (PropertyExists("barrelDelay"))
             {
                 xmltextlines.Add(indent + "    <barrelDelay attr1=\"" + _barrelDelay.ToString() + "\"/>"); 
@@ -1794,6 +1970,11 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("pitch"))
             {
                 xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("position"))
+            {
+                xmltextlines.Add(indent + "    <position x=\"" + _position.x.ToString() + "\" y=\"" + _position.y.ToString() + "\" z=\"" + _position.z.ToString() + "\"/>");
             }
 
             if (PropertyExists("weaponPosition"))
@@ -2182,6 +2363,7 @@ namespace VoidDestroyer2DataEditor
         float _pitchLower;
         float _roll;
         float _yaw;
+        float _pitch;
 
         bool _bShowInCockpit;
         bool _bHideInHangar;
@@ -2435,6 +2617,30 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("pitch is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float pitch
+        {
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _pitch = value;
+                            SetPropertyEdited("pitch", true);
+                            ParentDataFile.SetPropertyEdited("turret", true);
+                        }
+                    }
+                }
+            }
+        }
+
 
         [Description("bShowInCockpit is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bShowInCockpit
@@ -2574,6 +2780,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("pitchLower");
             InitProperty("roll");
             InitProperty("yaw");
+            InitProperty("pitch");
 
             InitProperty("bShowInCockpit");
             InitProperty("bHideInHangar");
@@ -2598,6 +2805,7 @@ namespace VoidDestroyer2DataEditor
             _pitchLower = 0;
             _roll = 0;
             _yaw = 0;
+            _pitch = 0;
 
             _bShowInCockpit = false;
             _bHideInHangar = false;
@@ -2622,6 +2830,7 @@ namespace VoidDestroyer2DataEditor
             _pitchLower = 0;
             _roll = 0;
             _yaw = 0;
+            _pitch = 0;
 
             _bShowInCockpit = false;
             _bHideInHangar = false;
@@ -2631,7 +2840,7 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public turretDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inturretID, string inturretOrientation, string inweaponFire, List<string> inturretRole, int inyawPermitted, int inweaponPositionID, float inpitchLower, float inroll, float inyaw, bool inbShowInCockpit, bool inbHideInHangar, Vector3D inposition) : base(inParentDataFile, inDataNode)
+        public turretDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inturretID, string inturretOrientation, string inweaponFire, List<string> inturretRole, int inyawPermitted, int inweaponPositionID, float inpitchLower, float inroll, float inyaw, float inpitch, bool inbShowInCockpit, bool inbHideInHangar, Vector3D inposition) : base(inParentDataFile, inDataNode)
         {
             _turretID = inturretID;
             _turretOrientation = inturretOrientation;
@@ -2645,6 +2854,7 @@ namespace VoidDestroyer2DataEditor
             _pitchLower = inpitchLower;
             _roll = inroll;
             _yaw = inyaw;
+            _pitch = inpitch;
 
             _bShowInCockpit = inbShowInCockpit;
             _bHideInHangar = inbHideInHangar;
@@ -2677,6 +2887,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
             _yaw = inCopyFrom.yaw;
             SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
+            _pitch = inCopyFrom.pitch;
+            SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
 
             _bShowInCockpit = inCopyFrom.bShowInCockpit;
             SetPropertyExists("bShowInCockpit", inCopyFrom.PropertyExists("bShowInCockpit"));
@@ -2713,6 +2925,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("roll", original.PropertyExists("roll"));
             _yaw = original.yaw;
             SetPropertyExists("yaw", original.PropertyExists("yaw"));
+            _pitch = original.pitch;
+            SetPropertyExists("pitch", original.PropertyExists("pitch"));
 
             _bShowInCockpit = original.bShowInCockpit;
             SetPropertyExists("bShowInCockpit", original.PropertyExists("bShowInCockpit"));
@@ -2752,6 +2966,8 @@ namespace VoidDestroyer2DataEditor
             result += _roll.ToString();
             result += ", ";
             result += _yaw.ToString();
+            result += ", ";
+            result += _pitch.ToString();
             result += ", ";
             result += _bShowInCockpit.ToString();
             result += ", ";
@@ -2812,6 +3028,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
             }
+            if (PropertyExists("pitch"))
+            {
+                xmltextlines.Add(indent + "    <pitch attr1=\"" + _pitch.ToString() + "\"/>"); 
+            }
 
             if (PropertyExists("bShowInCockpit"))
             {
@@ -2834,11 +3054,34 @@ namespace VoidDestroyer2DataEditor
 
     public class attachmentDataStructure : VD2DataStructure
     {
+        string _attachmentID;
         string _attachmentOrientation;
 
-        ObservableCollection<string> _attachmentID;
-
         Vector3D _attachmentPosition;
+
+        [Description("attachmentID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
+        public string attachmentID
+        {
+            get
+            {
+                return _attachmentID;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _attachmentID = value;
+                            SetPropertyEdited("attachmentID", true);
+                            ParentDataFile.SetPropertyEdited("attachment", true);
+                        }
+                    }
+                }
+            }
+        }
 
         [Description("attachmentOrientation is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string attachmentOrientation
@@ -2858,59 +3101,6 @@ namespace VoidDestroyer2DataEditor
                             _attachmentOrientation = value;
                             SetPropertyEdited("attachmentOrientation", true);
                             ParentDataFile.SetPropertyEdited("attachment", true);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        [Description("attachmentID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public ObservableCollection<string> attachmentID
-        {
-            get
-            {
-                return _attachmentID;
-            }
-            set
-            {
-                if (_attachmentID != null)
-                {
-                    _attachmentID.CollectionChanged -= OnattachmentIDChanged;
-                }
-                _attachmentID = value;
-                if (_attachmentID != null)
-                {
-                    _attachmentID.CollectionChanged += OnattachmentIDChanged;
-                }
-            }
-        }
-
-        public void OnattachmentIDChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (ParentDataFile != null)
-            {
-                if (ParentDataFile.Source != null)
-                {
-                    if (ParentDataFile.Source.WriteAccess)
-                    {
-                        SetPropertyEdited("attachmentID", true);
-                        ParentDataFile.SetPropertyEdited("attachment", true);
-                    }
-                    else
-                    {
-                        if (DataNode != null)
-                        {
-                            bool exists = false;
-                            _attachmentID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "attachmentID", out exists));
-                            _attachmentID.CollectionChanged += OnattachmentIDChanged;
-                            SetPropertyExists("attachmentID", exists);
-                        }
-                        else
-                        {
-                            _attachmentID.CollectionChanged -= OnattachmentIDChanged;
-                            _attachmentID.Clear();
-                            _attachmentID.CollectionChanged += OnattachmentIDChanged;
                         }
                     }
                 }
@@ -2991,13 +3181,11 @@ namespace VoidDestroyer2DataEditor
 
         public override void InitAllProperties()
         {
-            InitProperty("attachmentOrientation");
-
             InitProperty("attachmentID");
             List<string> attachmentIDreftypes = new List<string>();
             attachmentIDreftypes.Add("Other");
             SetPropertyIsObjectIDRef("attachmentID", true, attachmentIDreftypes);
-            SetPropertyIsCollection("attachmentID", true, typeof(string));
+            InitProperty("attachmentOrientation");
 
             InitProperty("attachmentPosition");
 
@@ -3006,10 +3194,8 @@ namespace VoidDestroyer2DataEditor
         //Only called by collections editor, so we use the data file that is open right now.
         public attachmentDataStructure() : base(null, null)
         {
+            _attachmentID = "";
             _attachmentOrientation = "";
-
-            _attachmentID = new ObservableCollection<string>();
-            _attachmentID.CollectionChanged += OnattachmentIDChanged;
 
             _attachmentPosition = new Vector3D();
 
@@ -3018,21 +3204,18 @@ namespace VoidDestroyer2DataEditor
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public attachmentDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
+            _attachmentID = "";
             _attachmentOrientation = "";
-
-            _attachmentID = new ObservableCollection<string>();
-            _attachmentID.CollectionChanged += OnattachmentIDChanged;
 
             _attachmentPosition = new Vector3D();
             _attachmentPosition.OnElementChanged += attachmentPosition_OnElementChanged;
 
         }
 
-        public attachmentDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inattachmentOrientation, List<string> inattachmentID, Vector3D inattachmentPosition) : base(inParentDataFile, inDataNode)
+        public attachmentDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inattachmentID, string inattachmentOrientation, Vector3D inattachmentPosition) : base(inParentDataFile, inDataNode)
         {
+            _attachmentID = inattachmentID;
             _attachmentOrientation = inattachmentOrientation;
-
-            _attachmentID = new ObservableCollection<string>(inattachmentID);
 
             _attachmentPosition = inattachmentPosition;
 
@@ -3040,12 +3223,10 @@ namespace VoidDestroyer2DataEditor
 
         public attachmentDataStructure(attachmentDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
+            _attachmentID = inCopyFrom.attachmentID;
+            SetPropertyExists("attachmentID", inCopyFrom.PropertyExists("attachmentID"));
             _attachmentOrientation = inCopyFrom.attachmentOrientation;
             SetPropertyExists("attachmentOrientation", inCopyFrom.PropertyExists("attachmentOrientation"));
-
-            _attachmentID = new ObservableCollection<string>(inCopyFrom.attachmentID);
-            _attachmentID.CollectionChanged += OnattachmentIDChanged;
-            SetPropertyExists("attachmentID", inCopyFrom.PropertyExists("attachmentID"));
 
             _attachmentPosition = new Vector3D(inCopyFrom.attachmentPosition);
             SetPropertyExists("attachmentPosition", inCopyFrom.PropertyExists("attachmentPosition"));
@@ -3055,12 +3236,10 @@ namespace VoidDestroyer2DataEditor
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
             attachmentDataStructure original = (attachmentDataStructure)inOriginal;
+            _attachmentID = original.attachmentID;
+            SetPropertyExists("attachmentID", original.PropertyExists("attachmentID"));
             _attachmentOrientation = original.attachmentOrientation;
             SetPropertyExists("attachmentOrientation", original.PropertyExists("attachmentOrientation"));
-
-            _attachmentID = new ObservableCollection<string>(original.attachmentID);
-            _attachmentID.CollectionChanged += OnattachmentIDChanged;
-            SetPropertyExists("attachmentID", original.PropertyExists("attachmentID"));
 
             _attachmentPosition = new Vector3D(original.attachmentPosition);
             SetPropertyExists("attachmentPosition", original.PropertyExists("attachmentPosition"));
@@ -3069,18 +3248,10 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
-            result += _attachmentOrientation;
+            result += _attachmentID;
             result += ", ";
-            for (i = 0; i < _attachmentID.Count; i++)
-            {
-                result += _attachmentID[i];
-                if (_attachmentID.Count - i != 1)
-                {
-                    result += ", ";
-                }
-            }
+            result += _attachmentOrientation;
             result += ", ";
             result += _attachmentPosition.ToString();
             return result;
@@ -3095,17 +3266,13 @@ namespace VoidDestroyer2DataEditor
                 indent += " ";
             }
             xmltextlines.Add(indent + "<attachment>");
+            if (PropertyExists("attachmentID"))
+            {
+                xmltextlines.Add(indent + "    <attachmentID attr1=\"" + _attachmentID + "\"/>"); 
+            }
             if (PropertyExists("attachmentOrientation"))
             {
                 xmltextlines.Add(indent + "    <attachmentOrientation attr1=\"" + _attachmentOrientation + "\"/>"); 
-            }
-
-            if (PropertyExists("attachmentID"))
-            {
-                foreach (string result in _attachmentID)
-                {
-                    xmltextlines.Add(indent + "    <attachmentID attr1=\"" + result + "\"/>"); 
-                }
             }
 
             if (PropertyExists("attachmentPosition"))
@@ -3565,13 +3732,12 @@ namespace VoidDestroyer2DataEditor
     {
         string _dockType;
         string _ejectOrientation;
+        string _objectID;
         string _orientation;
         string _attachedID;
         string _boneName;
         string _dockOrientation;
         string _resourceOnly;
-
-        ObservableCollection<string> _objectID;
 
         int _ejectVelocity;
         int _dockRollOffset;
@@ -3623,6 +3789,30 @@ namespace VoidDestroyer2DataEditor
                         {
                             _ejectOrientation = value;
                             SetPropertyEdited("ejectOrientation", true);
+                            ParentDataFile.SetPropertyEdited("dock", true);
+                        }
+                    }
+                }
+            }
+        }
+
+        [Description("objectID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
+        public string objectID
+        {
+            get
+            {
+                return _objectID;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _objectID = value;
+                            SetPropertyEdited("objectID", true);
                             ParentDataFile.SetPropertyEdited("dock", true);
                         }
                     }
@@ -3744,59 +3934,6 @@ namespace VoidDestroyer2DataEditor
                             _resourceOnly = value;
                             SetPropertyEdited("resourceOnly", true);
                             ParentDataFile.SetPropertyEdited("dock", true);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        [Description("objectID is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public ObservableCollection<string> objectID
-        {
-            get
-            {
-                return _objectID;
-            }
-            set
-            {
-                if (_objectID != null)
-                {
-                    _objectID.CollectionChanged -= OnobjectIDChanged;
-                }
-                _objectID = value;
-                if (_objectID != null)
-                {
-                    _objectID.CollectionChanged += OnobjectIDChanged;
-                }
-            }
-        }
-
-        public void OnobjectIDChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (ParentDataFile != null)
-            {
-                if (ParentDataFile.Source != null)
-                {
-                    if (ParentDataFile.Source.WriteAccess)
-                    {
-                        SetPropertyEdited("objectID", true);
-                        ParentDataFile.SetPropertyEdited("dock", true);
-                    }
-                    else
-                    {
-                        if (DataNode != null)
-                        {
-                            bool exists = false;
-                            _objectID = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "objectID", out exists));
-                            _objectID.CollectionChanged += OnobjectIDChanged;
-                            SetPropertyExists("objectID", exists);
-                        }
-                        else
-                        {
-                            _objectID.CollectionChanged -= OnobjectIDChanged;
-                            _objectID.Clear();
-                            _objectID.CollectionChanged += OnobjectIDChanged;
                         }
                     }
                 }
@@ -4001,6 +4138,10 @@ namespace VoidDestroyer2DataEditor
         {
             InitProperty("dockType");
             InitProperty("ejectOrientation");
+            InitProperty("objectID");
+            List<string> objectIDreftypes = new List<string>();
+            objectIDreftypes.Add("Ship");
+            SetPropertyIsObjectIDRef("objectID", true, objectIDreftypes);
             InitProperty("orientation");
             InitProperty("attachedID");
             List<string> attachedIDreftypes = new List<string>();
@@ -4009,12 +4150,6 @@ namespace VoidDestroyer2DataEditor
             InitProperty("boneName");
             InitProperty("dockOrientation");
             InitProperty("resourceOnly");
-
-            InitProperty("objectID");
-            List<string> objectIDreftypes = new List<string>();
-            objectIDreftypes.Add("Ship");
-            SetPropertyIsObjectIDRef("objectID", true, objectIDreftypes);
-            SetPropertyIsCollection("objectID", true, typeof(string));
 
             InitProperty("ejectVelocity");
             InitProperty("dockRollOffset");
@@ -4032,14 +4167,12 @@ namespace VoidDestroyer2DataEditor
         {
             _dockType = "";
             _ejectOrientation = "";
+            _objectID = "";
             _orientation = "";
             _attachedID = "";
             _boneName = "";
             _dockOrientation = "";
             _resourceOnly = "";
-
-            _objectID = new ObservableCollection<string>();
-            _objectID.CollectionChanged += OnobjectIDChanged;
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -4057,14 +4190,12 @@ namespace VoidDestroyer2DataEditor
         {
             _dockType = "";
             _ejectOrientation = "";
+            _objectID = "";
             _orientation = "";
             _attachedID = "";
             _boneName = "";
             _dockOrientation = "";
             _resourceOnly = "";
-
-            _objectID = new ObservableCollection<string>();
-            _objectID.CollectionChanged += OnobjectIDChanged;
 
             _ejectVelocity = 0;
             _dockRollOffset = 0;
@@ -4078,17 +4209,16 @@ namespace VoidDestroyer2DataEditor
 
         }
 
-        public dockDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string indockType, string inejectOrientation, string inorientation, string inattachedID, string inboneName, string indockOrientation, string inresourceOnly, List<string> inobjectID, int inejectVelocity, int indockRollOffset, int indockYawOffset, bool inbCanAcceptRawResource, bool inbInvisible, Vector3D inposition) : base(inParentDataFile, inDataNode)
+        public dockDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string indockType, string inejectOrientation, string inobjectID, string inorientation, string inattachedID, string inboneName, string indockOrientation, string inresourceOnly, int inejectVelocity, int indockRollOffset, int indockYawOffset, bool inbCanAcceptRawResource, bool inbInvisible, Vector3D inposition) : base(inParentDataFile, inDataNode)
         {
             _dockType = indockType;
             _ejectOrientation = inejectOrientation;
+            _objectID = inobjectID;
             _orientation = inorientation;
             _attachedID = inattachedID;
             _boneName = inboneName;
             _dockOrientation = indockOrientation;
             _resourceOnly = inresourceOnly;
-
-            _objectID = new ObservableCollection<string>(inobjectID);
 
             _ejectVelocity = inejectVelocity;
             _dockRollOffset = indockRollOffset;
@@ -4107,6 +4237,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("dockType", inCopyFrom.PropertyExists("dockType"));
             _ejectOrientation = inCopyFrom.ejectOrientation;
             SetPropertyExists("ejectOrientation", inCopyFrom.PropertyExists("ejectOrientation"));
+            _objectID = inCopyFrom.objectID;
+            SetPropertyExists("objectID", inCopyFrom.PropertyExists("objectID"));
             _orientation = inCopyFrom.orientation;
             SetPropertyExists("orientation", inCopyFrom.PropertyExists("orientation"));
             _attachedID = inCopyFrom.attachedID;
@@ -4117,10 +4249,6 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("dockOrientation", inCopyFrom.PropertyExists("dockOrientation"));
             _resourceOnly = inCopyFrom.resourceOnly;
             SetPropertyExists("resourceOnly", inCopyFrom.PropertyExists("resourceOnly"));
-
-            _objectID = new ObservableCollection<string>(inCopyFrom.objectID);
-            _objectID.CollectionChanged += OnobjectIDChanged;
-            SetPropertyExists("objectID", inCopyFrom.PropertyExists("objectID"));
 
             _ejectVelocity = inCopyFrom.ejectVelocity;
             SetPropertyExists("ejectVelocity", inCopyFrom.PropertyExists("ejectVelocity"));
@@ -4146,6 +4274,8 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("dockType", original.PropertyExists("dockType"));
             _ejectOrientation = original.ejectOrientation;
             SetPropertyExists("ejectOrientation", original.PropertyExists("ejectOrientation"));
+            _objectID = original.objectID;
+            SetPropertyExists("objectID", original.PropertyExists("objectID"));
             _orientation = original.orientation;
             SetPropertyExists("orientation", original.PropertyExists("orientation"));
             _attachedID = original.attachedID;
@@ -4156,10 +4286,6 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("dockOrientation", original.PropertyExists("dockOrientation"));
             _resourceOnly = original.resourceOnly;
             SetPropertyExists("resourceOnly", original.PropertyExists("resourceOnly"));
-
-            _objectID = new ObservableCollection<string>(original.objectID);
-            _objectID.CollectionChanged += OnobjectIDChanged;
-            SetPropertyExists("objectID", original.PropertyExists("objectID"));
 
             _ejectVelocity = original.ejectVelocity;
             SetPropertyExists("ejectVelocity", original.PropertyExists("ejectVelocity"));
@@ -4180,11 +4306,12 @@ namespace VoidDestroyer2DataEditor
 
         public override string ToString()
         {
-            int i = 0;
             string result = "";
             result += _dockType;
             result += ", ";
             result += _ejectOrientation;
+            result += ", ";
+            result += _objectID;
             result += ", ";
             result += _orientation;
             result += ", ";
@@ -4195,15 +4322,6 @@ namespace VoidDestroyer2DataEditor
             result += _dockOrientation;
             result += ", ";
             result += _resourceOnly;
-            result += ", ";
-            for (i = 0; i < _objectID.Count; i++)
-            {
-                result += _objectID[i];
-                if (_objectID.Count - i != 1)
-                {
-                    result += ", ";
-                }
-            }
             result += ", ";
             result += _ejectVelocity.ToString();
             result += ", ";
@@ -4236,6 +4354,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add(indent + "    <ejectOrientation attr1=\"" + _ejectOrientation + "\"/>"); 
             }
+            if (PropertyExists("objectID"))
+            {
+                xmltextlines.Add(indent + "    <objectID attr1=\"" + _objectID + "\"/>"); 
+            }
             if (PropertyExists("orientation"))
             {
                 xmltextlines.Add(indent + "    <orientation attr1=\"" + _orientation + "\"/>"); 
@@ -4255,14 +4377,6 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("resourceOnly"))
             {
                 xmltextlines.Add(indent + "    <resourceOnly attr1=\"" + _resourceOnly + "\"/>"); 
-            }
-
-            if (PropertyExists("objectID"))
-            {
-                foreach (string result in _objectID)
-                {
-                    xmltextlines.Add(indent + "    <objectID attr1=\"" + result + "\"/>"); 
-                }
             }
 
             if (PropertyExists("ejectVelocity"))
@@ -4304,6 +4418,8 @@ namespace VoidDestroyer2DataEditor
 
         int _pitch;
         int _roll;
+
+        float _yaw;
 
         Vector3D _shieldPosition;
 
@@ -4405,6 +4521,31 @@ namespace VoidDestroyer2DataEditor
         }
 
 
+        [Description("yaw is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public float yaw
+        {
+            get
+            {
+                return _yaw;
+            }
+            set
+            {
+                if (ParentDataFile != null)
+                {
+                    if (ParentDataFile.Source != null)
+                    {
+                        if (ParentDataFile.Source.WriteAccess)
+                        {
+                            _yaw = value;
+                            SetPropertyEdited("yaw", true);
+                            ParentDataFile.SetPropertyEdited("shield", true);
+                        }
+                    }
+                }
+            }
+        }
+
+
         [Description("shieldPosition is a 3D vector"), Category("3D Vectors"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public Vector3D shieldPosition
         {
@@ -4487,6 +4628,8 @@ namespace VoidDestroyer2DataEditor
             InitProperty("pitch");
             InitProperty("roll");
 
+            InitProperty("yaw");
+
             InitProperty("shieldPosition");
 
         }
@@ -4499,6 +4642,8 @@ namespace VoidDestroyer2DataEditor
 
             _pitch = 0;
             _roll = 0;
+
+            _yaw = 0;
 
             _shieldPosition = new Vector3D();
 
@@ -4513,18 +4658,22 @@ namespace VoidDestroyer2DataEditor
             _pitch = 0;
             _roll = 0;
 
+            _yaw = 0;
+
             _shieldPosition = new Vector3D();
             _shieldPosition.OnElementChanged += shieldPosition_OnElementChanged;
 
         }
 
-        public shieldDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inshieldID, string inshieldOrientation, int inpitch, int inroll, Vector3D inshieldPosition) : base(inParentDataFile, inDataNode)
+        public shieldDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inshieldID, string inshieldOrientation, int inpitch, int inroll, float inyaw, Vector3D inshieldPosition) : base(inParentDataFile, inDataNode)
         {
             _shieldID = inshieldID;
             _shieldOrientation = inshieldOrientation;
 
             _pitch = inpitch;
             _roll = inroll;
+
+            _yaw = inyaw;
 
             _shieldPosition = inshieldPosition;
 
@@ -4541,6 +4690,9 @@ namespace VoidDestroyer2DataEditor
             SetPropertyExists("pitch", inCopyFrom.PropertyExists("pitch"));
             _roll = inCopyFrom.roll;
             SetPropertyExists("roll", inCopyFrom.PropertyExists("roll"));
+
+            _yaw = inCopyFrom.yaw;
+            SetPropertyExists("yaw", inCopyFrom.PropertyExists("yaw"));
 
             _shieldPosition = new Vector3D(inCopyFrom.shieldPosition);
             SetPropertyExists("shieldPosition", inCopyFrom.PropertyExists("shieldPosition"));
@@ -4560,6 +4712,9 @@ namespace VoidDestroyer2DataEditor
             _roll = original.roll;
             SetPropertyExists("roll", original.PropertyExists("roll"));
 
+            _yaw = original.yaw;
+            SetPropertyExists("yaw", original.PropertyExists("yaw"));
+
             _shieldPosition = new Vector3D(original.shieldPosition);
             SetPropertyExists("shieldPosition", original.PropertyExists("shieldPosition"));
 
@@ -4575,6 +4730,8 @@ namespace VoidDestroyer2DataEditor
             result += _pitch.ToString();
             result += ", ";
             result += _roll.ToString();
+            result += ", ";
+            result += _yaw.ToString();
             result += ", ";
             result += _shieldPosition.ToString();
             return result;
@@ -4605,6 +4762,11 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("roll"))
             {
                 xmltextlines.Add(indent + "    <roll attr1=\"" + _roll.ToString() + "\"/>"); 
+            }
+
+            if (PropertyExists("yaw"))
+            {
+                xmltextlines.Add(indent + "    <yaw attr1=\"" + _yaw.ToString() + "\"/>"); 
             }
 
             if (PropertyExists("shieldPosition"))
@@ -5166,10 +5328,10 @@ namespace VoidDestroyer2DataEditor
 
     public class rotateBonesDataStructure : VD2DataStructure
     {
-        string _rotateBone;
+        ObservableCollection<string> _rotateBone;
 
-        [Description("rotateBone is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public string rotateBone
+        [Description("rotateBone is a collection of plaintext strings"), Category("Plaintext String Collections"), Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
+        public ObservableCollection<string> rotateBone
         {
             get
             {
@@ -5177,15 +5339,43 @@ namespace VoidDestroyer2DataEditor
             }
             set
             {
-                if (ParentDataFile != null)
+                if (_rotateBone != null)
                 {
-                    if (ParentDataFile.Source != null)
+                    _rotateBone.CollectionChanged -= OnrotateBoneChanged;
+                }
+                _rotateBone = value;
+                if (_rotateBone != null)
+                {
+                    _rotateBone.CollectionChanged += OnrotateBoneChanged;
+                }
+            }
+        }
+
+        public void OnrotateBoneChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (ParentDataFile != null)
+            {
+                if (ParentDataFile.Source != null)
+                {
+                    if (ParentDataFile.Source.WriteAccess)
                     {
-                        if (ParentDataFile.Source.WriteAccess)
+                        SetPropertyEdited("rotateBone", true);
+                        ParentDataFile.SetPropertyEdited("rotateBones", true);
+                    }
+                    else
+                    {
+                        if (DataNode != null)
                         {
-                            _rotateBone = value;
-                            SetPropertyEdited("rotateBone", true);
-                            ParentDataFile.SetPropertyEdited("rotateBones", true);
+                            bool exists = false;
+                            _rotateBone = new ObservableCollection<string>(ParseHelpers.GetStringListFromXMLNodeNamedChildren(DataNode, "rotateBone", out exists));
+                            _rotateBone.CollectionChanged += OnrotateBoneChanged;
+                            SetPropertyExists("rotateBone", exists);
+                        }
+                        else
+                        {
+                            _rotateBone.CollectionChanged -= OnrotateBoneChanged;
+                            _rotateBone.Clear();
+                            _rotateBone.CollectionChanged += OnrotateBoneChanged;
                         }
                     }
                 }
@@ -5197,32 +5387,36 @@ namespace VoidDestroyer2DataEditor
         public override void InitAllProperties()
         {
             InitProperty("rotateBone");
+            SetPropertyIsCollection("rotateBone", true, typeof(string));
 
         }
 
         //Only called by collections editor, so we use the data file that is open right now.
         public rotateBonesDataStructure() : base(null, null)
         {
-            _rotateBone = "";
+            _rotateBone = new ObservableCollection<string>();
+            _rotateBone.CollectionChanged += OnrotateBoneChanged;
 
         }
 
         //Only called when data does not exist to fill the data structure, datafile is given but data node is null in this case
         public rotateBonesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)
         {
-            _rotateBone = "";
+            _rotateBone = new ObservableCollection<string>();
+            _rotateBone.CollectionChanged += OnrotateBoneChanged;
 
         }
 
-        public rotateBonesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, string inrotateBone) : base(inParentDataFile, inDataNode)
+        public rotateBonesDataStructure(VD2Data inParentDataFile, XmlNode inDataNode, List<string> inrotateBone) : base(inParentDataFile, inDataNode)
         {
-            _rotateBone = inrotateBone;
+            _rotateBone = new ObservableCollection<string>(inrotateBone);
 
         }
 
         public rotateBonesDataStructure(rotateBonesDataStructure inCopyFrom) : base(inCopyFrom.ParentDataFile, inCopyFrom.DataNode)
         {
-            _rotateBone = inCopyFrom.rotateBone;
+            _rotateBone = new ObservableCollection<string>(inCopyFrom.rotateBone);
+            _rotateBone.CollectionChanged += OnrotateBoneChanged;
             SetPropertyExists("rotateBone", inCopyFrom.PropertyExists("rotateBone"));
 
         }
@@ -5230,15 +5424,24 @@ namespace VoidDestroyer2DataEditor
         public override void CopyFrom(VD2DataStructure inOriginal)
         {
             rotateBonesDataStructure original = (rotateBonesDataStructure)inOriginal;
-            _rotateBone = original.rotateBone;
+            _rotateBone = new ObservableCollection<string>(original.rotateBone);
+            _rotateBone.CollectionChanged += OnrotateBoneChanged;
             SetPropertyExists("rotateBone", original.PropertyExists("rotateBone"));
 
         }
 
         public override string ToString()
         {
+            int i = 0;
             string result = "";
-            result += _rotateBone;
+            for (i = 0; i < _rotateBone.Count; i++)
+            {
+                result += _rotateBone[i];
+                if (_rotateBone.Count - i != 1)
+                {
+                    result += ", ";
+                }
+            }
             return result;
         }
 
@@ -5253,7 +5456,10 @@ namespace VoidDestroyer2DataEditor
             xmltextlines.Add(indent + "<rotateBones>");
             if (PropertyExists("rotateBone"))
             {
-                xmltextlines.Add(indent + "    <rotateBone attr1=\"" + _rotateBone + "\"/>"); 
+                foreach (string result in _rotateBone)
+                {
+                    xmltextlines.Add(indent + "    <rotateBone attr1=\"" + result + "\"/>"); 
+                }
             }
 
             xmltextlines.Add(indent + "</rotateBones>");

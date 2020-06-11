@@ -41,9 +41,9 @@ namespace VoidDestroyer2DataEditor
 
         bool _isMassInfinite;
         bool _bCanResearch;
-        bool _bMobile;
         bool _bNoLargeHangarInterior;
         bool _bNoRemoteControlInterior;
+        bool _bMobile;
 
         Vector3D _dockingArms;
         Vector3D _dockingArmsEnd;
@@ -595,26 +595,6 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("bMobile is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public bool bMobile
-        {
-            get
-            {
-                return _bMobile;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _bMobile = value;
-                        SetPropertyEdited("bMobile", true);
-                    }
-                }
-            }
-        }
-
         [Description("bNoLargeHangarInterior is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bNoLargeHangarInterior
         {
@@ -650,6 +630,26 @@ namespace VoidDestroyer2DataEditor
                     {
                         _bNoRemoteControlInterior = value;
                         SetPropertyEdited("bNoRemoteControlInterior", true);
+                    }
+                }
+            }
+        }
+
+        [Description("bMobile is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bMobile
+        {
+            get
+            {
+                return _bMobile;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bMobile = value;
+                        SetPropertyEdited("bMobile", true);
                     }
                 }
             }
@@ -1135,9 +1135,9 @@ namespace VoidDestroyer2DataEditor
 
             InitProperty("isMassInfinite");
             InitProperty("bCanResearch");
-            InitProperty("bMobile");
             InitProperty("bNoLargeHangarInterior");
             InitProperty("bNoRemoteControlInterior");
+            InitProperty("bMobile");
 
             InitProperty("dockingArms");
             InitProperty("dockingArmsEnd");
@@ -1411,16 +1411,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bCanResearch", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bCanResearch"));
                 }
                 SetPropertyExists("bCanResearch", exists);
-                _bMobile = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMobile", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("bMobile", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("bMobile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bMobile"));
-                }
-                SetPropertyExists("bMobile", exists);
                 _bNoLargeHangarInterior = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bNoLargeHangarInterior", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -1441,6 +1431,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bNoRemoteControlInterior", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bNoRemoteControlInterior"));
                 }
                 SetPropertyExists("bNoRemoteControlInterior", exists);
+                _bMobile = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMobile", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bMobile", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bMobile", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bMobile"));
+                }
+                SetPropertyExists("bMobile", exists);
 
                 _dockingArms = ParseHelpers.GetVector3DFromVD2Data(DataXMLDoc, "dockingArms", out exists);
                 _dockingArms.OnElementChanged += dockingArms_OnElementChanged;
@@ -1674,10 +1674,6 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<bCanResearch attr1=\"" + ((_bCanResearch) ? "1" : "0") + "\"/>");
             }
-            if (PropertyExists("bMobile"))
-            {
-                xmltextlines.Add("<bMobile attr1=\"" + ((_bMobile) ? "1" : "0") + "\"/>");
-            }
             if (PropertyExists("bNoLargeHangarInterior"))
             {
                 xmltextlines.Add("<bNoLargeHangarInterior attr1=\"" + ((_bNoLargeHangarInterior) ? "1" : "0") + "\"/>");
@@ -1685,6 +1681,10 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("bNoRemoteControlInterior"))
             {
                 xmltextlines.Add("<bNoRemoteControlInterior attr1=\"" + ((_bNoRemoteControlInterior) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bMobile"))
+            {
+                xmltextlines.Add("<bMobile attr1=\"" + ((_bMobile) ? "1" : "0") + "\"/>");
             }
 
             xmltextlines.Add("");
@@ -1748,7 +1748,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

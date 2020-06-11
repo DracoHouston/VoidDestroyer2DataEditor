@@ -440,7 +440,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<translateVector x=\"" + _translateVector.x.ToString() + "\" y=\"" + _translateVector.y.ToString() + "\" z=\"" + _translateVector.z.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

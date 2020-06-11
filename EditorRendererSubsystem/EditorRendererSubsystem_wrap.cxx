@@ -624,6 +624,32 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_EditorWorld(void * jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_EditorRendererObject_SetName(void * jarg1, char * jarg2) {
+  EditorRendererObject *arg1 = (EditorRendererObject *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (EditorRendererObject *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->SetName(arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_EditorRendererObject_GetName(void * jarg1) {
+  char * jresult ;
+  EditorRendererObject *arg1 = (EditorRendererObject *) 0 ;
+  std::string result;
+  
+  arg1 = (EditorRendererObject *)jarg1; 
+  result = (arg1)->GetName();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_EditorRendererObject_SetWorldPosition(void * jarg1, float jarg2, float jarg3, float jarg4) {
   EditorRendererObject *arg1 = (EditorRendererObject *) 0 ;
   float arg2 ;
@@ -1386,17 +1412,25 @@ SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_StopSystem(void * jarg1) {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_SetName(void * jarg1, char * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_PUSystemComponent_ResetSystem(void * jarg1, unsigned int jarg2) {
   PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
-  std::string arg2 ;
+  bool arg2 ;
   
   arg1 = (PUSystemComponent *)jarg1; 
-  if (!jarg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return ;
-  }
-  (&arg2)->assign(jarg2); 
-  (arg1)->SetName(arg2);
+  arg2 = jarg2 ? true : false; 
+  (arg1)->ResetSystem(arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_PUSystemComponent_GetPUSystemName(void * jarg1) {
+  char * jresult ;
+  PUSystemComponent *arg1 = (PUSystemComponent *) 0 ;
+  std::string result;
+  
+  arg1 = (PUSystemComponent *)jarg1; 
+  result = (arg1)->GetPUSystemName();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
 }
 
 

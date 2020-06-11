@@ -396,7 +396,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<fieldSize x=\"" + _fieldSize.x.ToString() + "\" y=\"" + _fieldSize.y.ToString() + "\" z=\"" + _fieldSize.z.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

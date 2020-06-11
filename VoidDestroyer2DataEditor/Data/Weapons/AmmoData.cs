@@ -111,7 +111,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("projectileParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("projectileParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string projectileParticleName
         {
             get
@@ -735,6 +735,9 @@ namespace VoidDestroyer2DataEditor
             SetPropertyIsObjectID("projectileID", true);
             InitProperty("projectileType");
             InitProperty("projectileParticleName");
+            List<string> projectileParticleNamereftypes = new List<string>();
+            projectileParticleNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("projectileParticleName", true, projectileParticleNamereftypes);
             InitProperty("meshName");
             List<string> meshNamereftypes = new List<string>();
             meshNamereftypes.Add("Mesh");
@@ -1285,7 +1288,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

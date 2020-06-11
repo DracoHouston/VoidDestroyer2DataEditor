@@ -655,7 +655,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<bRequiresCollisionWeapon attr1=\"" + ((_bRequiresCollisionWeapon) ? "1" : "0") + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

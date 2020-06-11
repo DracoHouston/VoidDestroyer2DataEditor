@@ -43,6 +43,16 @@ public class EditorRendererObject : global::System.IDisposable {
     }
   }
 
+  public void SetName(string inName) {
+    EditorRendererPINVOKE.EditorRendererObject_SetName(swigCPtr, inName);
+    if (EditorRendererPINVOKE.SWIGPendingException.Pending) throw EditorRendererPINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public string GetName() {
+    string ret = EditorRendererPINVOKE.EditorRendererObject_GetName(swigCPtr);
+    return ret;
+  }
+
   public void SetWorldPosition(float x, float y, float z) {
     EditorRendererPINVOKE.EditorRendererObject_SetWorldPosition(swigCPtr, x, y, z);
   }

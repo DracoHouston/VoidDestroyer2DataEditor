@@ -956,7 +956,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<bAlwaysAvailableUpgrade attr1=\"" + ((_bAlwaysAvailableUpgrade) ? "1" : "0") + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

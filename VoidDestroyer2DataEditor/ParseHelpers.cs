@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace VoidDestroyer2DataEditor
 {
-    enum TagNameReportNodeTypes
+    public enum TagNameReportNodeTypes
     {
         plaintext,
         realnumber,
@@ -18,7 +18,7 @@ namespace VoidDestroyer2DataEditor
         datastructure
     }
 
-    class TagNameReportEntry
+    public class TagNameReportEntry
     {
         public int UseNum;
         public TagNameReportNodeTypes NodeType;
@@ -209,8 +209,23 @@ namespace VoidDestroyer2DataEditor
                         //This process will likely need to be reversed on save, unless it turns out in testing that VD2 behaves :(
                         xmltextlines[i] = xmltextlines[i].Replace("&", "&amp;");
                     }
-
-                    File.WriteAllLines("TempLoadStage.xml", xmltextlines);
+                    try
+                    {
+                        File.WriteAllLines("TempLoadStage.xml", xmltextlines);
+                    }
+                    catch (Exception ex)
+                    {
+                        UI.ErrorMessageDialog dialog = new UI.ErrorMessageDialog();
+                        dialog.ErrorTitleText = "Can't write to TempLoadStage.xml!";
+                        dialog.ErrorMessageText = "An exception occurred while attempting to write to the editor's temporary file, this is often because of write protections on the folder you installed this editor to.\r\nProgram Files has elevated priviledges, and requires admin permissions to write there.\r\n\r\nPlease use the exception below to diagnose the problem and try again.\r\n\r\n" + ex.Message + ex.StackTrace + "\r\n\r\n";
+                        while (ex.InnerException != null)
+                        {
+                            ex = ex.InnerException;
+                            dialog.ErrorMessageText += ex.Message + ex.StackTrace + "\r\n\r\n";
+                        }
+                        dialog.ShowDialog();
+                    }
+                    
                     result = new XmlDocument();
                     try
                     {

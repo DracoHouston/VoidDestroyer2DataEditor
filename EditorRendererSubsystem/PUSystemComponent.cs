@@ -58,9 +58,13 @@ public class PUSystemComponent : EditorActorComponent {
     EditorRendererPINVOKE.PUSystemComponent_StopSystem(swigCPtr);
   }
 
-  public void SetName(string inName) {
-    EditorRendererPINVOKE.PUSystemComponent_SetName(swigCPtr, inName);
-    if (EditorRendererPINVOKE.SWIGPendingException.Pending) throw EditorRendererPINVOKE.SWIGPendingException.Retrieve();
+  public void ResetSystem(bool inAutoPlay) {
+    EditorRendererPINVOKE.PUSystemComponent_ResetSystem(swigCPtr, inAutoPlay);
+  }
+
+  public string GetPUSystemName() {
+    string ret = EditorRendererPINVOKE.PUSystemComponent_GetPUSystemName(swigCPtr);
+    return ret;
   }
 
   public PUSystemComponent() : this(EditorRendererPINVOKE.new_PUSystemComponent(), true) {

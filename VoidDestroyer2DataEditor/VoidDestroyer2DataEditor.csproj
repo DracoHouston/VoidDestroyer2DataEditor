@@ -90,11 +90,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataOgreControl.cs">
+    <Compile Include="ShipOgreControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataOgreControl.Designer.cs">
-      <DependentUpon>DataOgreControl.cs</DependentUpon>
+    <Compile Include="ShipOgreControl.Designer.cs">
+      <DependentUpon>ShipOgreControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DuplicateFileDialog.cs">
       <SubType>Form</SubType>
@@ -130,6 +130,7 @@
     <Compile Include="EditorWorld.cs" />
     <Compile Include="ImageSetDB.cs" />
     <Compile Include="MeshDB.cs" />
+    <Compile Include="OgreShip.cs" />
     <Compile Include="PUDocument.cs" />
     <Compile Include="PUOgreControl.cs">
       <SubType>UserControl</SubType>
@@ -389,8 +390,8 @@
       <DependentUpon>Vector3DCollectionSidebarEditorItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Vector3DConverter.cs" />
-    <EmbeddedResource Include="DataOgreControl.resx">
-      <DependentUpon>DataOgreControl.cs</DependentUpon>
+    <EmbeddedResource Include="ShipOgreControl.resx">
+      <DependentUpon>ShipOgreControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DuplicateFileDialog.resx">
       <DependentUpon>DuplicateFileDialog.cs</DependentUpon>

@@ -36,7 +36,7 @@ namespace VoidDestroyer2DataEditor
                 string txt = (string)(value);
                 string[] fields = txt.Split(new char[] { ',' });
 
-                try
+                if (fields.Length == 3)
                 {
                     float xresult;
                     float yresult;
@@ -46,11 +46,9 @@ namespace VoidDestroyer2DataEditor
                         return new Vector3D(xresult, yresult, zresult);
                     }
                 }
-                catch
+                else 
                 {
-                    throw new InvalidCastException(
-                        "Cannot convert the string '" +
-                        value.ToString() + "' into a Vector3D");
+                    return new Vector3D();
                 }
             }
             return base.ConvertFrom(context, culture, value);

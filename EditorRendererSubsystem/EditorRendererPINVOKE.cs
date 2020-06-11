@@ -270,6 +270,12 @@ class EditorRendererPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_delete_EditorWorld")]
   public static extern void delete_EditorWorld(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererObject_SetName")]
+  public static extern void EditorRendererObject_SetName(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererObject_GetName")]
+  public static extern string EditorRendererObject_GetName(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_EditorRendererObject_SetWorldPosition")]
   public static extern void EditorRendererObject_SetWorldPosition(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2, float jarg3, float jarg4);
 
@@ -459,8 +465,11 @@ class EditorRendererPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_StopSystem")]
   public static extern void PUSystemComponent_StopSystem(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_SetName")]
-  public static extern void PUSystemComponent_SetName(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_ResetSystem")]
+  public static extern void PUSystemComponent_ResetSystem(global::System.Runtime.InteropServices.HandleRef jarg1, bool jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_PUSystemComponent_GetPUSystemName")]
+  public static extern string PUSystemComponent_GetPUSystemName(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("EditorRenderer", EntryPoint="CSharp_new_PUSystemComponent")]
   public static extern global::System.IntPtr new_PUSystemComponent();

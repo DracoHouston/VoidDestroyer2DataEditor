@@ -176,5 +176,34 @@ namespace VoidDestroyer2DataEditor
 
             VP.SetCameraYawPitchDistance(yaw, pitch, distance);
         }
+
+        protected virtual void PopulateContextMenu()
+        {
+            OgreContextMenu.Items.Clear();
+            OgreContextMenu.Items.Add("Reset Camera");
+            OgreContextMenu.Items[OgreContextMenu.Items.Count - 1].Click += ResetCamera_Click;
+        }
+
+        protected virtual void ResetCamera()
+        {
+            if (MainActor != null)
+            {
+                distance = MainActor.GetBoundingRadius() * 1.25f;
+                zoomdistance = distance * 0.1f;
+                yaw = 0;
+                pitch = 0;
+                VP.SetCameraYawPitchDistance(yaw, pitch, distance);
+            }
+        }
+
+        private void ResetCamera_Click(object sender, EventArgs e)
+        {
+            ResetCamera();
+        }
+
+        private void OgreContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            PopulateContextMenu();
+        }
     }
 }

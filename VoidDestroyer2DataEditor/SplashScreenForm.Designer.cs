@@ -67,7 +67,7 @@
             this.Name = "SplashScreenForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SplashScreenForm";
+            this.Text = "(LOADING) Void Destroyer 2 Data Editor";
             this.Load += new System.EventHandler(this.SplashScreenForm_Load);
             this.ResumeLayout(false);
 

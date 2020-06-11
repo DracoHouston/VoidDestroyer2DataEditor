@@ -137,12 +137,35 @@ namespace VoidDestroyer2DataEditor
             Themes = new List<DataEditorTheme>();
         }
 
-        public void SaveSettings()
+        public bool SaveSettings()
         {
             List<string> configlines = new List<string>();
             configlines.Add("VD2Path|" + VD2Path);
             configlines.Add("TreeIconSize|" + TreeIconSize.ToString());
-            File.WriteAllLines("EditorUserSettings.cfg", configlines);            
+            bool abort = false;
+            try
+            {
+                File.WriteAllLines("EditorUserSettings.cfg", configlines);
+            }
+            catch (Exception ex)
+            {
+                UI.ErrorMessageDialog dialog = new UI.ErrorMessageDialog();
+                dialog.ErrorTitleText = "Can't write config file!";
+                dialog.ErrorMessageText = "An exception occurred while attempting to write config to file, this is often because of write protections on the folder you installed this editor to.\r\nProgram Files has elevated priviledges, and requires admin permissions to write there.\r\n\r\nPlease use the exception below to diagnose the problem and try again.\r\n\r\n" + ex.Message + ex.StackTrace + "\r\n\r\n";
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    dialog.ErrorMessageText += ex.Message + ex.StackTrace + "\r\n\r\n";
+                }
+                dialog.ShowDialog();
+                abort = true;
+                //Application.Exit();
+            }
+            if (abort)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool InitUserSettings()

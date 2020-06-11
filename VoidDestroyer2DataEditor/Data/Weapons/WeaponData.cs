@@ -23,16 +23,16 @@ namespace VoidDestroyer2DataEditor
         string _maxShipSize;
         string _shieldID;
         string _ammunitionID;
+        string _collisionWeaponType;
         string _projectileWeaponType;
+        string _auxAmmunitionID;
         string _instantType;
         string _explosionID;
         string _chargeSoundID;
         string _chargedSoundID;
         string _chargeParticleName;
-        string _auxAmmunitionID;
         string _linkedRotatingElement;
         string _beamShieldID;
-        string _collisionWeaponType;
         string _particleEffectName;
         string _beamType;
         string _hitSound;
@@ -44,8 +44,10 @@ namespace VoidDestroyer2DataEditor
         ObservableCollection<string> _hangarID;
 
         int _distance;
-        int _roundsPerShot;
         int _rotateSpeed;
+        int _roundsPerShot;
+        int _stopEngineTime;
+        int _stopManeuveringTime;
 
         float _damage;
         float _range;
@@ -70,14 +72,15 @@ namespace VoidDestroyer2DataEditor
         bool _bNoAimAssist;
         bool _bAlwaysPlayFireSound;
         bool _bFireFullAmmo;
+        bool _bStopsDamage;
+        bool _bMining;
         bool _bSticky;
         bool _bCapture;
         bool _bReduceMassOnStick;
+        bool _bAddRandom;
         bool _bChargeGun;
         bool _bAntiCapShip;
         bool _bIgnoresShields;
-        bool _bAddRandom;
-        bool _bMining;
         bool _bRepair;
         bool _bAntiCapital;
 
@@ -169,7 +172,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("hitParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("hitParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string hitParticleName
         {
             get
@@ -289,6 +292,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("collisionWeaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string collisionWeaponType
+        {
+            get
+            {
+                return _collisionWeaponType;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _collisionWeaponType = value;
+                        SetPropertyEdited("collisionWeaponType", true);
+                    }
+                }
+            }
+        }
+
         [Description("projectileWeaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string projectileWeaponType
         {
@@ -304,6 +327,26 @@ namespace VoidDestroyer2DataEditor
                     {
                         _projectileWeaponType = value;
                         SetPropertyEdited("projectileWeaponType", true);
+                    }
+                }
+            }
+        }
+
+        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
+        public string auxAmmunitionID
+        {
+            get
+            {
+                return _auxAmmunitionID;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _auxAmmunitionID = value;
+                        SetPropertyEdited("auxAmmunitionID", true);
                     }
                 }
             }
@@ -389,7 +432,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("chargeParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("chargeParticleName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string chargeParticleName
         {
             get
@@ -404,26 +447,6 @@ namespace VoidDestroyer2DataEditor
                     {
                         _chargeParticleName = value;
                         SetPropertyEdited("chargeParticleName", true);
-                    }
-                }
-            }
-        }
-
-        [Description("auxAmmunitionID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
-        public string auxAmmunitionID
-        {
-            get
-            {
-                return _auxAmmunitionID;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _auxAmmunitionID = value;
-                        SetPropertyEdited("auxAmmunitionID", true);
                     }
                 }
             }
@@ -469,27 +492,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("collisionWeaponType is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public string collisionWeaponType
-        {
-            get
-            {
-                return _collisionWeaponType;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _collisionWeaponType = value;
-                        SetPropertyEdited("collisionWeaponType", true);
-                    }
-                }
-            }
-        }
-
-        [Description("particleEffectName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("particleEffectName is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string particleEffectName
         {
             get
@@ -725,6 +728,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("rotateSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int rotateSpeed
+        {
+            get
+            {
+                return _rotateSpeed;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _rotateSpeed = value;
+                        SetPropertyEdited("rotateSpeed", true);
+                    }
+                }
+            }
+        }
+
         [Description("roundsPerShot is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public int roundsPerShot
         {
@@ -745,12 +768,12 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("rotateSpeed is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public int rotateSpeed
+        [Description("stopEngineTime is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int stopEngineTime
         {
             get
             {
-                return _rotateSpeed;
+                return _stopEngineTime;
             }
             set
             {
@@ -758,8 +781,28 @@ namespace VoidDestroyer2DataEditor
                 {
                     if (Source.WriteAccess)
                     {
-                        _rotateSpeed = value;
-                        SetPropertyEdited("rotateSpeed", true);
+                        _stopEngineTime = value;
+                        SetPropertyEdited("stopEngineTime", true);
+                    }
+                }
+            }
+        }
+
+        [Description("stopManeuveringTime is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int stopManeuveringTime
+        {
+            get
+            {
+                return _stopManeuveringTime;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _stopManeuveringTime = value;
+                        SetPropertyEdited("stopManeuveringTime", true);
                     }
                 }
             }
@@ -1242,6 +1285,46 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("bStopsDamage is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bStopsDamage
+        {
+            get
+            {
+                return _bStopsDamage;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bStopsDamage = value;
+                        SetPropertyEdited("bStopsDamage", true);
+                    }
+                }
+            }
+        }
+
+        [Description("bMining is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bMining
+        {
+            get
+            {
+                return _bMining;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bMining = value;
+                        SetPropertyEdited("bMining", true);
+                    }
+                }
+            }
+        }
+
         [Description("bSticky is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bSticky
         {
@@ -1302,6 +1385,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("bAddRandom is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bAddRandom
+        {
+            get
+            {
+                return _bAddRandom;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bAddRandom = value;
+                        SetPropertyEdited("bAddRandom", true);
+                    }
+                }
+            }
+        }
+
         [Description("bChargeGun is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bChargeGun
         {
@@ -1357,46 +1460,6 @@ namespace VoidDestroyer2DataEditor
                     {
                         _bIgnoresShields = value;
                         SetPropertyEdited("bIgnoresShields", true);
-                    }
-                }
-            }
-        }
-
-        [Description("bAddRandom is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public bool bAddRandom
-        {
-            get
-            {
-                return _bAddRandom;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _bAddRandom = value;
-                        SetPropertyEdited("bAddRandom", true);
-                    }
-                }
-            }
-        }
-
-        [Description("bMining is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public bool bMining
-        {
-            get
-            {
-                return _bMining;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _bMining = value;
-                        SetPropertyEdited("bMining", true);
                     }
                 }
             }
@@ -1659,6 +1722,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("name");
             InitProperty("materialName");
             InitProperty("hitParticleName");
+            List<string> hitParticleNamereftypes = new List<string>();
+            hitParticleNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("hitParticleName", true, hitParticleNamereftypes);
             InitProperty("muzzleFlashEffectID");
             List<string> muzzleFlashEffectIDreftypes = new List<string>();
             muzzleFlashEffectIDreftypes.Add("Particle");
@@ -1673,7 +1739,12 @@ namespace VoidDestroyer2DataEditor
             List<string> ammunitionIDreftypes = new List<string>();
             ammunitionIDreftypes.Add("Ammo");
             SetPropertyIsObjectIDRef("ammunitionID", true, ammunitionIDreftypes);
+            InitProperty("collisionWeaponType");
             InitProperty("projectileWeaponType");
+            InitProperty("auxAmmunitionID");
+            List<string> auxAmmunitionIDreftypes = new List<string>();
+            auxAmmunitionIDreftypes.Add("Ammo");
+            SetPropertyIsObjectIDRef("auxAmmunitionID", true, auxAmmunitionIDreftypes);
             InitProperty("instantType");
             InitProperty("explosionID");
             List<string> explosionIDreftypes = new List<string>();
@@ -1688,17 +1759,18 @@ namespace VoidDestroyer2DataEditor
             chargedSoundIDreftypes.Add("Sound");
             SetPropertyIsObjectIDRef("chargedSoundID", true, chargedSoundIDreftypes);
             InitProperty("chargeParticleName");
-            InitProperty("auxAmmunitionID");
-            List<string> auxAmmunitionIDreftypes = new List<string>();
-            auxAmmunitionIDreftypes.Add("Ammo");
-            SetPropertyIsObjectIDRef("auxAmmunitionID", true, auxAmmunitionIDreftypes);
+            List<string> chargeParticleNamereftypes = new List<string>();
+            chargeParticleNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("chargeParticleName", true, chargeParticleNamereftypes);
             InitProperty("linkedRotatingElement");
             InitProperty("beamShieldID");
             List<string> beamShieldIDreftypes = new List<string>();
             beamShieldIDreftypes.Add("Shield");
             SetPropertyIsObjectIDRef("beamShieldID", true, beamShieldIDreftypes);
-            InitProperty("collisionWeaponType");
             InitProperty("particleEffectName");
+            List<string> particleEffectNamereftypes = new List<string>();
+            particleEffectNamereftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("particleEffectName", true, particleEffectNamereftypes);
             InitProperty("beamType");
             InitProperty("hitSound");
             List<string> hitSoundreftypes = new List<string>();
@@ -1720,8 +1792,10 @@ namespace VoidDestroyer2DataEditor
             SetPropertyIsCollection("hangarID", true, typeof(string));
 
             InitProperty("distance");
-            InitProperty("roundsPerShot");
             InitProperty("rotateSpeed");
+            InitProperty("roundsPerShot");
+            InitProperty("stopEngineTime");
+            InitProperty("stopManeuveringTime");
 
             InitProperty("damage");
             InitProperty("range");
@@ -1748,14 +1822,15 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bNoAimAssist");
             InitProperty("bAlwaysPlayFireSound");
             InitProperty("bFireFullAmmo");
+            InitProperty("bStopsDamage");
+            InitProperty("bMining");
             InitProperty("bSticky");
             InitProperty("bCapture");
             InitProperty("bReduceMassOnStick");
+            InitProperty("bAddRandom");
             InitProperty("bChargeGun");
             InitProperty("bAntiCapShip");
             InitProperty("bIgnoresShields");
-            InitProperty("bAddRandom");
-            InitProperty("bMining");
             InitProperty("bRepair");
             InitProperty("bAntiCapital");
 
@@ -1879,6 +1954,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("ammunitionID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "ammunitionID"));
                 }
                 SetPropertyExists("ammunitionID", exists);
+                _collisionWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionWeaponType", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("collisionWeaponType", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("collisionWeaponType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "collisionWeaponType"));
+                }
+                SetPropertyExists("collisionWeaponType", exists);
                 _projectileWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "projectileWeaponType", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -1889,6 +1974,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("projectileWeaponType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "projectileWeaponType"));
                 }
                 SetPropertyExists("projectileWeaponType", exists);
+                _auxAmmunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "auxAmmunitionID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("auxAmmunitionID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("auxAmmunitionID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "auxAmmunitionID"));
+                }
+                SetPropertyExists("auxAmmunitionID", exists);
                 _instantType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "instantType", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -1939,16 +2034,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("chargeParticleName", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "chargeParticleName"));
                 }
                 SetPropertyExists("chargeParticleName", exists);
-                _auxAmmunitionID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "auxAmmunitionID", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("auxAmmunitionID", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("auxAmmunitionID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "auxAmmunitionID"));
-                }
-                SetPropertyExists("auxAmmunitionID", exists);
                 _linkedRotatingElement = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "linkedRotatingElement", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -1969,16 +2054,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("beamShieldID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "beamShieldID"));
                 }
                 SetPropertyExists("beamShieldID", exists);
-                _collisionWeaponType = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "collisionWeaponType", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("collisionWeaponType", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("collisionWeaponType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "collisionWeaponType"));
-                }
-                SetPropertyExists("collisionWeaponType", exists);
                 _particleEffectName = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "particleEffectName", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -2073,16 +2148,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("distance", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "distance"));
                 }
                 SetPropertyExists("distance", exists);
-                _roundsPerShot = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "roundsPerShot", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("roundsPerShot", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("roundsPerShot", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "roundsPerShot"));
-                }
-                SetPropertyExists("roundsPerShot", exists);
                 _rotateSpeed = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "rotateSpeed", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -2093,6 +2158,36 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("rotateSpeed", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "rotateSpeed"));
                 }
                 SetPropertyExists("rotateSpeed", exists);
+                _roundsPerShot = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "roundsPerShot", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("roundsPerShot", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("roundsPerShot", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "roundsPerShot"));
+                }
+                SetPropertyExists("roundsPerShot", exists);
+                _stopEngineTime = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "stopEngineTime", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("stopEngineTime", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("stopEngineTime", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "stopEngineTime"));
+                }
+                SetPropertyExists("stopEngineTime", exists);
+                _stopManeuveringTime = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "stopManeuveringTime", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("stopManeuveringTime", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("stopManeuveringTime", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "stopManeuveringTime"));
+                }
+                SetPropertyExists("stopManeuveringTime", exists);
 
                 _damage = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "damage", out exists);
                 if (Source.ShortName == "Base")
@@ -2308,6 +2403,26 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bFireFullAmmo", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bFireFullAmmo"));
                 }
                 SetPropertyExists("bFireFullAmmo", exists);
+                _bStopsDamage = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bStopsDamage", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bStopsDamage", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bStopsDamage", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bStopsDamage"));
+                }
+                SetPropertyExists("bStopsDamage", exists);
+                _bMining = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMining", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bMining", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bMining", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bMining"));
+                }
+                SetPropertyExists("bMining", exists);
                 _bSticky = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bSticky", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -2338,6 +2453,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bReduceMassOnStick", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bReduceMassOnStick"));
                 }
                 SetPropertyExists("bReduceMassOnStick", exists);
+                _bAddRandom = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAddRandom", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bAddRandom", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bAddRandom", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bAddRandom"));
+                }
+                SetPropertyExists("bAddRandom", exists);
                 _bChargeGun = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bChargeGun", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -2368,26 +2493,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bIgnoresShields", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bIgnoresShields"));
                 }
                 SetPropertyExists("bIgnoresShields", exists);
-                _bAddRandom = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bAddRandom", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("bAddRandom", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("bAddRandom", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bAddRandom"));
-                }
-                SetPropertyExists("bAddRandom", exists);
-                _bMining = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bMining", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("bMining", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("bMining", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bMining"));
-                }
-                SetPropertyExists("bMining", exists);
                 _bRepair = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRepair", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -2517,9 +2622,17 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<ammunitionID attr1=\"" + _ammunitionID + "\"/>");
             }
+            if (PropertyExists("collisionWeaponType"))
+            {
+                xmltextlines.Add("<collisionWeaponType attr1=\"" + _collisionWeaponType + "\"/>");
+            }
             if (PropertyExists("projectileWeaponType"))
             {
                 xmltextlines.Add("<projectileWeaponType attr1=\"" + _projectileWeaponType + "\"/>");
+            }
+            if (PropertyExists("auxAmmunitionID"))
+            {
+                xmltextlines.Add("<auxAmmunitionID attr1=\"" + _auxAmmunitionID + "\"/>");
             }
             if (PropertyExists("instantType"))
             {
@@ -2541,10 +2654,6 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<chargeParticleName attr1=\"" + _chargeParticleName + "\"/>");
             }
-            if (PropertyExists("auxAmmunitionID"))
-            {
-                xmltextlines.Add("<auxAmmunitionID attr1=\"" + _auxAmmunitionID + "\"/>");
-            }
             if (PropertyExists("linkedRotatingElement"))
             {
                 xmltextlines.Add("<linkedRotatingElement attr1=\"" + _linkedRotatingElement + "\"/>");
@@ -2552,10 +2661,6 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("beamShieldID"))
             {
                 xmltextlines.Add("<beamShieldID attr1=\"" + _beamShieldID + "\"/>");
-            }
-            if (PropertyExists("collisionWeaponType"))
-            {
-                xmltextlines.Add("<collisionWeaponType attr1=\"" + _collisionWeaponType + "\"/>");
             }
             if (PropertyExists("particleEffectName"))
             {
@@ -2609,13 +2714,21 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<distance attr1=\"" + _distance.ToString() + "\"/>");
             }
+            if (PropertyExists("rotateSpeed"))
+            {
+                xmltextlines.Add("<rotateSpeed attr1=\"" + _rotateSpeed.ToString() + "\"/>");
+            }
             if (PropertyExists("roundsPerShot"))
             {
                 xmltextlines.Add("<roundsPerShot attr1=\"" + _roundsPerShot.ToString() + "\"/>");
             }
-            if (PropertyExists("rotateSpeed"))
+            if (PropertyExists("stopEngineTime"))
             {
-                xmltextlines.Add("<rotateSpeed attr1=\"" + _rotateSpeed.ToString() + "\"/>");
+                xmltextlines.Add("<stopEngineTime attr1=\"" + _stopEngineTime.ToString() + "\"/>");
+            }
+            if (PropertyExists("stopManeuveringTime"))
+            {
+                xmltextlines.Add("<stopManeuveringTime attr1=\"" + _stopManeuveringTime.ToString() + "\"/>");
             }
 
             xmltextlines.Add("");
@@ -2721,6 +2834,14 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<bFireFullAmmo attr1=\"" + ((_bFireFullAmmo) ? "1" : "0") + "\"/>");
             }
+            if (PropertyExists("bStopsDamage"))
+            {
+                xmltextlines.Add("<bStopsDamage attr1=\"" + ((_bStopsDamage) ? "1" : "0") + "\"/>");
+            }
+            if (PropertyExists("bMining"))
+            {
+                xmltextlines.Add("<bMining attr1=\"" + ((_bMining) ? "1" : "0") + "\"/>");
+            }
             if (PropertyExists("bSticky"))
             {
                 xmltextlines.Add("<bSticky attr1=\"" + ((_bSticky) ? "1" : "0") + "\"/>");
@@ -2733,6 +2854,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<bReduceMassOnStick attr1=\"" + ((_bReduceMassOnStick) ? "1" : "0") + "\"/>");
             }
+            if (PropertyExists("bAddRandom"))
+            {
+                xmltextlines.Add("<bAddRandom attr1=\"" + ((_bAddRandom) ? "1" : "0") + "\"/>");
+            }
             if (PropertyExists("bChargeGun"))
             {
                 xmltextlines.Add("<bChargeGun attr1=\"" + ((_bChargeGun) ? "1" : "0") + "\"/>");
@@ -2744,14 +2869,6 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("bIgnoresShields"))
             {
                 xmltextlines.Add("<bIgnoresShields attr1=\"" + ((_bIgnoresShields) ? "1" : "0") + "\"/>");
-            }
-            if (PropertyExists("bAddRandom"))
-            {
-                xmltextlines.Add("<bAddRandom attr1=\"" + ((_bAddRandom) ? "1" : "0") + "\"/>");
-            }
-            if (PropertyExists("bMining"))
-            {
-                xmltextlines.Add("<bMining attr1=\"" + ((_bMining) ? "1" : "0") + "\"/>");
             }
             if (PropertyExists("bRepair"))
             {
@@ -2796,7 +2913,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

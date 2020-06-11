@@ -1363,7 +1363,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<cloudsColor r=\"" + _cloudsColor.r.ToString() + "\" g=\"" + _cloudsColor.g.ToString() + "\" b=\"" + _cloudsColor.b.ToString() + "\" a=\"" + _cloudsColor.a.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

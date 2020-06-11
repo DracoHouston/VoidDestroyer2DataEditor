@@ -4562,6 +4562,11 @@ namespace VoidDestroyer2DataEditor
                         ImageSetDocument df = (ImageSetDocument)DataFile;
                         return df.ImageSetName;
                     }
+                    else if (DataFile is PUDocument)
+                    {
+                        PUDocument df = (PUDocument)DataFile;
+                        return df.PUTemplateName;
+                    }
                 }
                 string result = "";
                 for (int i = 0; i < Children.Count; i++)

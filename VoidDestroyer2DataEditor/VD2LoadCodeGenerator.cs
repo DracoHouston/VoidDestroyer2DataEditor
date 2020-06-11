@@ -23,6 +23,8 @@ namespace VoidDestroyer2DataEditor
         public List<string> ObjectIDRefTypes;
         public string Description;
         public string Category;
+        public TagNameReportNodeTypes PropertyType;
+        public Type DataStructureCollectionPropertyType;
         public KnownPropertiesInfo()
         {
             PropertyName = "";
@@ -32,6 +34,8 @@ namespace VoidDestroyer2DataEditor
             ObjectIDRefTypes = new List<string>();
             Description = "";
             Category = "";
+            PropertyType = TagNameReportNodeTypes.plaintext;
+            DataStructureCollectionPropertyType = typeof(VD2DataStructure);
         }
     }
 
@@ -109,14 +113,13 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.PropertyName = "cockpitID";
                     result.Add(currentknownprop);
 
-                    //we need particle universe to view the particle systems, effects/particles definitions dont get used for this property FOR SOME REASON!!!
-                    /*currentknownprop = new KnownPropertiesInfo();
+                    currentknownprop = new KnownPropertiesInfo();
                     objectidreftypes = new List<string>();
                     currentknownprop.IsObjectIDRef = true;
-                    objectidreftypes.Add("Particle");
+                    objectidreftypes.Add("ParticleUniverse");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "gravityDriveParticleSystem";
-                    result.Add(currentknownprop);*/
+                    result.Add(currentknownprop);
 
                     currentknownprop = new KnownPropertiesInfo();
                     objectidreftypes = new List<string>();
@@ -303,7 +306,31 @@ namespace VoidDestroyer2DataEditor
                     objectidreftypes.Add("Explosion");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "explosionID";
-                    result.Add(currentknownprop); 
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "particleEffectName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "hitParticleName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "chargeParticleName";
+                    result.Add(currentknownprop);
                     break;
                 case "TurretData":
                     currentknownprop = new KnownPropertiesInfo();
@@ -406,6 +433,14 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "ribbonID";
                     result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "projectileParticleName";
+                    result.Add(currentknownprop);
                     break;
                 case "MissileData":
                     currentknownprop = new KnownPropertiesInfo();
@@ -430,6 +465,22 @@ namespace VoidDestroyer2DataEditor
                     objectidreftypes.Add("Effect");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     currentknownprop.PropertyName = "ribbonID";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "missileParticleName";
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    objectidreftypes = new List<string>();
+                    currentknownprop.IsObjectIDRef = true;
+                    objectidreftypes.Add("ParticleUniverse");
+                    currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    currentknownprop.PropertyName = "trailParticleName";
                     result.Add(currentknownprop);
                     break;
                 case "MineData":
@@ -509,6 +560,12 @@ namespace VoidDestroyer2DataEditor
                     objectidreftypes.Add("Particle");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
                     result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "roll";
+                    currentknownprop.PropertyType = TagNameReportNodeTypes.realnumber;
+                    result.Add(currentknownprop);
                     break;
                 case "weapon":
                     currentknownprop = new KnownPropertiesInfo();
@@ -539,6 +596,12 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.PropertyName = "turretID";
                     objectidreftypes.Add("Turret");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "pitch";
+                    currentknownprop.PropertyType = TagNameReportNodeTypes.realnumber;
                     result.Add(currentknownprop);
                     break;
                 case "attachment":
@@ -578,6 +641,12 @@ namespace VoidDestroyer2DataEditor
                     currentknownprop.PropertyName = "shieldID";
                     objectidreftypes.Add("Shield");
                     currentknownprop.ObjectIDRefTypes = objectidreftypes;
+                    result.Add(currentknownprop);
+
+                    currentknownprop = new KnownPropertiesInfo();
+                    currentknownprop.CollectionOrSingle = CollectionOrSinglePropertyOptions.single;
+                    currentknownprop.PropertyName = "yaw";
+                    currentknownprop.PropertyType = TagNameReportNodeTypes.realnumber;
                     result.Add(currentknownprop);
                     break;
                 case "canister":
@@ -621,9 +690,9 @@ namespace VoidDestroyer2DataEditor
             folderlist.Add(vd2path + "Data\\Ships\\Destroyers");
             folderlist.Add(vd2path + "Data\\Ships\\Cruisers");
             folderlist.Add(vd2path + "Data\\Ships\\Carriers");
-            folderlist.Add(vd2path + "Data\\Ships\\Dreads");
+            folderlist.Add(vd2path + "Data\\Ships\\Dread");
 
-            VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ShipData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ShipData"), "DataOgreControl");
+            VD2LoadCodeGenerator.GenerateDataClassFromXMLFiles(folderlist, "ShipData", DataStructures, out DataStructures, GetKnownPropertiesOfDataClass("ShipData"), "ShipOgreControl");
 
             folderlist.Clear();
             folderlist.Add(vd2path + "Data\\Ships\\Upgrades");
@@ -810,7 +879,7 @@ namespace VoidDestroyer2DataEditor
             datastructureparsehelpersfiletextlines.Add("    {");
             for (int propidx = 0; propidx < DataStructures.Count; propidx++)
             {
-                datastructurefiletextlines = VD2LoadCodeGenerator.AddDataStructureParseHelpersLines(datastructureparsehelpersfiletextlines, DataStructures[propidx]);
+                datastructurefiletextlines = VD2LoadCodeGenerator.AddDataStructureParseHelpersLines(datastructureparsehelpersfiletextlines, DataStructures[propidx], GetKnownPropertiesOfDataStructure(DataStructures[propidx].Key));
             }
             datastructurefiletextlines.Add("    }");
             datastructurefiletextlines.Add("}");
@@ -920,84 +989,186 @@ namespace VoidDestroyer2DataEditor
             List<KeyValuePair<string, TagNameReportEntry>> listvectors = new List<KeyValuePair<string, TagNameReportEntry>>();
             List<KeyValuePair<string, TagNameReportEntry>> listcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
             List<KeyValuePair<string, TagNameReportEntry>> listdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
+            foreach (KnownPropertiesInfo known in inKnownProperties)
+            {
+                if (!roottagresults.ContainsKey(known.PropertyName))
+                {
+                    TagNameReportEntry knowntag = new TagNameReportEntry();
+
+                    knowntag.NodeType = known.PropertyType;
+                    if (known.CollectionOrSingle == CollectionOrSinglePropertyOptions.collection)
+                    {
+                        knowntag.IsList = true;
+                    }
+                    else
+                    {
+                        knowntag.IsList = false;
+                    }
+                    roottagresults.Add(known.PropertyName, knowntag);
+                }
+            }
             for (i = 0; i < roottagresults.Count; i++)
             {
                 KeyValuePair<string, TagNameReportEntry> currentresult = roottagresults.ElementAt(i);
-
+                CollectionOrSinglePropertyOptions collectionoverride = CollectionOrSinglePropertyOptions.auto;
+                foreach (KnownPropertiesInfo knownprop in inKnownProperties)
+                {
+                    if (knownprop.PropertyName == currentresult.Key)
+                    {
+                        collectionoverride = knownprop.CollectionOrSingle;
+                    }
+                }
                 switch (currentresult.Value.NodeType)
                 {
                     case TagNameReportNodeTypes.plaintext:
-                        if (currentresult.Value.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
                             liststrings.Add(currentresult);
                         }
-                        else
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                         {
                             strings.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                liststrings.Add(currentresult);
+                            }
+                            else
+                            {
+                                strings.Add(currentresult);
+                            }
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
                         if (((currentresult.Key.StartsWith("b")) && (char.IsUpper(currentresult.Key.ElementAt(1)))) || (currentresult.Key == "isMassInfinite"))
                         {
-                            if (currentresult.Value.IsList)
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                             {
                                 listbools.Add(currentresult);
                             }
-                            else
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                             {
                                 bools.Add(currentresult);
+                            }
+                            else
+                            {
+                                if (currentresult.Value.IsList)
+                                {
+                                    listbools.Add(currentresult);
+                                }
+                                else
+                                {
+                                    bools.Add(currentresult);
+                                }
                             }
                         }
                         else
                         {
-                            if (currentresult.Value.IsList)
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                             {
                                 listints.Add(currentresult);
                             }
-                            else
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                             {
                                 ints.Add(currentresult);
+                            }
+                            else
+                            {
+                                if (currentresult.Value.IsList)
+                                {
+                                    listints.Add(currentresult);
+                                }
+                                else
+                                {
+                                    ints.Add(currentresult);
+                                }
                             }
                         }
                         break;
                     case TagNameReportNodeTypes.realnumber:
-                        if (currentresult.Value.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
                             listfloats.Add(currentresult);
                         }
-                        else
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                         {
                             floats.Add(currentresult);
                         }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listfloats.Add(currentresult);
+                            }
+                            else
+                            {
+                                floats.Add(currentresult);
+                            }
+                        }
                         break;
                     case TagNameReportNodeTypes.vector:
-                        if (currentresult.Value.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
                             listvectors.Add(currentresult);
                         }
-                        else
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                         {
                             vectors.Add(currentresult);
                         }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listvectors.Add(currentresult);
+                            }
+                            else
+                            {
+                                vectors.Add(currentresult);
+                            }
+                        }
                         break;
                     case TagNameReportNodeTypes.color:
-                        if (currentresult.Value.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
                             listcolors.Add(currentresult);
                         }
-                        else
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                         {
                             colors.Add(currentresult);
                         }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listcolors.Add(currentresult);
+                            }
+                            else
+                            {
+                                colors.Add(currentresult);
+                            }
+                        }
                         break;
                     case TagNameReportNodeTypes.datastructure:
-                        if (currentresult.Value.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
                             listdatastructures.Add(currentresult);
                         }
-                        else
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
                         {
                             datastructures.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listdatastructures.Add(currentresult);
+                            }
+                            else
+                            {
+                                datastructures.Add(currentresult);
+                            }
                         }
                         break;
                     default:
@@ -3003,8 +3174,10 @@ namespace VoidDestroyer2DataEditor
             {
                 reporttextlines.Add("");
             }
+            
             skipnewline = true;
-            reporttextlines.Add("            File.WriteAllLines(_FilePath, xmltextlines);");
+            
+            reporttextlines.Add("            SafeWriteAllLines(_FilePath, xmltextlines);");
             reporttextlines.Add("        }");
             if (inModelViewerName != "")
             {
@@ -3105,117 +3278,300 @@ namespace VoidDestroyer2DataEditor
         public static List<string> AddDataStructureClassLines(List<string> inTextLines, KeyValuePair<string, TagNameReportEntry> inDataStructure, List<KnownPropertiesInfo> inKnownProperties)
         {
             bool skipnewline = false;
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurestrings = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructureints = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurefloats = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurebools = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurevectors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurecolors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructuredatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructureliststrings = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistints = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistfloats = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistbools = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistvectors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> strings = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> ints = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> floats = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> bools = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> vectors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> colors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> datastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> liststrings = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listints = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listfloats = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listbools = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listvectors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
             //inTextLines.Add("    [TypeConverter(typeof(" + inDataStructure.Key + "DataStructureConverter))]");
             inTextLines.Add("    public class " + inDataStructure.Key + "DataStructure : VD2DataStructure");
             inTextLines.Add("    {");
             int propidx = 0;
-                
+
+            foreach (KnownPropertiesInfo known in inKnownProperties)
+            {
+                if (!inDataStructure.Value.DataStructureProperties.ContainsKey(known.PropertyName))
+                {
+                    TagNameReportEntry knowntag = new TagNameReportEntry();
+
+                    knowntag.NodeType = known.PropertyType;
+                    if (known.CollectionOrSingle == CollectionOrSinglePropertyOptions.collection)
+                    {
+                        knowntag.IsList = true;
+                    }
+                    else
+                    {
+                        knowntag.IsList = false;
+                    }
+                    inDataStructure.Value.DataStructureProperties.Add(known.PropertyName, knowntag);
+                }
+            }
+
             for (propidx = 0; propidx < inDataStructure.Value.DataStructureProperties.Keys.Count; propidx++)
             {
-                TagNameReportEntry currentdatastructureproperty = new TagNameReportEntry();
-                inDataStructure.Value.DataStructureProperties.TryGetValue(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), out currentdatastructureproperty);
+                /*TagNameReportEntry currentresult = new TagNameReportEntry();
+                inDataStructure.Value.DataStructureProperties.TryGetValue(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), out currentresult);*/
 
-                //KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(i);
+                KeyValuePair<string, TagNameReportEntry> currentresult = new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), inDataStructure.Value.DataStructureProperties[inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx)]);
 
-                switch (currentdatastructureproperty.NodeType)
+                CollectionOrSinglePropertyOptions collectionoverride = CollectionOrSinglePropertyOptions.auto;
+                foreach (KnownPropertiesInfo knownprop in inKnownProperties)
+                {
+                    if (knownprop.PropertyName == currentresult.Key)
+                    {
+                        collectionoverride = knownprop.CollectionOrSingle;
+                    }
+                }
+                switch (currentresult.Value.NodeType)
                 {
                     case TagNameReportNodeTypes.plaintext:
-                        if (currentdatastructureproperty.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
-                            datastructureliststrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            liststrings.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            strings.Add(currentresult);
                         }
                         else
                         {
-                            datastructurestrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            if (currentresult.Value.IsList)
+                            {
+                                liststrings.Add(currentresult);
+                            }
+                            else
+                            {
+                                strings.Add(currentresult);
+                            }
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
-                        if ((inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b") || (inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx) == "isMassInfinite")) && (char.IsUpper(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).ElementAt(1))))
+                        if (((currentresult.Key.StartsWith("b")) && (char.IsUpper(currentresult.Key.ElementAt(1)))) || (currentresult.Key == "isMassInfinite"))
                         {
-                            if (currentdatastructureproperty.IsList)
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                             {
-                                datastructurelistbools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                listbools.Add(currentresult);
+                            }
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                            {
+                                bools.Add(currentresult);
                             }
                             else
                             {
-                                datastructurebools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                if (currentresult.Value.IsList)
+                                {
+                                    listbools.Add(currentresult);
+                                }
+                                else
+                                {
+                                    bools.Add(currentresult);
+                                }
                             }
                         }
                         else
                         {
-                            if (currentdatastructureproperty.IsList)
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                             {
-                                datastructurelistints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                listints.Add(currentresult);
+                            }
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                            {
+                                ints.Add(currentresult);
                             }
                             else
                             {
-                                datastructureints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                if (currentresult.Value.IsList)
+                                {
+                                    listints.Add(currentresult);
+                                }
+                                else
+                                {
+                                    ints.Add(currentresult);
+                                }
                             }
                         }
                         break;
                     case TagNameReportNodeTypes.realnumber:
-                        if (currentdatastructureproperty.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
-                            datastructurelistfloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listfloats.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            floats.Add(currentresult);
                         }
                         else
                         {
-                            datastructurefloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            if (currentresult.Value.IsList)
+                            {
+                                listfloats.Add(currentresult);
+                            }
+                            else
+                            {
+                                floats.Add(currentresult);
+                            }
                         }
                         break;
                     case TagNameReportNodeTypes.vector:
-                        if (currentdatastructureproperty.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
-                            datastructurelistvectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listvectors.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            vectors.Add(currentresult);
                         }
                         else
                         {
-                            datastructurevectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            if (currentresult.Value.IsList)
+                            {
+                                listvectors.Add(currentresult);
+                            }
+                            else
+                            {
+                                vectors.Add(currentresult);
+                            }
                         }
                         break;
                     case TagNameReportNodeTypes.color:
-                        if (currentdatastructureproperty.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
-                            datastructurelistcolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listcolors.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            colors.Add(currentresult);
                         }
                         else
                         {
-                            datastructurecolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            if (currentresult.Value.IsList)
+                            {
+                                listcolors.Add(currentresult);
+                            }
+                            else
+                            {
+                                colors.Add(currentresult);
+                            }
                         }
                         break;
                     case TagNameReportNodeTypes.datastructure:
-                        if (currentdatastructureproperty.IsList)
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
                         {
-                            datastructurelistdatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listdatastructures.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            datastructures.Add(currentresult);
                         }
                         else
                         {
-                            datastructuredatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            if (currentresult.Value.IsList)
+                            {
+                                listdatastructures.Add(currentresult);
+                            }
+                            else
+                            {
+                                datastructures.Add(currentresult);
+                            }
                         }
                         break;
                     default:
                         break;
                 }
+                /*switch (currentresult.NodeType)
+                {
+                    case TagNameReportNodeTypes.plaintext:
+                        if (currentresult.IsList)
+                        {
+                            liststrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        else
+                        {
+                            strings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        break;
+                    case TagNameReportNodeTypes.integer:
+                        if ((inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).StartsWith("b") || (inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx) == "isMassInfinite")) && (char.IsUpper(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx).ElementAt(1))))
+                        {
+                            if (currentresult.IsList)
+                            {
+                                listbools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                            }
+                            else
+                            {
+                                bools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                            }
+                        }
+                        else
+                        {
+                            if (currentresult.IsList)
+                            {
+                                listints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                            }
+                            else
+                            {
+                                ints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.realnumber:
+                        if (currentresult.IsList)
+                        {
+                            listfloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        else
+                        {
+                            floats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        break;
+                    case TagNameReportNodeTypes.vector:
+                        if (currentresult.IsList)
+                        {
+                            listvectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        else
+                        {
+                            vectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        break;
+                    case TagNameReportNodeTypes.color:
+                        if (currentresult.IsList)
+                        {
+                            listcolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        else
+                        {
+                            colors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        break;
+                    case TagNameReportNodeTypes.datastructure:
+                        if (currentresult.IsList)
+                        {
+                            listdatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        else
+                        {
+                            datastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentresult));
+                        }
+                        break;
+                    default:
+                        break;
+                }*/
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("        string _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3223,10 +3579,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<string> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3234,10 +3590,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("        int _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3245,10 +3601,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<int> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3256,10 +3612,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("        float _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3267,10 +3623,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<float> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3278,10 +3634,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("        bool _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3289,10 +3645,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<bool> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3300,10 +3656,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("        Vector3D _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3311,10 +3667,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<Vector3D> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3322,10 +3678,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("        ColorF _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3333,10 +3689,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<ColorF> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3344,10 +3700,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("        " + currentresult.Key + "DataStructure _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3355,10 +3711,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("        ObservableCollection<VD2DataStructure> _" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -3367,10 +3723,10 @@ namespace VoidDestroyer2DataEditor
             }
             
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 string decoratortext = "[Description(\"" + currentresult.Key + " is a plaintext string\"), Category(\"Plaintext Strings\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]";
                 foreach (KnownPropertiesInfo knownprop in inKnownProperties)
                 {
@@ -3413,10 +3769,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of plaintext strings\"), Category(\"Plaintext String Collections\"), Editor(\"System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a\", typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public ObservableCollection<string> " + currentresult.Key);
@@ -3476,10 +3832,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is an integer\"), Category(\"Integers\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public int " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3510,10 +3866,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of integers\"), Category(\"Integer Collections\")]");
                 inTextLines.Add("        public ObservableCollection<int> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3572,10 +3928,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a real number\"), Category(\"Real Numbers\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public float " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3606,10 +3962,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of real numbers\"), Category(\"Real Number Collections\")]");
                 inTextLines.Add("        public ObservableCollection<float> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3668,10 +4024,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a boolean value\"), Category(\"Booleans\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public bool " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3702,10 +4058,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of boolean values\"), Category(\"Boolean Collections\")]");
                 inTextLines.Add("        public ObservableCollection<bool> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3764,10 +4120,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a 3D vector\"), Category(\"3D Vectors\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public Vector3D " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3843,10 +4199,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of 3D vectors\"), Category(\"3D Vector Collections\")]");
                 inTextLines.Add("        public ObservableCollection<Vector3D> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -3957,10 +4313,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a Color\"), Category(\"Colors\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public ColorF " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -4041,10 +4397,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of Colors\"), Category(\"Color Collections\")]");
                 inTextLines.Add("        public ObservableCollection<ColorF> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -4160,10 +4516,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }            
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a datastructure\"), Category(\"Data Structures\"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]");
                 inTextLines.Add("        public " + currentresult.Key + "DataStructure " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -4183,10 +4539,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("        [Description(\"" + currentresult.Key + " is a collection of datastructures\"), Category(\"Data Structure Collection\")]");
                 inTextLines.Add("        public ObservableCollection<VD2DataStructure> " + currentresult.Key);
                 inTextLines.Add("        {");
@@ -4249,10 +4605,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("        public override void InitAllProperties()");
             inTextLines.Add("        {");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 foreach (KnownPropertiesInfo knownprop in inKnownProperties)
                 {
@@ -4276,10 +4632,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 foreach (KnownPropertiesInfo knownprop in inKnownProperties)
                 {
@@ -4304,10 +4660,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
@@ -4315,10 +4671,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(int));");
             }
@@ -4327,10 +4683,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
@@ -4338,10 +4694,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(float));");
             }
@@ -4350,10 +4706,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
@@ -4361,10 +4717,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(bool));");
             }
@@ -4373,10 +4729,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
@@ -4384,10 +4740,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(Vector3D));");
             }
@@ -4396,10 +4752,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
@@ -4407,10 +4763,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(ColorF));");
             }
@@ -4419,19 +4775,19 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
             }
             if (!skipnewline)
             {
                 inTextLines.Add("");
             }
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            InitProperty(\"" + currentresult.Key + "\");");
                 inTextLines.Add("            SetPropertyIsCollection(\"" + currentresult.Key + "\", true, typeof(" + currentresult.Key + "DataStructure));");
             }
@@ -4441,10 +4797,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("        public " + inDataStructure.Key + "DataStructure() : base(null, null)");
             inTextLines.Add("        {");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = \"\";");
             }
             if (!skipnewline)
@@ -4452,10 +4808,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4464,10 +4820,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = 0;");
             }
             if (!skipnewline)
@@ -4475,10 +4831,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4487,10 +4843,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = 0;");
             }
             if (!skipnewline)
@@ -4498,10 +4854,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4510,10 +4866,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = false;");
             }
             if (!skipnewline)
@@ -4521,10 +4877,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4533,10 +4889,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D();");
             }
             if (!skipnewline)
@@ -4544,10 +4900,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4556,10 +4912,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF();");
             }
             if (!skipnewline)
@@ -4567,10 +4923,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4579,10 +4935,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure();");
             }
             if (!skipnewline)
@@ -4590,10 +4946,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
 
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4603,10 +4959,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(VD2Data inParentDataFile, XmlNode inDataNode) : base(inParentDataFile, inDataNode)");
             inTextLines.Add("        {");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = \"\";");
             }
             if (!skipnewline)
@@ -4614,10 +4970,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4626,10 +4982,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = 0;");
             }
             if (!skipnewline)
@@ -4637,10 +4993,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4649,10 +5005,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = 0;");
             }
             if (!skipnewline)
@@ -4660,10 +5016,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4672,10 +5028,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = false;");
             }
             if (!skipnewline)
@@ -4683,10 +5039,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4695,10 +5051,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D();");
                 inTextLines.Add("            _" + currentresult.Key + ".OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
             }
@@ -4707,10 +5063,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4719,10 +5075,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF();");
                 inTextLines.Add("            _" + currentresult.Key + ".OnElementChanged += " + currentresult.Key + "_OnElementChanged;");
             }
@@ -4731,10 +5087,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4743,10 +5099,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure();");
             }
             if (!skipnewline)
@@ -4754,10 +5110,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
             }
@@ -4766,155 +5122,155 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        public " + inDataStructure.Key + "DataStructure(VD2Data inParentDataFile, XmlNode inDataNode, ");
             bool isfirstarg = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "string in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<string> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "int in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<int> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "float in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<float> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "bool in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<bool> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "Vector3D in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<Vector3D> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "ColorF in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<ColorF> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key + "DataStructure in" + currentresult.Key;
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += "List<" + currentresult.Key + "DataStructure> in" + currentresult.Key;
             }
             inTextLines[inTextLines.Count - 1] += ") : base(inParentDataFile, inDataNode)";
             inTextLines.Add("        {");
 
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -4922,10 +5278,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -4933,10 +5289,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -4944,10 +5300,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -4955,10 +5311,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -4966,10 +5322,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -4977,10 +5333,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -4988,10 +5344,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -4999,10 +5355,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -5010,10 +5366,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -5021,10 +5377,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -5032,10 +5388,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>(in" + currentresult.Key + ");");
             }
             if (!skipnewline)
@@ -5043,10 +5399,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = in" + currentresult.Key + ";");
             }
             if (!skipnewline)
@@ -5054,10 +5410,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
 
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>(in" + currentresult.Key + ");");
             }
 
@@ -5067,10 +5423,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("        {");
 
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5079,10 +5435,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5092,10 +5448,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5104,10 +5460,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5117,10 +5473,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5129,10 +5485,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5142,10 +5498,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = inCopyFrom." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5154,10 +5510,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5167,10 +5523,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5179,10 +5535,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (Vector3D vector in inCopyFrom." + currentresult.Key + ")");
@@ -5196,10 +5552,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5208,10 +5564,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (ColorF color in inCopyFrom." + currentresult.Key + ")");
@@ -5225,10 +5581,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure(inCopyFrom." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", inCopyFrom.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5237,10 +5593,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
 
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (VD2DataStructure ds in inCopyFrom." + currentresult.Key + ")");
@@ -5257,10 +5613,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("        {");
             inTextLines.Add("            " + inDataStructure.Key + "DataStructure original = (" + inDataStructure.Key + "DataStructure)inOriginal;");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5269,10 +5625,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<string>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5282,10 +5638,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5294,10 +5650,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<int>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5307,10 +5663,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5319,10 +5675,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<float>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5332,10 +5688,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = original." + currentresult.Key + ";");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5344,10 +5700,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<bool>(original." + currentresult.Key + ");");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
@@ -5357,10 +5713,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new Vector3D(original." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5369,10 +5725,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<Vector3D>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (Vector3D vector in original." + currentresult.Key + ")");
@@ -5386,10 +5742,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ColorF(original." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5398,10 +5754,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<ColorF>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (ColorF color in original." + currentresult.Key + ")");
@@ -5415,10 +5771,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new " + currentresult.Key + "DataStructure(original." + currentresult.Key + ");");
                 inTextLines.Add("            SetPropertyExists(\"" + currentresult.Key + "\", original.PropertyExists(\"" + currentresult.Key + "\"));");
             }
@@ -5427,10 +5783,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
 
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            _" + currentresult.Key + " = new ObservableCollection<VD2DataStructure>();");
                 inTextLines.Add("            _" + currentresult.Key + ".CollectionChanged += On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (VD2DataStructure ds in original." + currentresult.Key + ")");
@@ -5445,30 +5801,30 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("");
             inTextLines.Add("        public override string ToString()");
             inTextLines.Add("        {");
-            if ((datastructureliststrings.Count > 0) || (datastructurelistfloats.Count > 0) || (datastructurelistints.Count > 0) || (datastructurelistbools.Count > 0) || (datastructurelistvectors.Count > 0) || (datastructurelistcolors.Count > 0) || (datastructurelistdatastructures.Count > 0))
+            if ((liststrings.Count > 0) || (listfloats.Count > 0) || (listints.Count > 0) || (listbools.Count > 0) || (listvectors.Count > 0) || (listcolors.Count > 0) || (listdatastructures.Count > 0))
             {
                 inTextLines.Add("            int i = 0;");
             }
             inTextLines.Add("            string result = \"\";");
             isfirstarg = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ";");
             }
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i];");
@@ -5480,24 +5836,24 @@ namespace VoidDestroyer2DataEditor
                 
                 //inTextLines[inTextLines.Count - 1] += "List<string> in" + currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5507,24 +5863,24 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                }");
                 inTextLines.Add("            }");
             }
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5534,24 +5890,24 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                }");
                 inTextLines.Add("            }");
             }
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5561,24 +5917,24 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                }");
                 inTextLines.Add("            }");
             }
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5588,24 +5944,24 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                }");
                 inTextLines.Add("            }");
             }
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5615,25 +5971,25 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("                }");
                 inTextLines.Add("            }");
             }
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            result += _" + currentresult.Key + ".ToString();");
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines.Add("            result += \", \";");
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            for (i = 0; i < _" + currentresult.Key + ".Count; i++)");
                 inTextLines.Add("            {");
                 inTextLines.Add("                result += _" + currentresult.Key + "[i].ToString();");
@@ -5657,10 +6013,10 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("            }");
             inTextLines.Add("            xmltextlines.Add(indent + \"<" + inDataStructure.Key + ">\");");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + " + \"\\\"/>\"); ");
@@ -5671,10 +6027,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (string result in _" + currentresult.Key + ")");
@@ -5688,10 +6044,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\"); ");
@@ -5702,10 +6058,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (int result in _" + currentresult.Key + ")");
@@ -5719,10 +6075,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + _" + currentresult.Key + ".ToString() + \"\\\"/>\"); ");
@@ -5733,10 +6089,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (float result in _" + currentresult.Key + ")");
@@ -5750,10 +6106,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " attr1=\\\"\" + ((_" + currentresult.Key + ") ? \"1\" : \"0\") + \"\\\"/>\");");
@@ -5764,10 +6120,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (bool result in _" + currentresult.Key + ")");
@@ -5781,10 +6137,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " x=\\\"\" + _" + currentresult.Key + ".x.ToString() + \"\\\" y=\\\"\" + _" + currentresult.Key + ".y.ToString() + \"\\\" z=\\\"\" + _" + currentresult.Key + ".z.ToString() + \"\\\"/>\");");
@@ -5795,10 +6151,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (Vector3D result in _" + currentresult.Key + ")");
@@ -5812,10 +6168,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.Add(indent + \"    <" + currentresult.Key + " r=\\\"\" + _" + currentresult.Key + ".r.ToString() + \"\\\" g=\\\"\" + _" + currentresult.Key + ".g.ToString() + \"\\\" b=\\\"\" + _" + currentresult.Key + ".b.ToString() + \"\\\" a=\\\"\" + _" + currentresult.Key + ".a.ToString() + \"\\\"/>\");");
@@ -5826,10 +6182,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (ColorF result in _" + currentresult.Key + ")");
@@ -5843,10 +6199,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                xmltextlines.AddRange(_" + currentresult.Key + ".AsVD2XML(inIndent + 4));");
@@ -5857,10 +6213,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            if (PropertyExists(\"" + currentresult.Key + "\"))");
                 inTextLines.Add("            {");
                 inTextLines.Add("                foreach (" + currentresult.Key + "DataStructure result in _" + currentresult.Key + ")");
@@ -5910,41 +6266,208 @@ namespace VoidDestroyer2DataEditor
             inTextLines.Add("    }");
             inTextLines.Add("");*/
 
-            for (int childidx = 0; childidx < datastructuredatastructures.Count; childidx++)
+            for (int childidx = 0; childidx < datastructures.Count; childidx++)
             {
-                inTextLines = AddDataStructureClassLines(inTextLines, datastructuredatastructures[childidx], GetKnownPropertiesOfDataStructure(datastructurelistdatastructures[childidx].Key));
+                inTextLines = AddDataStructureClassLines(inTextLines, datastructures[childidx], GetKnownPropertiesOfDataStructure(datastructures[childidx].Key));
             }
-            for (int childidx = 0; childidx < datastructurelistdatastructures.Count; childidx++)
+            for (int childidx = 0; childidx < listdatastructures.Count; childidx++)
             {
-                inTextLines = AddDataStructureClassLines(inTextLines, datastructurelistdatastructures[childidx], GetKnownPropertiesOfDataStructure(datastructurelistdatastructures[childidx].Key));
+                inTextLines = AddDataStructureClassLines(inTextLines, listdatastructures[childidx], GetKnownPropertiesOfDataStructure(listdatastructures[childidx].Key));
             }
             return inTextLines;
         }
 
-        public static List<string> AddDataStructureParseHelpersLines(List<string> inTextLines, KeyValuePair<string, TagNameReportEntry> inDataStructure)
+        public static List<string> AddDataStructureParseHelpersLines(List<string> inTextLines, KeyValuePair<string, TagNameReportEntry> inDataStructure, List<KnownPropertiesInfo> inKnownProperties)
         {
             bool skipnewline = false;
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurestrings = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructureints = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurefloats = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurebools = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurevectors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurecolors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructuredatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructureliststrings = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistints = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistfloats = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistbools = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistvectors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
-            List<KeyValuePair<string, TagNameReportEntry>> datastructurelistdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> strings = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> ints = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> floats = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> bools = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> vectors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> colors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> datastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> liststrings = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listints = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listfloats = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listbools = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listvectors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listcolors = new List<KeyValuePair<string, TagNameReportEntry>>();
+            List<KeyValuePair<string, TagNameReportEntry>> listdatastructures = new List<KeyValuePair<string, TagNameReportEntry>>();
             
             
             int propidx = 0;
 
             for (propidx = 0; propidx < inDataStructure.Value.DataStructureProperties.Keys.Count; propidx++)
             {
-                TagNameReportEntry currentdatastructureproperty = new TagNameReportEntry();
+                KeyValuePair<string, TagNameReportEntry> currentresult = new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), inDataStructure.Value.DataStructureProperties[inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx)]);
+
+                CollectionOrSinglePropertyOptions collectionoverride = CollectionOrSinglePropertyOptions.auto;
+                foreach (KnownPropertiesInfo knownprop in inKnownProperties)
+                {
+                    if (knownprop.PropertyName == currentresult.Key)
+                    {
+                        collectionoverride = knownprop.CollectionOrSingle;
+                    }
+                }
+                switch (currentresult.Value.NodeType)
+                {
+                    case TagNameReportNodeTypes.plaintext:
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                        {
+                            liststrings.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            strings.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                liststrings.Add(currentresult);
+                            }
+                            else
+                            {
+                                strings.Add(currentresult);
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.integer:
+                        if (((currentresult.Key.StartsWith("b")) && (char.IsUpper(currentresult.Key.ElementAt(1)))) || (currentresult.Key == "isMassInfinite"))
+                        {
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                            {
+                                listbools.Add(currentresult);
+                            }
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                            {
+                                bools.Add(currentresult);
+                            }
+                            else
+                            {
+                                if (currentresult.Value.IsList)
+                                {
+                                    listbools.Add(currentresult);
+                                }
+                                else
+                                {
+                                    bools.Add(currentresult);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                            {
+                                listints.Add(currentresult);
+                            }
+                            else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                            {
+                                ints.Add(currentresult);
+                            }
+                            else
+                            {
+                                if (currentresult.Value.IsList)
+                                {
+                                    listints.Add(currentresult);
+                                }
+                                else
+                                {
+                                    ints.Add(currentresult);
+                                }
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.realnumber:
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                        {
+                            listfloats.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            floats.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listfloats.Add(currentresult);
+                            }
+                            else
+                            {
+                                floats.Add(currentresult);
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.vector:
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                        {
+                            listvectors.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            vectors.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listvectors.Add(currentresult);
+                            }
+                            else
+                            {
+                                vectors.Add(currentresult);
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.color:
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                        {
+                            listcolors.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            colors.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listcolors.Add(currentresult);
+                            }
+                            else
+                            {
+                                colors.Add(currentresult);
+                            }
+                        }
+                        break;
+                    case TagNameReportNodeTypes.datastructure:
+                        if (collectionoverride == CollectionOrSinglePropertyOptions.collection)
+                        {
+                            listdatastructures.Add(currentresult);
+                        }
+                        else if (collectionoverride == CollectionOrSinglePropertyOptions.single)
+                        {
+                            datastructures.Add(currentresult);
+                        }
+                        else
+                        {
+                            if (currentresult.Value.IsList)
+                            {
+                                listdatastructures.Add(currentresult);
+                            }
+                            else
+                            {
+                                datastructures.Add(currentresult);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                /*TagNameReportEntry currentdatastructureproperty = new TagNameReportEntry();
                 inDataStructure.Value.DataStructureProperties.TryGetValue(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), out currentdatastructureproperty);
 
                 //KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(i);
@@ -5954,11 +6477,11 @@ namespace VoidDestroyer2DataEditor
                     case TagNameReportNodeTypes.plaintext:
                         if (currentdatastructureproperty.IsList)
                         {
-                            datastructureliststrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            liststrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         else
                         {
-                            datastructurestrings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            strings.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         break;
                     case TagNameReportNodeTypes.integer:
@@ -5966,87 +6489,87 @@ namespace VoidDestroyer2DataEditor
                         {
                             if (currentdatastructureproperty.IsList)
                             {
-                                datastructurelistbools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                listbools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                             }
                             else
                             {
-                                datastructurebools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                bools.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                             }
                         }
                         else
                         {
                             if (currentdatastructureproperty.IsList)
                             {
-                                datastructurelistints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                listints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                             }
                             else
                             {
-                                datastructureints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                                ints.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                             }
                         }
                         break;
                     case TagNameReportNodeTypes.realnumber:
                         if (currentdatastructureproperty.IsList)
                         {
-                            datastructurelistfloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listfloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         else
                         {
-                            datastructurefloats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            floats.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         break;
                     case TagNameReportNodeTypes.vector:
                         if (currentdatastructureproperty.IsList)
                         {
-                            datastructurelistvectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listvectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         else
                         {
-                            datastructurevectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            vectors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         break;
                     case TagNameReportNodeTypes.color:
                         if (currentdatastructureproperty.IsList)
                         {
-                            datastructurelistcolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listcolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         else
                         {
-                            datastructurecolors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            colors.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         break;
                     case TagNameReportNodeTypes.datastructure:
                         if (currentdatastructureproperty.IsList)
                         {
-                            datastructurelistdatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            listdatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         else
                         {
-                            datastructuredatastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
+                            datastructures.Add(new KeyValuePair<string, TagNameReportEntry>(inDataStructure.Value.DataStructureProperties.Keys.ElementAt(propidx), currentdatastructureproperty));
                         }
                         break;
                     default:
                         break;
-                }
+                }*/
             }
 
-            for (int childidx = 0; childidx < datastructuredatastructures.Count; childidx++)
+            for (int childidx = 0; childidx < datastructures.Count; childidx++)
             {
-                inTextLines = AddDataStructureParseHelpersLines(inTextLines, datastructuredatastructures[childidx]);
+                inTextLines = AddDataStructureParseHelpersLines(inTextLines, datastructures[childidx], GetKnownPropertiesOfDataStructure(datastructures[childidx].Key));
             }
-            for (int childidx = 0; childidx < datastructurelistdatastructures.Count; childidx++)
+            for (int childidx = 0; childidx < listdatastructures.Count; childidx++)
             {
-                inTextLines = AddDataStructureParseHelpersLines(inTextLines, datastructurelistdatastructures[childidx]);
+                inTextLines = AddDataStructureParseHelpersLines(inTextLines, listdatastructures[childidx], GetKnownPropertiesOfDataStructure(listdatastructures[childidx].Key));
             }
 
             inTextLines.Add("        //Gets the value of child nodes to get a '" + inDataStructure.Key + "' data structure as a " + inDataStructure.Key + "DataStructure.");
             inTextLines.Add("        public static " + inDataStructure.Key + "DataStructure Get" + inDataStructure.Key + "DataStructureFromXMLNode(VD2Data inParentDataFile, XmlNode inXMLNode)");
             inTextLines.Add("        {");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            string " + currentresult.Key + " = ParseHelpers.GetStringFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6055,10 +6578,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<string> " + currentresult.Key + " = ParseHelpers.GetStringListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6067,10 +6590,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            int " + currentresult.Key + " = ParseHelpers.GetInt32FromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6079,10 +6602,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<int> " + currentresult.Key + " = ParseHelpers.GetInt32ListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6091,10 +6614,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            float " + currentresult.Key + " = ParseHelpers.GetFloatFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6103,10 +6626,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<float> " + currentresult.Key + " = ParseHelpers.GetFloatListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6115,10 +6638,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            bool " + currentresult.Key + " = ParseHelpers.GetBoolFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6127,10 +6650,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<bool> " + currentresult.Key + " = ParseHelpers.GetBoolListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6139,10 +6662,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            Vector3D " + currentresult.Key + " = ParseHelpers.GetVector3DFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");                
             }
@@ -6151,10 +6674,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<Vector3D> " + currentresult.Key + " = ParseHelpers.GetVector3DListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6163,10 +6686,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            ColorF " + currentresult.Key + " = ParseHelpers.GetColorFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6175,10 +6698,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<ColorF> " + currentresult.Key + " = ParseHelpers.GetColorListFromXMLNodeNamedChildren(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6187,10 +6710,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            " + currentresult.Key + "DataStructure " + currentresult.Key + " = DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureFromXMLNodeNamedChild(inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");                
             }
@@ -6199,10 +6722,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            bool " + currentresult.Key + "exists;");
                 inTextLines.Add("            List<" + currentresult.Key + "DataStructure> " + currentresult.Key + " = DataStructureParseHelpers.Get" + currentresult.Key + "DataStructureListFromXMLNodeNamedChildren(inParentDataFile, inXMLNode, \"" + currentresult.Key + "\", out " + currentresult.Key + "exists);");
             }
@@ -6212,154 +6735,154 @@ namespace VoidDestroyer2DataEditor
             }
             inTextLines.Add("            " + inDataStructure.Key + "DataStructure result = new " + inDataStructure.Key + "DataStructure(inParentDataFile, inXMLNode, ");
             bool isfirstarg = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
+            for (propidx = 0; propidx < bools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
+            for (propidx = 0; propidx < listbools.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < vectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
 
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 if (!isfirstarg)
                 {
                     inTextLines[inTextLines.Count - 1] += ", ";
                 }
                 isfirstarg = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines[inTextLines.Count - 1] += currentresult.Key;
             }
             inTextLines[inTextLines.Count - 1] += ");";
             inTextLines.Add("");
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurestrings.Count; propidx++)
+            for (propidx = 0; propidx < strings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurestrings.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = strings.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -6367,33 +6890,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructureliststrings.Count; propidx++)
+            for (propidx = 0; propidx < liststrings.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureliststrings.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
-            }
-            if (!skipnewline)
-            {
-                inTextLines.Add("");
-            }
-            skipnewline = true;
-            for (propidx = 0; propidx < datastructureints.Count; propidx++)
-            {
-                skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructureints.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-            }
-            if (!skipnewline)
-            {
-                inTextLines.Add("");
-            }
-            skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistints.Count; propidx++)
-            {
-                skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistints.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = liststrings.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
             }
@@ -6402,10 +6902,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurefloats.Count; propidx++)
+            for (propidx = 0; propidx < ints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurefloats.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = ints.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -6413,33 +6913,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistfloats.Count; propidx++)
+            for (propidx = 0; propidx < listints.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistfloats.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
-            }
-            if (!skipnewline)
-            {
-                inTextLines.Add("");
-            }
-            skipnewline = true;
-            for (propidx = 0; propidx < datastructurebools.Count; propidx++)
-            {
-                skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurebools.ElementAt(propidx);
-                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
-            }
-            if (!skipnewline)
-            {
-                inTextLines.Add("");
-            }
-            skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistbools.Count; propidx++)
-            {
-                skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistbools.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listints.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
             }
@@ -6448,10 +6925,56 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurevectors.Count; propidx++)
+            for (propidx = 0; propidx < floats.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurevectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = floats.ElementAt(propidx);
+                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < listfloats.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listfloats.ElementAt(propidx);
+                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < bools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = bools.ElementAt(propidx);
+                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < listbools.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = listbools.ElementAt(propidx);
+                inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
+                inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
+            }
+            if (!skipnewline)
+            {
+                inTextLines.Add("");
+            }
+            skipnewline = true;
+            for (propidx = 0; propidx < vectors.Count; propidx++)
+            {
+                skipnewline = false;
+                KeyValuePair<string, TagNameReportEntry> currentresult = vectors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
             }
@@ -6460,10 +6983,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistvectors.Count; propidx++)
+            for (propidx = 0; propidx < listvectors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistvectors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listvectors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (Vector3D element in result." + currentresult.Key + ")");
@@ -6476,10 +6999,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurecolors.Count; propidx++)
+            for (propidx = 0; propidx < colors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurecolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = colors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            " + currentresult.Key + ".OnElementChanged += result." + currentresult.Key + "_OnElementChanged;");
             }
@@ -6488,10 +7011,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistcolors.Count; propidx++)
+            for (propidx = 0; propidx < listcolors.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistcolors.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listcolors.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
                 inTextLines.Add("            foreach (ColorF element in result." + currentresult.Key + ")");
@@ -6504,10 +7027,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructuredatastructures.Count; propidx++)
+            for (propidx = 0; propidx < datastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructuredatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = datastructures.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
             }
             if (!skipnewline)
@@ -6515,10 +7038,10 @@ namespace VoidDestroyer2DataEditor
                 inTextLines.Add("");
             }
             skipnewline = true;
-            for (propidx = 0; propidx < datastructurelistdatastructures.Count; propidx++)
+            for (propidx = 0; propidx < listdatastructures.Count; propidx++)
             {
                 skipnewline = false;
-                KeyValuePair<string, TagNameReportEntry> currentresult = datastructurelistdatastructures.ElementAt(propidx);
+                KeyValuePair<string, TagNameReportEntry> currentresult = listdatastructures.ElementAt(propidx);
                 inTextLines.Add("            result.SetPropertyExists(\"" + currentresult.Key + "\", " + currentresult.Key + "exists);");
                 inTextLines.Add("            result." + currentresult.Key + ".CollectionChanged += result.On" + currentresult.Key + "Changed;");
             }

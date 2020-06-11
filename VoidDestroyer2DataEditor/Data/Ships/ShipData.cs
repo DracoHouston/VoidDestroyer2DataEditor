@@ -53,6 +53,7 @@ namespace VoidDestroyer2DataEditor
         int _boardingCrew;
         int _aggressiveRange;
         int _passangerCapacity;
+        int _upKeepOverride;
 
         float _cruiseSpeed;
         float _timeTillCruise;
@@ -76,15 +77,16 @@ namespace VoidDestroyer2DataEditor
         bool _bBlackMarket;
         bool _bUniqueShip;
         bool _bShowInCockpitParticles;
+        bool _bCanNotSell;
         bool _bRequiresKnowledge;
         bool _bListedNoPurchase;
         bool _bLargeHangarOnly;
         bool _bNoTargetAimNodeOffset;
         bool _bEveryShipyardOk;
         bool _bShowInCockpitWeaponParticles;
+        bool _bLargeDockOnly;
         bool _bBaseBuildOverride;
         bool _bSaveFileUnlockShip;
-        bool _bLargeDockOnly;
         bool _bCanPurchase;
         bool _bNoShipyardRequirement;
 
@@ -511,7 +513,7 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
-        [Description("gravityDriveParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("gravityDriveParticleSystem is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor)), TypeConverter(typeof(ObjectIDRefTypeConverter))]
         public string gravityDriveParticleSystem
         {
             get
@@ -954,6 +956,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("upKeepOverride is an integer"), Category("Integers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public int upKeepOverride
+        {
+            get
+            {
+                return _upKeepOverride;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _upKeepOverride = value;
+                        SetPropertyEdited("upKeepOverride", true);
+                    }
+                }
+            }
+        }
+
 
         [Description("cruiseSpeed is a real number"), Category("Real Numbers"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public float cruiseSpeed
@@ -1376,6 +1398,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("bCanNotSell is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bCanNotSell
+        {
+            get
+            {
+                return _bCanNotSell;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bCanNotSell = value;
+                        SetPropertyEdited("bCanNotSell", true);
+                    }
+                }
+            }
+        }
+
         [Description("bRequiresKnowledge is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bRequiresKnowledge
         {
@@ -1496,6 +1538,26 @@ namespace VoidDestroyer2DataEditor
             }
         }
 
+        [Description("bLargeDockOnly is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public bool bLargeDockOnly
+        {
+            get
+            {
+                return _bLargeDockOnly;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _bLargeDockOnly = value;
+                        SetPropertyEdited("bLargeDockOnly", true);
+                    }
+                }
+            }
+        }
+
         [Description("bBaseBuildOverride is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public bool bBaseBuildOverride
         {
@@ -1531,26 +1593,6 @@ namespace VoidDestroyer2DataEditor
                     {
                         _bSaveFileUnlockShip = value;
                         SetPropertyEdited("bSaveFileUnlockShip", true);
-                    }
-                }
-            }
-        }
-
-        [Description("bLargeDockOnly is a boolean value"), Category("Booleans"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public bool bLargeDockOnly
-        {
-            get
-            {
-                return _bLargeDockOnly;
-            }
-            set
-            {
-                if (Source != null)
-                {
-                    if (Source.WriteAccess)
-                    {
-                        _bLargeDockOnly = value;
-                        SetPropertyEdited("bLargeDockOnly", true);
                     }
                 }
             }
@@ -2528,6 +2570,9 @@ namespace VoidDestroyer2DataEditor
             InitProperty("combatAIClass");
             InitProperty("minimumMiningRoidSize");
             InitProperty("gravityDriveParticleSystem");
+            List<string> gravityDriveParticleSystemreftypes = new List<string>();
+            gravityDriveParticleSystemreftypes.Add("ParticleUniverse");
+            SetPropertyIsObjectIDRef("gravityDriveParticleSystem", true, gravityDriveParticleSystemreftypes);
             InitProperty("selfDestructAreaOfEffectID");
             List<string> selfDestructAreaOfEffectIDreftypes = new List<string>();
             selfDestructAreaOfEffectIDreftypes.Add("AreaOfEffect");
@@ -2562,6 +2607,7 @@ namespace VoidDestroyer2DataEditor
             InitProperty("boardingCrew");
             InitProperty("aggressiveRange");
             InitProperty("passangerCapacity");
+            InitProperty("upKeepOverride");
 
             InitProperty("cruiseSpeed");
             InitProperty("timeTillCruise");
@@ -2585,15 +2631,16 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bBlackMarket");
             InitProperty("bUniqueShip");
             InitProperty("bShowInCockpitParticles");
+            InitProperty("bCanNotSell");
             InitProperty("bRequiresKnowledge");
             InitProperty("bListedNoPurchase");
             InitProperty("bLargeHangarOnly");
             InitProperty("bNoTargetAimNodeOffset");
             InitProperty("bEveryShipyardOk");
             InitProperty("bShowInCockpitWeaponParticles");
+            InitProperty("bLargeDockOnly");
             InitProperty("bBaseBuildOverride");
             InitProperty("bSaveFileUnlockShip");
-            InitProperty("bLargeDockOnly");
             InitProperty("bCanPurchase");
             InitProperty("bNoShipyardRequirement");
 
@@ -3025,6 +3072,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("passangerCapacity", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "passangerCapacity"));
                 }
                 SetPropertyExists("passangerCapacity", exists);
+                _upKeepOverride = ParseHelpers.GetInt32FromVD2Data(DataXMLDoc, "upKeepOverride", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("upKeepOverride", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("upKeepOverride", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "upKeepOverride"));
+                }
+                SetPropertyExists("upKeepOverride", exists);
 
                 _cruiseSpeed = ParseHelpers.GetFloatFromVD2Data(DataXMLDoc, "cruiseSpeed", out exists);
                 if (Source.ShortName == "Base")
@@ -3237,6 +3294,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bShowInCockpitParticles", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bShowInCockpitParticles"));
                 }
                 SetPropertyExists("bShowInCockpitParticles", exists);
+                _bCanNotSell = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCanNotSell", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bCanNotSell", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bCanNotSell", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bCanNotSell"));
+                }
+                SetPropertyExists("bCanNotSell", exists);
                 _bRequiresKnowledge = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bRequiresKnowledge", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -3297,6 +3364,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bShowInCockpitWeaponParticles", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bShowInCockpitWeaponParticles"));
                 }
                 SetPropertyExists("bShowInCockpitWeaponParticles", exists);
+                _bLargeDockOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeDockOnly", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("bLargeDockOnly", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("bLargeDockOnly", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bLargeDockOnly"));
+                }
+                SetPropertyExists("bLargeDockOnly", exists);
                 _bBaseBuildOverride = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bBaseBuildOverride", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -3317,16 +3394,6 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("bSaveFileUnlockShip", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bSaveFileUnlockShip"));
                 }
                 SetPropertyExists("bSaveFileUnlockShip", exists);
-                _bLargeDockOnly = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bLargeDockOnly", out exists);
-                if (Source.ShortName == "Base")
-                {
-                    SetPropertyExistsInBaseData("bLargeDockOnly", exists);
-                }
-                else
-                {
-                    SetPropertyExistsInBaseData("bLargeDockOnly", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "bLargeDockOnly"));
-                }
-                SetPropertyExists("bLargeDockOnly", exists);
                 _bCanPurchase = ParseHelpers.GetBoolFromVD2Data(DataXMLDoc, "bCanPurchase", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -3750,6 +3817,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<passangerCapacity attr1=\"" + _passangerCapacity.ToString() + "\"/>");
             }
+            if (PropertyExists("upKeepOverride"))
+            {
+                xmltextlines.Add("<upKeepOverride attr1=\"" + _upKeepOverride.ToString() + "\"/>");
+            }
 
             xmltextlines.Add("");
             xmltextlines.Add("<note_to_self attr1=\"Floats...\"/>");
@@ -3842,6 +3913,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<bShowInCockpitParticles attr1=\"" + ((_bShowInCockpitParticles) ? "1" : "0") + "\"/>");
             }
+            if (PropertyExists("bCanNotSell"))
+            {
+                xmltextlines.Add("<bCanNotSell attr1=\"" + ((_bCanNotSell) ? "1" : "0") + "\"/>");
+            }
             if (PropertyExists("bRequiresKnowledge"))
             {
                 xmltextlines.Add("<bRequiresKnowledge attr1=\"" + ((_bRequiresKnowledge) ? "1" : "0") + "\"/>");
@@ -3866,6 +3941,10 @@ namespace VoidDestroyer2DataEditor
             {
                 xmltextlines.Add("<bShowInCockpitWeaponParticles attr1=\"" + ((_bShowInCockpitWeaponParticles) ? "1" : "0") + "\"/>");
             }
+            if (PropertyExists("bLargeDockOnly"))
+            {
+                xmltextlines.Add("<bLargeDockOnly attr1=\"" + ((_bLargeDockOnly) ? "1" : "0") + "\"/>");
+            }
             if (PropertyExists("bBaseBuildOverride"))
             {
                 xmltextlines.Add("<bBaseBuildOverride attr1=\"" + ((_bBaseBuildOverride) ? "1" : "0") + "\"/>");
@@ -3873,10 +3952,6 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("bSaveFileUnlockShip"))
             {
                 xmltextlines.Add("<bSaveFileUnlockShip attr1=\"" + ((_bSaveFileUnlockShip) ? "1" : "0") + "\"/>");
-            }
-            if (PropertyExists("bLargeDockOnly"))
-            {
-                xmltextlines.Add("<bLargeDockOnly attr1=\"" + ((_bLargeDockOnly) ? "1" : "0") + "\"/>");
             }
             if (PropertyExists("bCanPurchase"))
             {
@@ -4019,7 +4094,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
 
         public override Control GetDocumentControl()
@@ -4033,7 +4108,7 @@ namespace VoidDestroyer2DataEditor
                     result.MainSplitter.Panel2Collapsed = false;
                     result.SidebarSplitter.Panel1Collapsed = false;
 
-                    DataOgreControl modelviewer = new DataOgreControl();
+                    ShipOgreControl modelviewer = new ShipOgreControl();
                     modelviewer.DataFile = this;
                     modelviewer.Dock = DockStyle.Fill;
                     modelviewer.Name = Source.ShortName + objectID + "datamv";

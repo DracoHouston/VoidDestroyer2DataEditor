@@ -432,7 +432,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<translateMax x=\"" + _translateMax.x.ToString() + "\" y=\"" + _translateMax.y.ToString() + "\" z=\"" + _translateMax.z.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

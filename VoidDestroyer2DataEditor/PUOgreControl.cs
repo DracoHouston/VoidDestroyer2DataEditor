@@ -55,5 +55,17 @@ namespace VoidDestroyer2DataEditor
             zoomdistance = 5;
             VP.SetCameraYawPitchDistance(yaw, pitch, distance);
         }
+
+        protected override void ResetCamera()
+        {
+            if (PUActor != null)
+            {
+                distance = 50;
+                zoomdistance = 5;
+                yaw = 0;
+                pitch = 0;
+                VP.SetCameraYawPitchDistance(yaw, pitch, distance);
+            }
+        }
     }
 }

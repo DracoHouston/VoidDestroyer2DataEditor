@@ -17,6 +17,7 @@ namespace VoidDestroyer2DataEditor
         string _objectID;
         string _upgradeCategory;
         string _upgradeType;
+        string _buildableShipID;
         string _projectileAmmoID;
         string _requiredMissionID;
 
@@ -56,6 +57,8 @@ namespace VoidDestroyer2DataEditor
         bool _bNoOverworldIndicatorInShipMode;
         bool _bGateTravelRefuel;
         bool _bRadiationRefuel;
+
+        weaponDataStructure _weapon;
 
         ObservableCollection<VD2DataStructure> _turret;
 
@@ -134,6 +137,26 @@ namespace VoidDestroyer2DataEditor
                     {
                         _upgradeType = value;
                         SetPropertyEdited("upgradeType", true);
+                    }
+                }
+            }
+        }
+
+        [Description("buildableShipID is a plaintext string"), Category("Plaintext Strings"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string buildableShipID
+        {
+            get
+            {
+                return _buildableShipID;
+            }
+            set
+            {
+                if (Source != null)
+                {
+                    if (Source.WriteAccess)
+                    {
+                        _buildableShipID = value;
+                        SetPropertyEdited("buildableShipID", true);
                     }
                 }
             }
@@ -898,6 +921,20 @@ namespace VoidDestroyer2DataEditor
         }
 
 
+        [Browsable(false), Description("weapon is a datastructure"), Category("Data Structures"), Editor(typeof(VD2UITypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public weaponDataStructure weapon
+        {
+            get
+            {
+                return _weapon;
+            }
+            set
+            {
+                _weapon = value;
+            }
+        }
+
+
         [Browsable(false), Description("turret is a collection of datastructures"), Category("Data Structure Collections")]
         public ObservableCollection<VD2DataStructure> turret
         {
@@ -952,6 +989,7 @@ namespace VoidDestroyer2DataEditor
             SetPropertyIsObjectID("objectID", true);
             InitProperty("upgradeCategory");
             InitProperty("upgradeType");
+            InitProperty("buildableShipID");
             InitProperty("projectileAmmoID");
             List<string> projectileAmmoIDreftypes = new List<string>();
             projectileAmmoIDreftypes.Add("Projectile");
@@ -999,6 +1037,8 @@ namespace VoidDestroyer2DataEditor
             InitProperty("bNoOverworldIndicatorInShipMode");
             InitProperty("bGateTravelRefuel");
             InitProperty("bRadiationRefuel");
+
+            InitProperty("weapon");
 
             InitProperty("turret");
             SetPropertyIsCollection("turret", true, typeof(turretDataStructure));
@@ -1054,6 +1094,16 @@ namespace VoidDestroyer2DataEditor
                     SetPropertyExistsInBaseData("upgradeType", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "upgradeType"));
                 }
                 SetPropertyExists("upgradeType", exists);
+                _buildableShipID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "buildableShipID", out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("buildableShipID", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("buildableShipID", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "buildableShipID"));
+                }
+                SetPropertyExists("buildableShipID", exists);
                 _projectileAmmoID = ParseHelpers.GetStringFromVD2Data(DataXMLDoc, "projectileAmmoID", out exists);
                 if (Source.ShortName == "Base")
                 {
@@ -1411,6 +1461,17 @@ namespace VoidDestroyer2DataEditor
                 }
                 SetPropertyExists("bRadiationRefuel", exists);
 
+                _weapon = DataStructureParseHelpers.GetweaponDataStructureFromVD2Data(this, DataXMLDoc, out exists);
+                if (Source.ShortName == "Base")
+                {
+                    SetPropertyExistsInBaseData("weapon", exists);
+                }
+                else
+                {
+                    SetPropertyExistsInBaseData("weapon", EditorUI.UI.Ships.DoesPropertyExistInBaseData(GetObjectID(), "weapon"));
+                }
+                SetPropertyExists("weapon", exists);
+
                 _turret =  new ObservableCollection<VD2DataStructure>(DataStructureParseHelpers.GetturretDataStructureListFromVD2Data(this, DataXMLDoc, out exists));
                 _turret.CollectionChanged += OnturretChanged;
                 if (Source.ShortName == "Base")
@@ -1449,6 +1510,10 @@ namespace VoidDestroyer2DataEditor
             if (PropertyExists("upgradeType"))
             {
                 xmltextlines.Add("<upgradeType attr1=\"" + _upgradeType + "\"/>");
+            }
+            if (PropertyExists("buildableShipID"))
+            {
+                xmltextlines.Add("<buildableShipID attr1=\"" + _buildableShipID + "\"/>");
             }
             if (PropertyExists("projectileAmmoID"))
             {
@@ -1616,6 +1681,15 @@ namespace VoidDestroyer2DataEditor
             }
 
             xmltextlines.Add("");
+            xmltextlines.Add("<note_to_self attr1=\"Data Structures...\"/>");
+            xmltextlines.Add("");
+            if (PropertyExists("weapon"))
+            {
+                xmltextlines.AddRange(_weapon.AsVD2XML());
+                xmltextlines.Add("");
+            }
+
+            xmltextlines.Add("");
             xmltextlines.Add("<note_to_self attr1=\"Data Structure Collections...\"/>");
             xmltextlines.Add("");
             if (PropertyExists("turret"))
@@ -1627,7 +1701,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

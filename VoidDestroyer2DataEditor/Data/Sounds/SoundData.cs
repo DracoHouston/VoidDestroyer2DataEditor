@@ -655,7 +655,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<bDisable3d attr1=\"" + ((_bDisable3d) ? "1" : "0") + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

@@ -620,7 +620,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<impactSize x=\"" + _impactSize.x.ToString() + "\" y=\"" + _impactSize.y.ToString() + "\" z=\"" + _impactSize.z.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

@@ -161,7 +161,7 @@ namespace VoidDestroyer2DataEditor
                 xmltextlines.Add("<renderDistance attr1=\"" + _renderDistance.ToString() + "\"/>");
             }
 
-            File.WriteAllLines(_FilePath, xmltextlines);
+            SafeWriteAllLines(_FilePath, xmltextlines);
         }
     }
 }

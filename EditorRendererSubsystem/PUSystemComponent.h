@@ -8,7 +8,6 @@ class PUSystemComponent : public EditorActorComponent
 {
 	std::string PUSystemName;
 	ParticleUniverse::ParticleSystem* PUSystem;
-	std::string Name;
 	bool ForcedLooping;
 public:
 	virtual void Update(float DeltaTime, float TotalTime);
@@ -17,6 +16,7 @@ public:
 	void SetForcedLooping(bool inLooping);
 	void PlaySystem();
 	void StopSystem();
-	void SetName(std::string inName);
+	void ResetSystem(bool inAutoPlay);	
+	std::string GetPUSystemName();
 };
 
